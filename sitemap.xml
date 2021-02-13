@@ -1,0 +1,690 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>http://idouba.net/tags/book/</loc>
+    <lastmod>2019-08-09T15:32:08+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/categories/</loc>
+    <lastmod>2019-08-09T15:32:08+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/istio/</loc>
+    <lastmod>2019-08-09T15:32:08+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/categories/istio/</loc>
+    <lastmod>2019-08-09T15:32:08+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/istio-canary-release-pratice-of-cloudnativeistio-05/</loc>
+    <lastmod>2019-08-09T15:32:08+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/posts/</loc>
+    <lastmod>2019-08-09T15:32:08+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/</loc>
+    <lastmod>2019-08-09T15:32:08+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/</loc>
+    <lastmod>2019-08-09T15:32:08+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/istio-sidecar-injection-of-cloudnativeistio-04/</loc>
+    <lastmod>2019-08-02T15:22:57+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/istio-canary-release-of-cloudnativeistio-03/</loc>
+    <lastmod>2019-07-25T15:09:52+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/stio-prometheus-cloudnative-istio-06/</loc>
+    <lastmod>2019-07-21T14:44:37+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/istio-pilot-design-of-cloudnativeistio-02/</loc>
+    <lastmod>2019-07-19T14:44:37+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/istio-curcuit-break-of-cloudnativeistio/</loc>
+    <lastmod>2019-07-11T10:17:31+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/the-first-day-of-2019/</loc>
+    <lastmod>2019-01-01T15:10:06+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/%E7%A5%96%E6%AF%8D/</loc>
+    <lastmod>2019-01-01T15:10:06+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/categories/%E9%9A%8F%E7%AC%94/</loc>
+    <lastmod>2019-01-01T15:10:06+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/istio-tracing-is-not-zero-code-change/</loc>
+    <lastmod>2018-11-29T15:23:04+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/mesh/</loc>
+    <lastmod>2018-11-29T15:23:04+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/published/</loc>
+    <lastmod>2018-11-29T15:23:04+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/tracing/</loc>
+    <lastmod>2018-11-29T15:23:04+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/categories/tracing/</loc>
+    <lastmod>2018-11-29T15:23:04+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/istio-tracing-meetup-02/</loc>
+    <lastmod>2018-11-10T15:36:10+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/speak/</loc>
+    <lastmod>2018-11-10T15:36:10+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/istio-tracing-meetup-01/</loc>
+    <lastmod>2018-11-10T15:07:36+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/mid-autumn-and-my-grandmother/</loc>
+    <lastmod>2018-09-23T16:38:08+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/code/</loc>
+    <lastmod>2018-07-23T14:35:50+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/istio-01-code-pilot-service-discovery-upon-k8s/</loc>
+    <lastmod>2018-07-23T14:35:50+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/istio-01-code-pilot-service-discovery-adapter/</loc>
+    <lastmod>2018-07-21T16:12:44+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/api/</loc>
+    <lastmod>2018-05-05T15:53:52+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/istio-traffic-management-v1alpha3-by-example/</loc>
+    <lastmod>2018-05-05T15:53:52+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/cncf/</loc>
+    <lastmod>2018-01-01T14:17:31+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/go/</loc>
+    <lastmod>2018-01-01T14:17:31+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/opentracing-serverside-tracing/</loc>
+    <lastmod>2018-01-01T14:17:31+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/doudou/</loc>
+    <lastmod>2017-10-30T15:51:14+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/cas-in-kids-garden/</loc>
+    <lastmod>2017-10-30T15:51:14+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/%E9%9A%8F%E7%AC%94/</loc>
+    <lastmod>2017-10-30T15:51:14+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/kubernetes/</loc>
+    <lastmod>2017-09-01T15:39:48+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/categories/kubernetes/</loc>
+    <lastmod>2017-09-01T15:39:48+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/kubernetes-liveness-probe/</loc>
+    <lastmod>2017-09-01T15:39:48+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/federation/</loc>
+    <lastmod>2017-08-15T15:51:34+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/kubernetes-federation-sync-accross-cluster/</loc>
+    <lastmod>2017-08-15T15:51:34+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/thief-culture-of-the-city/</loc>
+    <lastmod>2016-12-31T10:56:34+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/g20/</loc>
+    <lastmod>2016-09-04T11:23:27+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/weekly-xisong-g20/</loc>
+    <lastmod>2016-09-04T11:23:27+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/categories/go/</loc>
+    <lastmod>2015-12-01T15:20:55+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/java/</loc>
+    <lastmod>2015-12-01T15:20:55+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/categories/java/</loc>
+    <lastmod>2015-12-01T15:20:55+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/sort/</loc>
+    <lastmod>2015-12-01T15:20:55+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/compare-go-and-java-style-by-sort-implement-3/</loc>
+    <lastmod>2015-12-01T15:20:55+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/compare-go-and-java-style-by-sort-implement-2/</loc>
+    <lastmod>2015-12-01T15:18:12+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/compare-go-and-java-style-by-sort-implement-1/</loc>
+    <lastmod>2015-12-01T05:11:15+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/concurrency/</loc>
+    <lastmod>2015-06-05T16:02:43+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/categories/concurrency/</loc>
+    <lastmod>2015-06-05T16:02:43+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/executor/</loc>
+    <lastmod>2015-06-05T16:02:43+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/source/</loc>
+    <lastmod>2015-06-05T16:02:43+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/thread/</loc>
+    <lastmod>2015-06-05T16:02:43+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/executor-framework-thread-pool-task-execution-part-02/</loc>
+    <lastmod>2015-06-05T16:02:43+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/executor-framework-thread-pool-task-execution-part-01/</loc>
+    <lastmod>2015-06-05T15:41:44+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/database/</loc>
+    <lastmod>2015-05-07T07:11:32+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/categories/database/</loc>
+    <lastmod>2015-05-07T07:11:32+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/join/</loc>
+    <lastmod>2015-05-07T07:11:32+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/mssql/</loc>
+    <lastmod>2015-05-07T07:11:32+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/mysql/</loc>
+    <lastmod>2015-05-07T07:11:32+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/oracle/</loc>
+    <lastmod>2015-05-07T07:11:32+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/programmer/</loc>
+    <lastmod>2015-05-07T07:11:32+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/learn_table_join_from_search_and_sort/</loc>
+    <lastmod>2015-05-07T07:11:32+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/about-projects/</loc>
+    <lastmod>2015-04-10T10:19:09+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/aqs/</loc>
+    <lastmod>2015-04-06T15:30:31+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/sync-implementation-by-aqs/</loc>
+    <lastmod>2015-04-06T15:30:31+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/java-nio-brief-intro/</loc>
+    <lastmod>2015-01-21T04:47:35+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/nio/</loc>
+    <lastmod>2015-01-21T04:47:35+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/12306/</loc>
+    <lastmod>2014-12-23T00:03:04+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/one-new-bug-report-of-liebao-huochepiao/</loc>
+    <lastmod>2014-12-23T00:03:04+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/categories/oracle/</loc>
+    <lastmod>2014-10-14T08:53:14+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/performance-comparison-of-oracle-paging/</loc>
+    <lastmod>2014-10-14T08:53:14+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/gc/</loc>
+    <lastmod>2014-07-15T05:49:37+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/jvm/</loc>
+    <lastmod>2014-07-15T05:49:37+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/categories/jvm/</loc>
+    <lastmod>2014-07-15T05:49:37+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/a-simple-example-demo-jvm-allocation-and-gc/</loc>
+    <lastmod>2014-07-15T05:49:37+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/b-tree/</loc>
+    <lastmod>2014-06-18T09:27:23+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/about-btrees-application-in-database-index-in-programmer/</loc>
+    <lastmod>2014-06-18T09:27:23+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/index/</loc>
+    <lastmod>2014-06-18T09:27:23+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/categories/archive/</loc>
+    <lastmod>2014-05-10T14:58:05+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/english/</loc>
+    <lastmod>2014-05-10T14:58:05+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/others/</loc>
+    <lastmod>2014-05-10T14:58:05+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/reference/</loc>
+    <lastmod>2014-05-10T14:58:05+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/randy-pausch-s-last-lecture/</loc>
+    <lastmod>2014-05-10T14:58:05+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/doudou-baseball/</loc>
+    <lastmod>2014-04-02T14:00:11+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/excute-plan/</loc>
+    <lastmod>2014-03-24T12:53:50+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/analysis-oracle-execute-plan-from-count/</loc>
+    <lastmod>2014-03-24T12:53:50+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/about-btrees-application-in-database-index/</loc>
+    <lastmod>2014-03-20T08:18:48+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/data-structure/</loc>
+    <lastmod>2014-03-20T08:18:48+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/learn-and-walk-with-doudou/</loc>
+    <lastmod>2014-02-25T06:47:43+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/douba/</loc>
+    <lastmod>2014-02-21T09:19:06+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/go-home/</loc>
+    <lastmod>2014-02-21T09:19:06+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/oracle-index-brief/</loc>
+    <lastmod>2014-02-19T13:48:09+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/hadoop/</loc>
+    <lastmod>2014-02-05T15:58:39+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/categories/hadoop/</loc>
+    <lastmod>2014-02-05T15:58:39+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/mapreduce/</loc>
+    <lastmod>2014-02-05T15:58:39+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/hadoop_mapreduce_shuffle_map_output/</loc>
+    <lastmod>2014-02-05T15:58:39+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/hadoop_job_submit_conclusion/</loc>
+    <lastmod>2014-02-01T13:25:44+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/hadoop_mapreduce_tasktracker_child_map/</loc>
+    <lastmod>2014-01-22T07:00:53+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/hadoop_mapreduce_tasktracker_launch_task/</loc>
+    <lastmod>2014-01-21T13:58:12+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/hadoop_mapreduce_job_init/</loc>
+    <lastmod>2014-01-19T14:54:46+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/hadoop_mapreduce_tasktracker_retrieve_task/</loc>
+    <lastmod>2014-01-18T14:50:50+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/hadoop_job_submit_service_init/</loc>
+    <lastmod>2014-01-17T14:36:20+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/hadoop_mapreduce_jobadded/</loc>
+    <lastmod>2014-01-16T13:39:25+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/eagertaskinitializationlistener/</loc>
+    <lastmod>2014-01-15T14:05:42+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/rpc/</loc>
+    <lastmod>2014-01-11T12:02:36+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/haddoop_rpc_jobclient_jobtracker/</loc>
+    <lastmod>2014-01-11T12:02:36+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/categories/database-concept/</loc>
+    <lastmod>2014-01-05T12:23:26+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/theory/</loc>
+    <lastmod>2014-01-05T12:23:26+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/wikipedia_isolation/</loc>
+    <lastmod>2014-01-05T12:23:26+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/clustering/</loc>
+    <lastmod>2013-09-18T13:28:36+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/categories/clustering/</loc>
+    <lastmod>2013-09-18T13:28:36+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/data-mining/</loc>
+    <lastmod>2013-09-18T13:28:36+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/notes-clustering-k-medoids/</loc>
+    <lastmod>2013-09-18T13:28:36+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/k-medoids/</loc>
+    <lastmod>2013-09-18T13:28:36+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/classification/</loc>
+    <lastmod>2013-09-18T11:12:40+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/categories/classification/</loc>
+    <lastmod>2013-09-18T11:12:40+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/notes-about-classification/</loc>
+    <lastmod>2013-09-18T11:12:40+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/about/</loc>
+    <lastmod>2013-06-08T14:22:52+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/categories/history-letter-archive/</loc>
+    <lastmod>2013-06-08T14:22:52+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/letter/</loc>
+    <lastmod>2013-06-08T14:22:52+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/life/</loc>
+    <lastmod>2013-06-08T14:22:52+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/history-letter-to-someone-mentor-so-called/</loc>
+    <lastmod>2013-06-08T14:22:52+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/doudou_history_letter_self_motivated/</loc>
+    <lastmod>2013-05-24T14:08:26+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/categories/english/</loc>
+    <lastmod>2008-05-05T09:00:53+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/my-gre-index-issue-argument/</loc>
+    <lastmod>2008-05-05T09:00:53+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/categories/history-article-archive/</loc>
+    <lastmod>2008-05-05T09:00:53+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/football/</loc>
+    <lastmod>2008-03-09T14:59:50+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/happy-birthday-inter/</loc>
+    <lastmod>2008-03-09T14:59:50+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/inter/</loc>
+    <lastmod>2008-03-09T14:59:50+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/gre-issue-88/</loc>
+    <lastmod>2007-07-27T19:00:53+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/tags/japanese/</loc>
+    <lastmod>2004-12-13T13:26:10+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/categories/%E3%81%AB%E3%81%BB%E3%82%93%E3%81%94/</loc>
+    <lastmod>2004-12-13T13:26:10+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://idouba.net/daily-japanese-speak-in-office-in-chinese/</loc>
+    <lastmod>2004-12-13T13:26:10+00:00</lastmod>
+  </url>
+  
+</urlset>

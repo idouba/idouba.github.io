@@ -1,0 +1,622 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on 爱豆吧！</title>
+    <link>http://idouba.net/posts/</link>
+    <description>Recent content in Posts on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>&lt;a href=&#39;https://beian.miit.gov.cn/&#39; target=&#39;_blank&#39;&gt;浙ICP备18050493号-1&lt;/a&gt; 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Fri, 09 Aug 2019 15:32:08 +0000</lastBuildDate><atom:link href="http://idouba.net/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Istio灰度发布实践 –《云原生服务网格Istio》书摘05</title>
+      <link>http://idouba.net/istio-canary-release-pratice-of-cloudnativeistio-05/</link>
+      <pubDate>Fri, 09 Aug 2019 15:32:08 +0000</pubDate>
+      
+      <guid>http://idouba.net/istio-canary-release-pratice-of-cloudnativeistio-05/</guid>
+      <description>本节书摘来自华为云原生技术丛书《云原生服务网格Istio:原理,实践,架构与源码解析》一书实践篇的第10章灰度发布实践。更多内容参照原书，或者关注容器魔方公众号。作者：star 目前一些大型的互联网或金融行业的公司，都有自己的发布系统。但是对一些初创公司，从零开始构建这样一套系统并不简单，有一定的门槛。利用Istio提供的流量路由功能可以很方便地构建一个流量分配系统来做灰度发布和AB测试。 预先准备： 将所有流量都路由到各个服务的v1版本 在开始本章的实践前，先将frontend、advertiseme</description>
+    </item>
+    
+    <item>
+      <title>Sidecar Injector自动注入的原理 –《云原生服务网格Istio》书摘04</title>
+      <link>http://idouba.net/istio-sidecar-injection-of-cloudnativeistio-04/</link>
+      <pubDate>Fri, 02 Aug 2019 15:22:57 +0000</pubDate>
+      
+      <guid>http://idouba.net/istio-sidecar-injection-of-cloudnativeistio-04/</guid>
+      <description>本节书摘来自华为云原生技术丛书《云原生服务网格Istio:原理,实践,架构与源码解析》一书原理篇的第6章透明的Sidecar机制，6.1.1小节Sidecar Injector自动注入的原理。更多内容参照原书，或者关注容器魔方公众号。 Sidecar注入 我们都知道，Istio的流量管理、策略、遥测等功能无须应用程序做任何改动，这种无侵入式的方式全部依赖于Sidecar。应用程序发送或者接收的流量都被Sidecar拦截，并由Sidecar进行认证、鉴权、策略执行及遥测数据上报等众多治理功能。 如图6-1</description>
+    </item>
+    
+    <item>
+      <title>Istio灰度发布 –《云原生服务网格Istio》书摘03</title>
+      <link>http://idouba.net/istio-canary-release-of-cloudnativeistio-03/</link>
+      <pubDate>Thu, 25 Jul 2019 15:09:52 +0000</pubDate>
+      
+      <guid>http://idouba.net/istio-canary-release-of-cloudnativeistio-03/</guid>
+      <description>本节书摘来自华为云原生技术丛书《云原生服务网格Istio:原理,实践,架构与源码解析》一书原理篇的第3章非侵入的流量治理，第3.1.4小节灰度发布原理。更多内容参照原书，或者关注容器魔方公众号。 3.1.4 灰度发布 在新版本上线时，不管是在技术上考虑产品的稳定性等因素，还是在商业上考虑新版本被用户接受的程度，直接将老版本全部升级是非常有风险的。所以一般的做法是，新老版本同时在线，新版本只切分少量流量出来，在确认新版本没有问题后，再逐步加大流量比例。这正是灰度发布要解决的问题。其核心是能配置一定的流量策略，将</description>
+    </item>
+    
+    <item>
+      <title>Istio通过Prometheus收集遥测数据--《云原生服务网格Istio》书摘06</title>
+      <link>http://idouba.net/stio-prometheus-cloudnative-istio-06/</link>
+      <pubDate>Sun, 21 Jul 2019 14:44:37 +0000</pubDate>
+      
+      <guid>http://idouba.net/stio-prometheus-cloudnative-istio-06/</guid>
+      <description>本节书摘来自华为云原生技术丛书《云原生服务网格Istio:原理,实践,架构与源码解析》一书原理篇的第4章可扩展的策略和遥测中1.4.1小节Prometheus适配器。更多内容参照原书，或者关注容器魔方公众号。 Prometheus适配器 Prometheus应该是当前应用最广的开源系统监控和报警平台了，随着以Kubernetes为核心的容器技术的发展，Prometheus强大的多维度数据模型、高效的数据采集能力、灵活的查询语法，以及可扩展性、方便集成的特点，尤其是和云原生生态的结合，使其获得了越来越</description>
+    </item>
+    
+    <item>
+      <title>Pilot的设计亮点–《云原生服务网格Istio》书摘02</title>
+      <link>http://idouba.net/istio-pilot-design-of-cloudnativeistio-02/</link>
+      <pubDate>Fri, 19 Jul 2019 14:44:37 +0000</pubDate>
+      
+      <guid>http://idouba.net/istio-pilot-design-of-cloudnativeistio-02/</guid>
+      <description>本节书摘来自华为云原生技术丛书《云原生服务网格Istio:原理,实践,架构与源码解析》一书架构篇的第14章司令官Pilot，第4节Pilot的设计亮点。更多内容参照原书，或者关注容器魔方公众号。作者：中虎 作为Istio数据面的司令官，Pilot控制中枢系统，它的性能好坏直接影响服务网格的大规模可扩展、配置时延等。如果Pilot的性能低，配置生成效率也低，那么它将难以管理大规模服务网格。比如，服务网格拥有成千上万服务及数十万服务实例，配置生成的效率很低，难以满足服务及Config更新带来的配置更新</description>
+    </item>
+    
+    <item>
+      <title>Istio服务熔断 –《云原生服务网格Istio》书摘01</title>
+      <link>http://idouba.net/istio-curcuit-break-of-cloudnativeistio/</link>
+      <pubDate>Thu, 11 Jul 2019 10:17:31 +0000</pubDate>
+      
+      <guid>http://idouba.net/istio-curcuit-break-of-cloudnativeistio/</guid>
+      <description>本节书摘来自华为云原生技术丛书《云原生服务网格Istio:原理,实践,架构与源码解析》一书中的第3章非侵入的流量治理，第3节Istio流量治理的原理3.1.2小节服务熔断。更多内容参照原书，或者关注容器魔方公众号。 熔断器在生活中一般指可以自动操作的电气开关，用来保护电路不会因为电流过载或者短路而受损，典型的动作是在检测到故障后马上中断电流。“熔断器”这个概念延伸到计算机世界中指的是故障检测和处理逻辑，防止临时故障或意外导致系统整体不可用，最典型的应用场景是防止网络和服务调用故障级联发生，限制故障</description>
+    </item>
+    
+    <item>
+      <title>2019年元旦忆我的咕咚队友</title>
+      <link>http://idouba.net/the-first-day-of-2019/</link>
+      <pubDate>Tue, 01 Jan 2019 15:10:06 +0000</pubDate>
+      
+      <guid>http://idouba.net/the-first-day-of-2019/</guid>
+      <description>2018，我和我的咕咚队友的故事。2019，我和我的咕咚队友的故事，还将继续。整理手机里的文字，告别和纪念逝去的2018，迎来2019，多些勇气和力量。 一百天，老太太离开我们整整一百天了，可能是过去的几十年里最难过最漫长的一百天。又一次踏上回家路。大清早四点多起床，背了一个空包就钻进了往机场的出租车。再也不用琢磨包里塞点老太太没有吃过的东西。包里空的，心里更空， 这段时间一直就心里空空的，乱乱的。莫名的会发脾气，也莫名的会忘东西。考勤纪律很严格的我厂里居然一个月里有好几次忘了打卡。 有几次奇怪的梦里</description>
+    </item>
+    
+    <item>
+      <title>Istio 调用链埋点原理剖析—是否真的“零修改”？</title>
+      <link>http://idouba.net/istio-tracing-is-not-zero-code-change/</link>
+      <pubDate>Thu, 29 Nov 2018 15:23:04 +0000</pubDate>
+      
+      <guid>http://idouba.net/istio-tracing-is-not-zero-code-change/</guid>
+      <description>发在Infoq上的一篇文章，答疑当前大家工作中碰到的Istio调用链的问题，最终澄清了观点，并推动社区修改了说法，避免误解。 前言 在 Istio 的实践中最近经常被问到一个问题，使用 Istio 做调用链用户的业务代码是不是完全 0 侵入，到底要不要修改业务代码？ 看官方介绍： Istio makes it easy to create a network of deployed services with load balancing, service-to-service authentication, monitoring, and more, without any changes in service code. 是不用修改任何代码即可做各种治理。实际使用中应用程序不做任何修改，使用 Istio 的调用链输出总是断开的，这到底是什么原因呢？ 对以上问题关注的人比较多，但是貌似说的都不是特别清楚，在最近的 K8S 技术社区的 Meetup 上笔者专门做</description>
+    </item>
+    
+    <item>
+      <title>Istio调用链埋点原理剖析—是否真的“零修改”分享实录（下）</title>
+      <link>http://idouba.net/istio-tracing-meetup-02/</link>
+      <pubDate>Sat, 10 Nov 2018 15:36:10 +0000</pubDate>
+      
+      <guid>http://idouba.net/istio-tracing-meetup-02/</guid>
+      <description>接上文Istio调用链埋点原理剖析—是否真的“零修改”分享实录（上） Isito调用链** 调用链原理和场景 正如Service Mesh的诞生是为了解决大规模分布式服务访问的治理问题，调用链的出现也是为了对应于大规模的复杂的分布式系统运行中碰到的故障定位定界问题。大量的服务调用、跨进程、跨服务器，可能还会跨多个物理机房。无论是服务自身问题还是网络环境的问题导致调用上链路上出现问题都比较复杂，如何定位就比单进程的一个服务打印一个异常栈来找出某个方法要困难的多。需要有一个类似的调用链路的跟踪，经一次请求的</description>
+    </item>
+    
+    <item>
+      <title>Istio调用链埋点原理剖析—是否真的“零修改”分享实录（上）</title>
+      <link>http://idouba.net/istio-tracing-meetup-01/</link>
+      <pubDate>Sat, 10 Nov 2018 15:07:36 +0000</pubDate>
+      
+      <guid>http://idouba.net/istio-tracing-meetup-01/</guid>
+      <description>前言 大家好，我是zhangchaomeng，来自华为Cloud BU，当前在做华为云应用服务网格。今天跟大家分享的主题是Istio调用链相关内容。通过剖析Istio的架构机制与Istio中调用链的工作原理来解答一个大家经常问道的一个问题：Istio是否像其官方文档中宣传的一样，对业务代码完全的无侵入，无需用做任何修改就可以完成所有的治理能力，包括调用链的埋点？ 关于这个问题，可以提前透漏下，答案是让人有点沮丧的，得改点。在Isito中你不用在自己的代码里使用各种埋点的SDK来做埋点的逻辑，但是必须要</description>
+    </item>
+    
+    <item>
+      <title>月圆满，人圆满，中秋别祖母</title>
+      <link>http://idouba.net/mid-autumn-and-my-grandmother/</link>
+      <pubDate>Sun, 23 Sep 2018 16:38:08 +0000</pubDate>
+      
+      <guid>http://idouba.net/mid-autumn-and-my-grandmother/</guid>
+      <description>2018中秋，十多年了第一次在这天回到家里。不是为团聚，而是为离别。 昨晚九点四十上接到的电话，祖母走了。当时没有难过，可能是因为还没想好接受。前天刚视频过，老太太脸色上看人还胖了点，和我说了许久 然后，然后人就不行了。实在忍不住捶胸，吓坏了客厅的孩子。 知道当前这种距离格局下这是迟早的，但没想到会来的这么快这么突然。真到来时还是没法接受。 悔恨，懊恼，有点扭曲的心里撕裂的疼。 前天中午视频的时候有点漫不经心，可能是上班中午困了吧。老太太来来回回就是这么几句：娃多大了，上学好好去的吧，不要呵斥娃，有话好好</description>
+    </item>
+    
+    <item>
+      <title>Istio技术与实践02：源码解析之Istio on Kubernetes 统一服务发现</title>
+      <link>http://idouba.net/istio-01-code-pilot-service-discovery-upon-k8s/</link>
+      <pubDate>Mon, 23 Jul 2018 14:35:50 +0000</pubDate>
+      
+      <guid>http://idouba.net/istio-01-code-pilot-service-discovery-upon-k8s/</guid>
+      <description>【摘要】 本文基于Pilot服务发现Kubernetes部分源码重点介绍在Istio on Kubernetes环境下，如何基于Pilot的Adapter机制实现Istio管理的服务直接使用Kubernetes service来做统一服务发现，避免了其他微服务框架运行在Kubernetes环境时上下两套服务目录的局面。并以此为入口从架构、场景等方面总结下Istio和Kubernetes的结合关系。 前言 文章Istio技术与实践01： 源码解析之Pilot多云平台服务发现机制结合Pilot的代码实现介绍了Ist</description>
+    </item>
+    
+    <item>
+      <title>Istio技术与实践01： 源码解析之Pilot多云平台服务发现机制</title>
+      <link>http://idouba.net/istio-01-code-pilot-service-discovery-adapter/</link>
+      <pubDate>Sat, 21 Jul 2018 16:12:44 +0000</pubDate>
+      
+      <guid>http://idouba.net/istio-01-code-pilot-service-discovery-adapter/</guid>
+      <description>前言 本文结合Pilot中的关键代码来说明下Istio的服务发现的机制、原理和流程。并以Eureka为例看下Adapter的机制如何支持多云环境下的服务发现。可以了解到： 1. Istio的服务模型; 2. Istio发现的机制和原理; 3. Istio服务发现的adpater机制。 基于以上了解可以根据需开发集成自有的服务注册表，完成服务发现的功能。 服务模型 首先，Istio作为一个（微）服务治理的平台，和其他的微服务模型一样也提供了Service，ServiceInstance这样抽象服务模型。如Service的定</description>
+    </item>
+    
+    <item>
+      <title>详析Istio最新v1alpha3 流量管理规则</title>
+      <link>http://idouba.net/istio-traffic-management-v1alpha3-by-example/</link>
+      <pubDate>Sat, 05 May 2018 15:53:52 +0000</pubDate>
+      
+      <guid>http://idouba.net/istio-traffic-management-v1alpha3-by-example/</guid>
+      <description>前言 isto提供了一种简单的语法来描述如何进行流量管理。可以给服务配置熔断、超时、重试等规则，也可以配置规则来切分流量从而实现金丝雀发布、A/B测试等发布功能。一个典型场景如官方文档中的case，将一定比例的流量或者满足一定条件的请求的流量切分到一个特定版本上。 Istio的route rule从v1alpha1到v1alpha3 变化特别大，可以看出对规则设计上完全进行了重构。看上去v1alpha3功能上更强了，可以预见未来1.0后alpha3风格的语法因为提供了更强的表达能力，将逐步取代alpha</description>
+    </item>
+    
+    <item>
+      <title>Opentracing 调用链服务端埋点</title>
+      <link>http://idouba.net/opentracing-serverside-tracing/</link>
+      <pubDate>Mon, 01 Jan 2018 14:17:31 +0000</pubDate>
+      
+      <guid>http://idouba.net/opentracing-serverside-tracing/</guid>
+      <description>1 前言 通过一个最简单的代码例子来看使用opentracing在服务端埋点的逻辑。因为调用链的抽象模型都是来自dapper这篇论文，所以其他的方式也是类似，只是接口方法上稍有不同。 2 关于服务端埋点 主要流程看上是： 收到请求 从通信协议（如常用的HTTP header）中解出客户端传递的trace； 构造span 保存span 服务端返回请求 关闭span，将span的数据结构上传到调用链的数据存储节点。 下面结合一个例子中的额使用看下2 3 4 6四个调用链埋点步骤具体做了哪些事情。 3 主要流程 以最典型的http服务端为</description>
+    </item>
+    
+    <item>
+      <title>论CAS在幼儿园点名中的应用</title>
+      <link>http://idouba.net/cas-in-kids-garden/</link>
+      <pubDate>Mon, 30 Oct 2017 15:51:14 +0000</pubDate>
+      
+      <guid>http://idouba.net/cas-in-kids-garden/</guid>
+      <description>宝贝的幼儿园老师都是漂亮活泼又富有爱心的小天使一样的人物，非常神奇的教会了宝贝们很多我们家长们都搞不定的事情，非常有办法的完全不用发火的将这些淘气的小家伙们修理的服服贴贴，在小宝贝们眼里简直就是神一般的存在，当然在家长眼里也是。 如果你以为这就是全部，那就大错特错了。就在这两天发现了，她们居然也是深谙各种计算机中的算法。不得不偷着怀疑这些白天在学校里的陪孩子们玩的小姑娘们下班后是不是在菊厂或者其他公司写代码。 这不这两天在家长群里发了消息，就小露了一手。这个案例的背景是要收集到每个宝贝的家长对一个重</description>
+    </item>
+    
+    <item>
+      <title>kubernetes liveness probe 流程</title>
+      <link>http://idouba.net/kubernetes-liveness-probe/</link>
+      <pubDate>Fri, 01 Sep 2017 15:39:48 +0000</pubDate>
+      
+      <guid>http://idouba.net/kubernetes-liveness-probe/</guid>
+      <description>1 概述 kubernetes提供了的Probe可以进行健康检查。 https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/ 对pod中的每个容器通过配置liveness或者readiness。 当liveness probe failed后，该container会杀掉，并重新创建；而readinessProbe失败，则该pod ip 会从service的endpoints列表中删除，即隔离到该后端的请求。 如liveness 配置如下： livenessProbe: httpGet: port: 10252 path: “/healthz” initialDelaySeconds: 15 timeoutSeconds: 15 文中尝试端到端的看下整个过程有哪些组件参与进来，怎么配合工作的。 2 配置 pkg/api/types.go#P</description>
+    </item>
+    
+    <item>
+      <title>kubernetes federation 工作机制之资源对象同步</title>
+      <link>http://idouba.net/kubernetes-federation-sync-accross-cluster/</link>
+      <pubDate>Tue, 15 Aug 2017 15:51:34 +0000</pubDate>
+      
+      <guid>http://idouba.net/kubernetes-federation-sync-accross-cluster/</guid>
+      <description>1 前言 希望通过本文最简单的方式向熟悉k8s的人说明白其上的federation是干什么的，如何工作的。 关于federation，比较官方的说法是：集群联邦可以让租户/企业根据需要扩展或伸缩所需要的集群；可以让租户/企业在跨地区甚至跨地域的多个集群上部署、调度、监测管理应用。通过集群联邦，租户/企业可以在指定集群上部署应用，可以拉通私有云和公有云建立混合云(hybrid cloud)。 如在design-proposal 中描述的federation提供了cross-cluster scheduling, cross-cluster service discovery, cross-cluster migration, cross-cluster**ing and auditing, cross-cluster load</description>
+    </item>
+    
+    <item>
+      <title>古城贼文化</title>
+      <link>http://idouba.net/thief-culture-of-the-city/</link>
+      <pubDate>Sat, 31 Dec 2016 10:56:34 +0000</pubDate>
+      
+      <guid>http://idouba.net/thief-culture-of-the-city/</guid>
+      <description>吃完晚饭与淋波&amp;amp;宝强在园区周边溜达一圈，不知怎么的扯到了小偷和被盗这个悲催的话题。三个人各自讲了自己经历的这方面的糗事，居然洋洋洒洒的扯了咕咚3000步。发现无论是数量还是质量还是精彩指数都完爆那两位，而这些素材都得益于在家乡古城的那几年经历，然后晚上回来虽然很晚了还是把这些归纳整理了下。 记忆最深刻的是在解放路上图书大厦的那次遭遇。那会儿刚从东北的铁路工地上回到家乡的这个城市，好久找不到工作，最后在和平门里一个老民居的公司里跑业务送东西。无意中撞到附近解放路上图书大厦里，后来就每天上午在</description>
+    </item>
+    
+    <item>
+      <title>稀松！对不住杭州，对不住G20</title>
+      <link>http://idouba.net/weekly-xisong-g20/</link>
+      <pubDate>Sun, 04 Sep 2016 11:23:27 +0000</pubDate>
+      
+      <guid>http://idouba.net/weekly-xisong-g20/</guid>
+      <description>注：这是第一篇用手机敲出来的文字，每天下午五点半开始在医院挂那瓶红色肺炎专用药的那四个小时。 熟悉的时间又来到这个最近开始熟悉的地方。这两天杭州g20，今天周末，临出门看了眼电视里习主席G20开幕布上的演讲。 右手上扎的针眼太有点多，今天换左手。腾出右手来闲着想记点东西。 这周过得和平时很不同。和很多生活在这个城市的人感觉一样，路上很空，街道人很少。连输液这边的护士都说这里现在的人都比平日少了好几成。与现实周围形成反差的是朋友圈里很热闹，名种晒图，大江南北。 对不住大家，对不住这个盛世的气氛。这周一个小</description>
+    </item>
+    
+    <item>
+      <title>Sort源码实现比较Go&amp;Java语言风格(3)</title>
+      <link>http://idouba.net/compare-go-and-java-style-by-sort-implement-3/</link>
+      <pubDate>Tue, 01 Dec 2015 15:20:55 +0000</pubDate>
+      
+      <guid>http://idouba.net/compare-go-and-java-style-by-sort-implement-3/</guid>
+      <description>前面两部分分别描述了Go和java两种语言对sort的使用方式和源码实现。作为go初学者，最想做的是通过例子和源码来对新的语言有个理解。这部分就结合自己的理解整理下，可以看到，是非常主观。 4 语言语法比较 可以看到，两种语言的思路基本上是一样的，用户必须定义比较规则。在排序过程中都要考察集合长度，使用用户定义的比较规则，然后调整元素位置来达到排序的效果，对应go的interface要求的三个方法。但是还是有挺多不同。 首先从使用方式上看，go的规则（通过方法来体现）定义在集合上，并且定义了三个方法，分</description>
+    </item>
+    
+    <item>
+      <title>Sort源码实现比较Go&amp;Java语言风格(2)</title>
+      <link>http://idouba.net/compare-go-and-java-style-by-sort-implement-2/</link>
+      <pubDate>Tue, 01 Dec 2015 15:18:12 +0000</pubDate>
+      
+      <guid>http://idouba.net/compare-go-and-java-style-by-sort-implement-2/</guid>
+      <description>接上篇博文，工作中用到了go排序的功能，作为go新手，在参照着例子，并读了go的sort.go部分涉及的源码，了解了go中排序的细节和实现算法，这些在上篇博文中有介绍。作为一个java ZHONGDU*2的用户，不由自主的想到了java中对应实现的样子，在这里也非常简要的贴出来，描述下java中排序的用法，和java源码中对应部分的实现，比较好奇java是和go一样，也用的时候快速排序吗？ 3 Java 排序源码解析 主要代码Looks like this： 3.1 使用例子 public class Person implements Comparable&amp;amp;lt;Person&amp;amp;gt; { private String name; private int age; @Override public int compareTo(Person o) { return this.age - o.age; } public static void main(String</description>
+    </item>
+    
+    <item>
+      <title>Sort源码实现比较Go&amp;Java语言风格(1)</title>
+      <link>http://idouba.net/compare-go-and-java-style-by-sort-implement-1/</link>
+      <pubDate>Tue, 01 Dec 2015 05:11:15 +0000</pubDate>
+      
+      <guid>http://idouba.net/compare-go-and-java-style-by-sort-implement-1/</guid>
+      <description>1 前言 刚开始拥抱go，非常新鲜！才使用没多久，属于没有经验，有一点感受的那种。具体也说不了特别清楚，就是觉得：简单，直接，灵活，方便。作为一个 java 重度中毒（ZHANGDU*2）用户，过程中还是习惯对照着思考，至少在这个阶段。也好，发现对照着想，似乎更容易融会贯通。 对资深的go程序员来说，应该都是非常基础基本的问题，但也挡不住咱这个小白要发表下感想。 第一篇文章首先结合最近做一个小feature时用到go中元素排序的功能，顺便了解下两种语言中排序功能的使用方式，各自源码中对排序功能的实现。当然最主要的</description>
+    </item>
+    
+    <item>
+      <title>戏（细）说Executor框架线程池任务执行全过程（下）</title>
+      <link>http://idouba.net/executor-framework-thread-pool-task-execution-part-02/</link>
+      <pubDate>Fri, 05 Jun 2015 16:02:43 +0000</pubDate>
+      
+      <guid>http://idouba.net/executor-framework-thread-pool-task-execution-part-02/</guid>
+      <description>归档下发表于infoq.com 2015年6月的两篇文章。本来是一篇文章，经过Infoq编辑Alice Ding建议，拆分为&amp;lt;上&amp;gt;和&amp;lt;下&amp;gt;两部分。谢谢Alice对文章的细心校对，帮我发下了其中的很多问题。添加下infoq要求的声明：本文为InfoQ中文站特供稿件，首发地址为：http://www.infoq.com/cn/articles/executor-framework-thread-pool-task-execution-part-02 。如需转载，请与InfoQ中文站</description>
+    </item>
+    
+    <item>
+      <title>戏（细）说Executor框架线程池任务执行全过程（上）</title>
+      <link>http://idouba.net/executor-framework-thread-pool-task-execution-part-01/</link>
+      <pubDate>Fri, 05 Jun 2015 15:41:44 +0000</pubDate>
+      
+      <guid>http://idouba.net/executor-framework-thread-pool-task-execution-part-01/</guid>
+      <description>归档下发表于infoq.com 2015年6月的两篇文章。本来是一篇文章，经过Infoq编辑Alice Ding建议，拆分为&amp;lt;上&amp;gt;和&amp;lt;下&amp;gt;两部分。谢谢Alice对文章的细心校对，帮我发下了其中的很多问题。添加下infoq要求的声明：本文为InfoQ中文站特供稿件，首发地址为：http://www.infoq.com/cn/articles/executor-framework-thread-pool-task-execution-part-01。如需转载，请与InfoQ中文站</description>
+    </item>
+    
+    <item>
+      <title>从Search Sort到Join</title>
+      <link>http://idouba.net/learn_table_join_from_search_and_sort/</link>
+      <pubDate>Thu, 07 May 2015 07:11:32 +0000</pubDate>
+      
+      <guid>http://idouba.net/learn_table_join_from_search_and_sort/</guid>
+      <description>发表于《程序员》2015年4月B的一篇文章，在博客归档下。根据杂志社要求，在自己博客发表该文章亦须注明：本文为CSDN编译整理，未经允许不得转载，如需转载请联系market#csdn.net(#换成@) 想通过原理来说明一些技术白皮书上“什么时候应该使用什么”这个“应该”后面的原因。通过数据结构中经典的排序查找算法来推倒解释数据库中几种经典的表连接背后的算法原理，和原理决定的在各种数据库中不同的应用和限制。以简单的算法来讲出数据库系统中看着核心强大功能的本质的算法设计。较之白皮书中不同数据库的不同</description>
+    </item>
+    
+    <item>
+      <title>跨界看项目那些事儿</title>
+      <link>http://idouba.net/about-projects/</link>
+      <pubDate>Fri, 10 Apr 2015 10:19:09 +0000</pubDate>
+      
+      <guid>http://idouba.net/about-projects/</guid>
+      <description>年底了，该总结了。例行的招呼几个项目负责人对几个项目执行情况进行总结，项目上中实践比较成功的，记录细节，评估其他项目借鉴的可能性；项目上存在的问题，重点一起剖析下。由表面现象，到深层次的原因，力图通过讨论或争论都能有一致的认识，形成改进。但希望是理解了改进，而不是被要求改进。为了更生动的说明自己的观点，作为主持人的笔者准备了一个大家都比较熟悉的例子，公司附近的一个工地上项目。居然发现效果很好，新鲜，生动，容易被大家理解和引起共鸣。也是，在批判自己的过程中，肆无忌惮的给第三方挑毛病的确是很爽的一件</description>
+    </item>
+    
+    <item>
+      <title>源码剖析AQS在几个同步工具类中的使用</title>
+      <link>http://idouba.net/sync-implementation-by-aqs/</link>
+      <pubDate>Mon, 06 Apr 2015 15:30:31 +0000</pubDate>
+      
+      <guid>http://idouba.net/sync-implementation-by-aqs/</guid>
+      <description>1. 前言 AQS(AbstractQueuedSynchronizer)是 java.util.concurrent的基础。J.U.C中宣传的封装良好的好用的同步工具类Semaphore、CountDownLatch、ReentrantLock、ReentrantReadWriteLock、FutureTask等虽然各自都有不同特征，但是简单看一下源码，每个类内部都包含一个如下的内部类定义： 同时每个类内部都包含有这样一个属性，连属性名都一样！注释已经暗示了，该类的同步机制正是通过这个AQS的子类来完成</description>
+    </item>
+    
+    <item>
+      <title>Java NIO 要点总结</title>
+      <link>http://idouba.net/java-nio-brief-intro/</link>
+      <pubDate>Wed, 21 Jan 2015 04:47:35 +0000</pubDate>
+      
+      <guid>http://idouba.net/java-nio-brief-intro/</guid>
+      <description>来自Jenkov.com的比较完整但是足够brief的一个系列：Java NIO Tutorial，介绍了NIO的主要机制和其中几个重要对象的作用和工作。 1. 三个对象 NIO核心的三个对象： Channels Buffers Selectors 简单讲三个对象：Channel 像IO的流，Buffer就像名字一样，就是个缓存。 数据可以从Channel读到Buffer中，也可以从Buffer 写到Channel中。IO是面向流的，连接到一个源或者目标（对应于输入流或者输出流），如Java IO Overview中说明，比较典型的数据源和目标类型有：Files、Pipe</description>
+    </item>
+    
+    <item>
+      <title>实际抢票体验描述和分析“猎豹抢票跨站推荐功能有票刷不到”的疑似bug</title>
+      <link>http://idouba.net/one-new-bug-report-of-liebao-huochepiao/</link>
+      <pubDate>Tue, 23 Dec 2014 00:03:04 +0000</pubDate>
+      
+      <guid>http://idouba.net/one-new-bug-report-of-liebao-huochepiao/</guid>
+      <description>前言 快过年了，又到了一年抢票时。今年douba和douma计划要带着doudou回姥姥家。昨天在家用抢票软件居然发现了一个bug，那就是在猎豹抢票中跨站推荐的车票几天里一直是没有，但是在12306手动尝试不同的跨站可以买到票，怀疑是猎豹在处理车次信息的时候对于变化的车次没有考虑到所致。在文中以实际操作尝试对这个bug做个比较详细的描述，并加上一点定位和分析，希望可以帮助这款神器的使用者和开发者提供些有用信息。按照douma的指示，今天上班来中午吃完饭不休息了，匆匆写下发表出来，供其他焦急的抢票战</description>
+    </item>
+    
+    <item>
+      <title>oracle分页技术性能比较</title>
+      <link>http://idouba.net/performance-comparison-of-oracle-paging/</link>
+      <pubDate>Tue, 14 Oct 2014 08:53:14 +0000</pubDate>
+      
+      <guid>http://idouba.net/performance-comparison-of-oracle-paging/</guid>
+      <description>一、前言 在一个有30亿条数据的大表上分页，为了对方案进行性能测试，先忽略其他条件查询的影响，单看下分页部分的性能，顺便考察说明下oracle中rownum使用中一些比较tricky的地方。实验条件： 表结构如下，内有2千万条实验数据。 二、实验 提供7种不同方式（其实是5种，二和四是一种、三和五是一种）方式的 。第一种只是为了demo一下假设的一种错误逻辑方式，第二种和第四种是一种逻辑正确，但是性能极差的方式。筛选下来看上去性能可行的方式是第五、第六、第七方式。 这里仅仅记录没中方式的执行结果和计划。 方式</description>
+    </item>
+    
+    <item>
+      <title>最简单例子图解JVM内存分配和回收</title>
+      <link>http://idouba.net/a-simple-example-demo-jvm-allocation-and-gc/</link>
+      <pubDate>Tue, 15 Jul 2014 05:49:37 +0000</pubDate>
+      
+      <guid>http://idouba.net/a-simple-example-demo-jvm-allocation-and-gc/</guid>
+      <description>一、简介 JVM采用分代垃圾回收。在JVM的内存空间中把堆空间分为年老代和年轻代。将大量（据说是90%以上）创建了没多久就会消亡的对象存储在年轻代，而年老代中存放生命周期长久的实例对象。年轻代中又被分为Eden区(圣经中的伊甸园)、和两个Survivor区。新的对象分配是首先放在Eden区，Survivor区作为Eden区和Old区的缓冲，在Survivor区的对象经历若干次收集仍然存活的，就会被转移到年老区。 简单讲，就是生命期短的对象放在一起，将少数生命期长的对象放在一起，分别采用不同的回收策略</description>
+    </item>
+    
+    <item>
+      <title>B树在数据库索引中的应用剖析(发表版本)</title>
+      <link>http://idouba.net/about-btrees-application-in-database-index-in-programmer/</link>
+      <pubDate>Wed, 18 Jun 2014 09:27:23 +0000</pubDate>
+      
+      <guid>http://idouba.net/about-btrees-application-in-database-index-in-programmer/</guid>
+      <description>最近一篇发表于《程序员》2014年6月刊上的文章。有点遗憾发现，有些部分被编辑修改过了，读起来有点怪怪的。最典型的是习惯于对某些比较经典的定义引用wikipedia或者原始白皮书中原始的E文，在文中发现都被硬译过了，表达的意思自己都有点看不懂了！ 最终修改后提交的版本归档下： 引言 关于数据库索引，随便Google一个Oracle index，Mysql index总能得到“某某索引之n条经典建议”之类大量结果。笔者认为，较之直接借鉴，在搞清实际需求的基础上，对备选方案的原理尽可能深入全面的了解会更有利于</description>
+    </item>
+    
+    <item>
+      <title>兰迪·波许教授的最后一课</title>
+      <link>http://idouba.net/randy-pausch-s-last-lecture/</link>
+      <pubDate>Sat, 10 May 2014 14:58:05 +0000</pubDate>
+      
+      <guid>http://idouba.net/randy-pausch-s-last-lecture/</guid>
+      <description>偶尔整理硬盘时候发现的《兰迪·波许教授的最后一课》相关资料，包括视频，是08年的时候下下来看的，非常感人。 视频地址：兰迪·波许教授的最后一课 文 档：[兰迪·波许教授的最后一课].Randy.Pausch’s.Last.Lecture.Transcript 附Randy 语录： Brick walls are there for a reason: they let us prove how badly we want things. 人生路上有阻挡你梦想的砖墙，那是有原因的。这些砖墙让我们来证明我们究竟有多么想要得到我们所需要的。 Experience is what you get when you didn’t get what you wanted. 当你得不到你想的到的东西时，你会得到经验。 Never lose the child-like wonder. 永远不要失去孩</description>
+    </item>
+    
+    <item>
+      <title>豆豆棒球记</title>
+      <link>http://idouba.net/doudou-baseball/</link>
+      <pubDate>Wed, 02 Apr 2014 14:00:11 +0000</pubDate>
+      
+      <guid>http://idouba.net/doudou-baseball/</guid>
+      <description>豆豆小朋友真的长大了！会调皮了。 今天晚上，doudou指挥着和豆爸配合了一把棒球的游戏。doudou用的是乒乓球，douba用的是笤帚做球杆（棒球是不是叫球棒？）。工具都是 doudou提供和设计。总共进行了六轮，以姥姥指挥douba耍赖藏球结束比赛。哦，忘了补充一句，整个过程，doudou是在尿湿了裤子，外面裤子被 扒下来在膝盖位置，湿漉漉的秋裤贴着屁股的艰难环境下完成的。 这个家伙怎么这么没有出息呀，就喜欢笤帚，在家里面扫地可起劲了。 for i in 0..6 doudou: step1: 高高的撅着屁股往床下扔乒乓球 step2：结实的趴在地</description>
+    </item>
+    
+    <item>
+      <title>从Count看Oracle执行计划的选择</title>
+      <link>http://idouba.net/analysis-oracle-execute-plan-from-count/</link>
+      <pubDate>Mon, 24 Mar 2014 12:53:50 +0000</pubDate>
+      
+      <guid>http://idouba.net/analysis-oracle-execute-plan-from-count/</guid>
+      <description>一、 前言 在调查一个性能问题的时候，一个同事问道，为什么数据库有些时候这么不聪明，明明表上有索引，但是在执行一个简单的count的时候居然全表扫描了！难道不知道走索引更快么？ 试图从最简单的count来重新了解oracle查询计划的选择，以及最终产生的结果。虽然有些结果会让人觉得有些意外，并且可能会鄙视，这个查询计划选择真的不够聪明。但稍微用心点的去了解，做的已经足够细致了。大多数情况下，根据我们输入的信息，来自输入的SQL、表结构、索引状况、统计信息，会得出一个比较优的计划。所以和前面一直试图讲到</description>
+    </item>
+    
+    <item>
+      <title>B树在数据库索引中的应用剖析（原稿）</title>
+      <link>http://idouba.net/about-btrees-application-in-database-index/</link>
+      <pubDate>Thu, 20 Mar 2014 08:18:48 +0000</pubDate>
+      
+      <guid>http://idouba.net/about-btrees-application-in-database-index/</guid>
+      <description>引言 关于数据库索引，随便Google一个Oracle index，Mysql index总有大量的结果出来，其中不乏某某索引之n条经典建议。笔者认为，较之借鉴，在搞清楚了自己的需求的基础上，对备选方案的原理有个尽可能深入全面的了解会更有利于我们的选择和决策。因为某种方案或者技术呈现出某种优势（包括可能没有被介绍到但一定存在的限制），不是定义出来的，而是因为其实现机制决定的。就像LinkedList和ArrayList分别适用于什么应用不是Document里面定义的，是由其本身的结构决定的。数据库的索</description>
+    </item>
+    
+    <item>
+      <title>牵一只蜗牛去散步</title>
+      <link>http://idouba.net/learn-and-walk-with-doudou/</link>
+      <pubDate>Tue, 25 Feb 2014 06:47:43 +0000</pubDate>
+      
+      <guid>http://idouba.net/learn-and-walk-with-doudou/</guid>
+      <description>douma发给我的一篇文章，让douba好好阅读。 上帝给我一个任务 叫我牵一只蜗牛去散步。 我不能走太快， 蜗牛已经尽力爬，为何每次总是那么一点点？ 我催它，我唬它，我责备它， 蜗牛用抱歉的眼光看着我， 彷佛说：「人家已经尽力了嘛！」 我拉它，我扯它，甚至想踢它， 蜗牛受了伤，它流着汗，喘着气，往前爬… 真奇怪，为什么上帝叫我牵一只蜗牛去散步？ 「上帝啊！为什么？」 天上一片安静。 「唉！也许上帝抓蜗牛去了！」 好吧！松手了！ 反正上帝不管了，我还管什么？ 让蜗牛往前爬，我在后面生闷气。 咦？我闻到花香，原来这边还有个花园， 我</description>
+    </item>
+    
+    <item>
+      <title>要回家了，要离家了</title>
+      <link>http://idouba.net/go-home/</link>
+      <pubDate>Fri, 21 Feb 2014 09:19:06 +0000</pubDate>
+      
+      <guid>http://idouba.net/go-home/</guid>
+      <description>要回到老家了，看老妈了。老妈摔伤躺着床上已经二十多天了，一直拖到现在才回家，很惭愧，很心疼。再有两个小时的飞机行程就到家了，看看父母，看看奶奶。晚上就可以躺在奶奶的大炕上了。 要离开小家了，想着小家。豆豆和以前每天一样在电话那头嗷嗷的喊叫，把douba的心都勾引到二十六七分钟自行车车程的小家。惦记着豆豆，惦记着douma。 机场大巴可真快呀！感觉比平时打车还快。二十分钟就到了机场了。 刚才打电话豆豆一直在喊叫，听douma说我们豆豆在吃饭的时候，和妈妈姥姥围在餐桌边上，眼睛一直还望门口看，豆豆是在等爸</description>
+    </item>
+    
+    <item>
+      <title>Oracle索引原理精简总结</title>
+      <link>http://idouba.net/oracle-index-brief/</link>
+      <pubDate>Wed, 19 Feb 2014 13:48:09 +0000</pubDate>
+      
+      <guid>http://idouba.net/oracle-index-brief/</guid>
+      <description>结合使用整理Oracle的索引，主要权威的来自于Oracle Database Concepts与Oracle Database Performance Tuning Guide 尝试用最少的字数介绍oracle的几种常用索引原理，主要是想简单分析其存储结构来说明其检索方式，和解释为什们某种索引使用与某种场合。（数据结构中最简单的ArrayList和LinkedList的使用场景）。阐述原因只有一个，就是因为其存储结构决定的。 B树索引(默认类型) 存储结构： B+树，不多描述。和其他几种关系数据库一样，就是根据索引列(一个或多个)来构造一个B+树来存储索引。非叶子节点两个区域：</description>
+    </item>
+    
+    <item>
+      <title>【hadoop代码笔记】Mapreduce shuffle过程之Map输出过程</title>
+      <link>http://idouba.net/hadoop_mapreduce_shuffle_map_output/</link>
+      <pubDate>Wed, 05 Feb 2014 15:58:39 +0000</pubDate>
+      
+      <guid>http://idouba.net/hadoop_mapreduce_shuffle_map_output/</guid>
+      <description>&lt;h3 id=&#34;一概要描述&#34;&gt;&lt;strong&gt;一、概要描述&lt;/strong&gt;&lt;/h3&gt;
+&lt;p&gt;shuffle是MapReduce的一个核心过程，因此没有在&lt;a href=&#34;../hadoop_job_submit_conclusion/&#34; title=&#34;【hadoop代码笔记】hadoop作业提交之汇总&#34;&gt;前面的MapReduce作业提交的过程&lt;/a&gt;中描述，而是单独拿出来比较详细的描述。 根据官方的流程图示如下：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;../wp-content/uploads/2014/02/shuffle.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;本篇文章中只是想尝试从代码分析来说明在map端是如何将map的输出保存下来等待reduce来取&lt;/strong&gt;。 在执行每个map task时，无论map方法中执行什么逻辑，最终都是要把输出写到磁盘上。如果没有reduce阶段，则直接输出到hdfs上，如果有有reduce作业，则每个map方法的输出在写磁盘前线在内存中缓存。每个map task都有一个环状的内存缓冲区，存储着map的输出结果，默认100m，在每次当缓冲区快满的时候由一个独立的线程将缓冲区的数据以一个溢出文件的方式存放到磁盘，当整个map task结束后再对磁盘中这个map task产生的所有溢出文件做合并，被合并成已分区且已排序的输出文件。然后等待reduce task来拉数据。&lt;/p&gt;
+&lt;h3 id=&#34;二-流程描述&#34;&gt;&lt;strong&gt;二、 流程描述&lt;/strong&gt;&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;在child进程调用到runNewMapper时，会设置output为NewOutputCollector，来负责map的输出。&lt;/li&gt;
+&lt;li&gt;在map方法的最后，不管经过什么逻辑的map处理，最终一般都要调用到TaskInputOutputContext的write方法，进而调用到设置的output即NewOutputCollector的write方法&lt;/li&gt;
+&lt;li&gt;NewOutputCollector其实只是对MapOutputBuffer的一个封装，其write方法调用的是MapOutputBuffer的collect方法。&lt;/li&gt;
+&lt;li&gt;MapOutputBuffer的collect方法中把key和value序列化后存储在一个环形缓存中，如果缓存满了则会调用startspill方法设置信号量，使得一个独立的线程SpillThread可以对缓存中的数据进行处理。&lt;/li&gt;
+&lt;li&gt;SpillThread线程的run方法中调用sortAndSpill方法对缓存中的数据进行排序后写溢出文件。&lt;/li&gt;
+&lt;li&gt;当map输出完成后，会调用output的close方法。&lt;/li&gt;
+&lt;li&gt;在close方法中调用flush方法，对剩余的缓存进行处理，最后调用mergeParts方法，将前面过程的多个溢出文件合并为一个。&lt;/li&gt;
+&lt;/ol&gt;</description>
+    </item>
+    
+    <item>
+      <title>【hadoop代码笔记】hadoop作业提交之汇总</title>
+      <link>http://idouba.net/hadoop_job_submit_conclusion/</link>
+      <pubDate>Sat, 01 Feb 2014 13:25:44 +0000</pubDate>
+      
+      <guid>http://idouba.net/hadoop_job_submit_conclusion/</guid>
+      <description>一、概述 在本篇博文中，试图通过代码了解hadoop job执行的整个流程。即用户提交的mapreduce的jar文件、输入提交到hadoop的集群，并在集群中运行。重点在代码的角度描述整个流程，有些细节描述的并不那么详细。 汇总的代码流程图附件:hadoop_mapreduce_jobsubmit 二、主要流程 Jobclient通过RPC方式调用到jobtracker的submitJob方法提交作业，包括作业的jar、分片和作业描述。 JobTracker的submitJob方法吧job加入到内存队列中</description>
+    </item>
+    
+    <item>
+      <title>【hadoop代码笔记】hadoop作业提交之Child启动map任务</title>
+      <link>http://idouba.net/hadoop_mapreduce_tasktracker_child_map/</link>
+      <pubDate>Wed, 22 Jan 2014 07:00:53 +0000</pubDate>
+      
+      <guid>http://idouba.net/hadoop_mapreduce_tasktracker_child_map/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;一、概要描述&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在&lt;a href=&#34;../hadoop_mapreduce_tasktracker_launch_task&#34;&gt;上篇博文描&lt;/a&gt;述了TaskTracker启动一个独立的java进程来执行Map或Reduce任务。在本篇和&lt;a href=&#34;../hadoop_mapreduce_tasktracker_child_reduce&#34;&gt;下篇博文&lt;/a&gt;中我们会关注启动的那个入口是org.apache.hadoop.mapred.Child的这个Java进程是如何执行用户定义的map或Reduce任务的。&lt;/p&gt;
+&lt;p&gt;接&lt;a href=&#34;../hadoop_mapreduce_tasktracker_launch_task&#34;&gt;上篇文章&lt;/a&gt;，TaskRunner线程执行中，会构造一个_java –D** Child address port tasked_这 样第一个java命令，单独启动一个java进程。在Child的main函数中通过TaskUmbilicalProtocol协议，从 TaskTracker获得需要执行的Task，并调用Task的run方法来执行，而Task的run方法会通过java反射机制构造 Mapper，InputFormat，mapperContext，然后调用构造的mapper的run方法执行mapper操作。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;二、 流程描述&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;1.Child类根据前面输入的三个参数，即tasktracher的地址、端口、taskid。通过TaskUmbilicalProtocol协议，从TaskTracker获得需要执行的Task，在Child的main函数中调用执行。&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;
+&lt;p&gt;在Chilld中，执行Task的run方法。Task 的run方法。是真正执行用户定义的map或者reduce任务的入口，通过TaskUmbilicalProtocol向tasktracker上报执行进度。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在MapTask的run中执行runMapper方法来调用mapper定义的方法。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在runNewMapper方法中构造mapper实例和mapper执行的配置信息。并执行mapper.run方法来调用到用户定义的mapper的方法。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;mapper的run方法中，从输入数据中逐一取出调用map方法来处理每一条数据&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;mapper的map方法是真正用户定义的处理数据的类。也是用户唯一需要定义的方法。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;</description>
+    </item>
+    
+    <item>
+      <title>【hadoop代码笔记】hadoop作业提交之TaskTracker 启动task</title>
+      <link>http://idouba.net/hadoop_mapreduce_tasktracker_launch_task/</link>
+      <pubDate>Tue, 21 Jan 2014 13:58:12 +0000</pubDate>
+      
+      <guid>http://idouba.net/hadoop_mapreduce_tasktracker_launch_task/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;一、概要描述&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在&lt;a href=&#34;../hadoop_mapreduce_tasktracker_retrieve_task&#34;&gt;上篇博文&lt;/a&gt;描 述了TaskTracker从Jobtracker如何从JobTracker获取到要执行的Task。在从JobTracker获取到 LaunchTaskAction后，执行addToTaskQueue方法来把要执行的Task加入到queue。在本篇博文中，我们来关注下该方法 后，TaskTracker怎么来处理这些Task。&lt;/p&gt;
+&lt;p&gt;实际上，TaskTracker初始化时，会初始化并启动两个TaskLauncher类型的线程，mapLauncher，reduceLauncher。在TaskTracker从JobTracher获取到任务后，对应的会把任务添加到两个 TaskLauncher的Queue中，其实是TaskLauncher维护的一个列表List&lt;!-- raw HTML omitted --&gt; tasksToLaunch。&lt;/p&gt;
+&lt;p&gt;TaskLauncher线程一直会定时检查TaskTracher上面有slot开业运行新的Task，则启动 Task。在这个过程中，先把task运行需要的文件解压到本地，并创建根据Task类型（Map或者Reduce）创建一个TaskRunner线程， 在TaskRunner中JvmManager调用JvmManagerForType、JvmRunner来启动一个&lt;strong&gt;java进程&lt;/strong&gt;来执行Map或Reduce任务。&lt;/p&gt;
+&lt;p&gt;本文只是介绍到启动一个java进程，至于是什么样的java进程，对于maptask和reducetask分别是怎么执行的，在后面的&lt;a href=&#34;../hadoop_mapreduce_tasktracker_child_map&#34;&gt;child启动maptask&lt;/a&gt;，和&lt;a href=&#34;../hadoop_mapreduce_tasktracker_child_reduce&#34;&gt;child启动reducetask&lt;/a&gt; 会比较详细的介绍。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;二、 流程描述&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;tasktracker的offerService方法获取到要执行的task后调用addToTaskQueue方法，其实是调用taskrunner的addToTaskQueue方法&lt;/li&gt;
+&lt;li&gt;TaskLauncher内部维护了一个List&lt;!-- raw HTML omitted --&gt; tasksToLaunch，只是把task加入到该&lt;/li&gt;
+&lt;li&gt;taskLauncher是一个线程，在其run方法中从tasksToLaunch集合中取出task来执行，调用Tasktracker的startNewTask方法启动task。&lt;/li&gt;
+&lt;li&gt;startNewtask方法中调用localizeJob方法把job相关的配置信息和要运行的jar拷贝到tasktracker本地，然后调用taskInProgress的launchTask方法来启动task。&lt;/li&gt;
+&lt;li&gt;TaskInProgress的launchTask方法先调用localizeTask(task把task相关的配置信息获取到本地。然后创建一个TaskRunner线程来启动task。&lt;/li&gt;
+&lt;li&gt;在TaskRunner的run方法中构建一个java命令的执行的条件，包括引用类，执行目录等，入口类是Child。然后调用JvmManager 的launchJvm方法来调用。&lt;/li&gt;
+&lt;li&gt;JvmManager 进而调用 JvmManagerForType的reapJvm，和spawnNewJvm 方法，发起调用.&lt;/li&gt;
+&lt;li&gt;在JvmManagerForType的spawnNewJvm 方法中创建了一个JvmRunner线程类执行调用.&lt;/li&gt;
+&lt;li&gt;JvmRunner线程的run反复调用runChild方法来执行 一个命令行的调用。&lt;/li&gt;
+&lt;/ol&gt;</description>
+    </item>
+    
+    <item>
+      <title>【hadoop代码笔记】hadoop作业提交之Job初始化</title>
+      <link>http://idouba.net/hadoop_mapreduce_job_init/</link>
+      <pubDate>Sun, 19 Jan 2014 14:54:46 +0000</pubDate>
+      
+      <guid>http://idouba.net/hadoop_mapreduce_job_init/</guid>
+      <description>一、概要描述 在上一篇博文中主要描述了JobTracker和其几个服务（或功能）模块的接收到提交的job后的一些处理。其中很重要的一部分就作业的初始化。因为代码片段图的表达问题，本应该在上篇描述的内容，分开在本篇描述。 二、 流程描述 代码也接上文的最后一个方法EagerTaskInitializationListener的 jobAdded方法把JobInProgress类型的job放到List类型的 jobInitQueue中，有个单独的线程会对新加入的每个job进行初始化，其初始化调用的方法就是Job</description>
+    </item>
+    
+    <item>
+      <title>【hadoop代码笔记】hadoop作业提交之TaskTracker获取Task</title>
+      <link>http://idouba.net/hadoop_mapreduce_tasktracker_retrieve_task/</link>
+      <pubDate>Sat, 18 Jan 2014 14:50:50 +0000</pubDate>
+      
+      <guid>http://idouba.net/hadoop_mapreduce_tasktracker_retrieve_task/</guid>
+      <description>一、概要描述 在上上一篇博文和上一篇博文中 分别描述了jobTracker和其服务（功能）模块初始化完成后，接收JobClient提交的作业，并进行初始化。本文着重描 述，JobTracker如何选择作业的Task分发到TaskTracker。本文只是描述一个TaskTracker如何从JobTracker获取 Task任务。Task任务在TaskTracker如何执行将在后面博文中描述。 二、 流程描述 TaskTracker在run中调用offerService()方法一直死循环的去连接Jobtracke</description>
+    </item>
+    
+    <item>
+      <title>【hadoop代码笔记hadoop作业提交之JobTracker等相关功能模块初始化</title>
+      <link>http://idouba.net/hadoop_job_submit_service_init/</link>
+      <pubDate>Fri, 17 Jan 2014 14:36:20 +0000</pubDate>
+      
+      <guid>http://idouba.net/hadoop_job_submit_service_init/</guid>
+      <description>一、概要描述 本文重点描述在JobTracker一端接收作业、调度作业等几个模块的初始化工作。想过模块的介绍会在其他文章中比较详细的描述。受理作业提交在下一篇文章中会进行描述。 为了表达的尽可能清晰一点只是摘录出影响逻辑流转的主要代码。重点强调直接的协作调用，每个内部完成的逻辑（一直可以更细的说明、有些细节可能自己也理解并不深刻:-(）在后续会描述。 主要包括JobTracker、TaskScheduler（此处以FairScheduler为例）、JobInProgressListener（以用的较多</description>
+    </item>
+    
+    <item>
+      <title>【hadoop代码笔记】hadoop作业提交之JobTracker接收作业提交</title>
+      <link>http://idouba.net/hadoop_mapreduce_jobadded/</link>
+      <pubDate>Thu, 16 Jan 2014 13:39:25 +0000</pubDate>
+      
+      <guid>http://idouba.net/hadoop_mapreduce_jobadded/</guid>
+      <description>一、概要描述 在上一篇博文中主要描述了JobTracker接收作业的几个服务（或功能）模块的初始化过程。本节将介绍这些服务（或功能）是如何接收到提交的job。本来作业的初始化也可以在本节内描述，但是涉及到JobInProgress的初始化过程放在一张图上太拥挤，就分开到下一篇文章中描述。 二、 流程描述 JobClient通过RPC的方式向JobTracker提交作业； 调用JobTracker的submitJob方法。该方法是JobTracker向外提供的供调用的提交作业的接口。 submit方法中调用J</description>
+    </item>
+    
+    <item>
+      <title>【hadoop代码笔记】Hadoop作业提交中EagerTaskInitializationListener的作用</title>
+      <link>http://idouba.net/eagertaskinitializationlistener/</link>
+      <pubDate>Wed, 15 Jan 2014 14:05:42 +0000</pubDate>
+      
+      <guid>http://idouba.net/eagertaskinitializationlistener/</guid>
+      <description>一、概述 继承自JobInProgressListener，实现了jobAdded，jobRemoved，jobUpdated方法。哦，不能说实现，应该说继承，JobInProgressListener居然是个抽象类，看着怎么这样的listener也应该是个interface。 在该listener被注册后，就响应jobAdded，jobRemoved，jobUpdated动作。在EagerTaskInitializationListener中，响应这三种动作来维护内部的一个job列表（Listjo</description>
+    </item>
+    
+    <item>
+      <title>【hadoop代码笔记】通过JobClient对Jobtracker的调用详细了解Hadoop RPC</title>
+      <link>http://idouba.net/haddoop_rpc_jobclient_jobtracker/</link>
+      <pubDate>Sat, 11 Jan 2014 12:02:36 +0000</pubDate>
+      
+      <guid>http://idouba.net/haddoop_rpc_jobclient_jobtracker/</guid>
+      <description>Hadoop的各个服务间，客户端和服务间的交互采用RPC方式。关于这种机制介绍的资源很多，也不难理解，这里不做背景介绍。只是尝试从Jobclient向JobTracker提交作业这个最简单的客户端服务器交互的代码中，去跟踪和了解下RPC是怎么被使用的。不同于准备发表博客时搜索的几篇博文，试图通过一种具体的场景来介绍，属于比较初级。其他DataNode和Namenode之间，Tasktracker和JobTracker之间的交互基本也都一样。为了引用的代码篇幅尽可能少，忽略了代码中写日志（包括Me</description>
+    </item>
+    
+    <item>
+      <title>【译】数据库事务隔离级别</title>
+      <link>http://idouba.net/wikipedia_isolation/</link>
+      <pubDate>Sun, 05 Jan 2014 12:23:26 +0000</pubDate>
+      
+      <guid>http://idouba.net/wikipedia_isolation/</guid>
+      <description>&lt;p&gt;看到wikipedia中文关于数据库相关的几个&lt;!-- raw HTML omitted --&gt;经典&lt;!-- raw HTML omitted --&gt;条目有点老旧，尤其和英文条目相比。确定开始翻译其中几篇，先从&lt;!-- raw HTML omitted --&gt;事务隔离等级&lt;!-- raw HTML omitted --&gt;开始。格式采用维基Sandbox发布后的格式。翻译完后自己校对过几遍，质量还可以。:-)
+已经在中文维基发布。
+翻译的中文条目地址：&lt;!-- raw HTML omitted --&gt;事务隔离等级&lt;!-- raw HTML omitted --&gt;；
+对应的英文条目地址：&lt;!-- raw HTML omitted --&gt;Isolation (database systems)&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
+&lt;p&gt;欢迎大家指正，可以直接在维基上对应条目更新的！。&lt;/p&gt;
+&lt;p&gt;**事务隔离（isolation）**定义了&lt;a href=&#34;http://en.wikipedia.org/wiki/Database&#34; title=&#34;Database&#34;&gt;数据库&lt;/a&gt;系统中一个操作产生的影响什么时候以哪种方式可以对其他&lt;a href=&#34;http://en.wikipedia.org/wiki/Concurrency_%28computer_science%29&#34; title=&#34;Concurrency (computer science)&#34;&gt;并发&lt;/a&gt;操作可见。隔离是事务&lt;a href=&#34;http://en.wikipedia.org/wiki/ACID&#34; title=&#34;ACID&#34;&gt;ACID&lt;/a&gt; (原子性、一致性性、隔离性、持久性)四大属性中的一个重要属性。&lt;/p&gt;
+&lt;p&gt;&lt;!-- raw HTML omitted --&gt;1 并发控制(Concurrency control)&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;2 隔离级别(Isolation levels)&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt; 2.1 可序列化(Serializable)&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;2.2 可重复读(Repeatable reads)&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;2.3 授权读(Read committed)&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;2.4 未授权读(Read uncommitted)&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;3 默认隔离级别&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;4 读现象(Read phenomena)&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;4.1 脏读(Dirty reads (Uncommitted Dependency))&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;4.2 不可重复读(non-repeatable read)&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;4.3 幻影读(phantom read)&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;5 隔离级别、读现象和锁(Isolation Levels, Read Phenomena and Locks)&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;5.1 隔离级别vs读现象(Isolation Levels vs Read Phenomena)&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;5.2 隔离级别vs 锁持续时间(Isolation Levels vs Lock Duration)&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;6 参照&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;7 相关条目&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;8 外部链接&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
+&lt;h2 id=&#34;并发控制concurrency-control&#34;&gt;并发控制(Concurrency control)&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;http://en.wikipedia.org/wiki/Concurrency_control&#34; title=&#34;Concurrency control&#34;&gt;并发控制&lt;/a&gt;描述了数据库处理隔离以保证数据正确性的机制。为了保证并行事务执行的准确执行数据库和存储引擎在设计的时候着重强调了这一点。典型的事务相关机制限制数据的访问顺序(&lt;a href=&#34;http://en.wikipedia.org/wiki/Schedule_%28computer_science%29&#34; title=&#34;Schedule (computer science)&#34;&gt;执行调度&lt;/a&gt;)以满足&lt;a href=&#34;http://en.wikipedia.org/wiki/Serializability&#34; title=&#34;Serializability&#34;&gt;可序列化&lt;/a&gt; 和&lt;a href=&#34;http://en.wikipedia.org/wiki/Recoverability&#34; title=&#34;Recoverability&#34;&gt;可恢复性&lt;/a&gt;。限制数据访问意味着降低了执行的性能，并发控制机制就是要保证在满足这些限制的前提下提供尽可能高的性能。经常在不损害正确性的情况下，为了达到更好的性能，&lt;a href=&#34;http://en.wikipedia.org/wiki/Serializability&#34; title=&#34;Serializability&#34;&gt;可序列化&lt;/a&gt;的的要求会减低一些，但是为了避免数据一致性的破坏，&lt;a href=&#34;http://en.wikipedia.org/wiki/Recoverability&#34; title=&#34;Recoverability&#34;&gt;可恢复性&lt;/a&gt;必须保证。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://en.wikipedia.org/wiki/Two-phase_locking&#34; title=&#34;Two-phase locking&#34;&gt;两阶段锁&lt;/a&gt;是关系数据库中最常见的提供了&lt;a href=&#34;http://en.wikipedia.org/wiki/Serializability&#34; title=&#34;Serializability&#34;&gt;可序列化&lt;/a&gt; 和&lt;a href=&#34;http://en.wikipedia.org/wiki/Recoverability&#34; title=&#34;Recoverability&#34;&gt;可恢复性&lt;/a&gt;的并发控制机制，为了访问一个数据库对象，事务首先要获得这个对象的 &lt;a href=&#34;http://en.wikipedia.org/wiki/Lock_%28database%29&#34; title=&#34;Lock (database)&#34;&gt;锁&lt;/a&gt;。对于不同的访问类型（如对对象的读写操作）和锁的类型，如果另外一个事务正持有这个对象的锁，获得锁的过程会被阻塞或者延迟。&lt;/p&gt;
+&lt;h2 id=&#34;隔离级别isolation-levels&#34;&gt;隔离级别(Isolation levels)&lt;/h2&gt;
+&lt;p&gt;在&lt;a href=&#34;http://en.wikipedia.org/w/index.php?title=%E6%95%B0%E6%8D%AE%E5%BA%93&amp;amp;action=edit&amp;amp;redlink=1&#34; title=&#34;数据库 (page does not exist)&#34;&gt;数据库&lt;/a&gt;事务的&lt;a href=&#34;http://en.wikipedia.org/wiki/ACID&#34; title=&#34;ACID&#34;&gt;ACID&lt;/a&gt;四个属性中，隔离性是一个最常放松的一个。为了获取更高的隔离等级，数据库系统的 &lt;a href=&#34;http://en.wikipedia.org/wiki/Lock_%28database%29&#34; title=&#34;Lock (database)&#34;&gt;锁&lt;/a&gt;机制或者&lt;a href=&#34;http://en.wikipedia.org/wiki/Multiversion_concurrency_control&#34; title=&#34;Multiversion concurrency control&#34;&gt;多版本并发控制&lt;/a&gt;机制都会影响&lt;a href=&#34;http://en.wikipedia.org/wiki/Concurrency_%28computer_science%29&#34; title=&#34;Concurrency (computer science)&#34;&gt;并发&lt;/a&gt;。 &lt;a href=&#34;http://en.wikipedia.org/wiki/Software_application&#34; title=&#34;Software application&#34;&gt;应用软件&lt;/a&gt;也需要额外的逻辑来使其正常工作。&lt;/p&gt;
+&lt;p&gt;很多&lt;a href=&#34;http://en.wikipedia.org/wiki/DBMS&#34; title=&#34;DBMS&#34;&gt;DBMS&lt;/a&gt;定义了不同的“事务隔离等级”来控制锁的程度。在很多数据库系统中，多数的数据库事务都避免高等级的隔离等级（如可序列化）从而减少对系统的锁定开销。程序员需要小心的分析数据库访问部分的代码来保证隔离级别的降低不会造成难以发现的代码bug。相反的，更高的隔离级别会增加&lt;a href=&#34;http://en.wikipedia.org/wiki/Deadlock&#34; title=&#34;Deadlock&#34;&gt;死锁&lt;/a&gt;发生的几率，同样需要编程过程中去避免。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://en.wikipedia.org/wiki/American_National_Standards_Institute&#34; title=&#34;American National Standards Institute&#34;&gt;ANSI&lt;/a&gt;/&lt;a href=&#34;http://en.wikipedia.org/wiki/International_Organization_for_Standardization&#34; title=&#34;International Organization for Standardization&#34;&gt;ISO&lt;/a&gt; &lt;a href=&#34;http://en.wikipedia.org/wiki/SQL&#34; title=&#34;SQL&#34;&gt;SQL&lt;/a&gt;定义的标准隔离级别如下。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Data Mining 笔记聚类k-medoids</title>
+      <link>http://idouba.net/notes-clustering-k-medoids/</link>
+      <pubDate>Wed, 18 Sep 2013 13:28:36 +0000</pubDate>
+      
+      <guid>http://idouba.net/notes-clustering-k-medoids/</guid>
+      <description>一、概述 k-means利用簇内点的均值或加权平均值ci（质心）作为类Ci的代表点。对数值属性数据有较好的几何和统计意义。对孤立点是敏感的，如果具有极大值，就可能大幅度地扭曲数据的分布. k-medoids(k-中心点)算法是为消除这种敏感性提出的，它选择类中位置最接近类中心的对象(称为中心点)作为类的代表点，目标函数仍然可以采用平方误差准则。 PAM（Partitioning Around Medoids，围绕中心点的划分）是最早提出的k中心点算法之一。 二、算法思想： 随机选择k个对象作为初始的k个类的代表点，将其</description>
+    </item>
+    
+    <item>
+      <title>Data Mining 笔记之Classification</title>
+      <link>http://idouba.net/notes-about-classification/</link>
+      <pubDate>Wed, 18 Sep 2013 11:12:40 +0000</pubDate>
+      
+      <guid>http://idouba.net/notes-about-classification/</guid>
+      <description>一、概念 监督式学习VS非监督式学习 Supervised learning (classification) Supervision: The training data (observations, measurements, etc.) are accompanied by labels indicating the class of the observations New data is classified based on the training set Unsupervised learning (clustering) The class labels of training data is unknown Given a set of measurements, observations, etc. with the aim of establishing the existence of classes or clusters in the data –Jiawei Han 监督式学习：提供了训练元组的类标号，通过分析已知数据，得到一个分类模型，用来确定其它的对象属于哪个类别。 非监督式学习：不依赖有类标号的训练实例 分类Classification predicts categorical class labels (discrete or nominal) classifies data (constructs a model) based on the training set and the values (class labels) in a classifying attribute and uses it in classifying new data。 预测分类表示，通过分析训练集中数据的属性来进行构建一个模型来确定新的数据属于哪个</description>
+    </item>
+    
+    <item>
+      <title>给某某导师的一封邮件</title>
+      <link>http://idouba.net/history-letter-to-someone-mentor-so-called/</link>
+      <pubDate>Sat, 08 Jun 2013 14:22:52 +0000</pubDate>
+      
+      <guid>http://idouba.net/history-letter-to-someone-mentor-so-called/</guid>
+      <description>整理之前常用的网易邮箱的时候，发现几篇比较长的邮件，感受到了当年的年轻气盛，被自己小激励了一把。当年觉得很私密的邮件，现在倒愿意在自己的空间归档下,不然可能就真的扔掉了。是研究生入学前给当年向某位知名人生导师写的邮件，并未得到回复:-(。看到邮件里描述自己的还挺可爱的，虽然使劲回忆起来有些太心酸太囧的经历没有好意思写进去。但是有的啰嗦，怪不得人家不回呢，呵呵。好像更像是自己和自己说话。有热情，有干劲，但是似乎有一点偏执。现在回头看。豆妈说一定不要让我们豆豆也这么辛苦。很感激当年的这些经历，也不太</description>
+    </item>
+    
+    <item>
+      <title>一张纸勾起的回忆</title>
+      <link>http://idouba.net/doudou_history_letter_self_motivated/</link>
+      <pubDate>Fri, 24 May 2013 14:08:26 +0000</pubDate>
+      
+      <guid>http://idouba.net/doudou_history_letter_self_motivated/</guid>
+      <description>收拾之前的东西，不小心看到了一张纸条，是自己写给自己的。有点小感慨，记录下。 那时候刚开始工作吧，在沈阳的辽中县修桥，好像是从东北回家的路上，在北京的西单图书大厦泡了一天，买了这样一本书。当时看了，技巧倒没有得到什么，但是好像很受激励（年轻时更容易被激励吧），就下决心，真的下决心拿张破纸记下了目标，有点狂妄，当时不知道四级六级具体是啥，只知道六级比四级难，目标就写个大的。 说实话，读的那本书里面的内容已经完全不记得了，书好像也早都不在了。只是从那里面第一次听说了VOA Special English。后来就从一个还</description>
+    </item>
+    
+    <item>
+      <title>GRE作文目录</title>
+      <link>http://idouba.net/my-gre-index-issue-argument/</link>
+      <pubDate>Mon, 05 May 2008 09:00:53 +0000</pubDate>
+      
+      <guid>http://idouba.net/my-gre-index-issue-argument/</guid>
+      <description>[在寄托的作文练习.][1]归档下。 第二次作业：（20070727） Issue 88: http://bbs.gter.net/bbs/viewthread.php?tid=710682&amp;amp;extra=page%3D1 Argument 26: http://bbs.gter.net/bbs/viewthread.php?tid=710693&amp;amp;extra=page%3D1 第三次作业：（20070728） Issue 159: http://bbs.gter.net/bbs/viewthread.php?tid=711072&amp;amp;extra=page%3D1 Argument 147: http://bbs.gter.net/bbs/viewthread.php?tid=711321&amp;amp;extra=page%3D1 第四次作业:（20070729） Issue 177:http://bbs.gter.net/bbs/viewthread.php?tid=711906&amp;amp;extra=page%3D1 Argument 17: http://bbs.gter.net/bbs/viewthread.php?tid=711910&amp;amp;extra=page%3D1 第五次作业:（20070730） Issue 59 :http://bbs.gter.net/bbs/viewthread.php?tid=712537&amp;amp;extra=page%3D2 Argument 51:http://bbs.gter.net/bbs/viewthread.php?tid=712541&amp;amp;extra=page%3D1 第六次作业:（20070731） Issue 143 : http://bbs.gter.net/bbs/viewthread.php?tid=713063&amp;amp;extra=page%3D1 Issue 43 :http://bbs.gter.net/bbs/viewthread.php?tid=713593&amp;amp;extra=page%3D1 Argument 2: http://bbs.gter.net/bbs/viewthread.php?tid=713213&amp;amp;extra=page%3D1 第七次作业:（20070801） Issue 56 : http://bbs.gter.net/bbs/thread-713667-1-1.html Argument 140: http://bbs.gter.net/bbs/thread-713668-1-1.html 第八次作业:（20070802） Issue 147 :http://bbs.gter.net/bbs/viewthread.php?tid=714625&amp;amp;extra=page%3D1 Issue 51 : http://bbs.gter.net/bbs/viewthread.php?tid=714563&amp;amp;extra=page%3D1 Argument 65: http://bbs.gter.net/bbs/viewthread.php?tid=714619&amp;amp;extra=page%3D1 第九次作业:（20070803） Issue 207 :http://bbs.gter.net/bbs/viewthread.php?tid=715128&amp;amp;extra=page%3D1 Argument 117 :http://bbs.gter.net/bbs/viewthread.php?tid=715261&amp;amp;extra=page%3D1 第十次作业:（20070804） Issue 144:http://bbs.gter.net/bbs/viewthread.php?tid=716645&amp;amp;extra=page%3D1 Argument 50：http://bbs.gter.net/bbs/vie</description>
+    </item>
+    
+    <item>
+      <title>HAPPY BIRTHDAY, INTER</title>
+      <link>http://idouba.net/happy-birthday-inter/</link>
+      <pubDate>Sun, 09 Mar 2008 14:59:50 +0000</pubDate>
+      
+      <guid>http://idouba.net/happy-birthday-inter/</guid>
+      <description>在国米百年诞辰的时候写给俱乐部的一封信。 Hi Inter, HAPPY BIRTHDAY !!! I am an Inter fan of China, a postgraduate student of a University in the Northwest of China. I have been the fan of Inter for 12 years. Football was not as popular as it is now in China 12 years ago. I have to admit that one critical reason why I have deep feeling of Inter rather than AC Milan which was highly regarded by lots of my friends is because of Ronaldo. But I find my love did not pale when he move to Real Madrid, maybe I love Inter more. I always told my friends that I can share some special feelings, some character with Inter. We are persistent, working hard, and have a dream of great success, but I have to say we are less confident in a long time. The most impressive moment in my memory is the game Inter lose to Juventus in 1998, also it is the worst moment I can remember. I felt being greatly hurt when the referee refused to give penalty when Ronaldo was obviously offended in penalty zone, which eventually lead to the losing of the champion of that season. I will never hesitate to say Zanetti if I was asked to tell my favorite plays in Inter. He is the captain of Inter, and has been and will always be a captain in</description>
+    </item>
+    
+    <item>
+      <title>GRE Issue 88</title>
+      <link>http://idouba.net/gre-issue-88/</link>
+      <pubDate>Fri, 27 Jul 2007 19:00:53 +0000</pubDate>
+      
+      <guid>http://idouba.net/gre-issue-88/</guid>
+      <description>Issue: Technologies not only influence but actually determine social customs and ethics 提纲： 1.同意技术对社会习惯和和道德规范的影响，但反对其决定作用的说法。 2.科学技术对社会习惯的影响，科技进步影响各个方面，社会习惯和道德规范也受到影 响。 影响社会习惯例子：Postcard改用email，Mobile phone short message in holidays. 生动丰富，快捷，便宜。 影响道德规范例子:human clone, internet 对传统的道德规范形成冲击，其约束力减弱,网络为人们说谎提供了方便 ,在网上没有人知道和你说话的是条狗。 3.但技术并不是决定作用。 前面的同样的技术对不同地方的道德产生了同样的挑战，但并没有形成同样的社</description>
+    </item>
+    
+    <item>
+      <title>一次日语朝礼</title>
+      <link>http://idouba.net/daily-japanese-speak-in-office-in-chinese/</link>
+      <pubDate>Mon, 13 Dec 2004 13:26:10 +0000</pubDate>
+      
+      <guid>http://idouba.net/daily-japanese-speak-in-office-in-chinese/</guid>
+      <description>那时候每天早上都要在办公室用日语朗读一篇文章(后来我们小组要求背诵了)，对学习日语确实有很大帮助。平时也就和合作的日本team那边的人写邮件讨论功能，开始大部分句式也都是从senior的人那儿拷贝来，替换中间的词汇来表达。包括入职才一个多月就写的几十页的功能文档，都是这么干的。每天轮流一个人来朗读一篇文章倒确实对大家的口语锻炼有挺多好处的，尽管我们这些当时年龄资历都很不够的人，一般在两周多的项目总结会上，一般也就只是听，没有说的份。做多每次会前，逐个自我介绍，用日语自我介绍下，我叫什么，负责那个</description>
+    </item>
+    
+  </channel>
+</rss>

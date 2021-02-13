@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<meta property="og:title" content="【hadoop代码笔记】hadoop作业提交之JobTracker接收作业提交" />
+<meta property="og:description" content="一、概要描述 在上一篇博文中主要描述了JobTracker接收作业的几个服务（或功能）模块的初始化过程。本节将介绍这些服务（或功能）是如何接收到提交的job。本来作业的初始化也可以在本节内描述，但是涉及到JobInProgress的初始化过程放在一张图上太拥挤，就分开到下一篇文章中描述。 二、 流程描述 JobClient通过RPC的方式向JobTracker提交作业； 调用JobTracker的submitJob方法。该方法是JobTracker向外提供的供调用的提交作业的接口。 submit方法中调用J" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://idouba.net/hadoop_mapreduce_jobadded/" />
+<meta property="article:published_time" content="2014-01-16T13:39:25+00:00" />
+<meta property="article:modified_time" content="2014-01-16T13:39:25+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="【hadoop代码笔记】hadoop作业提交之JobTracker接收作业提交"/>
+<meta name="twitter:description" content="一、概要描述 在上一篇博文中主要描述了JobTracker接收作业的几个服务（或功能）模块的初始化过程。本节将介绍这些服务（或功能）是如何接收到提交的job。本来作业的初始化也可以在本节内描述，但是涉及到JobInProgress的初始化过程放在一张图上太拥挤，就分开到下一篇文章中描述。 二、 流程描述 JobClient通过RPC的方式向JobTracker提交作业； 调用JobTracker的submitJob方法。该方法是JobTracker向外提供的供调用的提交作业的接口。 submit方法中调用J"/>
+<meta name="generator" content="Hugo 0.80.0" />
+
+
+    
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "【hadoop代码笔记】hadoop作业提交之JobTracker接收作业提交",
+  "url": "http:\/\/idouba.net\/hadoop_mapreduce_jobadded\/",
+  "wordCount": "3644",
+  "datePublished": "2014-01-16T13:39:25+00:00",
+  "dateModified": "2014-01-16T13:39:25+00:00",
+  "author": {
+    "@type": "Person",
+    "name": "douba"
+  },
+  "keywords": "hadoop, java, mapreduce, source"
+}
+</script>
+
+
+
+    <link rel="canonical" href="http://idouba.net/hadoop_mapreduce_jobadded/">
+
+    <title>【hadoop代码笔记】hadoop作业提交之JobTracker接收作业提交 | 爱豆吧！</title>
+
+    
+    <!-- combined, minified CSS -->
+    
+    <link href="http://idouba.net/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    
+
+    <!-- minified Font Awesome for SVG icons -->
+    
+    <script defer src="http://idouba.net/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+
+    <!-- RSS 2.0 feed -->
+    
+
+    
+
+    
+
+  </head>
+
+  <body>
+
+    
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="http://idouba.net/">Home</a>
+        </nav>
+      </div>
+    </div>
+    
+
+    
+    
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.net/" rel="home">爱豆吧！</a></h1>
+        <p class="lead blog-description" dir="auto">idouba@beta.</p>
+      </div>
+    </header>
+    
+    
+
+    
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/hadoop_mapreduce_jobadded/">【hadoop代码笔记】hadoop作业提交之JobTracker接收作业提交</a></h2>
+    <p class="blog-post-meta"><time datetime="2014-01-16T13:39:25Z">Thu Jan 16, 2014</time> by douba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/hadoop/" rel="category tag">hadoop</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/hadoop/" rel="tag">hadoop</a>, <a href="/tags/java/" rel="tag">java</a>, <a href="/tags/mapreduce/" rel="tag">mapreduce</a>, <a href="/tags/source/" rel="tag">source</a>
+
+</p>
+  </header>
+  <p><strong>一、概要描述</strong></p>
+<p>在<a href="../hadoop_job_submit_service_init">上一篇博文</a>中主要描述了JobTracker接收作业的几个服务（或功能）模块的初始化过程。本节将介绍这些服务（或功能）是如何接收到提交的job。本来作业的初始化也可以在本节内描述，但是涉及到JobInProgress的初始化过程放在一张图上太拥挤，就分开到<a href="../hadoop_mapreduce_job_init">下一篇文章中</a>描述。</p>
+<p><strong>二、 流程描述</strong></p>
+<ol>
+<li><a href="http://www.idouba.net/hadoop_jobclient_submit">JobClient通过RPC的方式向JobTracker提交作业</a>；</li>
+<li>调用<a href="http://www.idouba.net/hadoop_mapreduce_jobtracker">JobTracker</a>的submitJob方法。该方法是JobTracker向外提供的供调用的提交作业的接口。</li>
+<li>submit方法中调用<a href="http://www.idouba.net/hadoop_mapreduce_jobtracker">JobTracker</a>的addJob方法。</li>
+<li>在addJob方法中会把作业加入到集合中供调度，并会触发注册的JobInProgressListener的jobAdded事件。由<a href="http://www.idouba.net/hadoop_job_submit_service_init">上篇博文的jobtracker相关服务和功能的初始化的</a>FairScheduler的start方法中看到，这里注册的是两个JobInProgressListener。分别是<a href="http://www.idouba.net/hadoop_fairScheduler">FairScheduler</a>的内部类JobListener和<a href="http://www.idouba.net/EagerTaskInitializationListener">EagerTaskInitializationListener</a>。</li>
+<li><a href="http://www.idouba.net/hadoop_fairScheduler">FairScheduler</a>的内部类JobListener响应jobAdded事件事件。只是为每个加入的Job创建一个用于<a href="http://www.idouba.net/hadoop_fairScheduler">FairScheduler</a>调度用的JobInfo对象，并将其和job的对应的存储在Map&lt;JobInProgress, JobInfo&gt; infos集合中。</li>
+<li><a href="http://www.idouba.net/EagerTaskInitializationListener">EagerTaskInitializationListener</a>响应jobAdded事件事件。jobAdded 只是简单的把job加入到一个List<!-- raw HTML omitted -->类型的 jobInitQueue中。并不直接对其进行初始化，对其中的job的处理由另外线程JobInitManager来做。该线程，一直检查 jobInitQueue是否有作业，有则拿出来从线程池中取一个线程InitJob处理。关于作业的初始化过程专门在<a href="http://www.idouba.net/hadoop_mapreduce_job_init">下一篇文章</a>中介绍。</li>
+</ol>
+<p><img src="../wp-content/uploads/2014/01/hadoop_mapreduce_jobadded1.png" alt=""></p>
+<p><strong>JobTracker接收作业提交</strong></p>
+<p><strong>三、代码详细</strong></p>
+<p><strong>1. JobClient的submitJob方法，调用submitJobInternal方法。</strong></p>
+<p>主要流程：</p>
+<p>1）通过调用JobTracker的getNewJobId()向jobtracker请求一个新的作业ID</p>
+<p>2）获取job的jar、输入分片、作业描述等几个路径信息，以jobId命名。</p>
+<p>3）其中getSystemDir()是返回jobtracker的系统目录，来放置job相关的文件。包括：mapreduce的jar文件submitJarFile、分片文件submitSplitFile、作业描述文件submitJobFile</p>
+<p>4）检查作业的输出说明，如果没有指定输出目录或输出目录以及存在，则作业不提交。参照org.apache.hadoop.mapreduce.lib.output.<a href="http://archive.cloudera.com/cdh/testing/hadoop-0.20/api/org/apache/hadoop/mapred/FileOutputFormat">FileOutputFormat</a>的<a href="http://www.java2s.com/Open-Source/Java/Database-DBMS/hadoop-0.20.1/org/apache/hadoop/mapred/FileOutputFormat.java.htm">checkOutputSpecs</a>方法。如果没有指定，则抛出InvalidJobConfException，文件已经存在则抛出FileAlreadyExistsException</p>
+<p>5）计算作业的输入分片。通过InputFormat的getSplits(job)方法获得作业的split并将split序列化封装为RawSplit。返回split数目，也即代表有多个分片有多少个map。详细参见<a href="../hadoop_inputformat">InputFormat</a>获取Split的方法。</p>
+<p>6）writeNewSplits 方法把输入分片写到JobTracker的job目录下。</p>
+<p>7）将运行作业所需的资源（包括作业jar文件，配置文件和计算所得的输入分片）复制到jobtracker的文件系统中一个以作业ID命名的目录下。</p>
+<p>8） 使用句柄JobSubmissionProtocol通过RPC远程调用的submitJob()方法，向JobTracker提交作业。 JobTracker作业放入到内存队列中，由作业调度器进行调度。并初始化作业实例。JobTracker创建job成功后会给JobClient传回 一个JobStatus对象用于记录job的状态信息，如执行时间、Map和Reduce任务完成的比例等。JobClient会根据这个 JobStatus对象创建一个 NetworkedJob的RunningJob对象，用于定时从JobTracker获得执行过程的统计数据来监控并打印到用户的控制台。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"> 1 <span style="color:#66d9ef">public</span> RunningJob <span style="color:#a6e22e">submitJobInternal</span><span style="color:#f92672">(</span>JobConf job<span style="color:#f92672">)</span>
+ 2             <span style="color:#66d9ef">throws</span> FileNotFoundException<span style="color:#f92672">,</span> ClassNotFoundException<span style="color:#f92672">,</span>
+ 3             InterruptedException<span style="color:#f92672">,</span> IOException <span style="color:#f92672">{</span>
+ 4 
+ 5         <span style="color:#75715e">// 1）通过调用JobTracker的getNewJobId()向jobtracker请求一个新的作业ID
+</span><span style="color:#75715e"></span> 6         JobID jobId <span style="color:#f92672">=</span> jobSubmitClient<span style="color:#f92672">.</span><span style="color:#a6e22e">getNewJobId</span><span style="color:#f92672">();</span>
+ 7         <span style="color:#75715e">// 2）获取job的jar、输入分片、作业描述等几个路径信息，以jobId命名。
+</span><span style="color:#75715e"></span> 8         <span style="color:#75715e">// 3）其中getSystemDir()是返回jobtracker的系统目录，来放置job相关的文件。包括：mapreduce的jar文件submitJarFile、分片文件submitSplitFile、作业描述文件submitJobFile
+</span><span style="color:#75715e"></span> 9 
+10         Path submitJobDir <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Path<span style="color:#f92672">(</span>getSystemDir<span style="color:#f92672">(),</span> jobId<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">());</span>
+11         Path submitJarFile <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Path<span style="color:#f92672">(</span>submitJobDir<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;job.jar&#34;</span><span style="color:#f92672">);</span>
+12         Path submitSplitFile <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Path<span style="color:#f92672">(</span>submitJobDir<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;job.split&#34;</span><span style="color:#f92672">);</span>
+13         <span style="color:#a6e22e">configureCommandLineOptions</span><span style="color:#f92672">(</span>job<span style="color:#f92672">,</span> submitJobDir<span style="color:#f92672">,</span> submitJarFile<span style="color:#f92672">);</span>
+14         Path submitJobFile <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Path<span style="color:#f92672">(</span>submitJobDir<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;job.xml&#34;</span><span style="color:#f92672">);</span>
+15         <span style="color:#66d9ef">int</span> reduces <span style="color:#f92672">=</span> job<span style="color:#f92672">.</span><span style="color:#a6e22e">getNumReduceTasks</span><span style="color:#f92672">();</span>
+16         JobContext context <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> JobContext<span style="color:#f92672">(</span>job<span style="color:#f92672">,</span> jobId<span style="color:#f92672">);</span>
+17 
+18         <span style="color:#75715e">// Check the output specification
+</span><span style="color:#75715e"></span>19         <span style="color:#75715e">// 4）检查作业的输出说明，如果没有指定输出目录或输出目录以及存在，则作业不提交。参照org.apache.hadoop.mapreduce.lib.output.FileOutputFormat的checkOutputSpecs方法。如果没有指定，则抛出InvalidJobConfException，文件已经存在则抛出FileAlreadyExistsException
+</span><span style="color:#75715e"></span>20 
+21         <span style="color:#a6e22e">if</span> <span style="color:#f92672">(</span>reduces <span style="color:#f92672">==</span> 0 <span style="color:#f92672">?</span> job<span style="color:#f92672">.</span><span style="color:#a6e22e">getUseNewMapper</span><span style="color:#f92672">()</span> <span style="color:#f92672">:</span> job<span style="color:#f92672">.</span><span style="color:#a6e22e">getUseNewReducer</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+22             org<span style="color:#f92672">.</span><span style="color:#a6e22e">apache</span><span style="color:#f92672">.</span><span style="color:#a6e22e">hadoop</span><span style="color:#f92672">.</span><span style="color:#a6e22e">mapreduce</span><span style="color:#f92672">.</span><span style="color:#a6e22e">OutputFormat</span><span style="color:#f92672">&lt;,</span> <span style="color:#f92672">&gt;</span> output <span style="color:#f92672">=</span> ReflectionUtils
+23                     <span style="color:#f92672">.</span><span style="color:#a6e22e">newInstance</span><span style="color:#f92672">(</span>context<span style="color:#f92672">.</span><span style="color:#a6e22e">getOutputFormatClass</span><span style="color:#f92672">(),</span> job<span style="color:#f92672">);</span>
+24             output<span style="color:#f92672">.</span><span style="color:#a6e22e">checkOutputSpecs</span><span style="color:#f92672">(</span>context<span style="color:#f92672">);</span>
+25         <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+26             job<span style="color:#f92672">.</span><span style="color:#a6e22e">getOutputFormat</span><span style="color:#f92672">().</span><span style="color:#a6e22e">checkOutputSpecs</span><span style="color:#f92672">(</span>fs<span style="color:#f92672">,</span> job<span style="color:#f92672">);</span>
+27         <span style="color:#f92672">}</span>
+28 
+29         <span style="color:#75715e">// 5）计算作业的输入分片。详细参见FormatInputFormat获取Split的方法。
+</span><span style="color:#75715e"></span>30         <span style="color:#75715e">// 6）writeNewSplits 方法把输入分片写到JobTracker的job目录下，名称是submitSplitFile
+</span><span style="color:#75715e"></span>31         <span style="color:#75715e">// job.split名称。
+</span><span style="color:#75715e"></span>32         <span style="color:#75715e">// 7）将运行作业所需的资源（包括作业jar文件，配置文件和计算所得的输入分片）复制到jobtracker的文件系统中一个以作业ID命名的目录下。
+</span><span style="color:#75715e"></span>33 
+34         <span style="color:#75715e">// Create the splits for the job
+</span><span style="color:#75715e"></span>35         LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">debug</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Creating splits at &#34;</span> <span style="color:#f92672">+</span> fs<span style="color:#f92672">.</span><span style="color:#a6e22e">makeQualified</span><span style="color:#f92672">(</span>submitSplitFile<span style="color:#f92672">));</span>
+36         <span style="color:#66d9ef">int</span> maps<span style="color:#f92672">;</span>
+37         <span style="color:#a6e22e">if</span> <span style="color:#f92672">(</span>job<span style="color:#f92672">.</span><span style="color:#a6e22e">getUseNewMapper</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+38             maps <span style="color:#f92672">=</span> writeNewSplits<span style="color:#f92672">(</span>context<span style="color:#f92672">,</span> submitSplitFile<span style="color:#f92672">);</span>
+39         <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+40             maps <span style="color:#f92672">=</span> writeOldSplits<span style="color:#f92672">(</span>job<span style="color:#f92672">,</span> submitSplitFile<span style="color:#f92672">);</span>
+41         <span style="color:#f92672">}</span>
+42         job<span style="color:#f92672">.</span><span style="color:#a6e22e">set</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;mapred.job.split.file&#34;</span><span style="color:#f92672">,</span> submitSplitFile<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">());</span>
+43         job<span style="color:#f92672">.</span><span style="color:#a6e22e">setNumMapTasks</span><span style="color:#f92672">(</span>maps<span style="color:#f92672">);</span>
+44 
+45         <span style="color:#75715e">// Write job file to JobTracker&#39;s fs
+</span><span style="color:#75715e"></span>46         FSDataOutputStream out <span style="color:#f92672">=</span> FileSystem<span style="color:#f92672">.</span><span style="color:#a6e22e">create</span><span style="color:#f92672">(</span>fs<span style="color:#f92672">,</span> submitJobFile<span style="color:#f92672">,</span>
+47                 <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">FsPermission</span><span style="color:#f92672">(</span>JOB_FILE_PERMISSION<span style="color:#f92672">));</span>
+48 
+49         <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+50             job<span style="color:#f92672">.</span><span style="color:#a6e22e">writeXml</span><span style="color:#f92672">(</span>out<span style="color:#f92672">);</span>
+51         <span style="color:#f92672">}</span> <span style="color:#66d9ef">finally</span> <span style="color:#f92672">{</span>
+52             out<span style="color:#f92672">.</span><span style="color:#a6e22e">close</span><span style="color:#f92672">();</span>
+53         <span style="color:#f92672">}</span>
+54 
+55         <span style="color:#75715e">// 8）使用句柄JobSubmissionProtocol通过RPC远程调用的submitJob()方法，向JobTracker提交作业。JobTracker根据接收到的submitJob()方法调用后，把调用放入到内存队列中，由作业调度器进行调度。并初始化作业实例。
+</span><span style="color:#75715e"></span>56 
+57         JobStatus status <span style="color:#f92672">=</span> jobSubmitClient<span style="color:#f92672">.</span><span style="color:#a6e22e">submitJob</span><span style="color:#f92672">(</span>jobId<span style="color:#f92672">);</span>
+58         <span style="color:#a6e22e">if</span> <span style="color:#f92672">(</span>status <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+59             <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">NetworkedJob</span><span style="color:#f92672">(</span>status<span style="color:#f92672">);</span>
+60         <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+61             <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">IOException</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Could not launch job&#34;</span><span style="color:#f92672">);</span>
+62         <span style="color:#f92672">}</span>
+63     <span style="color:#f92672">}</span>
+</code></pre></div><p><strong>2. <a href="../hadoop_mapreduce_jobtracker">JobTracker</a>的submitJob方法，是JobTracker向外提供的供调用的提交作业的接口。</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">synchronized</span> JobStatus <span style="color:#a6e22e">submitJob</span><span style="color:#f92672">(</span>JobID jobId<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> IOException <span style="color:#f92672">{</span>
+<span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>jobs<span style="color:#f92672">.</span><span style="color:#a6e22e">containsKey</span><span style="color:#f92672">(</span>jobId<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+      <span style="color:#75715e">//检查Job已经存在，则仅仅返回其status
+</span><span style="color:#75715e"></span>      <span style="color:#66d9ef">return</span> jobs<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>jobId<span style="color:#f92672">).</span><span style="color:#a6e22e">getStatus</span><span style="color:#f92672">();</span>
+<span style="color:#f92672">}</span>
+<span style="color:#75715e">//不存在，则创建该job 的JobInProgress 实例，
+</span><span style="color:#75715e"></span>JobInProgress job <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> JobInProgress<span style="color:#f92672">(</span>jobId<span style="color:#f92672">,</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">conf</span><span style="color:#f92672">);</span>
+String queue <span style="color:#f92672">=</span> job<span style="color:#f92672">.</span><span style="color:#a6e22e">getProfile</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getQueueName</span><span style="color:#f92672">();</span>
+ <span style="color:#66d9ef">new</span> CleanupQueue<span style="color:#f92672">().</span><span style="color:#a6e22e">addToQueue</span><span style="color:#f92672">(</span>conf<span style="color:#f92672">,</span>getSystemDirectoryForJob<span style="color:#f92672">(</span>jobId<span style="color:#f92672">));</span>    
+    <span style="color:#f92672">}</span>
+<span style="color:#75715e">// check for access
+</span><span style="color:#75715e"></span>checkAccess<span style="color:#f92672">(</span>job<span style="color:#f92672">,</span> QueueManager<span style="color:#f92672">.</span><span style="color:#a6e22e">QueueOperation</span><span style="color:#f92672">.</span><span style="color:#a6e22e">SUBMIT_JOB</span><span style="color:#f92672">);</span>
+<span style="color:#75715e">// 检查内存是否够用
+</span><span style="color:#75715e"></span>checkMemoryRequirements<span style="color:#f92672">(</span>job<span style="color:#f92672">);</span>
+<span style="color:#66d9ef">return</span> addJob<span style="color:#f92672">(</span>jobId<span style="color:#f92672">,</span> job<span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p><strong>3. <a href="../hadoop_mapreduce_jobtracker">JobTracker</a>的addJob方法，把作业加入到集合中供调度。其中jobs 是Map&lt;JobID, JobInProgress&gt;类型，维护着加入进来的JobInProgress job。</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">synchronized</span> JobStatus <span style="color:#a6e22e">addJob</span><span style="color:#f92672">(</span>JobID jobId<span style="color:#f92672">,</span> JobInProgress job<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+totalSubmissions<span style="color:#f92672">++;</span>
+<span style="color:#66d9ef">synchronized</span> <span style="color:#f92672">(</span>jobs<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+      <span style="color:#66d9ef">synchronized</span> <span style="color:#f92672">(</span>taskScheduler<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+<span style="color:#75715e">//将job实例加入到Map&lt;JobID, JobInProgress&gt; jobs 集合中，
+</span><span style="color:#75715e"></span>        jobs<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>job<span style="color:#f92672">.</span><span style="color:#a6e22e">getProfile</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getJobID</span><span style="color:#f92672">(),</span> job<span style="color:#f92672">);</span>
+<span style="color:#75715e">//并触发所有注册的JobInProgressListener，通知其一个新Job添加进来了，让各个Listener响应各自的动作。
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>JobInProgressListener listener <span style="color:#f92672">:</span> jobInProgressListeners<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+          <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+            listener<span style="color:#f92672">.</span><span style="color:#a6e22e">jobAdded</span><span style="color:#f92672">(</span>job<span style="color:#f92672">);</span>
+          <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>IOException ioe<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">warn</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Failed to add and so skipping the job : &#34;</span>
+                <span style="color:#f92672">+</span> job<span style="color:#f92672">.</span><span style="color:#a6e22e">getJobID</span><span style="color:#f92672">()</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;. Exception : &#34;</span> <span style="color:#f92672">+</span> ioe<span style="color:#f92672">);</span>
+          <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+      <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+    myInstrumentation<span style="color:#f92672">.</span><span style="color:#a6e22e">submitJob</span><span style="color:#f92672">(</span>job<span style="color:#f92672">.</span><span style="color:#a6e22e">getJobConf</span><span style="color:#f92672">(),</span> jobId<span style="color:#f92672">);</span>
+    <span style="color:#66d9ef">return</span> job<span style="color:#f92672">.</span><span style="color:#a6e22e">getStatus</span><span style="color:#f92672">();</span>
+  <span style="color:#f92672">}</span>
+</code></pre></div><p><strong>4.<a href="../hadoop_fairScheduler">FairScheduler</a>.JobListener的jobAdded方法。jobAdded方法是JobInProgressListener中定义的在JobTracker中响应job变化的方法。在这个方法中，只是为每个加入的Job创建一个用于<a href="../hadoop_fairScheduler">FairScheduler</a>调度用的JobInfo对象，并将其和job的对应的存储在Map&lt;JobInProgress, JobInfo&gt; infos集合中。</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">jobAdded</span><span style="color:#f92672">(</span>JobInProgress job<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+      <span style="color:#66d9ef">synchronized</span> <span style="color:#f92672">(</span>FairScheduler<span style="color:#f92672">.</span><span style="color:#a6e22e">this</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        poolMgr<span style="color:#f92672">.</span><span style="color:#a6e22e">addJob</span><span style="color:#f92672">(</span>job<span style="color:#f92672">);</span>
+        JobInfo info <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> JobInfo<span style="color:#f92672">();</span>
+        infos<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>job<span style="color:#f92672">,</span> info<span style="color:#f92672">);</span>
+        update<span style="color:#f92672">();</span>
+      <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><p><strong>5. <a href="../EagerTaskInitializationListener">EagerTaskInitializationListener</a>的jobAdded方法。这个方法其实在前面文章中介绍过，在<a href="../EagerTaskInitializationListener">EagerTaskInitializationListener</a>中，jobAdded 只是简单的把job加入到一个List<!-- raw HTML omitted -->类型的 jobInitQueue中。并不直接对其进行初始化，对其中的job的处理由另外线程JobInitManager来做。该线程，一直检查 jobInitQueue是否有作业，有则拿出来从线程池中取一个线程InitJob处理。关于作业的初始化过程专门在<a href="../hadoop_mapreduce_job_init">下一篇文章</a>中介绍。</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Override</span>
+  <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">jobAdded</span><span style="color:#f92672">(</span>JobInProgress job<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">synchronized</span> <span style="color:#f92672">(</span>jobInitQueue<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+      jobInitQueue<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>job<span style="color:#f92672">);</span>
+      resortInitQueue<span style="color:#f92672">();</span>
+      jobInitQueue<span style="color:#f92672">.</span><span style="color:#a6e22e">notifyAll</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+
+  <span style="color:#f92672">}</span>
+</code></pre></div><p>完。</p>
+
+
+  
+
+  
+
+</article> 
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 ml-auto blog-sidebar">
+  
+
+  
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+    
+
+    
+    <footer class="blog-footer">
+      <p dir="auto">
+      
+      <!-- raw HTML omitted -->浙ICP备18050493号-1<!-- raw HTML omitted --> 浙公网安备 33010802006262号
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+    
+
+  </body>
+
+</html>

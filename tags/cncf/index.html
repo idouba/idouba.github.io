@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<meta property="og:title" content="cncf" />
+<meta property="og:description" content="idouba@beta." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://idouba.net/tags/cncf/" />
+<meta property="og:updated_time" content="2018-01-01T14:17:31+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="cncf"/>
+<meta name="twitter:description" content="idouba@beta."/>
+<meta name="generator" content="Hugo 0.80.0" />
+
+
+    
+      
+    
+
+    <link rel="canonical" href="http://idouba.net/tags/cncf/">
+
+    <title>爱豆吧！</title>
+
+    
+    <!-- combined, minified CSS -->
+    
+    <link href="http://idouba.net/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    
+
+    <!-- minified Font Awesome for SVG icons -->
+    
+    <script defer src="http://idouba.net/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+
+    <!-- RSS 2.0 feed -->
+    <link rel="alternate" type="application/rss+xml" href="http://idouba.net/tags/cncf/index.xml" title="爱豆吧！" />
+    
+
+    
+
+    
+
+  </head>
+
+  <body>
+
+    
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="http://idouba.net/">Home</a>
+        </nav>
+      </div>
+    </div>
+    
+
+    
+    
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.net/" rel="home">爱豆吧！</a></h1>
+        <p class="lead blog-description" dir="auto">idouba@beta.</p>
+      </div>
+    </header>
+    
+    
+
+    
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/opentracing-serverside-tracing/">Opentracing 调用链服务端埋点</a></h2>
+    <p class="blog-post-meta"><time datetime="2018-01-01T14:17:31Z">Mon Jan 01, 2018</time> by idouba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/tracing/" rel="category tag">tracing</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/cncf/" rel="tag">cncf</a>, <a href="/tags/go/" rel="tag">go</a>, <a href="/tags/tracing/" rel="tag">tracing</a>
+
+</p>
+  </header>
+  1 前言 通过一个最简单的代码例子来看使用opentracing在服务端埋点的逻辑。因为调用链的抽象模型都是来自dapper这篇论文，所以其他的方式也是类似，只是接口方法上稍有不同。 2 关于服务端埋点 主要流程看上是： 收到请求 从通信协议（如常用的HTTP header）中解出客户端传递的trace； 构造span 保存span 服务端返回请求 关闭span，将span的数据结构上传到调用链的数据存储节点。 下面结合一个例子中的额使用看下2 3 4 6四个调用链埋点步骤具体做了哪些事情。 3 主要流程 以最典型的http服务端为
+  <a href='http://idouba.net/opentracing-serverside-tracing/'>Read more →</a>
+</article> 
+
+
+
+
+
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 ml-auto blog-sidebar">
+  
+
+  
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+    
+
+    
+    <footer class="blog-footer">
+      <p dir="auto">
+      
+      <!-- raw HTML omitted -->浙ICP备18050493号-1<!-- raw HTML omitted --> 浙公网安备 33010802006262号
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+    
+
+  </body>
+
+</html>

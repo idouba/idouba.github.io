@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>index on 爱豆吧！</title>
+    <link>http://idouba.net/tags/index/</link>
+    <description>Recent content in index on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>&lt;a href=&#39;https://beian.miit.gov.cn/&#39; target=&#39;_blank&#39;&gt;浙ICP备18050493号-1&lt;/a&gt; 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Wed, 18 Jun 2014 09:27:23 +0000</lastBuildDate><atom:link href="http://idouba.net/tags/index/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>B树在数据库索引中的应用剖析(发表版本)</title>
+      <link>http://idouba.net/about-btrees-application-in-database-index-in-programmer/</link>
+      <pubDate>Wed, 18 Jun 2014 09:27:23 +0000</pubDate>
+      
+      <guid>http://idouba.net/about-btrees-application-in-database-index-in-programmer/</guid>
+      <description>最近一篇发表于《程序员》2014年6月刊上的文章。有点遗憾发现，有些部分被编辑修改过了，读起来有点怪怪的。最典型的是习惯于对某些比较经典的定义引用wikipedia或者原始白皮书中原始的E文，在文中发现都被硬译过了，表达的意思自己都有点看不懂了！ 最终修改后提交的版本归档下： 引言 关于数据库索引，随便Google一个Oracle index，Mysql index总能得到“某某索引之n条经典建议”之类大量结果。笔者认为，较之直接借鉴，在搞清实际需求的基础上，对备选方案的原理尽可能深入全面的了解会更有利于</description>
+    </item>
+    
+    <item>
+      <title>B树在数据库索引中的应用剖析（原稿）</title>
+      <link>http://idouba.net/about-btrees-application-in-database-index/</link>
+      <pubDate>Thu, 20 Mar 2014 08:18:48 +0000</pubDate>
+      
+      <guid>http://idouba.net/about-btrees-application-in-database-index/</guid>
+      <description>引言 关于数据库索引，随便Google一个Oracle index，Mysql index总有大量的结果出来，其中不乏某某索引之n条经典建议。笔者认为，较之借鉴，在搞清楚了自己的需求的基础上，对备选方案的原理有个尽可能深入全面的了解会更有利于我们的选择和决策。因为某种方案或者技术呈现出某种优势（包括可能没有被介绍到但一定存在的限制），不是定义出来的，而是因为其实现机制决定的。就像LinkedList和ArrayList分别适用于什么应用不是Document里面定义的，是由其本身的结构决定的。数据库的索</description>
+    </item>
+    
+    <item>
+      <title>Oracle索引原理精简总结</title>
+      <link>http://idouba.net/oracle-index-brief/</link>
+      <pubDate>Wed, 19 Feb 2014 13:48:09 +0000</pubDate>
+      
+      <guid>http://idouba.net/oracle-index-brief/</guid>
+      <description>结合使用整理Oracle的索引，主要权威的来自于Oracle Database Concepts与Oracle Database Performance Tuning Guide 尝试用最少的字数介绍oracle的几种常用索引原理，主要是想简单分析其存储结构来说明其检索方式，和解释为什们某种索引使用与某种场合。（数据结构中最简单的ArrayList和LinkedList的使用场景）。阐述原因只有一个，就是因为其存储结构决定的。 B树索引(默认类型) 存储结构： B+树，不多描述。和其他几种关系数据库一样，就是根据索引列(一个或多个)来构造一个B+树来存储索引。非叶子节点两个区域：</description>
+    </item>
+    
+  </channel>
+</rss>

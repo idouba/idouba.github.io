@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>concurrency on 爱豆吧！</title>
+    <link>http://idouba.net/tags/concurrency/</link>
+    <description>Recent content in concurrency on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>&lt;a href=&#39;https://beian.miit.gov.cn/&#39; target=&#39;_blank&#39;&gt;浙ICP备18050493号-1&lt;/a&gt; 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Fri, 05 Jun 2015 16:02:43 +0000</lastBuildDate><atom:link href="http://idouba.net/tags/concurrency/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>戏（细）说Executor框架线程池任务执行全过程（下）</title>
+      <link>http://idouba.net/executor-framework-thread-pool-task-execution-part-02/</link>
+      <pubDate>Fri, 05 Jun 2015 16:02:43 +0000</pubDate>
+      
+      <guid>http://idouba.net/executor-framework-thread-pool-task-execution-part-02/</guid>
+      <description>归档下发表于infoq.com 2015年6月的两篇文章。本来是一篇文章，经过Infoq编辑Alice Ding建议，拆分为&amp;lt;上&amp;gt;和&amp;lt;下&amp;gt;两部分。谢谢Alice对文章的细心校对，帮我发下了其中的很多问题。添加下infoq要求的声明：本文为InfoQ中文站特供稿件，首发地址为：http://www.infoq.com/cn/articles/executor-framework-thread-pool-task-execution-part-02 。如需转载，请与InfoQ中文站</description>
+    </item>
+    
+    <item>
+      <title>戏（细）说Executor框架线程池任务执行全过程（上）</title>
+      <link>http://idouba.net/executor-framework-thread-pool-task-execution-part-01/</link>
+      <pubDate>Fri, 05 Jun 2015 15:41:44 +0000</pubDate>
+      
+      <guid>http://idouba.net/executor-framework-thread-pool-task-execution-part-01/</guid>
+      <description>归档下发表于infoq.com 2015年6月的两篇文章。本来是一篇文章，经过Infoq编辑Alice Ding建议，拆分为&amp;lt;上&amp;gt;和&amp;lt;下&amp;gt;两部分。谢谢Alice对文章的细心校对，帮我发下了其中的很多问题。添加下infoq要求的声明：本文为InfoQ中文站特供稿件，首发地址为：http://www.infoq.com/cn/articles/executor-framework-thread-pool-task-execution-part-01。如需转载，请与InfoQ中文站</description>
+    </item>
+    
+    <item>
+      <title>源码剖析AQS在几个同步工具类中的使用</title>
+      <link>http://idouba.net/sync-implementation-by-aqs/</link>
+      <pubDate>Mon, 06 Apr 2015 15:30:31 +0000</pubDate>
+      
+      <guid>http://idouba.net/sync-implementation-by-aqs/</guid>
+      <description>1. 前言 AQS(AbstractQueuedSynchronizer)是 java.util.concurrent的基础。J.U.C中宣传的封装良好的好用的同步工具类Semaphore、CountDownLatch、ReentrantLock、ReentrantReadWriteLock、FutureTask等虽然各自都有不同特征，但是简单看一下源码，每个类内部都包含一个如下的内部类定义： 同时每个类内部都包含有这样一个属性，连属性名都一样！注释已经暗示了，该类的同步机制正是通过这个AQS的子类来完成</description>
+    </item>
+    
+  </channel>
+</rss>

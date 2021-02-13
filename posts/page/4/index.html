@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<meta property="og:title" content="Posts" />
+<meta property="og:description" content="idouba@beta." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://idouba.net/posts/" />
+<meta property="og:updated_time" content="2019-08-09T15:32:08+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Posts"/>
+<meta name="twitter:description" content="idouba@beta."/>
+<meta name="generator" content="Hugo 0.80.0" />
+
+
+    
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Blog",
+  "headline": "爱豆吧！",
+  "url" : "http:\/\/idouba.net\/posts\/",
+  "author": {
+    "@type": "Person",
+    "name": "idouba"
+  },
+  "dateModified": "2019-08-09T15:32:08+00:00",
+  "keywords": "archive,classification,clustering,concurrency,database,database-concept,english,go,hadoop,history-article-archive,history-letter-archive,istio,java,jvm,kubernetes,oracle,tracing,にほんご,随笔,12306,about,api,aqs,b-tree,book,classification,clustering,cncf,code,concurrency,data-mining,data-structure,database,douba,doudou,english,excute-plan,executor,federation,football,g20,gc,go,hadoop,index,inter,istio,japanese,java,join,jvm,k-medoids,kubernetes,letter,life,mapreduce,mesh,mssql,mysql,nio,oracle,others,programmer,published,reference,rpc,sort,source,speak,theory,thread,tracing,祖母,随笔,",
+  "description": "idouba@beta."
+}
+</script>
+
+
+    <link rel="canonical" href="http://idouba.net/posts/">
+
+    <title>爱豆吧！</title>
+
+    
+    <!-- combined, minified CSS -->
+    
+    <link href="http://idouba.net/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    
+
+    <!-- minified Font Awesome for SVG icons -->
+    
+    <script defer src="http://idouba.net/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+
+    <!-- RSS 2.0 feed -->
+    <link rel="alternate" type="application/rss+xml" href="http://idouba.net/posts/index.xml" title="爱豆吧！" />
+    
+
+    
+
+    
+
+  </head>
+
+  <body>
+
+    
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="http://idouba.net/">Home</a>
+        </nav>
+      </div>
+    </div>
+    
+
+    
+    
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.net/" rel="home">爱豆吧！</a></h1>
+        <p class="lead blog-description" dir="auto">idouba@beta.</p>
+      </div>
+    </header>
+    
+    
+
+    
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/performance-comparison-of-oracle-paging/">oracle分页技术性能比较</a></h2>
+    <p class="blog-post-meta"><time datetime="2014-10-14T08:53:14Z">Tue Oct 14, 2014</time> by douba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/oracle/" rel="category tag">oracle</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/database/" rel="tag">database</a>, <a href="/tags/oracle/" rel="tag">oracle</a>
+
+</p>
+  </header>
+  一、前言 在一个有30亿条数据的大表上分页，为了对方案进行性能测试，先忽略其他条件查询的影响，单看下分页部分的性能，顺便考察说明下oracle中rownum使用中一些比较tricky的地方。实验条件： 表结构如下，内有2千万条实验数据。 二、实验 提供7种不同方式（其实是5种，二和四是一种、三和五是一种）方式的 。第一种只是为了demo一下假设的一种错误逻辑方式，第二种和第四种是一种逻辑正确，但是性能极差的方式。筛选下来看上去性能可行的方式是第五、第六、第七方式。 这里仅仅记录没中方式的执行结果和计划。 方式
+  <a href='http://idouba.net/performance-comparison-of-oracle-paging/'>Read more →</a>
+</article> 
+
+
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/a-simple-example-demo-jvm-allocation-and-gc/">最简单例子图解JVM内存分配和回收</a></h2>
+    <p class="blog-post-meta"><time datetime="2014-07-15T05:49:37Z">Tue Jul 15, 2014</time> by douba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/jvm/" rel="category tag">jvm</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/code/" rel="tag">code</a>, <a href="/tags/gc/" rel="tag">gc</a>, <a href="/tags/jvm/" rel="tag">jvm</a>
+
+</p>
+  </header>
+  一、简介 JVM采用分代垃圾回收。在JVM的内存空间中把堆空间分为年老代和年轻代。将大量（据说是90%以上）创建了没多久就会消亡的对象存储在年轻代，而年老代中存放生命周期长久的实例对象。年轻代中又被分为Eden区(圣经中的伊甸园)、和两个Survivor区。新的对象分配是首先放在Eden区，Survivor区作为Eden区和Old区的缓冲，在Survivor区的对象经历若干次收集仍然存活的，就会被转移到年老区。 简单讲，就是生命期短的对象放在一起，将少数生命期长的对象放在一起，分别采用不同的回收策略
+  <a href='http://idouba.net/a-simple-example-demo-jvm-allocation-and-gc/'>Read more →</a>
+</article> 
+
+
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/about-btrees-application-in-database-index-in-programmer/">B树在数据库索引中的应用剖析(发表版本)</a></h2>
+    <p class="blog-post-meta"><time datetime="2014-06-18T09:27:23Z">Wed Jun 18, 2014</time> by douba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/database/" rel="category tag">database</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/b-tree/" rel="tag">B tree</a>, <a href="/tags/database/" rel="tag">database</a>, <a href="/tags/index/" rel="tag">index</a>, <a href="/tags/published/" rel="tag">published</a>, <a href="/tags/mssql/" rel="tag">mssql</a>, <a href="/tags/mysql/" rel="tag">mysql</a>, <a href="/tags/oracle/" rel="tag">oracle</a>
+
+</p>
+  </header>
+  最近一篇发表于《程序员》2014年6月刊上的文章。有点遗憾发现，有些部分被编辑修改过了，读起来有点怪怪的。最典型的是习惯于对某些比较经典的定义引用wikipedia或者原始白皮书中原始的E文，在文中发现都被硬译过了，表达的意思自己都有点看不懂了！ 最终修改后提交的版本归档下： 引言 关于数据库索引，随便Google一个Oracle index，Mysql index总能得到“某某索引之n条经典建议”之类大量结果。笔者认为，较之直接借鉴，在搞清实际需求的基础上，对备选方案的原理尽可能深入全面的了解会更有利于
+  <a href='http://idouba.net/about-btrees-application-in-database-index-in-programmer/'>Read more →</a>
+</article> 
+
+
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/randy-pausch-s-last-lecture/">兰迪·波许教授的最后一课</a></h2>
+    <p class="blog-post-meta"><time datetime="2014-05-10T14:58:05Z">Sat May 10, 2014</time> by douba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/archive/" rel="category tag">archive</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/english/" rel="tag">english</a>, <a href="/tags/others/" rel="tag">others</a>, <a href="/tags/reference/" rel="tag">reference</a>
+
+</p>
+  </header>
+  偶尔整理硬盘时候发现的《兰迪·波许教授的最后一课》相关资料，包括视频，是08年的时候下下来看的，非常感人。 视频地址：兰迪·波许教授的最后一课 文 档：[兰迪·波许教授的最后一课].Randy.Pausch’s.Last.Lecture.Transcript 附Randy 语录： Brick walls are there for a reason: they let us prove how badly we want things. 人生路上有阻挡你梦想的砖墙，那是有原因的。这些砖墙让我们来证明我们究竟有多么想要得到我们所需要的。 Experience is what you get when you didn’t get what you wanted. 当你得不到你想的到的东西时，你会得到经验。 Never lose the child-like wonder. 永远不要失去孩
+  <a href='http://idouba.net/randy-pausch-s-last-lecture/'>Read more →</a>
+</article> 
+
+
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/doudou-baseball/">豆豆棒球记</a></h2>
+    <p class="blog-post-meta"><time datetime="2014-04-02T14:00:11Z">Wed Apr 02, 2014</time> by douba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/%E9%9A%8F%E7%AC%94/" rel="category tag">随笔</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/doudou/" rel="tag">doudou</a>
+
+</p>
+  </header>
+  豆豆小朋友真的长大了！会调皮了。 今天晚上，doudou指挥着和豆爸配合了一把棒球的游戏。doudou用的是乒乓球，douba用的是笤帚做球杆（棒球是不是叫球棒？）。工具都是 doudou提供和设计。总共进行了六轮，以姥姥指挥douba耍赖藏球结束比赛。哦，忘了补充一句，整个过程，doudou是在尿湿了裤子，外面裤子被 扒下来在膝盖位置，湿漉漉的秋裤贴着屁股的艰难环境下完成的。 这个家伙怎么这么没有出息呀，就喜欢笤帚，在家里面扫地可起劲了。 for i in 0..6 doudou: step1: 高高的撅着屁股往床下扔乒乓球 step2：结实的趴在地
+  <a href='http://idouba.net/doudou-baseball/'>Read more →</a>
+</article> 
+
+
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/analysis-oracle-execute-plan-from-count/">从Count看Oracle执行计划的选择</a></h2>
+    <p class="blog-post-meta"><time datetime="2014-03-24T12:53:50Z">Mon Mar 24, 2014</time> by idouba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/database/" rel="category tag">database</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/excute-plan/" rel="tag">excute plan</a>, <a href="/tags/oracle/" rel="tag">oracle</a>
+
+</p>
+  </header>
+  一、 前言 在调查一个性能问题的时候，一个同事问道，为什么数据库有些时候这么不聪明，明明表上有索引，但是在执行一个简单的count的时候居然全表扫描了！难道不知道走索引更快么？ 试图从最简单的count来重新了解oracle查询计划的选择，以及最终产生的结果。虽然有些结果会让人觉得有些意外，并且可能会鄙视，这个查询计划选择真的不够聪明。但稍微用心点的去了解，做的已经足够细致了。大多数情况下，根据我们输入的信息，来自输入的SQL、表结构、索引状况、统计信息，会得出一个比较优的计划。所以和前面一直试图讲到
+  <a href='http://idouba.net/analysis-oracle-execute-plan-from-count/'>Read more →</a>
+</article> 
+
+
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/about-btrees-application-in-database-index/">B树在数据库索引中的应用剖析（原稿）</a></h2>
+    <p class="blog-post-meta"><time datetime="2014-03-20T08:18:48Z">Thu Mar 20, 2014</time> by douba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/database/" rel="category tag">database</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/data-structure/" rel="tag">data structure</a>, <a href="/tags/database/" rel="tag">database</a>, <a href="/tags/index/" rel="tag">index</a>, <a href="/tags/mssql/" rel="tag">mssql</a>, <a href="/tags/mysql/" rel="tag">mysql</a>, <a href="/tags/oracle/" rel="tag">oracle</a>, <a href="/tags/programmer/" rel="tag">programmer</a>, <a href="/tags/published/" rel="tag">published</a>
+
+</p>
+  </header>
+  引言 关于数据库索引，随便Google一个Oracle index，Mysql index总有大量的结果出来，其中不乏某某索引之n条经典建议。笔者认为，较之借鉴，在搞清楚了自己的需求的基础上，对备选方案的原理有个尽可能深入全面的了解会更有利于我们的选择和决策。因为某种方案或者技术呈现出某种优势（包括可能没有被介绍到但一定存在的限制），不是定义出来的，而是因为其实现机制决定的。就像LinkedList和ArrayList分别适用于什么应用不是Document里面定义的，是由其本身的结构决定的。数据库的索
+  <a href='http://idouba.net/about-btrees-application-in-database-index/'>Read more →</a>
+</article> 
+
+
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/learn-and-walk-with-doudou/">牵一只蜗牛去散步</a></h2>
+    <p class="blog-post-meta"><time datetime="2014-02-25T06:47:43Z">Tue Feb 25, 2014</time> by douba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/%E9%9A%8F%E7%AC%94/" rel="category tag">随笔</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/doudou/" rel="tag">doudou</a>, <a href="/tags/reference/" rel="tag">reference</a>
+
+</p>
+  </header>
+  douma发给我的一篇文章，让douba好好阅读。 上帝给我一个任务 叫我牵一只蜗牛去散步。 我不能走太快， 蜗牛已经尽力爬，为何每次总是那么一点点？ 我催它，我唬它，我责备它， 蜗牛用抱歉的眼光看着我， 彷佛说：「人家已经尽力了嘛！」 我拉它，我扯它，甚至想踢它， 蜗牛受了伤，它流着汗，喘着气，往前爬… 真奇怪，为什么上帝叫我牵一只蜗牛去散步？ 「上帝啊！为什么？」 天上一片安静。 「唉！也许上帝抓蜗牛去了！」 好吧！松手了！ 反正上帝不管了，我还管什么？ 让蜗牛往前爬，我在后面生闷气。 咦？我闻到花香，原来这边还有个花园， 我
+  <a href='http://idouba.net/learn-and-walk-with-doudou/'>Read more →</a>
+</article> 
+
+
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/go-home/">要回家了，要离家了</a></h2>
+    <p class="blog-post-meta"><time datetime="2014-02-21T09:19:06Z">Fri Feb 21, 2014</time> by douba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/%E9%9A%8F%E7%AC%94/" rel="category tag">随笔</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/douba/" rel="tag">douba</a>
+
+</p>
+  </header>
+  要回到老家了，看老妈了。老妈摔伤躺着床上已经二十多天了，一直拖到现在才回家，很惭愧，很心疼。再有两个小时的飞机行程就到家了，看看父母，看看奶奶。晚上就可以躺在奶奶的大炕上了。 要离开小家了，想着小家。豆豆和以前每天一样在电话那头嗷嗷的喊叫，把douba的心都勾引到二十六七分钟自行车车程的小家。惦记着豆豆，惦记着douma。 机场大巴可真快呀！感觉比平时打车还快。二十分钟就到了机场了。 刚才打电话豆豆一直在喊叫，听douma说我们豆豆在吃饭的时候，和妈妈姥姥围在餐桌边上，眼睛一直还望门口看，豆豆是在等爸
+  <a href='http://idouba.net/go-home/'>Read more →</a>
+</article> 
+
+
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/oracle-index-brief/">Oracle索引原理精简总结</a></h2>
+    <p class="blog-post-meta"><time datetime="2014-02-19T13:48:09Z">Wed Feb 19, 2014</time> by idouba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/database/" rel="category tag">database</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/index/" rel="tag">index</a>, <a href="/tags/oracle/" rel="tag">oracle</a>
+
+</p>
+  </header>
+  结合使用整理Oracle的索引，主要权威的来自于Oracle Database Concepts与Oracle Database Performance Tuning Guide 尝试用最少的字数介绍oracle的几种常用索引原理，主要是想简单分析其存储结构来说明其检索方式，和解释为什们某种索引使用与某种场合。（数据结构中最简单的ArrayList和LinkedList的使用场景）。阐述原因只有一个，就是因为其存储结构决定的。 B树索引(默认类型) 存储结构： B+树，不多描述。和其他几种关系数据库一样，就是根据索引列(一个或多个)来构造一个B+树来存储索引。非叶子节点两个区域：
+  <a href='http://idouba.net/oracle-index-brief/'>Read more →</a>
+</article> 
+
+
+
+
+
+<nav class="blog-pagination">
+  
+  <a class="btn btn-outline-primary" href="/posts/page/3/" rel="prev" role="button">Previous page</a>
+  <a class="btn btn-outline-primary" href="/posts/page/5/" rel="next" role="button">Next page</a>
+  
+  
+  
+</nav>
+
+
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 ml-auto blog-sidebar">
+  
+
+  
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+    
+
+    
+    <footer class="blog-footer">
+      <p dir="auto">
+      
+      <!-- raw HTML omitted -->浙ICP备18050493号-1<!-- raw HTML omitted --> 浙公网安备 33010802006262号
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+    
+
+  </body>
+
+</html>

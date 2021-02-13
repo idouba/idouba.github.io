@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<meta property="og:title" content="Istio 调用链埋点原理剖析—是否真的“零修改”？" />
+<meta property="og:description" content="发在Infoq上的一篇文章，答疑当前大家工作中碰到的Istio调用链的问题，最终澄清了观点，并推动社区修改了说法，避免误解。 前言 在 Istio 的实践中最近经常被问到一个问题，使用 Istio 做调用链用户的业务代码是不是完全 0 侵入，到底要不要修改业务代码？ 看官方介绍： Istio makes it easy to create a network of deployed services with load balancing, service-to-service authentication, monitoring, and more, without any changes in service code. 是不用修改任何代码即可做各种治理。实际使用中应用程序不做任何修改，使用 Istio 的调用链输出总是断开的，这到底是什么原因呢？ 对以上问题关注的人比较多，但是貌似说的都不是特别清楚，在最近的 K8S 技术社区的 Meetup 上笔者专门做" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://idouba.net/istio-tracing-is-not-zero-code-change/" />
+<meta property="article:published_time" content="2018-11-29T15:23:04+00:00" />
+<meta property="article:modified_time" content="2018-11-29T15:23:04+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Istio 调用链埋点原理剖析—是否真的“零修改”？"/>
+<meta name="twitter:description" content="发在Infoq上的一篇文章，答疑当前大家工作中碰到的Istio调用链的问题，最终澄清了观点，并推动社区修改了说法，避免误解。 前言 在 Istio 的实践中最近经常被问到一个问题，使用 Istio 做调用链用户的业务代码是不是完全 0 侵入，到底要不要修改业务代码？ 看官方介绍： Istio makes it easy to create a network of deployed services with load balancing, service-to-service authentication, monitoring, and more, without any changes in service code. 是不用修改任何代码即可做各种治理。实际使用中应用程序不做任何修改，使用 Istio 的调用链输出总是断开的，这到底是什么原因呢？ 对以上问题关注的人比较多，但是貌似说的都不是特别清楚，在最近的 K8S 技术社区的 Meetup 上笔者专门做"/>
+<meta name="generator" content="Hugo 0.80.0" />
+
+
+    
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Istio 调用链埋点原理剖析—是否真的“零修改”？",
+  "url": "http:\/\/idouba.net\/istio-tracing-is-not-zero-code-change\/",
+  "wordCount": "5998",
+  "datePublished": "2018-11-29T15:23:04+00:00",
+  "dateModified": "2018-11-29T15:23:04+00:00",
+  "author": {
+    "@type": "Person",
+    "name": "idouba"
+  },
+  "keywords": "Istio, Tracing, istio, published, mesh, tracing"
+}
+</script>
+
+
+
+    <link rel="canonical" href="http://idouba.net/istio-tracing-is-not-zero-code-change/">
+
+    <title>Istio 调用链埋点原理剖析—是否真的“零修改”？ | 爱豆吧！</title>
+
+    
+    <!-- combined, minified CSS -->
+    
+    <link href="http://idouba.net/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    
+
+    <!-- minified Font Awesome for SVG icons -->
+    
+    <script defer src="http://idouba.net/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+
+    <!-- RSS 2.0 feed -->
+    
+
+    
+
+    
+
+  </head>
+
+  <body>
+
+    
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="http://idouba.net/">Home</a>
+        </nav>
+      </div>
+    </div>
+    
+
+    
+    
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.net/" rel="home">爱豆吧！</a></h1>
+        <p class="lead blog-description" dir="auto">idouba@beta.</p>
+      </div>
+    </header>
+    
+    
+
+    
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/istio-tracing-is-not-zero-code-change/">Istio 调用链埋点原理剖析—是否真的“零修改”？</a></h2>
+    <p class="blog-post-meta"><time datetime="2018-11-29T15:23:04Z">Thu Nov 29, 2018</time> by idouba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">Istio</a>, <a href="/categories/tracing/" rel="category tag">Tracing</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/istio/" rel="tag">istio</a>, <a href="/tags/published/" rel="tag">published</a>, <a href="/tags/mesh/" rel="tag">mesh</a>, <a href="/tags/tracing/" rel="tag">tracing</a>
+
+</p>
+  </header>
+  <p>发在<a href="https://www.infoq.cn/article/pqy*PFPhox9OQQ9iCRTt">Infoq</a>上的一篇文章，答疑当前大家工作中碰到的Istio调用链的问题，最终澄清了观点，并推动社区修改了说法，避免误解。</p>
+<h2 id="前言">前言</h2>
+<p>在 Istio 的实践中最近经常被问到一个问题，使用 Istio 做调用链用户的业务代码是不是完全 0 侵入，到底要不要修改业务代码？</p>
+<p>看官方介绍：</p>
+<blockquote>
+<p>Istio makes it easy to create a network of deployed services with load balancing, service-to-service authentication, monitoring, and more, <em>without any changes</em> in service code.</p>
+</blockquote>
+<p>是不用修改任何代码即可做各种治理。实际使用中应用程序不做任何修改，使用 Istio 的调用链输出总是断开的，这到底是什么原因呢？</p>
+<p>对以上问题关注的人比较多，但是貌似说的都不是特别清楚，在最近的 K8S 技术社区的 Meetup 上笔者专门做了主题分享，通过解析 Istio 的架构机制与 Istio 中调用链的工作原理来回答以上问题。在本文中将节选里面的重点内容，基于 Istio 官方典型的示例来展开其中的每个细节和原理。</p>
+<p>Istio 本身的内容在这里不多介绍，作为 Google 继 Kubernetes 之后的又一重要项目，Istio 提供了 Service Mesh 方式服务治理的完整的解决方案。正如其首页介绍，通过非侵入的方式提供了服务的连接、控制、保护和观测能力。包括智能控制服务间的流量和 API 调用；提供授权、认证和通信加密机制自动保护服务安全；通过开放策略来控制调用者对服务的访问；另外提供了可扩展丰富的调用链、监控、日志等手段来对服务与性能进行观测。即用户不用修改代码，就可以实现各种服务治理能力。</p>
+<p>较之其他系统和平台，Istio 比较明显的一个特点是服务运行的监控数据都可以动态获取和输出，提供了强大的调用链、监控和调用日志收集输出的能力。配合可视化工具，运维人员可以方便的看到系统的运行状况，并发现问题进而解决问题。而我们基本上不用在自己的代码里做任何修改来生成数据并对接各种监控、日志、调用链等后端。非常神奇的是只要我们的程序被部署 run 起来，其运行数据就自动收集并在一个面板上展现出来。</p>
+<h2 id="调用链概述">调用链概述</h2>
+<p>对于分布式系统的运维管理和故障定位来说，调用链当然是第一利器。</p>
+<p><img src="https://static001.infoq.cn/resource/image/7e/b3/7e04e3441cac058f374c1d2d345ec6b3.jpg" alt=""></p>
+<p>正如 Service Mesh 的诞生是为了解决大规模分布式服务访问的治理问题，调用链的出现也是为了对应于大规模的复杂的分布式系统运行中碰到的故障定位定界问题。大量的服务调用、跨进程、跨服务器，可能还会跨多个物理机房。无论是服务自身问题还是网络环境的问题导致调用上链路上出现问题都比较复杂，如何定位就比单进程的一个服务打印一个异常栈来找出某个方法要困难的多。需要有一个类似的调用链路的跟踪，经一次请求的逻辑规矩完整的表达出来，可以观察到每个阶段的调用关系，并能看到每个阶段的耗时和调用详细情况。</p>
+<p><!-- raw HTML omitted -->Dapper, a Large-Scale Distributed Systems Tracing Infrastructure<!-- raw HTML omitted --> 描述了其中的原理和一般性的机制。模型中包含的术语也很多，理解最主要的两个即可：</p>
+<ul>
+<li>Trace：一次完整的分布式调用跟踪链路。</li>
+<li>Span：跨服务的一次调用； 多个 Span 组合成一次 Trace 追踪记录。</li>
+</ul>
+<p>上图是 Dapper 论文中的经典图示，左表示一个分布式调用关系。前端（A），两个中间层（B 和 C），以及两个后端（D 和 E）。用户发起一个请求时，先到达前端，再发送两个服务 B 和 C。B 直接应答，C 服务调用后端 D 和 E 交互之后给 A 应答，A 进而返回最终应答。要使用调用链跟踪，就是给每次调用添加 TraceId、SpanId 这样的跟踪标识和时间戳。</p>
+<p>右表示对应 Span 的管理关系。每个节点是一个 Span，表示一个调用。至少包含 Span 的名、父 SpanId 和 SpanId。节点间的连线下表示 Span 和父 Span 的关系。所有的 Span 属于一个跟踪，共用一个 TraceId。从图上可以看到对前端 A 的调用 Span 的两个子 Span 分别是对 B 和 C 调用的 Span，D 和 E 两个后端服务调用的 Span 则都是 C 的子 Span。</p>
+<p>调用链系统有很多实现，用的比较多的如<!-- raw HTML omitted -->zipkin<!-- raw HTML omitted -->，还有已经加入 CNCF 基金会并且的用的越来越多的<!-- raw HTML omitted -->Jaeger<!-- raw HTML omitted -->，满足 Opentracing 语义标准的就有<!-- raw HTML omitted -->这么多<!-- raw HTML omitted -->。</p>
+<p><img src="https://static001.infoq.cn/resource/image/e9/d9/e9a56816d4e7b3cfff3dc97624d33ed9.png" alt=""></p>
+<p>一个完整的调用链跟踪系统，包括调用链埋点，调用链数据收集，调用链数据存储和处理，调用链数据检索（除了提供检索的 APIServer，一般还要包含一个非常酷炫的调用链前端）等若干重要组件。如图是 Jaeger 的一个完整实现。</p>
+<p>这里我们仅关注与应用相关的内容，即调用链埋点的部分，看下在 Istio 中是否能做到”无侵入“的调用链埋点。调用链的埋点是一个比起来记录日志，报个 metric 或者告警要复杂的多。根本原因其数据结构要相对复杂一些，为了能将在多个点上收集的关于一次调用的多个中间请求过程关联起来形成一个链。下面通过详析自带的典型例子来看下这里的细节。</p>
+<h2 id="调用链示例">调用链示例</h2>
+<p>简单起见，我们以 Istio 最经典的 Bookinfo 为例来说明。Bookinfo 模拟在线书店的一个分类，显示一本书的信息。本身是一个异构应用，几个服务分别由不同的语言编写的。各个服务的模拟作用和调用关系是：</p>
+<ul>
+<li>Productpage ：Productpage 服务会调用 Details 和 Reviews 两个服务，用来生成页面。</li>
+<li>Details ：这个微服务包含了书籍的信息。</li>
+<li>Reviews ：这个微服务包含了书籍相关的评论。并调用 Ratings 微服务。</li>
+<li>Ratings ：Ratings 微服务中包含了由书籍评价组成的评级信息。</li>
+</ul>
+<p>在 Istio 上运行这个典型例子，不用做任何的代码修改，自带的 Zipkin 上就能看到如下的调用链输出。</p>
+<p><img src="https://static001.infoq.cn/resource/image/5a/e9/5a76ec8e66cf61633ad1183ff6b935e9.png" alt=""></p>
+<p>可以看到 zipkin 上展示给我们的调用链和 Boookinfo 这个场景设计的调用关系一致：Productpage 服务会调用 Details 和 Reviews 两个服务，Reviews 调用了 Ratings 微服务。除了显示调用关系外，还显示了每个中间调用的耗时和调用详情。基于这个视图，服务的运维人员比较直观的定界到慢的或者有问题的服务，并钻取当时的调用细节，进而定位到问题。我们就要关注下调用链埋点到底是在哪里做的，怎么做的？</p>
+<p><img src="https://static001.infoq.cn/resource/image/13/51/13e55c574948a341e676823fc0374351.png" alt=""></p>
+<h2 id="istio-调用链埋点逻辑">Istio 调用链埋点逻辑</h2>
+<p>在 Istio 中，所有的治理逻辑的执行体都是和业务容器一起部署的 Envoy 这个 Sidecar，不管是负载均衡、熔断、流量路由还是安全、可观察性的数据生成都是在 Envoy 上。Sidecar 拦截了所有的流入和流出业务程序的流量，根据收到的规则执行执行各种动作。实际使用中一般是基于 K8S 提供的 InitContainer 机制，用于在 Pod 中执行一些初始化任务. InitContainer 中执行了一段 Iptables 的脚本。正是通过这些 Iptables 规则拦截 pod 中流量，并发送到 Envoy 上。Envoy 拦截到 Inbound 和 Outbound 的流量会分别作不同操作，执行上面配置的操作，另外再把请求往下发，对于 Outbound 就是根据服务发现找到对应的目标服务后端上；对于 Inbound 流量则直接发到本地的服务实例上。</p>
+<p>所以我们的重点是看下拦截到流量后 Sidecar 在调用链埋点怎么做的。</p>
+<p>Envoy 的埋点规则和在其他服务调用方和被调用方的对应埋点逻辑没有太大差别，甚至和一般 SDK 方式内置的调用链埋点逻辑也类似。</p>
+<ul>
+<li>Inbound 流量：对于经过 Sidecar 流入应用程序的流量，如果经过 Sidecar 时 Header 中没有任何跟踪相关的信息，则会在创建一个根 Span，TraceId 就是这个 SpanId，然后再将请求传递给业务容器的服务；如果请求中包含 Trace 相关的信息，则 Sidecar 从中提取 Trace 的上下文信息并发给应用程序。</li>
+<li>Outbound 流量：对于经过 Sidecar 流出的流量，如果经过 Sidecar 时 Header 中没有任何跟踪相关的信息，则会创建根 Span，并将该跟 Span 相关上下文信息放在请求头中传递给下一个调用的服务；当存在 Trace 信息时，Sidecar 从 Header 中提取 Span 相关信息，并基于这个 Span 创建子 Span，并将新的 Span 信息加在请求头中传递。</li>
+</ul>
+<p>特别是 Outbound 部分的调用链埋点逻辑，通过一段伪代码描述如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">parentSpan <span style="color:#f92672">=</span> tracer<span style="color:#f92672">.</span><span style="color:#a6e22e">getTracer</span><span style="color:#f92672">().</span><span style="color:#a6e22e">extract</span><span style="color:#f92672">(</span>headers<span style="color:#f92672">);</span>
+ 	<span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>parentSpan <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">){</span>
+ 	span <span style="color:#f92672">=</span> tracer<span style="color:#f92672">.</span><span style="color:#a6e22e">buildSpan</span><span style="color:#f92672">(</span>operation<span style="color:#f92672">).</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
+ 	<span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+ 	span <span style="color:#f92672">=</span> tracer<span style="color:#f92672">.</span><span style="color:#a6e22e">buildSpan</span><span style="color:#f92672">(</span>operation<span style="color:#f92672">).</span><span style="color:#a6e22e">asChildOf</span><span style="color:#f92672">(</span>parentSpan<span style="color:#f92672">).</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
+ 	<span style="color:#f92672">}</span>
+</code></pre></div><p>如图是对前面 Zipkin 上输出的一个 Trace 一个透视图，观察下每个调用的细节。可以看到每个阶段四个服务与部署在它旁边上的 Sidecar 是怎么配合的。在图上只标记了 Sidecar 生成的 Span 主要信息。下面基于具体的例子我们走一遍流程，类剖析下细节，最终得出我们关系的业务代码要做哪些事情？</p>
+<p>因为 Sidecar 处理 Inbound 和 Outbound 的逻辑有所不同，在图上表也分开两个框图分开表达。如 Productpage，接收外部请求是一个处理，给 Details 发出请求是一个处理，给 Reviews 发出请求是另外一个处理，因此围绕 Productpage 这个 app 有三个黑色的处理块，其实是一个 Sidecar 在做事。</p>
+<p>同时，为了不使的图上箭头太多，最终的 Response 都没有表达出来，其实图上每个请求的箭头都有一个反方向的 Response。在服务发起方的 Sidecar 会收到 Response 时，会记录一个 CR(client Received) 表示收到响应的时间并计算整个 Span 的持续时间。</p>
+<p><img src="https://static001.infoq.cn/resource/image/a0/48/a041f85697f8ff38076e3d3856f3ad48.png" alt=""></p>
+<p>下面通过解析下具体数据来找出埋点逻辑：</p>
+<ol>
+<li>首先从调用入口的 Gateway 开始，Gateway 作为一个独立部署在一个 pod 中的 Envoy 进程，当有请求过来时，它会将请求转给入口服务 Productpage。Gateway 这个 Envoy 在发出请求时里面没有 Trace 信息，会生成一个根 Span：SpanId 和 TraceId 都是 f79a31352fe7cae9，因为是第一个调用链上的第一个 Span，也就是一般说的根 Span，所有 ParentId 为空，在这个时候会记录 CS（Client Send）；</li>
+<li>请求从入口 Gateway 这个 Envoy 进入 Productpage 的 app 业务进程其 Inbound 流量被 Productpage Pod 内的 Envoy 拦截，Envoy 处理请求头中带着 Trace 信息，记录 SR(Server Received)，并将请求发送给 Productpage 业务容器处理，Productpage 在处理请求的业务方法中在接受调用的参数时，除了接受一般的业务参数外，同时解析请求中的调用链 Header 信息，并把 Header 中的 Trace 信息传递给了调用的 Details 和 Reviews 的微服务。</li>
+<li>从 Productpage 出去的请求到达 Reviews 服务前，其 Oubtbound 流量又一次通过同 Pod 的 Envoy，Envoy 埋点逻辑检查 Header 中包含了 Trace 相关信息，在将请求发出前会做客户端的调用链埋点，即以当前 Span 为 parent Span，生成一个子 Span：新的 SpanId cb4c86fb667f3114，TraceId 保持一致 9a31352fe7cae9，ParentId 就是上个 Span 的 Id： f79a31352fe7cae9。</li>
+<li>从 Productpage 到 Reviews 的请求经过 Productpage 的 Sidecar 走 LB 后，发给一个 Reviews 的实例。请求在到达 Reviews 业务容器前，同样也被 Reviews 的 Envoy 拦截，Envoy 检查从 Header 中解析出 Trace 信息存在，则发送 Trace 信息给 Reviews。Reviews 处理请求的服务端代码中同样接收和解析出这些包含 Trace 的 Header 信息，发送给下一个 Ratings 服务。</li>
+</ol>
+<p>在这里我们只是理了一遍请求从入口 Gateway，访问 Productpage 服务，再访问 Reviews 服务的流程。可以看到期间每个访问阶段，对服务的 Inbound 和 Outbound 流量都会被 Envoy 拦截并执行对应的调用链埋点逻辑。图示的 Reviews 访问 Ratings 和 Productpage 访问 Details 逻辑与以上类似，这里不做复述。</p>
+<p>以上过程也印证了前面我们提出的 Envoy 的埋点逻辑。可以看到过程中除了 Envoy 处理 Inbound 和 Outbound 流量时要执行对应的埋点逻辑外，每一步的调用要串起来，应用程序其实做了些事情。就是在将请求发给下一个服务时，需要将调用链相关的信息同样传下去，尽管这些 Trace 和 Span 的标识并不是它生成的。这样在出流量的 Proxy 向下一跳服务发起请求前才能判断并生成子 Span 并和原 Span 进行关联，进而形成一个完整的调用链。否则，如果在应用容器未处理 Header 中的 Trace，则 Sidecar 在处理请求时会创建根 Span，最终会形成若干个割裂的 Span，并不能被关联到一个 Trace 上，就会出现我们开始提到的问题。</p>
+<p>不断被问到两个问题来试图说明这个业务代码配合修改来实现调用链逻辑可能不必要：</p>
+<p>问题一：既然传入的请求上已经带了这些 Header 信息了，直接往下一直传不就好了吗？Sidecar 请求 APP 的时候带着这些 Header，APP 请求 Sidecar 时也带着这些 Header 不就完了吗？</p>
+<p>问题二：既然 TraceId 和 SpanId 是同一个 Sidecar 生成的，为什么要再费劲让 App 收到请求的时候解析下，发出请求时候再带着发出来传回给 Sidecar 呢？</p>
+<p><img src="https://static001.infoq.cn/resource/image/9a/5e/9a339365844590c00f725642dc3a3e5e.png" alt=""></p>
+<p>回答问题一，只需理解一点，这里的 App 业务代码是处理请求不是转发请求，即图上左边的 Request to Productpage 到 Productpage 中请求就截止了，要怎么处理完全是 Productpage 的服务接口的内容了，可以是调用本地处理逻辑直接返回，也可以是如示例中的场景构造新的请求调用其他的服务。右边的 Request from Productpage 完全是 Productpage 服务构造的发出的另外一个请求。</p>
+<p>回答问题二，需要理解当前 Envoy 是独立的 Listener 来处理 Inbound 和 Outbound 的请求。Inbound 只会处理入的流量并将流量转发到本地的服务实例上。而 Outbound 就是根据服务发现找到对应的目标服务后端上。除了在一个进程里外两个之间可以说没有任何关系。 另外如问题一描述，因为到 Outbound 已经是一个新构造的请求了，使得想维护一个 map 来记录这些 Trace 信息这种方案也变得不可行。</p>
+<p>例子中 Productpage 访问 Reviews 的 Span 详细如下，删减掉一些数据只保留主要信息大致是这样：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{ 
+	<span style="color:#f92672">&#34;traceId&#34;</span>: <span style="color:#e6db74">&#34;f79a31352fe7cae9&#34;</span>,
+	 <span style="color:#f92672">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;cb4c86fb667f3114&#34;</span>,
+	 <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;reviews-route&#34;</span>,
+	 <span style="color:#f92672">&#34;parentId&#34;</span>: <span style="color:#e6db74">&#34;f79a31352fe7cae9&#34;</span>,
+	 <span style="color:#f92672">&#34;timestamp&#34;</span>: <span style="color:#ae81ff">1536132571847838</span>,
+	 <span style="color:#f92672">&#34;duration&#34;</span>: <span style="color:#ae81ff">64849</span>,
+	 <span style="color:#f92672">&#34;annotations&#34;</span>: [ { 
+		<span style="color:#f92672">&#34;timestamp&#34;</span>: <span style="color:#ae81ff">1536132571847838</span>,
+		 <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;cs&#34;</span>,
+		 <span style="color:#f92672">&#34;endpoint&#34;</span>: { 
+			<span style="color:#f92672">&#34;serviceName&#34;</span>: <span style="color:#e6db74">&#34;productpage&#34;</span>,
+			 <span style="color:#f92672">&#34;ipv4&#34;</span>: <span style="color:#e6db74">&#34;172.16.0.33&#34;</span> 
+		} 
+	},   { 
+		<span style="color:#f92672">&#34;timestamp&#34;</span>: <span style="color:#ae81ff">1536132571848121</span>,
+		 <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;sr&#34;</span>,
+		 <span style="color:#f92672">&#34;endpoint&#34;</span>: { 
+			<span style="color:#f92672">&#34;serviceName&#34;</span>: <span style="color:#e6db74">&#34;reviews&#34;</span>,
+			 <span style="color:#f92672">&#34;ipv4&#34;</span>: <span style="color:#e6db74">&#34;172.16.0.32&#34;</span> 
+		} 
+	},   { 
+		<span style="color:#f92672">&#34;timestamp&#34;</span>: <span style="color:#ae81ff">1536132571912403</span>,
+		 <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;ss&#34;</span>,
+		 <span style="color:#f92672">&#34;endpoint&#34;</span>: { 
+			<span style="color:#f92672">&#34;serviceName&#34;</span>: <span style="color:#e6db74">&#34;reviews&#34;</span>,
+			 <span style="color:#f92672">&#34;ipv4&#34;</span>: <span style="color:#e6db74">&#34;172.16.0.32&#34;</span> 
+		} 
+	},   { 
+		<span style="color:#f92672">&#34;timestamp&#34;</span>: <span style="color:#ae81ff">1536132571912687</span>,
+		 <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;cr&#34;</span>,
+		 <span style="color:#f92672">&#34;endpoint&#34;</span>: { 
+			<span style="color:#f92672">&#34;serviceName&#34;</span>: <span style="color:#e6db74">&#34;productpage&#34;</span>,
+			 <span style="color:#f92672">&#34;ipv4&#34;</span>: <span style="color:#e6db74">&#34;172.16.0.33&#34;</span> 
+		} 
+	} ],
+	 <span style="color:#f92672">&#34;binaryAnnotations&#34;</span>: [ { 
+		<span style="color:#f92672">&#34;key&#34;</span>: <span style="color:#e6db74">&#34;http.status_code&#34;</span>,
+		 <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;200&#34;</span>,
+		 <span style="color:#f92672">&#34;endpoint&#34;</span>: { 
+			<span style="color:#f92672">&#34;serviceName&#34;</span>: <span style="color:#e6db74">&#34;reviews&#34;</span>,
+			 <span style="color:#f92672">&#34;ipv4&#34;</span>: <span style="color:#e6db74">&#34;172.16.0.32&#34;</span> 
+		} 
+	},   { 
+		<span style="color:#f92672">&#34;key&#34;</span>: <span style="color:#e6db74">&#34;http.url&#34;</span>,
+		 <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;http://reviews:9080/reviews/0&#34;</span>,
+		 <span style="color:#f92672">&#34;endpoint&#34;</span>: { 
+			<span style="color:#f92672">&#34;serviceName&#34;</span>: <span style="color:#e6db74">&#34;productpage&#34;</span>,
+			 <span style="color:#f92672">&#34;ipv4&#34;</span>: <span style="color:#e6db74">&#34;172.16.0.33&#34;</span> 
+		} 
+	},   { 
+		<span style="color:#f92672">&#34;key&#34;</span>: <span style="color:#e6db74">&#34;response_size&#34;</span>,
+		 <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;375&#34;</span>,
+		 <span style="color:#f92672">&#34;endpoint&#34;</span>: { 
+			<span style="color:#f92672">&#34;serviceName&#34;</span>: <span style="color:#e6db74">&#34;reviews&#34;</span>,
+			 <span style="color:#f92672">&#34;ipv4&#34;</span>: <span style="color:#e6db74">&#34;172.16.0.32&#34;</span> 
+		} 
+	} ] 
+}
+</code></pre></div><p>Productpage 的 Proxy 上报了个 CS，CR, Reviews 的那个 Proxy 上报了个 SS，SR。分别表示 Productpage 作为 client 什么时候发出请求，什么时候最终收到请求，Reviews 的 Proxy 什么时候收到了客户端的请求，什么时候发出了 response。另外还包括这次访问的其他信息如 Response Code、Response Size 等。</p>
+<h2 id="业务代码修改">业务代码修改</h2>
+<p>根据前面的分析我们可以得到结论：埋点逻辑是在 Sidecar 代理中完成，应用程序不用处理复杂的埋点逻辑，但应用程序需要配合在请求头上传递生成的 Trace 相关信息。下面抽取服务代码来印证下结论，并看下业务代码到底是怎么修改的。</p>
+<p>Python 写的 Productpage 在服务端处理请求时，先从 Request 中提取接收到的 Header。然后再构造请求调用 Details 获取服务接口，并将 Header 转发出去。</p>
+<p>首先处理 Productpage 请问的 Restful 方法中从 Request 中提取 Trace 相关的 Header.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">app<span style="color:#f92672">.</span>route(<span style="color:#e6db74">&#39;/productpage&#39;</span>)
+ 	<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">front</span>():
+ 	product_id <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span> <span style="color:#75715e"># TODO: replace default value</span>
+ 	Headers <span style="color:#f92672">=</span> getForwardHeaders(Request)
+ 	<span style="color:#960050;background-color:#1e0010">…</span>
+ 	detailsStatus, details <span style="color:#f92672">=</span> getProductDetails(product_id, headers)
+ 	reviewsStatus, reviews <span style="color:#f92672">=</span> getProductReviews(product_id, headers)
+ 	<span style="color:#66d9ef">return</span> <span style="color:#960050;background-color:#1e0010">…</span>
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">getForwardHeaders</span>(request):
+ 	Headers <span style="color:#f92672">=</span> {}
+ 	incoming_Headers <span style="color:#f92672">=</span> [ <span style="color:#e6db74">&#39;x-request-id&#39;</span>,
+ 	<span style="color:#e6db74">&#39;x-b3-traceid&#39;</span>,
+ 	<span style="color:#e6db74">&#39;x-b3-spanId&#39;</span>,
+ 	<span style="color:#e6db74">&#39;x-b3-parentspanid&#39;</span>,
+ 	<span style="color:#e6db74">&#39;x-b3-sampled&#39;</span>,
+ 	<span style="color:#e6db74">&#39;x-b3-flags&#39;</span>,
+ 	<span style="color:#e6db74">&#39;x-ot-span-context&#39;</span>
+ 	]
+
+ 	<span style="color:#66d9ef">for</span> ihdr <span style="color:#f92672">in</span> incoming_Headers:
+ 	val <span style="color:#f92672">=</span> request<span style="color:#f92672">.</span>headers<span style="color:#f92672">.</span>get(ihdr)
+ 	<span style="color:#66d9ef">if</span> val <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> None:
+ 	headers[ihdr] <span style="color:#f92672">=</span> val
+ 	<span style="color:#66d9ef">return</span> headers
+</code></pre></div><p> 	for ihdr in incoming_Headers:
+ 	val = request.headers.get(ihdr)
+ 	if val is not None:
+ 	headers[ihdr] = val
+ 	return headers<!-- raw HTML omitted --></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">getProductReviews</span>(product_id, headers):
+ 	url <span style="color:#f92672">=</span> reviews[<span style="color:#e6db74">&#39;name&#39;</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/&#34;</span> <span style="color:#f92672">+</span> reviews[<span style="color:#e6db74">&#39;endpoint&#39;</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/&#34;</span> <span style="color:#f92672">+</span> str(product_id)
+ 	res <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(url, headers<span style="color:#f92672">=</span>Headers, timeout<span style="color:#f92672">=</span><span style="color:#ae81ff">3.0</span>)
+</code></pre></div><p>Reviews 服务中 Java 的 Rest 代码类似，在服务端接收请求时，除了接收 Request 中的业务参数外，还要提取 Header 信息，调用 Ratings 服务时再传递下去。其他的 Productpage 调用 Details，Reviews 调用 ratings 逻辑类似。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@GET</span>
+<span style="color:#a6e22e">@Path</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/reviews/{productId}&#34;</span><span style="color:#f92672">)</span>
+<span style="color:#66d9ef">public</span> Response <span style="color:#a6e22e">bookReviewsById</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@PathParam</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;productId&#34;</span><span style="color:#f92672">)</span> <span style="color:#66d9ef">int</span> productId<span style="color:#f92672">,</span>
+<span style="color:#a6e22e">@HeaderParam</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;end-user&#34;</span><span style="color:#f92672">)</span> String user<span style="color:#f92672">,</span>
+<span style="color:#a6e22e">@HeaderParam</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;x-request-id&#34;</span><span style="color:#f92672">)</span> String xreq<span style="color:#f92672">,</span>
+<span style="color:#a6e22e">@HeaderParam</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;x-b3-traceid&#34;</span><span style="color:#f92672">)</span> String xTraceId<span style="color:#f92672">,</span>
+<span style="color:#a6e22e">@HeaderParam</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;x-b3-spanid&#34;</span><span style="color:#f92672">)</span> String xSpanId<span style="color:#f92672">,</span>
+<span style="color:#a6e22e">@HeaderParam</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;x-b3-parentspanid&#34;</span><span style="color:#f92672">)</span> String xparentSpanId<span style="color:#f92672">,</span>
+<span style="color:#a6e22e">@HeaderParam</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;x-b3-sampled&#34;</span><span style="color:#f92672">)</span> String xsampled<span style="color:#f92672">,</span>
+<span style="color:#a6e22e">@HeaderParam</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;x-b3-flags&#34;</span><span style="color:#f92672">)</span> String xflags<span style="color:#f92672">,</span>
+<span style="color:#a6e22e">@HeaderParam</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;x-ot-span-context&#34;</span><span style="color:#f92672">)</span> String xotSpan<span style="color:#f92672">)</span>
+</code></pre></div><p>当然这里只是个 demo，示意下要在那个环节修改代码。实际项目中我们不会这样在每个业务方法上作这样的修改，这样对代码的侵入，甚至说污染太严重。根据语言的特点会尽力把这段逻辑提取成一段通用逻辑，只要能在接收和发送请求的地方能机械的 forward 这几个 Trace 相关的 Header 即可。如果需要更多的控制，如在在 Span 上加特定的 Tag，或者在应用代码中代码中对某个服务内部方法的调用进详细跟踪需要构造一个 Span，可以使用类似 opentracing 的对应方法来实现。</p>
+<h2 id="社区声明">社区声明</h2>
+<p>最近一直在和社区沟通，督促在更显著的位置明确的告诉使用者用 Istio 作治理并不是所有场景下都不需要修改代码，比如调用链，虽然用户不用业务代码埋点，但还是需要修改些代码。尤其是避免首页“without any change”对大家的误导。得到回应是 1.1 中社区首页 what-is-istio 已经修改了这部分说明，不再是 1.0 中说<!-- raw HTML omitted -->without any changes in service code<!-- raw HTML omitted -->，而是改为<!-- raw HTML omitted -->with few or no code changes in service code<!-- raw HTML omitted -->。提示大家在使用 Isito 进行调用链埋点时，应用程序需要进行适当的修改。当然了解了其中原理，做起来也不会太麻烦。</p>
+<p><img src="https://static001.infoq.cn/resource/image/a4/5c/a498b31f5b985601b0975e687b27bd5c.png" alt=""></p>
+<p><img src="https://static001.infoq.cn/resource/image/92/c8/929ddad3dab29a3251c8502792cb05c8.png" alt=""></p>
+<p>改了个程度轻一点的否定词，很少几乎不用修改，还是基本不用改的意思。这也是社区一贯的观点。</p>
+<p>结合对 Istio 调用链的原理的分析和一个典型例子中细节字段、流程包括代码的额解析，再加上和社区沟通的观点。得到以下结论：</p>
+<ul>
+<li>Istio 的绝大多数治理能力都是在 Sidecar 而非应用程序中实现，因此是非侵入的；</li>
+<li>Istio 的调用链埋点逻辑也是在 Sidecar 代理中完成，对应用程序非侵入，但应用程序需做适当的修改，即配合在请求头上传递生成的 Trace 相关信息。</li>
+</ul>
+<p>文中内容比较多，有点啰嗦，原理性的东西不感兴趣也可以跳过，只要知道结论“Istio 调用链埋点业务代码要少量修改”就可以。</p>
+
+
+  
+
+  
+
+</article> 
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 ml-auto blog-sidebar">
+  
+
+  
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+    
+
+    
+    <footer class="blog-footer">
+      <p dir="auto">
+      
+      <!-- raw HTML omitted -->浙ICP备18050493号-1<!-- raw HTML omitted --> 浙公网安备 33010802006262号
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+    
+
+  </body>
+
+</html>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>database on 爱豆吧！</title>
+    <link>http://idouba.net/categories/database/</link>
+    <description>Recent content in database on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>&lt;a href=&#39;https://beian.miit.gov.cn/&#39; target=&#39;_blank&#39;&gt;浙ICP备18050493号-1&lt;/a&gt; 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Thu, 07 May 2015 07:11:32 +0000</lastBuildDate><atom:link href="http://idouba.net/categories/database/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>从Search Sort到Join</title>
+      <link>http://idouba.net/learn_table_join_from_search_and_sort/</link>
+      <pubDate>Thu, 07 May 2015 07:11:32 +0000</pubDate>
+      
+      <guid>http://idouba.net/learn_table_join_from_search_and_sort/</guid>
+      <description>发表于《程序员》2015年4月B的一篇文章，在博客归档下。根据杂志社要求，在自己博客发表该文章亦须注明：本文为CSDN编译整理，未经允许不得转载，如需转载请联系market#csdn.net(#换成@) 想通过原理来说明一些技术白皮书上“什么时候应该使用什么”这个“应该”后面的原因。通过数据结构中经典的排序查找算法来推倒解释数据库中几种经典的表连接背后的算法原理，和原理决定的在各种数据库中不同的应用和限制。以简单的算法来讲出数据库系统中看着核心强大功能的本质的算法设计。较之白皮书中不同数据库的不同</description>
+    </item>
+    
+    <item>
+      <title>B树在数据库索引中的应用剖析(发表版本)</title>
+      <link>http://idouba.net/about-btrees-application-in-database-index-in-programmer/</link>
+      <pubDate>Wed, 18 Jun 2014 09:27:23 +0000</pubDate>
+      
+      <guid>http://idouba.net/about-btrees-application-in-database-index-in-programmer/</guid>
+      <description>最近一篇发表于《程序员》2014年6月刊上的文章。有点遗憾发现，有些部分被编辑修改过了，读起来有点怪怪的。最典型的是习惯于对某些比较经典的定义引用wikipedia或者原始白皮书中原始的E文，在文中发现都被硬译过了，表达的意思自己都有点看不懂了！ 最终修改后提交的版本归档下： 引言 关于数据库索引，随便Google一个Oracle index，Mysql index总能得到“某某索引之n条经典建议”之类大量结果。笔者认为，较之直接借鉴，在搞清实际需求的基础上，对备选方案的原理尽可能深入全面的了解会更有利于</description>
+    </item>
+    
+    <item>
+      <title>从Count看Oracle执行计划的选择</title>
+      <link>http://idouba.net/analysis-oracle-execute-plan-from-count/</link>
+      <pubDate>Mon, 24 Mar 2014 12:53:50 +0000</pubDate>
+      
+      <guid>http://idouba.net/analysis-oracle-execute-plan-from-count/</guid>
+      <description>一、 前言 在调查一个性能问题的时候，一个同事问道，为什么数据库有些时候这么不聪明，明明表上有索引，但是在执行一个简单的count的时候居然全表扫描了！难道不知道走索引更快么？ 试图从最简单的count来重新了解oracle查询计划的选择，以及最终产生的结果。虽然有些结果会让人觉得有些意外，并且可能会鄙视，这个查询计划选择真的不够聪明。但稍微用心点的去了解，做的已经足够细致了。大多数情况下，根据我们输入的信息，来自输入的SQL、表结构、索引状况、统计信息，会得出一个比较优的计划。所以和前面一直试图讲到</description>
+    </item>
+    
+    <item>
+      <title>B树在数据库索引中的应用剖析（原稿）</title>
+      <link>http://idouba.net/about-btrees-application-in-database-index/</link>
+      <pubDate>Thu, 20 Mar 2014 08:18:48 +0000</pubDate>
+      
+      <guid>http://idouba.net/about-btrees-application-in-database-index/</guid>
+      <description>引言 关于数据库索引，随便Google一个Oracle index，Mysql index总有大量的结果出来，其中不乏某某索引之n条经典建议。笔者认为，较之借鉴，在搞清楚了自己的需求的基础上，对备选方案的原理有个尽可能深入全面的了解会更有利于我们的选择和决策。因为某种方案或者技术呈现出某种优势（包括可能没有被介绍到但一定存在的限制），不是定义出来的，而是因为其实现机制决定的。就像LinkedList和ArrayList分别适用于什么应用不是Document里面定义的，是由其本身的结构决定的。数据库的索</description>
+    </item>
+    
+    <item>
+      <title>Oracle索引原理精简总结</title>
+      <link>http://idouba.net/oracle-index-brief/</link>
+      <pubDate>Wed, 19 Feb 2014 13:48:09 +0000</pubDate>
+      
+      <guid>http://idouba.net/oracle-index-brief/</guid>
+      <description>结合使用整理Oracle的索引，主要权威的来自于Oracle Database Concepts与Oracle Database Performance Tuning Guide 尝试用最少的字数介绍oracle的几种常用索引原理，主要是想简单分析其存储结构来说明其检索方式，和解释为什们某种索引使用与某种场合。（数据结构中最简单的ArrayList和LinkedList的使用场景）。阐述原因只有一个，就是因为其存储结构决定的。 B树索引(默认类型) 存储结构： B+树，不多描述。和其他几种关系数据库一样，就是根据索引列(一个或多个)来构造一个B+树来存储索引。非叶子节点两个区域：</description>
+    </item>
+    
+    <item>
+      <title>【译】数据库事务隔离级别</title>
+      <link>http://idouba.net/wikipedia_isolation/</link>
+      <pubDate>Sun, 05 Jan 2014 12:23:26 +0000</pubDate>
+      
+      <guid>http://idouba.net/wikipedia_isolation/</guid>
+      <description>&lt;p&gt;看到wikipedia中文关于数据库相关的几个&lt;!-- raw HTML omitted --&gt;经典&lt;!-- raw HTML omitted --&gt;条目有点老旧，尤其和英文条目相比。确定开始翻译其中几篇，先从&lt;!-- raw HTML omitted --&gt;事务隔离等级&lt;!-- raw HTML omitted --&gt;开始。格式采用维基Sandbox发布后的格式。翻译完后自己校对过几遍，质量还可以。:-)
+已经在中文维基发布。
+翻译的中文条目地址：&lt;!-- raw HTML omitted --&gt;事务隔离等级&lt;!-- raw HTML omitted --&gt;；
+对应的英文条目地址：&lt;!-- raw HTML omitted --&gt;Isolation (database systems)&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
+&lt;p&gt;欢迎大家指正，可以直接在维基上对应条目更新的！。&lt;/p&gt;
+&lt;p&gt;**事务隔离（isolation）**定义了&lt;a href=&#34;http://en.wikipedia.org/wiki/Database&#34; title=&#34;Database&#34;&gt;数据库&lt;/a&gt;系统中一个操作产生的影响什么时候以哪种方式可以对其他&lt;a href=&#34;http://en.wikipedia.org/wiki/Concurrency_%28computer_science%29&#34; title=&#34;Concurrency (computer science)&#34;&gt;并发&lt;/a&gt;操作可见。隔离是事务&lt;a href=&#34;http://en.wikipedia.org/wiki/ACID&#34; title=&#34;ACID&#34;&gt;ACID&lt;/a&gt; (原子性、一致性性、隔离性、持久性)四大属性中的一个重要属性。&lt;/p&gt;
+&lt;p&gt;&lt;!-- raw HTML omitted --&gt;1 并发控制(Concurrency control)&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;2 隔离级别(Isolation levels)&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt; 2.1 可序列化(Serializable)&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;2.2 可重复读(Repeatable reads)&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;2.3 授权读(Read committed)&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;2.4 未授权读(Read uncommitted)&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;3 默认隔离级别&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;4 读现象(Read phenomena)&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;4.1 脏读(Dirty reads (Uncommitted Dependency))&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;4.2 不可重复读(non-repeatable read)&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;4.3 幻影读(phantom read)&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;5 隔离级别、读现象和锁(Isolation Levels, Read Phenomena and Locks)&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;5.1 隔离级别vs读现象(Isolation Levels vs Read Phenomena)&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;5.2 隔离级别vs 锁持续时间(Isolation Levels vs Lock Duration)&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;6 参照&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;7 相关条目&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;8 外部链接&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
+&lt;h2 id=&#34;并发控制concurrency-control&#34;&gt;并发控制(Concurrency control)&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;http://en.wikipedia.org/wiki/Concurrency_control&#34; title=&#34;Concurrency control&#34;&gt;并发控制&lt;/a&gt;描述了数据库处理隔离以保证数据正确性的机制。为了保证并行事务执行的准确执行数据库和存储引擎在设计的时候着重强调了这一点。典型的事务相关机制限制数据的访问顺序(&lt;a href=&#34;http://en.wikipedia.org/wiki/Schedule_%28computer_science%29&#34; title=&#34;Schedule (computer science)&#34;&gt;执行调度&lt;/a&gt;)以满足&lt;a href=&#34;http://en.wikipedia.org/wiki/Serializability&#34; title=&#34;Serializability&#34;&gt;可序列化&lt;/a&gt; 和&lt;a href=&#34;http://en.wikipedia.org/wiki/Recoverability&#34; title=&#34;Recoverability&#34;&gt;可恢复性&lt;/a&gt;。限制数据访问意味着降低了执行的性能，并发控制机制就是要保证在满足这些限制的前提下提供尽可能高的性能。经常在不损害正确性的情况下，为了达到更好的性能，&lt;a href=&#34;http://en.wikipedia.org/wiki/Serializability&#34; title=&#34;Serializability&#34;&gt;可序列化&lt;/a&gt;的的要求会减低一些，但是为了避免数据一致性的破坏，&lt;a href=&#34;http://en.wikipedia.org/wiki/Recoverability&#34; title=&#34;Recoverability&#34;&gt;可恢复性&lt;/a&gt;必须保证。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://en.wikipedia.org/wiki/Two-phase_locking&#34; title=&#34;Two-phase locking&#34;&gt;两阶段锁&lt;/a&gt;是关系数据库中最常见的提供了&lt;a href=&#34;http://en.wikipedia.org/wiki/Serializability&#34; title=&#34;Serializability&#34;&gt;可序列化&lt;/a&gt; 和&lt;a href=&#34;http://en.wikipedia.org/wiki/Recoverability&#34; title=&#34;Recoverability&#34;&gt;可恢复性&lt;/a&gt;的并发控制机制，为了访问一个数据库对象，事务首先要获得这个对象的 &lt;a href=&#34;http://en.wikipedia.org/wiki/Lock_%28database%29&#34; title=&#34;Lock (database)&#34;&gt;锁&lt;/a&gt;。对于不同的访问类型（如对对象的读写操作）和锁的类型，如果另外一个事务正持有这个对象的锁，获得锁的过程会被阻塞或者延迟。&lt;/p&gt;
+&lt;h2 id=&#34;隔离级别isolation-levels&#34;&gt;隔离级别(Isolation levels)&lt;/h2&gt;
+&lt;p&gt;在&lt;a href=&#34;http://en.wikipedia.org/w/index.php?title=%E6%95%B0%E6%8D%AE%E5%BA%93&amp;amp;action=edit&amp;amp;redlink=1&#34; title=&#34;数据库 (page does not exist)&#34;&gt;数据库&lt;/a&gt;事务的&lt;a href=&#34;http://en.wikipedia.org/wiki/ACID&#34; title=&#34;ACID&#34;&gt;ACID&lt;/a&gt;四个属性中，隔离性是一个最常放松的一个。为了获取更高的隔离等级，数据库系统的 &lt;a href=&#34;http://en.wikipedia.org/wiki/Lock_%28database%29&#34; title=&#34;Lock (database)&#34;&gt;锁&lt;/a&gt;机制或者&lt;a href=&#34;http://en.wikipedia.org/wiki/Multiversion_concurrency_control&#34; title=&#34;Multiversion concurrency control&#34;&gt;多版本并发控制&lt;/a&gt;机制都会影响&lt;a href=&#34;http://en.wikipedia.org/wiki/Concurrency_%28computer_science%29&#34; title=&#34;Concurrency (computer science)&#34;&gt;并发&lt;/a&gt;。 &lt;a href=&#34;http://en.wikipedia.org/wiki/Software_application&#34; title=&#34;Software application&#34;&gt;应用软件&lt;/a&gt;也需要额外的逻辑来使其正常工作。&lt;/p&gt;
+&lt;p&gt;很多&lt;a href=&#34;http://en.wikipedia.org/wiki/DBMS&#34; title=&#34;DBMS&#34;&gt;DBMS&lt;/a&gt;定义了不同的“事务隔离等级”来控制锁的程度。在很多数据库系统中，多数的数据库事务都避免高等级的隔离等级（如可序列化）从而减少对系统的锁定开销。程序员需要小心的分析数据库访问部分的代码来保证隔离级别的降低不会造成难以发现的代码bug。相反的，更高的隔离级别会增加&lt;a href=&#34;http://en.wikipedia.org/wiki/Deadlock&#34; title=&#34;Deadlock&#34;&gt;死锁&lt;/a&gt;发生的几率，同样需要编程过程中去避免。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://en.wikipedia.org/wiki/American_National_Standards_Institute&#34; title=&#34;American National Standards Institute&#34;&gt;ANSI&lt;/a&gt;/&lt;a href=&#34;http://en.wikipedia.org/wiki/International_Organization_for_Standardization&#34; title=&#34;International Organization for Standardization&#34;&gt;ISO&lt;/a&gt; &lt;a href=&#34;http://en.wikipedia.org/wiki/SQL&#34; title=&#34;SQL&#34;&gt;SQL&lt;/a&gt;定义的标准隔离级别如下。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

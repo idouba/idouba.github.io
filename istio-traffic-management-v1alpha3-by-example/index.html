@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<meta property="og:title" content="详析Istio最新v1alpha3 流量管理规则" />
+<meta property="og:description" content="前言 isto提供了一种简单的语法来描述如何进行流量管理。可以给服务配置熔断、超时、重试等规则，也可以配置规则来切分流量从而实现金丝雀发布、A/B测试等发布功能。一个典型场景如官方文档中的case，将一定比例的流量或者满足一定条件的请求的流量切分到一个特定版本上。 Istio的route rule从v1alpha1到v1alpha3 变化特别大，可以看出对规则设计上完全进行了重构。看上去v1alpha3功能上更强了，可以预见未来1.0后alpha3风格的语法因为提供了更强的表达能力，将逐步取代alpha" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://idouba.net/istio-traffic-management-v1alpha3-by-example/" />
+<meta property="article:published_time" content="2018-05-05T15:53:52+00:00" />
+<meta property="article:modified_time" content="2018-05-05T15:53:52+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="详析Istio最新v1alpha3 流量管理规则"/>
+<meta name="twitter:description" content="前言 isto提供了一种简单的语法来描述如何进行流量管理。可以给服务配置熔断、超时、重试等规则，也可以配置规则来切分流量从而实现金丝雀发布、A/B测试等发布功能。一个典型场景如官方文档中的case，将一定比例的流量或者满足一定条件的请求的流量切分到一个特定版本上。 Istio的route rule从v1alpha1到v1alpha3 变化特别大，可以看出对规则设计上完全进行了重构。看上去v1alpha3功能上更强了，可以预见未来1.0后alpha3风格的语法因为提供了更强的表达能力，将逐步取代alpha"/>
+<meta name="generator" content="Hugo 0.80.0" />
+
+
+    
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "详析Istio最新v1alpha3 流量管理规则",
+  "url": "http:\/\/idouba.net\/istio-traffic-management-v1alpha3-by-example\/",
+  "wordCount": "3645",
+  "datePublished": "2018-05-05T15:53:52+00:00",
+  "dateModified": "2018-05-05T15:53:52+00:00",
+  "author": {
+    "@type": "Person",
+    "name": "douba"
+  },
+  "keywords": "Istio, Mesh, API"
+}
+</script>
+
+
+
+    <link rel="canonical" href="http://idouba.net/istio-traffic-management-v1alpha3-by-example/">
+
+    <title>详析Istio最新v1alpha3 流量管理规则 | 爱豆吧！</title>
+
+    
+    <!-- combined, minified CSS -->
+    
+    <link href="http://idouba.net/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    
+
+    <!-- minified Font Awesome for SVG icons -->
+    
+    <script defer src="http://idouba.net/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+
+    <!-- RSS 2.0 feed -->
+    
+
+    
+
+    
+
+  </head>
+
+  <body>
+
+    
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="http://idouba.net/">Home</a>
+        </nav>
+      </div>
+    </div>
+    
+
+    
+    
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.net/" rel="home">爱豆吧！</a></h1>
+        <p class="lead blog-description" dir="auto">idouba@beta.</p>
+      </div>
+    </header>
+    
+    
+
+    
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/istio-traffic-management-v1alpha3-by-example/">详析Istio最新v1alpha3 流量管理规则</a></h2>
+    <p class="blog-post-meta"><time datetime="2018-05-05T15:53:52Z">Sat May 05, 2018</time> by douba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">Istio</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/mesh/" rel="tag">Mesh</a>, <a href="/tags/api/" rel="tag">API</a>
+
+</p>
+  </header>
+  <h3 id="前言">前言</h3>
+<p>isto提供了一种简单的语法来描述如何进行<a href="https://istio.io/docs/concepts/traffic-management/overview.html">流量管理</a>。可以给服务配置熔断、超时、重试等规则，也可以配置规则来切分流量从而实现金丝雀发布、A/B测试等发布功能。一个典型场景如官方文档中的case，将一定比例的流量或者满足一定条件的请求的流量切分到一个特定版本上。</p>
+<p>Istio的route rule从<a href="https://istio.io/docs/reference/config/istio.routing.v1alpha1.html">v1alpha1</a>到<a href="https://istio.io/docs/reference/config/istio.networking.v1alpha3.html">v1alpha3</a> 变化特别大，可以看出对规则设计上完全进行了重构。看上去v1alpha3功能上更强了，可以预见未来1.0后alpha3风格的语法因为提供了更强的表达能力，将逐步取代alpha1成为标准语法。但是初次使用或者中alpha1直接切过来一般还会有些不适应。因为较之alpha1，<a href="https://istio.io/docs/reference/config/istio.networking.v1alpha3.html">v1alpha3</a>使用上还是有点复杂。导致原来用v1alpha1配置的规则场景在v1alpha3下不是很容易的配置出来。因此本文一个典型例子来说明下v1alpha3规则的使用上的细节和注意要点。</p>
+<h3 id="例子">例子</h3>
+<p>先看下这个例子，以及基于这个例子的简单规则解释，后面再结合其中的每一个部分来了解v1alpha3规则的设计和使用方式。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+    <span style="color:#960050;background-color:#1e0010">“apiVersion”:</span> <span style="color:#960050;background-color:#1e0010">“networking.istio.io/v1alpha3”,</span>
+    <span style="color:#960050;background-color:#1e0010">“kind”:</span> <span style="color:#960050;background-color:#1e0010">“VirtualService”,</span>
+    <span style="color:#960050;background-color:#1e0010">“metadata”:</span> <span style="color:#960050;background-color:#1e0010">{</span>
+        <span style="color:#960050;background-color:#1e0010">“name”:</span> <span style="color:#960050;background-color:#1e0010">“reviews-route”</span>
+    }<span style="color:#960050;background-color:#1e0010">,</span>
+    <span style="color:#960050;background-color:#1e0010">“spec”:</span> {
+        <span style="color:#960050;background-color:#1e0010">“hosts”:</span> <span style="color:#960050;background-color:#1e0010">[</span>
+            <span style="color:#f92672">&#34;reviews&#34;</span>
+        <span style="color:#960050;background-color:#1e0010">]</span>,
+        <span style="color:#960050;background-color:#1e0010">“gateways”:</span> <span style="color:#960050;background-color:#1e0010">[</span>
+            <span style="color:#f92672">&#34;bookinfo&#34;</span>,
+            <span style="color:#f92672">&#34;mesh&#34;</span>
+        <span style="color:#960050;background-color:#1e0010">]</span>,
+        <span style="color:#960050;background-color:#1e0010">“http”:</span> <span style="color:#960050;background-color:#1e0010">[</span>
+            <span style="color:#960050;background-color:#1e0010">{</span>
+                <span style="color:#f92672">&#34;match&#34;</span>: [
+                    {
+                        <span style="color:#f92672">&#34;headers&#34;</span>: {
+                            <span style="color:#f92672">&#34;cookie&#34;</span>: {
+                                <span style="color:#f92672">&#34;regex&#34;</span>: <span style="color:#e6db74">&#34;^(.*?;)?(user=jason)(;.*)?&#34;</span>
+                            }
+                        },
+                        <span style="color:#f92672">&#34;uri&#34;</span>: {
+                            <span style="color:#f92672">&#34;prefix&#34;</span>: <span style="color:#e6db74">&#34;/catalog1&#34;</span>
+                        }
+                    },
+                    {
+                        <span style="color:#f92672">&#34;uri&#34;</span>: {
+                            <span style="color:#f92672">&#34;prefix&#34;</span>: <span style="color:#e6db74">&#34;/catalog2&#34;</span>
+                        }
+                    }
+                ],
+                <span style="color:#960050;background-color:#1e0010">“rewrite”:</span> <span style="color:#960050;background-color:#1e0010">{</span>
+                    <span style="color:#960050;background-color:#1e0010">“uri”:</span> <span style="color:#960050;background-color:#1e0010">“/newcatalog”</span>
+                }<span style="color:#960050;background-color:#1e0010">,</span>
+                <span style="color:#960050;background-color:#1e0010">“route”:</span> [
+                    {
+                        <span style="color:#f92672">&#34;destination&#34;</span>: {
+                            <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;reviews&#34;</span>,
+                            <span style="color:#f92672">&#34;subset&#34;</span>: <span style="color:#e6db74">&#34;v2&#34;</span>
+                        },
+                        <span style="color:#f92672">&#34;weight&#34;</span>: <span style="color:#ae81ff">25</span>
+                    },
+                    {
+                        <span style="color:#f92672">&#34;destination&#34;</span>: {
+                            <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;reviews&#34;</span>,
+                            <span style="color:#f92672">&#34;subset&#34;</span>: <span style="color:#e6db74">&#34;v3&#34;</span>
+                        },
+                        <span style="color:#f92672">&#34;weight&#34;</span>: <span style="color:#ae81ff">75</span>
+                    }
+                ]
+            <span style="color:#960050;background-color:#1e0010">},</span>
+            {
+                <span style="color:#960050;background-color:#1e0010">“route”:</span> <span style="color:#960050;background-color:#1e0010">[</span>
+                    <span style="color:#960050;background-color:#1e0010">{</span>
+                        <span style="color:#f92672">&#34;destination&#34;</span>: {
+                            <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;reviews&#34;</span>,
+                            <span style="color:#f92672">&#34;subset&#34;</span>: <span style="color:#e6db74">&#34;v1&#34;</span>
+                        }
+                    }
+                <span style="color:#960050;background-color:#1e0010">]</span>
+            <span style="color:#960050;background-color:#1e0010">}</span>
+        <span style="color:#960050;background-color:#1e0010">]</span>
+    <span style="color:#960050;background-color:#1e0010">}</span>
+<span style="color:#960050;background-color:#1e0010">}</span>
+</code></pre></div><p>在这个例子中通过VirtualService对reviews这个服务配置了route规则。HTTP请求满足如下条件：cookie中满足”^(.*?;)?(user=jason)(;.*)?这个表达式，并且uri以catalog1开头；或者uri以catalog2开头。这样的http请求会被route到reviews的v2和v3版本上，其中请求中75%的到v3，25%的到v2，并且uri会被重写成newcatalog。不满足以上条件的其他的请求会路由到v1版本上。</p>
+<p>再看场景，这是一个非常典型的灰度发布的case，从生产版本上分流一部分满足特定条件的请求到一个新版本上，使用实际流量来对一个灰度版本进行评价，切分一部分流量走回v2和v3的灰度版本，其他流量还是走在原版本上。当新的版本评估满足要求时，提升这个版本未生成版本，接收生产上的流量。</p>
+<p>为了尽可能的cover到规则的主要设计，这个例子其实有点复杂。现实场景在做灰度时，要么是将满足一定请求条件的流量从生产版本上引流出来，要么是忽略条件将一定比例的流量引流出来，很少有两个叠加在一起的，满足条件流量再按照比例分配到两个不同的版本上。</p>
+<h3 id="规则说明">规则说明</h3>
+<p>其实就是看下组成规则的数据结构，这里只是描述主要功能中用到的结构。其他详细参照官方文档。介绍的顺序依照从外到内，从大到小的顺序。一般了解了前四个VirtualService，HTTPRoute和HTTPMatchRequest和DestinationWeight就足够了，后面是这几个大的结构中引用到的结构，参照了解些即可。</p>
+<h4 id="virtualservice">VirtualService</h4>
+<p>从例子中也可以看到，<a href="https://istio.io/docs/reference/config/istio.networking.v1alpha3.html#VirtualService">VirtualService</a>是规则的入口，对指定的host定义了一组路由规则。即满足什么条件，执行什么动作。</p>
+<p>其中host就是服务名，对于不同的名字服务有不同的规则。如对于k8s就是服务名，或者包含了ns的长域名。Hosts作用于HTTP和TCP服务，是mesh中在服务注册中定义的服务推荐使用服务名，只有在Gateway中，才可以使用IP或者CIDR prefix。Gateway表示应用这个规则的sidecar和gateway。保留字“mesh”用了表示mesh中的所有sidecar，当省略Gateway这个字段，则默认这个规则会施加到所有的mesh上。如果只是定义了一个gateway列表，则规则只会应用到这个列表的gateway上。为了使得列表应用到某几个gateway和所有的sidecar，需要指定“mesh”和特定的gateway。如例子中规则应用到bookinfo这个gateway上，同时应用到所有的sidecar上。</p>
+<p>可以对http协议和tcp协议，分别配置HTTPRoute,和TCPRoute。本文中以七层的HTTPRoute为例来描述，因为七层协议比起四层来属性多一些，配置的条件和可以执行的动作也丰富一些。</p>
+<p>根据规则的语法特点，一般默认的route放到最后一个，表示不匹配前面规则的流量都会走到该route上。这个和<a href="https://istio.io/docs/reference/config/istio.routing.v1alpha1.html">v1alpha1</a>版本的语义不同，在<a href="https://istio.io/docs/reference/config/istio.routing.v1alpha1.html">v1alpha1</a>里是通过<a href="https://istio.io/docs/reference/config/istio.routing.v1alpha1.html#RouteRule">RouteRule</a>来描述规则，并且RouteRule上有个precedence来标识规则的优先级。</p>
+<p><a href="https://istio.io/docs/reference/config/istio.networking.v1alpha3.html#VirtualService">VirtualService</a> 可以定义如下属性</p>
+<h4 id="httproute">HTTPRoute</h4>
+<p><a href="https://istio.io/docs/reference/config/istio.networking.v1alpha3.html#HTTPRoute">HTTPRoute</a>是在VirtualService上定义的http规则。</p>
+<p>描述HTTP/1.1, HTTP2, and gRPC 的条件和执行动作的规则。即match某些条件，执行定义的动作。匹配条件在HTTPMatchRequest中定义。</p>
+<blockquote>
+<p>非常需要注意的一点是：HTTPRoute中 match字段是一个数组，表示多个条件的集合，条件之间是或的关系。Match中的每个元素是个HTTPMatchRequest类型，里面可以包含多个条件，即对HTTP不同属性的判定，条件之间是AND关系。</p>
+</blockquote>
+<p>如上面的例子中，HTTP请求的cookie中满足”^(.*?;)?(user=jason)(;.*)?这个表达式，<strong>并且</strong>uri以catalog1开始的请求，<strong>或者</strong>uri以catalog2开头的http请求。</p>
+<p>执行动作可以是：</p>
+<ul>
+<li>路由<a href="https://istio.io/docs/reference/config/istio.networking.v1alpha3.html#DestinationWeight">DestinationWeight</a>[] ，</li>
+<li>重定向<a href="https://istio.io/docs/reference/config/istio.networking.v1alpha3.html#HTTPRedirect">HTTPRedirect</a>，</li>
+<li>重写<a href="https://istio.io/docs/reference/config/istio.networking.v1alpha3.html#HTTPRewrite">HTTPRewrite</a></li>
+<li>重试<a href="https://istio.io/docs/reference/config/istio.networking.v1alpha3.html#HTTPRetry">HTTPRetry</a></li>
+</ul>
+<p>等。这里我们将以最重要的路由为例来描述。一下是HTTPRoute上的所有属性。可以看到重要的match条件和各种支持的动作。</p>
+<h4 id="span-stylefont-size-1emhttpmatchrequestspansection"><!-- raw HTML omitted -->HTTPMatchRequest<!-- raw HTML omitted --><!-- raw HTML omitted --></h4>
+<p><a href="https://istio.io/docs/reference/config/istio.networking.v1alpha3.html#HTTPMatchRequest">HttpMatchRequest</a>是对HTTP请求定义了一组规则。匹配HTTP请求中重要的属性。如uri scheme method</p>
+<p>Headers 等。对于HTTP规则，比较常用的就是根据headers里的字段来匹配。如例子中检查cookie中满足条件的请求。</p>
+<h4 id="destinationweight">DestinationWeight</h4>
+<p><a href="https://istio.io/docs/reference/config/istio.networking.v1alpha3.html#DestinationWeight">DestinationWeight</a>是定义了一个有权重的目标服务。本来就是定义了个route，表示满足前面描述的条件的请求要路由到服务的哪个版本上去。作为增强，给每个目标版本上加了权重，表示多大比例的流量路由到该版本。</p>
+<p>如例子中表示75%的流量到V1,25%的流量到V3。</p>
+<p>可以看到由两个重要属性组成，destination和weight。</p>
+<blockquote>
+<p>关于weight有非常重要的有点约定：<!-- raw HTML omitted -->在一个route里，所有destination的weight的和必须是100，如果只有一个destination，weight可以不写，默认是100，表示所有的流量都会到这个destination上去。</p>
+</blockquote>
+<p>以上是主要的数据结构，除此外还有如下几个相关的重要结构：<a href="https://istio.io/docs/reference/config/istio.networking.v1alpha3.html#Destination">Destination</a>表示执行完规则后最重要请求要被转发到的目标服务。主要字段是一个服务名和subset，服务名可以是istio名字服务中注册的服务名，也可以是外部dns上存的一个服务名。根据使用的名字服务不同，服务名的解释也略有不同，如在kubernetes上，可以使用短服务名，自动会解析成 reviews.bookinfo.svc.cluster.local这样的长域名。<a href="https://istio.io/docs/reference/config/istio.networking.v1alpha3.html#Subset">Subset</a>只是在mesh内生效，表示访问服务的一个子集，在<a href="https://istio.io/docs/reference/config/istio.networking.v1alpha3.html#DestinationRule">DestinationRule</a>中定义，一般都是通过label来描述一个服务一个版本。除了定义服务的subset外，在DestinationRule上可以给服务和服务的某个subeset定义<a href="https://istio.io/docs/reference/config/istio.networking.v1alpha3.html#TrafficPolicy">TrafficPolicy</a>，这个和文中着重讨论的流量路由没用没用直接关系，这里不展开。另外在HTTPMatchRequest的定义中可以看到，大部分条件的匹配都是使用<a href="https://istio.io/docs/reference/config/istio.networking.v1alpha3.html#StringMatch">StringMatch</a>描述了条件的匹配方式，可以是exact完全匹配，prefix的前置匹配，或者regex的表达式匹配。</p>
+<h3 id="其他">其他</h3>
+<p>除了这里文中示例说明的路由管理<a href="https://istio.io/docs/tasks/traffic-management-v1alpha3/request-routing.html">Request Routing</a>外，<a href="https://istio.io/docs/tasks/traffic-management-v1alpha3/">流量管理</a>还包括如下丰富的流量治理能力：</p>
+<ul>
+<li><a href="https://istio.io/docs/tasks/traffic-management-v1alpha3/fault-injection.html">Fault Injection</a>.</li>
+<li><a href="https://istio.io/docs/tasks/traffic-management-v1alpha3/traffic-shifting.html">Traffic Shifting</a>.</li>
+<li><a href="https://istio.io/docs/tasks/traffic-management-v1alpha3/request-timeouts.html">Setting Request Timeouts</a>.</li>
+<li><a href="https://istio.io/docs/tasks/traffic-management-v1alpha3/ingress.html">Control Ingress Traffic</a>.</li>
+<li><a href="https://istio.io/docs/tasks/traffic-management-v1alpha3/egress.html">Control Egress Traffic</a>.</li>
+<li><a href="https://istio.io/docs/tasks/traffic-management-v1alpha3/egress-tcp.html">Control Egress TCP Traffic</a>.</li>
+<li><a href="https://istio.io/docs/tasks/traffic-management-v1alpha3/circuit-breaking.html">Circuit Breaking</a>.</li>
+<li><a href="https://istio.io/docs/tasks/traffic-management-v1alpha3/mirroring.html">Mirroring</a>.</li>
+</ul>
+<p>部分在上面的结构中有提及，其他通过在上面配置额外的属性，或者结合其他的规则配置即可完成。理解了个规则的设计思路和一些细节，配置这里治理规则还是非常容易的。总体来说istio提供给我们了一个表达能力很强的的流量治理规则。</p>
+<h3 id="找错">找错</h3>
+<p><a href="https://istio.io/docs/reference/config/istio.networking.v1alpha3.html#HTTPMatchRequest">HTTPMatchRequest</a> 下面这个例子和文档中描述的结构貌似有不一致或者歧义的地方，通过本文中的介绍，不知是否能找出来。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">networking.istio.io/v1alpha3</span>
+<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">VirtualService</span>
+<span style="color:#f92672">metadata</span>:
+  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">ratings-route</span>
+<span style="color:#f92672">spec</span>:
+  <span style="color:#f92672">hosts</span>:
+  - <span style="color:#ae81ff">ratings</span>
+  <span style="color:#f92672">http</span>:
+  - <span style="color:#f92672">match</span>:
+    - <span style="color:#f92672">headers</span>:
+        <span style="color:#f92672">cookie</span>:
+          <span style="color:#f92672">regex</span>: <span style="color:#e6db74">&#34;^(.*?;)?(user=jason)(;.*)?&#34;</span>
+        <span style="color:#f92672">uri</span>:
+          <span style="color:#f92672">prefix</span>: <span style="color:#e6db74">&#34;/ratings/v2/&#34;</span>
+    <span style="color:#f92672">route</span>: 
+    - <span style="color:#f92672">destination</span>:
+        <span style="color:#f92672">name</span>: <span style="color:#ae81ff">ratings</span>
+</code></pre></div><p> </p>
+
+
+  
+
+  
+
+</article> 
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 ml-auto blog-sidebar">
+  
+
+  
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+    
+
+    
+    <footer class="blog-footer">
+      <p dir="auto">
+      
+      <!-- raw HTML omitted -->浙ICP备18050493号-1<!-- raw HTML omitted --> 浙公网安备 33010802006262号
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+    
+
+  </body>
+
+</html>

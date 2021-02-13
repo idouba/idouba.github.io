@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<meta property="og:title" content="源码剖析AQS在几个同步工具类中的使用" />
+<meta property="og:description" content="1. 前言 AQS(AbstractQueuedSynchronizer)是 java.util.concurrent的基础。J.U.C中宣传的封装良好的好用的同步工具类Semaphore、CountDownLatch、ReentrantLock、ReentrantReadWriteLock、FutureTask等虽然各自都有不同特征，但是简单看一下源码，每个类内部都包含一个如下的内部类定义： 同时每个类内部都包含有这样一个属性，连属性名都一样！注释已经暗示了，该类的同步机制正是通过这个AQS的子类来完成" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://idouba.net/sync-implementation-by-aqs/" />
+<meta property="article:published_time" content="2015-04-06T15:30:31+00:00" />
+<meta property="article:modified_time" content="2015-04-06T15:30:31+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="源码剖析AQS在几个同步工具类中的使用"/>
+<meta name="twitter:description" content="1. 前言 AQS(AbstractQueuedSynchronizer)是 java.util.concurrent的基础。J.U.C中宣传的封装良好的好用的同步工具类Semaphore、CountDownLatch、ReentrantLock、ReentrantReadWriteLock、FutureTask等虽然各自都有不同特征，但是简单看一下源码，每个类内部都包含一个如下的内部类定义： 同时每个类内部都包含有这样一个属性，连属性名都一样！注释已经暗示了，该类的同步机制正是通过这个AQS的子类来完成"/>
+<meta name="generator" content="Hugo 0.80.0" />
+
+
+    
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "源码剖析AQS在几个同步工具类中的使用",
+  "url": "http:\/\/idouba.net\/sync-implementation-by-aqs\/",
+  "wordCount": "15046",
+  "datePublished": "2015-04-06T15:30:31+00:00",
+  "dateModified": "2015-04-06T15:30:31+00:00",
+  "author": {
+    "@type": "Person",
+    "name": "douba"
+  },
+  "keywords": "concurrency, AQS, java, source"
+}
+</script>
+
+
+
+    <link rel="canonical" href="http://idouba.net/sync-implementation-by-aqs/">
+
+    <title>源码剖析AQS在几个同步工具类中的使用 | 爱豆吧！</title>
+
+    
+    <!-- combined, minified CSS -->
+    
+    <link href="http://idouba.net/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    
+
+    <!-- minified Font Awesome for SVG icons -->
+    
+    <script defer src="http://idouba.net/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+
+    <!-- RSS 2.0 feed -->
+    
+
+    
+
+    
+
+  </head>
+
+  <body>
+
+    
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="http://idouba.net/">Home</a>
+        </nav>
+      </div>
+    </div>
+    
+
+    
+    
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.net/" rel="home">爱豆吧！</a></h1>
+        <p class="lead blog-description" dir="auto">idouba@beta.</p>
+      </div>
+    </header>
+    
+    
+
+    
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/sync-implementation-by-aqs/">源码剖析AQS在几个同步工具类中的使用</a></h2>
+    <p class="blog-post-meta"><time datetime="2015-04-06T15:30:31Z">Mon Apr 06, 2015</time> by douba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/concurrency/" rel="category tag">concurrency</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/aqs/" rel="tag">AQS</a>, <a href="/tags/concurrency/" rel="tag">concurrency</a>, <a href="/tags/java/" rel="tag">java</a>, <a href="/tags/source/" rel="tag">source</a>
+
+</p>
+  </header>
+  <h3 id="1-前言">1. 前言</h3>
+<p>AQS(AbstractQueuedSynchronizer)是 <!-- raw HTML omitted -->java.util.concurrent<!-- raw HTML omitted -->的基础。J.U.C中宣传的封装良好的好用的同步工具类<!-- raw HTML omitted -->Semaphore<!-- raw HTML omitted -->、<!-- raw HTML omitted -->CountDownLatch<!-- raw HTML omitted -->、<!-- raw HTML omitted -->ReentrantLock<!-- raw HTML omitted -->、<!-- raw HTML omitted -->ReentrantReadWriteLock<!-- raw HTML omitted -->、<!-- raw HTML omitted -->FutureTask<!-- raw HTML omitted -->等虽然各自都有不同特征，但是简单看一下源码，每个类内部都包含一个如下的内部类定义：</p>
+<!-- raw HTML omitted -->
+<p><img src="../wp-content/uploads/2015/03/AQS_hierachy.png" alt=""></p>
+<p>同时每个类内部都包含有这样一个属性，连属性名都一样！注释已经暗示了，该类的同步机制正是通过这个AQS的子类来完成的。不得不感叹：“<strong>每个强大的同步工具类，内心都有一把同样的锁！</strong>”</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">/** All mechanics via AbstractQueuedSynchronizer subclass */</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> Sync sync<span style="color:#f92672">;</span>
+</code></pre></div><p>几种同步类提供的功能其实都是委托sync来完成。有些是部分功能，有些则是全部功能。 本文中就是想尝试比较分析下在几个同步工具类下面定义的AQS的子类如何来实现工具类要求的功能。当然包括两部分，一部分是这些工具类如何使用其Sync这种类型的同步器，也就是工具类向外提供的方法中，如何使用sync这个句柄；第二部分，就是工具类中自己定义的内部类Sync继承自AQS，那到底override了哪些方法来做到以父类AQS为基础，提供受委托工具类的功能要求。</p>
+<p>关于第一部分，sync如何被其工具类使用，请允许我无耻的在一个文章中把一个类所有代码贴出来。</p>
+<p>所幸方法很多，总的代码行不多，因为每个方法都是一个风格，就是换个名直接调用sync的对应方法。这是<!-- raw HTML omitted -->Semaphore<!-- raw HTML omitted -->中对sync的使用。是不是觉得写这个代码的作者比写这个文章的作者还要无耻？在其他几个工具类中，没有这么夸张，b但基本上也是这个风格，即以一个helper的方式向外面的封装类提供功能支持。所以第一个问题，在文章中说到这里，后面涉及到也只会简单描述。 主要是求索第二个问题，即每个工具类中自己定义的Sync到底是什么样子，有哪些不同的特征，其实也就是代码上看这些Sync类对父类AQS做了哪些修改。</p>
+<h3 id="2-aqs简介">2. AQS简介</h3>
+<p>要介绍子类的特征，父类总得大致介绍下。AQS的原理、设计等比较系统的东西，在这里就不想涉及了。可以参照<a href="http://www.blogjava.net/xylz/archive/2010/07/08/325587.html">《深入浅出 Java Concurrency》</a>{#viewpost1_TitleUrl}系列的<a href="http://www.blogjava.net/xylz/archive/2010/07/06/325390.html">深入浅出 Java Concurrency (7): 锁机制 part 2 AQS</a>{#viewpost1_TitleUrl}一节，谢谢这个系列，作者讲的确实非常的深入浅出！要想了解更多，可以参考Doug Lea大师的原著<a href="http://gee.cs.oswego.edu/dl/papers/aqs.pdf"><em>The java</em>.<em>util</em>.<em>concurrent Synchronizer Framework</em></a>。最简单的办法其实就是的耐心把<!-- raw HTML omitted -->AbstractQueuedSynchronizer<!-- raw HTML omitted -->源码前面注释的javadoc完整的读一遍就可以了。笔者反正有这样的习惯。扎着脑袋看代码，看注释，然后自己看看是否能把一个package有个系统的视图，如果需要再看相关的参考文档来确认这个系统的视图。</p>
+<p>看一个对象有什么本事，看他的构成是什么样，远比看他由哪些行为来的要深远。其实在OOP这种以class方式承载功能的编程中，即看一个类包含的属性，比他的方法也更容易理解对象的作用。看AQS类，暂时抛开outline视图下需要两屏才能看完的重要方法（还未展开ConditionObject和Node两个重要的内部类），只看该类包含的三个重要属性的定义就能看出端倪。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">transient</span> <span style="color:#66d9ef">volatile</span> Node head<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">transient</span> <span style="color:#66d9ef">volatile</span> Node tail<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">volatile</span> <span style="color:#66d9ef">int</span> state<span style="color:#f92672">;</span>
+</code></pre></div><p>注释其实已经告诉我们了，Node类型的head和tail是一个FIFO的wait queue；一个int类型的状态位state。到这里也能猜到AQS对外呈现（或者说声明）的主要行为就是由一个状态位和一个有序队列来配合完成。 最简单的读一下主要的四个方法：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//获取排他锁 
+</span><span style="color:#75715e"></span>   <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">acquire</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> arg<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>tryAcquire<span style="color:#f92672">(</span>arg<span style="color:#f92672">)</span> <span style="color:#f92672">&amp;&amp;</span>
+            acquireQueued<span style="color:#f92672">(</span>addWaiter<span style="color:#f92672">(</span>Node<span style="color:#f92672">.</span><span style="color:#a6e22e">EXCLUSIVE</span><span style="color:#f92672">),</span> arg<span style="color:#f92672">))</span>
+            selfInterrupt<span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+   
+<span style="color:#75715e">//释放排他锁 
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">release</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> arg<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+ <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>tryRelease<span style="color:#f92672">(</span>arg<span style="color:#f92672">))</span> <span style="color:#f92672">{</span> 
+  Node h <span style="color:#f92672">=</span> head<span style="color:#f92672">;</span>
+ <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>h <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">&amp;&amp;</span> h<span style="color:#f92672">.</span><span style="color:#a6e22e">waitStatus</span> <span style="color:#f92672">!=</span> 0<span style="color:#f92672">)</span>
+ unparkSuccessor<span style="color:#f92672">(</span>h<span style="color:#f92672">);</span>
+ <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
+ <span style="color:#f92672">}</span> 
+<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+ <span style="color:#f92672">}</span>
+ 
+ <span style="color:#75715e">//获取共享锁    
+</span><span style="color:#75715e"></span> <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">acquireShared</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> arg<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>tryAcquireShared<span style="color:#f92672">(</span>arg<span style="color:#f92672">)</span> <span style="color:#f92672">&amp;</span>lt<span style="color:#f92672">;</span> 0<span style="color:#f92672">)</span>
+            doAcquireShared<span style="color:#f92672">(</span>arg<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#75715e">//释放共享锁    
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">releaseShared</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> arg<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>tryReleaseShared<span style="color:#f92672">(</span>arg<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+            doReleaseShared<span style="color:#f92672">();</span>
+            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><p>分别对应锁的获取和释放，只是**shared后缀的表示一组表示共享锁，而另外一组没有后缀的表示排他锁。只用关注每个方法的第一行，都是这种try字体的风格：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">try</span><span style="color:#f92672">*****(</span>arg<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>即做一个判断，然后做获取或者释放锁。 其实AQS主要的工作思路正是如此：在获取锁时候，先判断当前状态是否允许获取锁，若是可以则获取锁，否则获取不成功。<!-- raw HTML omitted -->获取不成功则会阻塞，进入阻塞队列。而释放锁时，一般会修改状态位，唤醒队列中的阻塞线程。 跟踪这几个try字体的方法定义，发现一个惊人的巧合，这几个方法在AQS中居然都是一样的定义：<!-- raw HTML omitted --></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">boolean</span> tr<span style="color:#f92672">***(</span><span style="color:#66d9ef">int</span> arg<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> UnsupportedOperationException<span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><p>即都是父类中只有定义，在子类中实现。子类根据功能需要的不同，有选择的对需要的方法进行实现。父类中提供一个执行模板，但是具体步骤留给子类来定义，不同的子类有不同的实现。</p>
+<h3 id="3-aqs的重要方法定义">3. AQS的重要方法定义</h3>
+<p>简单看下下面几个方法的源码发现定义中都涉及到了<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/AbstractQueuedSynchronizer.html#getState()"><code>getState()</code></a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/AbstractQueuedSynchronizer.html#setState(int)"><code>setState(int)</code></a>，即对状态位state的维护。`</p>
+<ul>
+<li>
+<p><a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/AbstractQueuedSynchronizer.html#tryAcquire(int)"><code>tryAcquire(int)</code></a></p>
+</li>
+<li>
+<p><a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/AbstractQueuedSynchronizer.html#tryRelease(int)"><code>tryRelease(int)</code></a></p>
+<p>的调用，可以看的更清楚看到，说明几个同步工具类内定义的Sync类，即自定义子类中其实都涉及到对state的操作。`</p>
+</li>
+</ul>
+<p><img src="../wp-content/uploads/2015/03/AQS_state_reference.png" alt=""></p>
+<p>而同时不小心观察到AQS中有一大组final的方法，就是子类不能覆盖的，大致看下方法内的定义，大部分都是直接或间接涉及对head和tail的操作，即对等待队列的维护。</p>
+<p><img src="../wp-content/uploads/2015/03/final_aqs_method.png" alt=""></p>
+<p>那在AQS的子类中有没有对有序队列的操作呢？检索下对head和tail的引用即可找到结论。</p>
+<p><img src="../wp-content/uploads/2015/03/AQS_head_reference.png" alt=""></p>
+<p>对head的操作仅限于在AQS类内部，观察方法的修饰，除了final就是private，即表示这些方法不可能被子类override，或者不可能在子类中直接被调用。看下图对于tail的调用也是同样的风格，即对等待队列的操作全部不超过AQS类内部。</p>
+<p><img src="../wp-content/uploads/2015/03/AQS_tail_reference.png" alt=""></p>
+<p>于是几乎可以有这样的结论：在AQS的设计中，在父类AQS中实现了对等待队列的默认实现，无论是对共享锁还是对排他锁。子类中几乎不用修改该部分功能，而state在子类中根据需要被赋予了不同的意义，子类通过对state的不同操作来提供不同的同步器功能，进而对封装的工具类提供不同的功能。 在下面尝试对以上观点在AQS各个子类在各个工具类中的使用进行验证。</p>
+<h3 id="4-aqs在子类中的使用">4. AQS在子类中的使用</h3>
+<p>对每个考察会从如下几个方面来进行</p>
+<ul>
+<li>工具类的主要作用</li>
+<li>主要获取锁方法（其他的类似方法如对应的可以更好的处理中断和超时或者异步等特性）</li>
+<li>主要释放锁方法（其他的类似方法如对应的可以更好的处理中断和超时或者异步等特性）</li>
+<li>工具类的构造方法（构造方法能告诉我们一个类最在意，最根本的属性）</li>
+<li>Sync构造方法</li>
+<li>Sync接口方法</li>
+<li>Sync对AQS方法的override</li>
+<li>state的作用</li>
+<li>state维护重要逻辑</li>
+</ul>
+<p>我们的问题就是这些AQS的子类如何配合父类AQS的框架方法来完成各个工具类不同的锁需求。分析思路是这样：</p>
+<ul>
+<li>这个工具类是干什么用的？可以理解为是功能需求。</li>
+<li>这个工具类是通过哪些方法来实现这些功能的？可以理解为分解的需求</li>
+<li>AQS的子类Sync是如何支持这些方法的？可以理解为需求的实现。</li>
+</ul>
+<p>按照如下的思路对每个工具类尝试进行解析，只是注意以上观点，可能并没有覆盖这个工具类的所有内容(其实就是方法)和对应Sync的所有内容。为了表达清楚些，把重点方法的代码引用在文章中，并对重点语句做了标记。因为五钟同步工具类在一起说明，看上去引用的代码有点多。</p>
+<h4 id="1-semaphore">1） Semaphore</h4>
+<p>先看doc中对<!-- raw HTML omitted -->Semaphore<!-- raw HTML omitted -->的功能要求：</p>
+<p><em>A counting semaphore. Conceptually, a semaphore maintains a set of permits. Each <code>acquire</code> blocks if necessary until a permit is available, and then takes it. Each <code>release</code> adds a permit, potentially releasing a blocking acquirer. However, no actual permit objects are used; the <code>Semaphore</code> just keeps a count of the number available and acts accordingly.</em></p>
+<p>信号量<!-- raw HTML omitted -->Semaphore<!-- raw HTML omitted -->的主要作用是来控制同时访问某个特定资源的操作数量，或者同时执行某个指定操作的数量。 <!-- raw HTML omitted -->Semaphore<!-- raw HTML omitted -->只是计数，不包括许可对象，并且Semaphore也不会把许可与线程对象关联起来，因此一个线程中获得的许可可以在另外一个线程中释放。关于这点的理解可以参照<!-- raw HTML omitted -->What is mutex and semaphore in Java ? What is the main difference ?<!-- raw HTML omitted -->的说明。 <!-- raw HTML omitted -->Semphore对外的两个方法是 acquire()和release()方法。在许可可用前会阻塞每一个 acquire()，然后再获取该许可。每调用 release() 添加一个许可，释放一个正在阻塞的获取者。<!-- raw HTML omitted --></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">acquire</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> InterruptedException <span style="color:#f92672">{</span>
+        sync<span style="color:#f92672">.</span><span style="color:#a6e22e">acquireSharedInterruptibly</span><span style="color:#f92672">(</span>1<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+ <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">release</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        sync<span style="color:#f92672">.</span><span style="color:#a6e22e">releaseShared</span><span style="color:#f92672">(</span>1<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><p>达到这样的操作是通过同步器Sync来操作，可以是FairSync，也可以是NonfairSync。 从Sync的构造方法中，就可以看出Semphore中所谓的permit其实就是AQS中的state。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#a6e22e">Semaphore</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> permits<span style="color:#f92672">,</span> <span style="color:#66d9ef">boolean</span> fair<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        sync <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>fair<span style="color:#f92672">)?</span> <span style="color:#66d9ef">new</span> FairSync<span style="color:#f92672">(</span>permits<span style="color:#f92672">)</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">new</span> NonfairSync<span style="color:#f92672">(</span>permits<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+
+Sync<span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> permits<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            setState<span style="color:#f92672">(</span>permits<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+</code></pre></div><p>工具类是通过Sync的acquireSharedInterruptibly和ReleaseShared的方法提供功能。AQS中定义的这两个final方法调用的是子类对应的try*方法。在这里<!-- raw HTML omitted -->覆盖了tryAcquireShared和tryReleaseShared方法。每一次请求acquire()一个许可都会导致计数器减少1，同样每次释放一个许可release()都会导致计数器增加1，一旦达到了0，新的许可请求线程将被挂起。<!-- raw HTML omitted --></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">tryReleaseShared</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> releases<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">for</span> <span style="color:#f92672">(;;)</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">int</span> p <span style="color:#f92672">=</span> getState<span style="color:#f92672">();</span>
+                <span style="color:#75715e">//释放锁时，许可递加
+</span><span style="color:#75715e"></span>                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>compareAndSetState<span style="color:#f92672">(</span>p<span style="color:#f92672">,</span> p <span style="color:#f92672">+</span> releases<span style="color:#f92672">))</span>
+                    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+</code></pre></div><p>每次释放锁时先调用该方法时，作用就修改state值为state+release，即表示增加新释放的许可数。 而tryAcquireShared对应于FairSync，NonfairSync有两种不同的实现。 FairSync中，总是判断当前线程是等待队列的第一个线程时，获得锁，且修改state值为state-acquires。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">tryAcquireShared</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> acquires<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            Thread current <span style="color:#f92672">=</span> Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">currentThread</span><span style="color:#f92672">();</span>
+            <span style="color:#66d9ef">for</span> <span style="color:#f92672">(;;)</span> <span style="color:#f92672">{</span>
+                <span style="color:#75715e">//&amp;nbsp;FairSync中，总是判断当前线程是等待队列的第一个线程时，获得锁
+</span><span style="color:#75715e"></span>                Thread first <span style="color:#f92672">=</span> getFirstQueuedThread<span style="color:#f92672">();</span>
+                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>first <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">&amp;&amp;</span> first <span style="color:#f92672">!=</span> current<span style="color:#f92672">)</span>
+                    <span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span>1<span style="color:#f92672">;</span>
+                <span style="color:#66d9ef">int</span> available <span style="color:#f92672">=</span> getState<span style="color:#f92672">();</span>
+                <span style="color:#75715e">//获得锁，则计数递减
+</span><span style="color:#75715e"></span>                <span style="color:#66d9ef">int</span> remaining <span style="color:#f92672">=</span> available <span style="color:#f92672">-</span> acquires<span style="color:#f92672">;</span>
+                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>remaining <span style="color:#f92672">&amp;</span>lt<span style="color:#f92672">;</span> 0 <span style="color:#f92672">||</span>
+                    compareAndSetState<span style="color:#f92672">(</span>available<span style="color:#f92672">,</span> remaining<span style="color:#f92672">))</span>
+                    <span style="color:#66d9ef">return</span> remaining<span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+</code></pre></div><p>对NonfairSync，不用考虑等待队列，直接修改state许可数。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">tryAcquireShared</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> acquires<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> nonfairTryAcquireShared<span style="color:#f92672">(</span>acquires<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">nonfairTryAcquireShared</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> acquires<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">for</span> <span style="color:#f92672">(;;)</span> <span style="color:#f92672">{</span>
+                <span style="color:#75715e">//对NonfairSync，不用考虑等待队列，直接修改state许可数
+</span><span style="color:#75715e"></span>                <span style="color:#66d9ef">int</span> available <span style="color:#f92672">=</span> getState<span style="color:#f92672">();</span>
+                <span style="color:#66d9ef">int</span> remaining <span style="color:#f92672">=</span> available <span style="color:#f92672">-</span> acquires<span style="color:#f92672">;</span>
+                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>remaining <span style="color:#f92672">&amp;</span>lt<span style="color:#f92672">;</span> 0 <span style="color:#f92672">||</span>
+                    compareAndSetState<span style="color:#f92672">(</span>available<span style="color:#f92672">,</span> remaining<span style="color:#f92672">))</span>
+                    <span style="color:#66d9ef">return</span> remaining<span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+</code></pre></div><p>即不管是公平还是非公平，acquire方法总是会判断是否还有许可可用，如果有，并且当前线程可以获得，则获得锁，许可数相应减少。state在此的作用就是许可数。</p>
+<p>**总结：**在<!-- raw HTML omitted -->Semaphore<!-- raw HTML omitted -->中使用AQS的子类Sync，初始化state表示许可数，在每一次请求acquire()一个许可都会导致计数器减少1，同样每次释放一个许可release()都会导致计数器增加1。一旦达到了0，新的许可请求线程将被挂起。</p>
+<h4 id="2-countdownlatch">2） CountDownLatch</h4>
+<p>要求完成的功能是： <em>A synchronization aid that allows one or more threads to wait until a set of operations being performed in other threads completes.</em> __<em>A <code>CountDownLatch</code> is initialized with a given count. The <code>await</code> methods block until the current count reaches zero due to invocations of the <code>countDown</code> method, after which all waiting threads are released and any subsequent invocations of <code>await</code> return immediately.</em></p>
+<p>就像名字Latch所表达的一样，把一组线程全部关在外面，在某个状态时候放开。即一种同步机制来保证一个或多个线程等待其他线程完成。初始化了一个count计数，当count未递减到0时候，每次调用**<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/CountDownLatch.html#await()">await</a>**方法都会阻塞。每次调用**<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/CountDownLatch.html#countDown()">countDown</a>**来是的的count递减。 这是<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/CountDownLatch.html"><code>CountDownLatch</code></a> 中“规定”的该工具类应该满足的功能，详细的使用的例子不再此介绍。只是分析如何借助Sync同步器来达到以上功能的。 __ 从构造函数中可以看到该类也维护了一个计数count。这个计数其实也是通过AQS的state来完成的，</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#a6e22e">CountDownLatch</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> count<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>count <span style="color:#f92672">&lt;</span> 0<span style="color:#f92672">)</span> <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IllegalArgumentException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;count &lt; 0&#34;</span><span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">sync</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Sync<span style="color:#f92672">(</span>count<span style="color:#f92672">);}</span>
+</code></pre></div><p><!-- raw HTML omitted -->CountDownLatch的两个重要方法是<!-- raw HTML omitted --><!-- raw HTML omitted -->await<!-- raw HTML omitted --><!-- raw HTML omitted -->和<!-- raw HTML omitted --><!-- raw HTML omitted -->countDown<!-- raw HTML omitted --><!-- raw HTML omitted -->方法。定义分别如下。定义await方法的作用是在计数器不为0时候阻塞调用线程，为0时候立即返回；countDown方法的作用是计数递减。<!-- raw HTML omitted --></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">await</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> InterruptedException <span style="color:#f92672">{</span>
+        sync<span style="color:#f92672">.</span><span style="color:#a6e22e">acquireSharedInterruptibly</span><span style="color:#f92672">(</span>1<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">countDown</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        sync<span style="color:#f92672">.</span><span style="color:#a6e22e">releaseShared</span><span style="color:#f92672">(</span>1<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><p>看到这两个方法最终的执行还是同步器中的对应方法。在CountDownLatch中也定义了一个继承于AQS的Sync。在前面的分析中知道父类的acquireSharedInterruptibly方法和releaseShared其实是分别调用到了子类中定义的tryAcquireShared和tryReleaseShared方法。 在CountDownLatch的Sync类中也就仅仅实现了这两个方法。</p>
+<p><!-- raw HTML omitted -->其中tryAcquireShared方法内容非常简单，只是一个三元表达式，但是这个state值为0赋值1，不为0却赋值-1。看着不太符合我们一般的用法，这主要是为了配合父类AQS中的逻辑。当state为0表示计数递减完成，则返回值为1，在父类调用中直接方法结束，不阻塞；当state不为0表示计算器递减未完成，则返回值为-1，在父类中满足小于0的条件，执行后续的阻塞操作。<!-- raw HTML omitted --></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">tryAcquireShared</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> acquires<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+ <span style="color:#75715e">//当state不为0表示计数递减未完成，则返回值为-1，在父类调用会阻塞
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">return</span> getState<span style="color:#f92672">()</span> <span style="color:#f92672">==</span> 0<span style="color:#f92672">?</span> 1 <span style="color:#f92672">:</span> <span style="color:#f92672">-</span>1<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+</code></pre></div><p>tryReleaseShared方法主要是对state值的维护，当已经为0，则返回false，父类releaseShared方法直接返回；当state不为0（其实就是大于0，因为count初始化是一个正数），则递减，并通过cas的方式更新state的值。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">tryReleaseShared</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> releases<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#75715e">// Decrement count; signal when transition to zero
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">for</span> <span style="color:#f92672">(;;)</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">int</span> c <span style="color:#f92672">=</span> getState<span style="color:#f92672">();</span>
+                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>c <span style="color:#f92672">==</span> 0<span style="color:#f92672">)</span>
+                <span style="color:#75715e">//当已经为0，则返回false，父类releaseShared方法直接返回
+</span><span style="color:#75715e"></span>                    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+                <span style="color:#75715e">//当state不为0（其实就是大于0，因为count初始化是一个正数），则递减，并通过cas的方式更新state的值。
+</span><span style="color:#75715e"></span>                <span style="color:#66d9ef">int</span> nextc <span style="color:#f92672">=</span> c<span style="color:#f92672">-</span>1<span style="color:#f92672">;</span>
+                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>compareAndSetState<span style="color:#f92672">(</span>c<span style="color:#f92672">,</span> nextc<span style="color:#f92672">))</span>
+                    <span style="color:#66d9ef">return</span> nextc <span style="color:#f92672">==</span> 0<span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+</code></pre></div><p>总结：<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/CountDownLatch.html"><code>CountDownLatch</code></a> 委托自定义的Sync中的，<strong><a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/CountDownLatch.html#await()">await</a></strong>()和**<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/CountDownLatch.html#countDown()">countDown</a>**()方法来完成阻塞线程到计数器为0的功能和计数器递减功能。而该这两个方法委托给自定义的Sync的**<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/AbstractQueuedSynchronizer.html#acquireSharedInterruptibly(int)">acquireSharedInterruptibly</a>**()和**<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/AbstractQueuedSynchronizer.html#releaseShared(int)">releaseShared</a>**(int arg)方法。真正实现对state(count)维护的是父类AQS中调用子类定义的<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/AbstractQueuedSynchronizer.html#tryAcquireShared(int)">tryAcquireShared(int)</a>和<!-- raw HTML omitted -->tryReleaseShared(int)<!-- raw HTML omitted -->来维护计数count。计数count使用的是AQS的状态位state。每次调用<!-- raw HTML omitted --><!-- raw HTML omitted -->countDown<!-- raw HTML omitted --><!-- raw HTML omitted -->方法计数递减，在计数递减到0之前，调用await的线程都会阻塞。`</p>
+<h4 id="3reentrantlock">3）ReentrantLock</h4>
+<p>名字翻译很好，可重入锁。功能需求如下 A reentrant mutual exclusion <!-- raw HTML omitted -->Lock<!-- raw HTML omitted --> with the same basic behavior and semantics as the implicit monitor lock accessed using synchronized methods and statements, but with extended capabilities._ _A <code>ReentrantLock</code> is owned by the thread last successfully locking, but not yet unlocking it. A thread invoking <code>lock</code> will return, successfully acquiring the lock, when the lock is not owned by another thread. The method will return immediately if the current thread already owns the lock. This can be checked using methods <!-- raw HTML omitted -->isHeldByCurrentThread<!-- raw HTML omitted -->, and <!-- raw HTML omitted -->getHoldCount<!-- raw HTML omitted -->.</p>
+<p>可重入锁应该是几种同步工具里面被用的对多的一个。标准的互斥操作，也就是一次只能有一个线程持有锁，可能是AQS中最重要的一个类。基本功能就关键字Synchronize所支持的功能。关于ReentrantLock和Synchronize的差别比较等文章很多，可以参照<a href="http://www.ibm.com/developerworks/cn/java/j-jtp10264/">Java 理论与实践: JDK 5.0 中更灵活、更具可伸缩性的锁定机制</a>和《Java Concurrency in Practice》的对应章节。 <!-- raw HTML omitted -->ReentrantLock<!-- raw HTML omitted --><!-- raw HTML omitted -->对外的主要方法是<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->lock<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->()，<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->tryLock<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->()和<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->unlock<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->()方法，当然还有其他变种的<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->lockInterruptibly<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->()、<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->tryLock<!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted -->(long timeout, <!-- raw HTML omitted --><!-- raw HTML omitted -->TimeUnit<!-- raw HTML omitted --> <!-- raw HTML omitted -->unit)等。<!-- raw HTML omitted --></p>
+<p>**<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/ReentrantLock.html#lock()">lock</a>**的功能是获取锁。如果没有线程使用则立即返回，并设置state为1；如果当前线程已经占有锁，则state加1；如果其他线程占有锁，则当前线程不可用，等待。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">lock</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        sync<span style="color:#f92672">.</span><span style="color:#a6e22e">lock</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><p><strong><a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/ReentrantLock.html#tryLock()">tryLock</a>的功能是</strong> 如果锁可用，则获取锁，并立即返回值 true。如果锁不可用，立即返回值 false。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">tryLock</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> sync<span style="color:#f92672">.</span><span style="color:#a6e22e">nonfairTryAcquire</span><span style="color:#f92672">(</span>1<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><p><strong><a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/ReentrantLock.html#unlock()">unlock</a>的功能是</strong>尝试释放锁，如果当前线程占有锁则count减一，如果count为0则释放锁。若占有线程不是当前线程，则抛异常。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">unlock</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        sync<span style="color:#f92672">.</span><span style="color:#a6e22e">release</span><span style="color:#f92672">(</span>1<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><p>可以看到也是借助Sync来完成，我们下面详细看下Sync是如何实现这些”规定”的需求的。<a href="http://docs.oracle.com/javase/7/docs/api/index.html?java/util/concurrent/locks/AbstractQueuedSynchronizer.html">ReentrantLock</a>的构造函数告诉我们，其支持公平和非公平两种锁机制。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#a6e22e">ReentrantLock</span><span style="color:#f92672">(</span><span style="color:#66d9ef">boolean</span> fair<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        sync <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>fair<span style="color:#f92672">)?</span> <span style="color:#66d9ef">new</span> FairSync<span style="color:#f92672">()</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">new</span> NonfairSync<span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><p>在该类中对应定了两种FairSync和NonfairSync两种同步器，都继承者AQS。可以看到对应执行的是lock、release、和Sync的nonfairTryAcquire。从前面AQS源码知道release是在父类AQS中定义的方法，lock和nonfairTryAcquire是这个Sync中特定的方法，不是对父类对应方法的覆盖。 <strong>lock方法有对于FairSync和NoFairSync有两种不同的实现，对于非公平锁只要当前没有线程持有锁，就将锁给当前线程；而公平锁不能这么做，总是调用acquire方法来和其他线程一样公平的尝试获取锁。</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">/**NoFairSync**/</span>
+     <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">lock</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>compareAndSetState<span style="color:#f92672">(</span>0<span style="color:#f92672">,</span> 1<span style="color:#f92672">))</span>
+                <span style="color:#75715e">//对于非公平锁只要当前没有线程持有锁，就将锁给当前线程
+</span><span style="color:#75715e"></span>                setExclusiveOwnerThread<span style="color:#f92672">(</span>Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">currentThread</span><span style="color:#f92672">());</span>
+            <span style="color:#66d9ef">else</span>
+                acquire<span style="color:#f92672">(</span>1<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#75715e">/**FairSync**/</span>
+          <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">lock</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+            acquire<span style="color:#f92672">(</span>1<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+</code></pre></div><p><strong><a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/AbstractQueuedSynchronizer.html#acquire(int)">acquire</a></strong>(int arg)方法是在父类AQS中定义，在其实现中先会调用子类的**<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/AbstractQueuedSynchronizer.html#tryAcquire(int)">tryAcquire</a>**(int arg)方法。 对于非公平锁，通过state是否为0判断，当前是否有线程持有锁，如果没有则把锁分配给当前线程；否则如果state不为0，说明当前有线程持有锁，则判断持有锁的线程是否就是当前线程，如果是增加state计数，表示持有锁的线程的重入次数增加。当然增加重入数也会检查是否超过最大值。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">tryAcquire</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> acquires<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> nonfairTryAcquire<span style="color:#f92672">(</span>acquires<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+<span style="color:#66d9ef">final</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">nonfairTryAcquire</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> acquires<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">final</span> Thread current <span style="color:#f92672">=</span> Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">currentThread</span><span style="color:#f92672">();</span>
+        <span style="color:#66d9ef">int</span> c <span style="color:#f92672">=</span> getState<span style="color:#f92672">();</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>c <span style="color:#f92672">==</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#75715e">//通过state是否为0判断，当前是否有线程持有锁，如果没有则把锁分配给当前线程
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>compareAndSetState<span style="color:#f92672">(</span>0<span style="color:#f92672">,</span> acquires<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+                setExclusiveOwnerThread<span style="color:#f92672">(</span>current<span style="color:#f92672">);</span>
+                <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>current <span style="color:#f92672">==</span> getExclusiveOwnerThread<span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+        <span style="color:#75715e">//否则如果state不为0，说明当前有线程持有锁，则判断持有锁的线程是否就是当前线程，如果是增加state计数，表示持有锁的线程的重入次数增加
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">int</span> nextc <span style="color:#f92672">=</span> c <span style="color:#f92672">+</span> acquires<span style="color:#f92672">;</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>nextc <span style="color:#f92672">&amp;</span>lt<span style="color:#f92672">;</span> 0<span style="color:#f92672">)</span> <span style="color:#75715e">// overflow
+</span><span style="color:#75715e"></span>                <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> Error<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Maximum lock count exceeded&#34;</span><span style="color:#f92672">);</span>
+            setState<span style="color:#f92672">(</span>nextc<span style="color:#f92672">);</span>
+            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><p>对于公平锁，其**<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/AbstractQueuedSynchronizer.html#tryAcquire(int)">tryAcquire</a>**(int arg)方法中，如果state为0表示没有线程持有锁，会检查当前线程是否是等待队列的第一个线程，如果是则分配锁给当前线程；否则如果state不为0，说明当前有线程持有锁，则判断持有锁的线程释放就是当前线程，如果是增加state计数，表示持有锁的线程的重入次数增加。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">tryAcquire</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> acquires<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">final</span> Thread current <span style="color:#f92672">=</span> Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">currentThread</span><span style="color:#f92672">();</span>
+            <span style="color:#66d9ef">int</span> c <span style="color:#f92672">=</span> getState<span style="color:#f92672">();</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>c <span style="color:#f92672">==</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>isFirst<span style="color:#f92672">(</span>current<span style="color:#f92672">)</span> <span style="color:#f92672">&amp;&amp;</span>
+                    compareAndSetState<span style="color:#f92672">(</span>0<span style="color:#f92672">,</span> acquires<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+               <span style="color:#75715e">//如果state为0表示没有线程持有锁，会检查当前线程是否是等待队列的第一个线程，如果是则分配锁给当前线程
+</span><span style="color:#75715e"></span>                    setExclusiveOwnerThread<span style="color:#f92672">(</span>current<span style="color:#f92672">);</span>
+                    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
+                <span style="color:#f92672">}</span>
+            <span style="color:#f92672">}</span>
+            <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>current <span style="color:#f92672">==</span> getExclusiveOwnerThread<span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+           <span style="color:#75715e">//如果state不为0，说明当前有线程持有锁，则判断持有锁的线程释放就是当前线程，如果是增加state计数，表示持有锁的线程的重入次数增加
+</span><span style="color:#75715e"></span>                <span style="color:#66d9ef">int</span> nextc <span style="color:#f92672">=</span> c <span style="color:#f92672">+</span> acquires<span style="color:#f92672">;</span>
+                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>nextc <span style="color:#f92672">&amp;</span>lt<span style="color:#f92672">;</span> 0<span style="color:#f92672">)</span>
+                    <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> Error<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Maximum lock count exceeded&#34;</span><span style="color:#f92672">);</span>
+                setState<span style="color:#f92672">(</span>nextc<span style="color:#f92672">);</span>
+                <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span>
+            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+</code></pre></div><p><strong>比较公平锁机制和非公平锁机制的差别仅仅在于如果当前没有线程持有锁，是优先把锁分配给当前线程，还是优先分配给等待队列中队首的线程。</strong> 释放锁时候调用AQS的**<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/AbstractQueuedSynchronizer.html#release(int)">release</a>**(int arg)方法，前面定义知道父类的该方法会先调用子类的**<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/AbstractQueuedSynchronizer.html#tryRelease(int)">tryRelease</a>**(int arg)方法。在该方法中主要作用是state状态位减少release个，表示释放锁，如果更新后的state为0；表示当前线程释放锁，如果不为0，表示持有锁的当前线程重入数减少。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">tryRelease</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> releases<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">int</span> c <span style="color:#f92672">=</span> getState<span style="color:#f92672">()</span> <span style="color:#f92672">-</span> releases<span style="color:#f92672">;</span> <span style="color:#75715e">//state状态位减少release个
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">currentThread</span><span style="color:#f92672">()</span> <span style="color:#f92672">!=</span> getExclusiveOwnerThread<span style="color:#f92672">())</span>
+                <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IllegalMonitorStateException<span style="color:#f92672">();</span>
+            <span style="color:#66d9ef">boolean</span> free <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>c <span style="color:#f92672">==</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+           <span style="color:#75715e">//如果更新后的state为0，表示当前线程释放锁
+</span><span style="color:#75715e"></span>                free <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
+                setExclusiveOwnerThread<span style="color:#f92672">(</span><span style="color:#66d9ef">null</span><span style="color:#f92672">);</span>
+            <span style="color:#f92672">}</span><span style="color:#75715e">//如果不为0，表示持有锁的当前线程重入数减少。
+</span><span style="color:#75715e"></span>            setState<span style="color:#f92672">(</span>c<span style="color:#f92672">);</span>
+            <span style="color:#66d9ef">return</span> free<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+</code></pre></div><p><strong>总结：</strong> <!-- raw HTML omitted -->ReentrantLock<!-- raw HTML omitted -->中定义的同步器分为公平的同步器和非公平的同步器。在该同步器中state状态位表示当前持有锁的线程的重入次数。在获取锁时，通过覆盖AQS的**<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/AbstractQueuedSynchronizer.html#tryAcquire(int)">tryAcquire</a>**(int arg)方法，如果没有线程持有则立即返回，并设置state为1；如果当前线程已经占有锁，则state加1；如果其他线程占有锁，则当前线程不可用。释放锁时，覆盖了AQS的**<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/AbstractQueuedSynchronizer.html#tryRelease(int)">tryRelease</a>**(int arg)，在该方法中主要作用是state状态位减少release个，表示释放锁，如果更新后的state为0，表示当前线程释放锁，如果不为0，表示持有锁的当前线程重入数减少。</p>
+<h4 id="4reentrantreadwritelock可重入读写锁">4）ReentrantReadWriteLock可重入读写锁</h4>
+<p>读写锁的要求是： A ReadWriteLock maintains a pair of associated <!-- raw HTML omitted -->locks<!-- raw HTML omitted -->, one for read-only operations and one for writing. The <!-- raw HTML omitted -->read lock<!-- raw HTML omitted --> may be held simultaneously by multiple reader threads, so long as there are no writers. The <!-- raw HTML omitted -->write lock<!-- raw HTML omitted --> is exclusive. All <!-- raw HTML omitted -->ReadWriteLock<!-- raw HTML omitted --> implementations must guarantee that the memory synchronization effects of <!-- raw HTML omitted -->writeLock<!-- raw HTML omitted --> operations (as specified in the <!-- raw HTML omitted -->Lock<!-- raw HTML omitted --> interface) also hold with respect to the associated <!-- raw HTML omitted -->readLock<!-- raw HTML omitted -->. That is, a thread successfully acquiring the read lock will see all updates made upon previous release of the write lock.</p>
+<p>即读和读之间是兼容的，写和任何操作都是排他的。这种锁机制在数据库系统理论中应用的其实更为普遍。 允许多个读线程同时持有锁，但是只有一个写线程可以持有锁。读写锁允许读线程和写线程按照请求锁的顺序重新获取读取锁或者写入锁。当然了只有写线程释放了锁，读线程才能获取重入锁。写线程获取写入锁后可以再次获取读取锁，但是读线程获取读取锁后却不能获取写入锁。 <!-- raw HTML omitted -->ReentrantReadWriteLock<!-- raw HTML omitted -->锁从其要求的功能上来看，是对前面的<a href="http://docs.oracle.com/javase/7/docs/api/index.html?java/util/concurrent/locks/AbstractQueuedSynchronizer.html">ReentrantLock</a>的扩展，因此功能复杂度上来说也提高了，看看该类下面定义的内部类，除了支持公平非公平的Sync外，还有两种不同的锁，ReadLock和WriteLock。</p>
+<p><img src="../wp-content/uploads/2015/03/readwritelock.png" alt=""></p>
+<p>在向下进行之前，有必要回答这样一个问题，WriteLock和ReadLock好像完成的功能不一样，看上去似乎是两把锁。<!-- raw HTML omitted -->ReentrantReadWriteLock<!-- raw HTML omitted -->中分别通过两个public的方法**<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/ReentrantReadWriteLock.html#readLock()">readLock</a>**()和**<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/ReentrantReadWriteLock.html#writeLock()">writeLock</a>**()获得读锁和写锁。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> ReentrantReadWriteLock<span style="color:#f92672">.</span><span style="color:#a6e22e">ReadLock</span> readerLock<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> ReentrantReadWriteLock<span style="color:#f92672">.</span><span style="color:#a6e22e">WriteLock</span> writerLock<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> Sync sync<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">public</span> ReentrantReadWriteLock<span style="color:#f92672">.</span><span style="color:#a6e22e">WriteLock</span> <span style="color:#a6e22e">writeLock</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span> <span style="color:#66d9ef">return</span> writerLock<span style="color:#f92672">;</span> <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">public</span> ReentrantReadWriteLock<span style="color:#f92672">.</span><span style="color:#a6e22e">ReadLock</span>  <span style="color:#a6e22e">readLock</span><span style="color:#f92672">()</span>  <span style="color:#f92672">{</span> <span style="color:#66d9ef">return</span> readerLock<span style="color:#f92672">;</span> <span style="color:#f92672">}</span>
+</code></pre></div><p>但是如果是两把锁，可以实现前面功能要求的读锁和读锁直接的兼容，写锁和写锁直接的互斥，这本身共享锁和排他锁就能满足要求，但是如何实现对同一个对象上读和写的控制？明显，只有一把锁才能做到。 看上面代码片段时候，不小心看到了一个熟悉的字段Sync，前面的几个同步工具我们知道了，这些工具类的所有操作最终都是委托给AQS的对应子类Sync来完成，这里只有一个同步器Sync，那是不是就是只有一把锁呢。看看后面的构造函数会验证我们的猜想。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#a6e22e">ReentrantReadWriteLock</span><span style="color:#f92672">(</span><span style="color:#66d9ef">boolean</span> fair<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        sync <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>fair<span style="color:#f92672">)?</span> <span style="color:#66d9ef">new</span> FairSync<span style="color:#f92672">()</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">new</span> NonfairSync<span style="color:#f92672">();</span>
+        <span style="color:#75715e">//使用了同一个this，即统一this里面的同一个sync来构造读锁和写锁
+</span><span style="color:#75715e"></span>        readerLock <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ReadLock<span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
+        writerLock <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> WriteLock<span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><p><strong>没错，<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/ReentrantReadWriteLock.ReadLock.html" title="class in java.util.concurrent.locks">ReadLock</a>和<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/ReentrantReadWriteLock.WriteLock.html" title="class in java.util.concurrent.locks">WriteLock</a>使用的其实是一个private的同步器Sync。</strong> 下面看下可重入读写锁提供哪些锁的方法来满足上面的需求的。</p>
+<p>看到<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/ReentrantReadWriteLock.ReadLock.html" title="class in java.util.concurrent.locks">ReadLock</a>提供了**<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/ReentrantReadWriteLock.ReadLock.html#lock()">lock</a>**()、**<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/ReentrantReadWriteLock.ReadLock.html#lockInterruptibly()">lockInterruptibly</a>**()、**<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/ReentrantReadWriteLock.ReadLock.html#tryLock()">tryLock</a>**()、**<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/ReentrantReadWriteLock.ReadLock.html#tryLock(long,%20java.util.concurrent.TimeUnit)">tryLock</a>**(long timeout, TimeUnit unit)和**<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/ReentrantReadWriteLock.ReadLock.html#unlock()">unlock</a>**()方法。我们看下主要的几个方法的实现如下：**<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/ReentrantReadWriteLock.ReadLock.html#lock()">lock</a>**()方法的作用是获取读锁；**<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/ReentrantReadWriteLock.ReadLock.html#tryLock()">tryLock</a>**()的作用是尝试当前没有其他线程当前持有写锁时获取读锁；**<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/ReentrantReadWriteLock.ReadLock.html#unlock()">unlock</a>**方法的作用是释放读锁。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">lock</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+            sync<span style="color:#f92672">.</span><span style="color:#a6e22e">acquireShared</span><span style="color:#f92672">(</span>1<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+       <span style="color:#66d9ef">public</span>  <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">tryLock</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> sync<span style="color:#f92672">.</span><span style="color:#a6e22e">tryReadLock</span><span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span>
+       <span style="color:#66d9ef">public</span>  <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">unlock</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+            sync<span style="color:#f92672">.</span><span style="color:#a6e22e">releaseShared</span><span style="color:#f92672">(</span>1<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+</code></pre></div><p>分别调用到Sync的三个方法**<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/AbstractQueuedSynchronizer.html#acquireShared(int)">acquireShared</a>**(int arg) 、**<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/AbstractQueuedSynchronizer.html#releaseShared(int)">releaseShared</a>**(int arg)和 tryReadLock()方法，其中前两个是AQS父类中定义的，后一个是该Sync中根据自己需要实现的方法。 前面AQS父类的介绍中知道，**<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/AbstractQueuedSynchronizer.html#acquireShared(int)">acquireShared</a>**(int arg) 和**<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/AbstractQueuedSynchronizer.html#releaseShared(int)">releaseShared</a>**(int arg)方法是在父类中定义的，调用子类的对应try字体的方法，我们看下在子类Sync中定义对应的try*字体的方法怎么满足功能的。先看<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/AbstractQueuedSynchronizer.html#acquireShared(int)"><strong>acquireShared</strong></a>中定义的tryAcquireShared</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">tryAcquireShared</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> unused<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            Thread current <span style="color:#f92672">=</span> Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">currentThread</span><span style="color:#f92672">();</span>
+            <span style="color:#66d9ef">int</span> c <span style="color:#f92672">=</span> getState<span style="color:#f92672">();</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>exclusiveCount<span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> <span style="color:#f92672">!=</span> 0 <span style="color:#f92672">&amp;&amp;</span>
+                getExclusiveOwnerThread<span style="color:#f92672">()</span> <span style="color:#f92672">!=</span> current<span style="color:#f92672">)</span>
+               <span style="color:#75715e">//如果有排他锁，且持有排他锁的线程不是当前线程，则获取失败。
+</span><span style="color:#75715e"></span>                <span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span>1<span style="color:#f92672">;</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>sharedCount<span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> <span style="color:#f92672">==</span> MAX_COUNT<span style="color:#f92672">)</span>
+              <span style="color:#75715e">//否则如果已经加读锁的个数超过允许的最大值，抛出异常
+</span><span style="color:#75715e"></span>                <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> Error<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Maximum lock count exceeded&#34;</span><span style="color:#f92672">);</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>readerShouldBlock<span style="color:#f92672">(</span>current<span style="color:#f92672">)</span> <span style="color:#f92672">&amp;&amp;</span>
+                compareAndSetState<span style="color:#f92672">(</span>c<span style="color:#f92672">,</span> c <span style="color:#f92672">+</span> SHARED_UNIT<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+             <span style="color:#75715e">//否则检查是否需要阻塞当前线程，如果不阻塞，则使用CAS的方式给更新状态位state。其中readerShouldBlock在Sync的两个子类中实现，根据公平非公平的策略有不同的判断条件
+</span><span style="color:#75715e"></span>                HoldCounter rh <span style="color:#f92672">=</span> cachedHoldCounter<span style="color:#f92672">;</span>
+                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>rh <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">||</span> rh<span style="color:#f92672">.</span><span style="color:#a6e22e">tid</span> <span style="color:#f92672">!=</span> current<span style="color:#f92672">.</span><span style="color:#a6e22e">getId</span><span style="color:#f92672">())</span>
+                    cachedHoldCounter <span style="color:#f92672">=</span> rh <span style="color:#f92672">=</span> readHolds<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">();</span>
+                rh<span style="color:#f92672">.</span><span style="color:#a6e22e">count</span><span style="color:#f92672">++;</span>
+                <span style="color:#66d9ef">return</span> 1<span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span>
+            <span style="color:#66d9ef">return</span> fullTryAcquireShared<span style="color:#f92672">(</span>current<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+</code></pre></div><p>尝试获取读锁的方法是这样的：如果有排他锁，但是持有排他锁的线程不是当前线程，则获取失败；否则如果已经加读锁的个数超过允许的最大值，抛出异常；否则检查是否需要阻塞当前线程，如果不阻塞，则使用CAS的方式给更新状态位state。其中readerShouldBlock在Sync的两个子类中实现，根据公平非公平的策略有不同的判断条件。</p>
+<p>对应的<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/AbstractQueuedSynchronizer.html#releaseShared(int)"><strong>releaseShared</strong></a><strong>中调用的</strong>tryReleaseShared定义如下</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">tryReleaseShared</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> unused<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            HoldCounter rh <span style="color:#f92672">=</span> cachedHoldCounter<span style="color:#f92672">;</span>
+            Thread current <span style="color:#f92672">=</span> Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">currentThread</span><span style="color:#f92672">();</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>rh <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">||</span> rh<span style="color:#f92672">.</span><span style="color:#a6e22e">tid</span> <span style="color:#f92672">!=</span> current<span style="color:#f92672">.</span><span style="color:#a6e22e">getId</span><span style="color:#f92672">())</span>
+                rh <span style="color:#f92672">=</span> readHolds<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">();</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>rh<span style="color:#f92672">.</span><span style="color:#a6e22e">tryDecrement</span><span style="color:#f92672">()</span> <span style="color:#f92672">&amp;</span>lt<span style="color:#f92672">;=</span> 0<span style="color:#f92672">)</span>
+                <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IllegalMonitorStateException<span style="color:#f92672">();</span>
+            <span style="color:#66d9ef">for</span> <span style="color:#f92672">(;;)</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">int</span> c <span style="color:#f92672">=</span> getState<span style="color:#f92672">();</span>
+              <span style="color:#75715e">// 释放读锁时更新状态位的值
+</span><span style="color:#75715e"></span>                <span style="color:#66d9ef">int</span> nextc <span style="color:#f92672">=</span> c <span style="color:#f92672">-</span> SHARED_UNIT<span style="color:#f92672">;</span>
+                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>compareAndSetState<span style="color:#f92672">(</span>c<span style="color:#f92672">,</span> nextc<span style="color:#f92672">))</span>
+                    <span style="color:#66d9ef">return</span> nextc <span style="color:#f92672">==</span> 0<span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+</code></pre></div><p>可以看到主要的作用在准备释放读锁时更新状态位的值。 Sync中提供给ReadLock用的tryReadLock方法和tryAcquireShared内容和逻辑差不多，而且本文想着重分析的Sync对父类AQS的方法如何改变来达到需要的功能，所以这个方法这里不分析了。 可以看到加锁时候state增加了一个SHARED_UNIT，在释放锁时state减少了一个SHARED_UNIT。为什么是SHARED_UNIT，而不是1呢？这个看了下面两个方法的定义就比较清楚了。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">/** Returns the number of shared holds represented in count  */</span>
+        <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">sharedCount</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> c<span style="color:#f92672">)</span>    <span style="color:#f92672">{</span> <span style="color:#66d9ef">return</span> c <span style="color:#f92672">&amp;</span>gt<span style="color:#f92672">;&amp;</span>gt<span style="color:#f92672">;&amp;</span>gt<span style="color:#f92672">;</span> SHARED_SHIFT<span style="color:#f92672">;</span> <span style="color:#f92672">}</span>
+        <span style="color:#75715e">/** Returns the number of exclusive holds represented in count  */</span>
+       <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">exclusiveCount</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> c<span style="color:#f92672">)</span> <span style="color:#f92672">{</span> <span style="color:#66d9ef">return</span> c <span style="color:#f92672">&amp;</span> EXCLUSIVE_MASK<span style="color:#f92672">;</span> <span style="color:#f92672">}</span>
+</code></pre></div><p>原来为了只用一个state状态位来表示两种锁的信息，高位16位表示共享锁的状态位，低位16位表示独占锁的状态位。至于读锁和写锁的状态位的意思，随着后面分析会逐步更清楚。 在看到这里的时候，读锁的状态位的意思应该是比较清楚，表示当前持有共享锁的线程数。有一个新的线程过了想使用共享锁，如果其他线程也只是加了共享锁，则当前线程就可以加共享锁，每加一次，状态位递加一些，因为存储在高16位，所以递加时是加一个SHARED_UNIT。</p>
+<p>接着关注下<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/ReentrantReadWriteLock.WriteLock.html" title="class in java.util.concurrent.locks">WriteLock</a>的方法。和 <!-- raw HTML omitted -->ReadLock<!-- raw HTML omitted --> 类似，提供出来的还是<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/ReentrantReadWriteLock.WriteLock.html#lock()">lock</a>()、<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/ReentrantReadWriteLock.WriteLock.html#tryLock()">tryLock</a>()、<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/ReentrantReadWriteLock.WriteLock.html#unlock()">unlock</a>()三个和其相似方法。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">lock</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+            sync<span style="color:#f92672">.</span><span style="color:#a6e22e">acquire</span><span style="color:#f92672">(</span>1<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">tryLock</span><span style="color:#f92672">(</span> <span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> sync<span style="color:#f92672">.</span><span style="color:#a6e22e">tryWriteLock</span><span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">unlock</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+            sync<span style="color:#f92672">.</span><span style="color:#a6e22e">release</span><span style="color:#f92672">(</span>1<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+</code></pre></div><p>看到分别调用了Sync的acquire() release() 和tryWriteLock方法，其中前两个都是定义在父类AQS的方法。调用了子类定义的对应try字体的方法。tryAcquire和tryRelease方法。这里我们就看下子类的这两个try*字体的方法做了哪些事情。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">tryAcquire</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> acquires<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            Thread current <span style="color:#f92672">=</span> Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">currentThread</span><span style="color:#f92672">();</span>
+            <span style="color:#66d9ef">int</span> c <span style="color:#f92672">=</span> getState<span style="color:#f92672">();</span>
+            <span style="color:#66d9ef">int</span> w <span style="color:#f92672">=</span> exclusiveCount<span style="color:#f92672">(</span>c<span style="color:#f92672">);</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>c <span style="color:#f92672">!=</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                 <span style="color:#75715e">//通过state的判断，当有读锁时获取不成功
+</span><span style="color:#75715e"></span>                 <span style="color:#75715e">//当有写锁，如果持有写锁的线程不是当前线程，则获取不成功
+</span><span style="color:#75715e"></span>                <span style="color:#75715e">// (Note: if c != 0 and w == 0 then shared count != 0)
+</span><span style="color:#75715e"></span>                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>w <span style="color:#f92672">==</span> 0 <span style="color:#f92672">||</span> current <span style="color:#f92672">!=</span> getExclusiveOwnerThread<span style="color:#f92672">())</span>
+                    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>w <span style="color:#f92672">+</span> exclusiveCount<span style="color:#f92672">(</span>acquires<span style="color:#f92672">)</span> <span style="color:#f92672">&amp;</span>gt<span style="color:#f92672">;</span> MAX_COUNT<span style="color:#f92672">)</span>
+                    <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> Error<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Maximum lock count exceeded&#34;</span><span style="color:#f92672">);</span>
+            <span style="color:#f92672">}</span><span style="color:#75715e">//如果可以获取，则CAS的方式更新state，并设置当前线程排他的获取锁
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">if</span> <span style="color:#f92672">((</span>w <span style="color:#f92672">==</span> 0 <span style="color:#f92672">&amp;&amp;</span> writerShouldBlock<span style="color:#f92672">(</span>current<span style="color:#f92672">))</span> <span style="color:#f92672">||</span>
+                <span style="color:#f92672">!</span>compareAndSetState<span style="color:#f92672">(</span>c<span style="color:#f92672">,</span> c <span style="color:#f92672">+</span> acquires<span style="color:#f92672">))</span>
+                <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+            setExclusiveOwnerThread<span style="color:#f92672">(</span>current<span style="color:#f92672">);</span>
+            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+</code></pre></div><p><!-- raw HTML omitted -->tryAcquire中尝试获取排他锁。结合排他锁的语义和代码逻辑不难看到：通过state的判断，当有读锁时获取不成功，当有写锁，如果持有写锁的线程不是当前线程，则获取不成功。如果可以获取，则CAS的方式更新state，并设置当前线程排他的获取锁。writerShouldBlock定义在Sync的子类中，对于FaireSync和UnFairSync有不同的判断。<!-- raw HTML omitted --> 接下来看tryRelease方法，主要作用是在释放排他锁时候更新state，减去releases的数目。看到这里发现写锁中用到的Sync和可重入锁<!-- raw HTML omitted -->ReentrantLock<!-- raw HTML omitted -->整个逻辑都对应的差不多。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">tryRelease</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> releases<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#75715e">//释放排他锁时候更新state，减去releases的数目
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">int</span> nextc <span style="color:#f92672">=</span> getState<span style="color:#f92672">()</span> <span style="color:#f92672">-</span> releases<span style="color:#f92672">;</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">currentThread</span><span style="color:#f92672">()</span> <span style="color:#f92672">!=</span> getExclusiveOwnerThread<span style="color:#f92672">())</span>
+                <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IllegalMonitorStateException<span style="color:#f92672">();</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>exclusiveCount<span style="color:#f92672">(</span>nextc<span style="color:#f92672">)</span> <span style="color:#f92672">==</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                setExclusiveOwnerThread<span style="color:#f92672">(</span><span style="color:#66d9ef">null</span><span style="color:#f92672">);</span>
+                setState<span style="color:#f92672">(</span>nextc<span style="color:#f92672">);</span>
+                <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+                setState<span style="color:#f92672">(</span>nextc<span style="color:#f92672">);</span>
+                <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+</code></pre></div><p><!-- raw HTML omitted -->只是观察到写锁state更新加和减和前面的几种比较类似，直接操作的就是传入的整形参数，这在读锁的时候讲过了，因为排他锁的状态位是存储在state的低16位。<!-- raw HTML omitted --></p>
+<p><strong>总结</strong>： <!-- raw HTML omitted -->ReentrantReadWriteLock<!-- raw HTML omitted -->中提供了两个Lock：<!-- raw HTML omitted -->ReentrantReadWriteLock.ReadLock<!-- raw HTML omitted -->和<!-- raw HTML omitted -->ReentrantReadWriteLock.WriteLock<!-- raw HTML omitted -->。对外提供功能的是两个lock，但是内部封装的是一个同步器Sync，有公平和不公平两个版本。借用了AQS的state状态位来保存锁的计数信息。高16位表示共享锁的数量，低16位表示独占锁的重入次数。在AQS子类的对应try字体方法中实现对state的维护。</p>
+<h4 id="5futuretask">5）FutureTask</h4>
+<p>先看需求 <em>A cancellable asynchronous computation. This class provides a base implementation of <a href="eclipse-javadoc:%E2%98%82=spring/C:%5C/Program%20Files%20%5C(x86)%5C/Java%5C/jre6%5C/lib%5C/rt.jar%3Cjava.util.concurrent(FutureTask.class%E2%98%83FutureTask%E2%98%82Future">Future</a>, with methods to start and cancel a computation, query to see if the computation is complete, and retrieve the result of the computation. The result can only be retrieved when the computation has completed; the get method will block if the computation has not yet completed. Once the computation has completed, the computation cannot be restarted or cancelled.</em></p>
+<p>理解其核心需求是，一个执行任务，开始执行后可以被取消，可以查看执行结果，如果执行结果未完成则阻塞。 一般表示一个输入待执行任务。在线程池中FutureTask中一般的用法就是构造一个FutureTask，然后提交execute，返回的类型还是FutureTask，调用其get方法即可得到执行结果。 run方法定义的就是任务执行的内容，在工作线程中被调用。通过构造函数可以看到FutureTask封装的了一个Runnable的对象，另外一个泛型参数result。猜也可以猜到前者就是执行的任务内容，后者是来接收执行结果的。可以看到功能还是委托给Sync对象，构造的参数是一个有执行结果的调用Callable，也可以直接使用一个Callable参数。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#a6e22e">FutureTask</span><span style="color:#f92672">(</span>Runnable runnable<span style="color:#f92672">,</span> V result<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        sync <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Sync<span style="color:#f92672">(</span>Executors<span style="color:#f92672">.</span><span style="color:#a6e22e">callable</span><span style="color:#f92672">(</span>runnable<span style="color:#f92672">,</span> result<span style="color:#f92672">));</span>
+    <span style="color:#f92672">}</span><span style="color:#66d9ef">public</span> <span style="color:#a6e22e">FutureTask</span><span style="color:#f92672">(</span>Runnable runnable<span style="color:#f92672">,</span> V result<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        sync <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Sync<span style="color:#f92672">(</span>Executors<span style="color:#f92672">.</span><span style="color:#a6e22e">callable</span><span style="color:#f92672">(</span>runnable<span style="color:#f92672">,</span> result<span style="color:#f92672">));</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">FutureTask</span><span style="color:#f92672">(</span>Callable<span style="color:#f92672">&lt;</span>V<span style="color:#f92672">&gt;</span> callable<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>callable <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span>
+        <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> NullPointerException<span style="color:#f92672">();</span>
+    sync <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Sync<span style="color:#f92672">(</span>callable<span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>FutureTask实现了RunnableFuture接口，也即实现了Runnable和Future接口。作业线程执行的内容是FutureTask的的run方法内定义的任务内容。如线程池<a href="eclipse-javadoc:%E2%98%82=spring/C:%5C/Program%20Files%20%5C(x86)%5C/Java%5C/jre6%5C/lib%5C/rt.jar%3Cjava.util.concurrent(ThreadPoolExecutor.class%E2%98%83ThreadPoolExecutor">ThreadPoolExecutor</a>.<a href="eclipse-javadoc:%E2%98%82=spring/C:%5C/Program%20Files%20%5C(x86)%5C/Java%5C/jre6%5C/lib%5C/rt.jar%3Cjava.util.concurrent(ThreadPoolExecutor$Worker.class%E2%98%83Worker">Worker</a>.runTask(<a href="eclipse-javadoc:%E2%98%82=spring/C:%5C/Program%20Files%20%5C(x86)%5C/Java%5C/jre6%5C/lib%5C/rt.jar%3Cjava.util.concurrent(ThreadPoolExecutor$Worker.class%E2%98%83Worker~runTask~Ljava.lang.Runnable;%E2%98%82java.lang.Runnable" title="in java.lang">Runnable</a>task)方法可以看到在线程池的Worker线程中调用到执行任务的run方法。这里使用Sync的作用，就是在任务执行线程和提交任务（同时也是获取任务执行结果）的线程之间维持一个锁的关系，保证只有执行结束后才能获取到结果。</p>
+<p>FutureTask的任务执行方法是</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        sync<span style="color:#f92672">.</span><span style="color:#a6e22e">innerRun</span><span style="color:#f92672">();</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>获取执行结果的方法是</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> V <span style="color:#a6e22e">get</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> InterruptedException<span style="color:#f92672">,</span> ExecutionException <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> sync<span style="color:#f92672">.</span><span style="color:#a6e22e">innerGet</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><p>设置执行结果的方法是</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">set</span><span style="color:#f92672">(</span>V v<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        sync<span style="color:#f92672">.</span><span style="color:#a6e22e">innerSet</span><span style="color:#f92672">(</span>v<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><p>能看到，都是调到对应的Sync的对应方法。最主要的是innerRun方法，通过CAS的方式设置任务执行状态位RUNNING，执行传入的回调，并把执行结果调用innerSet进行赋值。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">innerRun</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+              <span style="color:#75715e">//设置任务执行状态位RUNNING
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>compareAndSetState<span style="color:#f92672">(</span>0<span style="color:#f92672">,</span> RUNNING<span style="color:#f92672">))</span>
+                <span style="color:#66d9ef">return</span><span style="color:#f92672">;</span>
+            <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+                runner <span style="color:#f92672">=</span> Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">currentThread</span><span style="color:#f92672">();</span>
+                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>getState<span style="color:#f92672">()</span> <span style="color:#f92672">==</span> RUNNING<span style="color:#f92672">)</span> <span style="color:#75715e">// recheck after setting thread
+</span><span style="color:#75715e"></span>                    <span style="color:#75715e">//获取和设置回调的结果
+</span><span style="color:#75715e"></span>                    innerSet<span style="color:#f92672">(</span>callable<span style="color:#f92672">.</span><span style="color:#a6e22e">call</span><span style="color:#f92672">());</span>
+                <span style="color:#66d9ef">else</span>
+                    releaseShared<span style="color:#f92672">(</span>0<span style="color:#f92672">);</span> <span style="color:#75715e">// cancel
+</span><span style="color:#75715e"></span>            <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>Throwable ex<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                innerSetException<span style="color:#f92672">(</span>ex<span style="color:#f92672">);</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+</code></pre></div><p>在innerSet方法中设置执行状态位为执行结束，并把执行结果赋值给result。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">innerSet</span><span style="color:#f92672">(</span>V v<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+	    <span style="color:#66d9ef">for</span> <span style="color:#f92672">(;;)</span> <span style="color:#f92672">{</span>
+		<span style="color:#66d9ef">int</span> s <span style="color:#f92672">=</span> getState<span style="color:#f92672">();</span>
+		<span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>s <span style="color:#f92672">==</span> RAN<span style="color:#f92672">)</span>
+		    <span style="color:#66d9ef">return</span><span style="color:#f92672">;</span>
+                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>s <span style="color:#f92672">==</span> CANCELLED<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+		   releaseShared<span style="color:#f92672">(</span>0<span style="color:#f92672">);</span>
+                    <span style="color:#66d9ef">return</span><span style="color:#f92672">;</span>
+                <span style="color:#f92672">}</span>
+                   <span style="color:#75715e">//设置执行状态位为执行结束，并把执行结果赋值给result
+</span><span style="color:#75715e"></span>		<span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>compareAndSetState<span style="color:#f92672">(</span>s<span style="color:#f92672">,</span> RAN<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+                    result <span style="color:#f92672">=</span> v<span style="color:#f92672">;</span>
+                    releaseShared<span style="color:#f92672">(</span>0<span style="color:#f92672">);</span>
+                    done<span style="color:#f92672">();</span>
+		    <span style="color:#66d9ef">return</span><span style="color:#f92672">;</span>
+                <span style="color:#f92672">}</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+</code></pre></div><p>前面方法把执行结果放在result中，我们知道future接口定义的get方法来获取执行结果，那如何来判断另外一个线程已经执行完毕呢？看到FutureTask的get方法还是调用到Sync的innerGet方法。 innerGet方法根据判断执行状态来获取执行结果。acquireSharedInterruptibly方法其实调用的是子类中定义的tryAcquireShared来判断任务释放执行完毕或者取消。如果未完毕或取消，则挂起当前线程。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">V <span style="color:#a6e22e">innerGet</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> InterruptedException<span style="color:#f92672">,</span> ExecutionException <span style="color:#f92672">{</span>
+            <span style="color:#75715e">//acquireSharedInterruptibly方法其实调用的是子类中定义的tryAcquireShared来判断任务释放执行完毕或者取消。如果未完毕或取消，则挂起当前线程
+</span><span style="color:#75715e"></span>            acquireSharedInterruptibly<span style="color:#f92672">(</span>0<span style="color:#f92672">);</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>getState<span style="color:#f92672">()</span> <span style="color:#f92672">==</span> CANCELLED<span style="color:#f92672">)</span>
+                <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> CancellationException<span style="color:#f92672">();</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>exception <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span>
+                <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> ExecutionException<span style="color:#f92672">(</span>exception<span style="color:#f92672">);</span>
+            <span style="color:#66d9ef">return</span> result<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+</code></pre></div><p>tryAcquireShared方法的定义如下，调用innerIsDone方法，根据state的状态值做出判断，如果结束则返回1，未结束返回-1。当tryAcquireShared返回-1，则在父类AQS中获取共享锁的线程会阻塞。即实现“任务未完成调用get方法的线程会阻塞”这样的功能。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">tryAcquireShared</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> ignore<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    <span style="color:#75715e">//调用innerIsDone方法，根据state的状态值做出判断，如果结束则返回1，未结束返回-1。当tryAcquireShared返回-1，则在父类AQS中获取共享锁的线程会阻塞。
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">return</span> innerIsDone<span style="color:#f92672">()?</span> 1 <span style="color:#f92672">:</span> <span style="color:#f92672">-</span>1<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">innerIsDone</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> ranOrCancelled<span style="color:#f92672">(</span>getState<span style="color:#f92672">())</span> <span style="color:#f92672">&amp;&amp;</span> runner <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+   <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">ranOrCancelled</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> state<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> <span style="color:#f92672">(</span>state <span style="color:#f92672">&amp;</span> <span style="color:#f92672">(</span>RAN <span style="color:#f92672">|</span> CANCELLED<span style="color:#f92672">))</span> <span style="color:#f92672">!=</span> 0<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+</code></pre></div><p>tryReleaseShared没有做什么事情，因为不像前面四种其实都有锁的意味，需要释放锁。在FutureTask中state表示任务的执行状态，在几乎每个方法的开始都会判读和设置状态。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">tryReleaseShared</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> ignore<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            runner <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+</code></pre></div><p>**总结：**在FutureTask实现了异步的执行和提交，作为可以被Executor提交的对象。通过Sync来维护任务的执行状态，从而保证只有工作线程任务执行完后，其他线程才能获取到执行结果。AQS的子类Sync在这里主要是借用state状态位来存储执行状态，来完成对对各种状态以及加锁、阻塞的实现。</p>
+<p>最后终于理解了这早前就算了解的类，名字为什么叫FutureTask，实现了Future接口（满足在future的某个时间获取执行结果，这是Future接口的取名的意义吧），另外在执行中作为对执行任务的封装，封装了执行的任务内容，同时也封装了执行结果，可以安全的把这个任务交给另外的线程去执行，只要执行get方法能得到结果，则一定是你想要的结果，真的是很精妙。</p>
+<h3 id="5-总结对照">5. 总结对照</h3>
+<p>本文主要侧重AQS的子类在各个同步工具类中的使用情况，其实也基本涵盖了这几个同步工具类的主要逻辑，但目标并不是对这几个同步工具类的代码进行详细解析。另外AQS本身的几个final方法，才是同步器的公共基础，也不是本文的主题，也未详细展开。其实写这篇文章的一个初始目的真的只是想列出如下表格，对比下AQS中的各个子类是怎么使用state的，居然啰嗦了这么多。</p>
+<table>
+<thead>
+<tr>
+<th>工具类</th>
+<th>工具类作用</th>
+<th>工具类加锁方法</th>
+<th>工具类释放锁方法</th>
+<th>Sync覆盖的方法</th>
+<th>Sync非覆盖的重要方法</th>
+<th>state的作用</th>
+<th>锁类型</th>
+<th>锁维护</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Semaphore</td>
+<td>控制同时访问某个特定资源的操作数量</td>
+<td>acquire：每次请求一个许可都会导致计数器减少1，，一旦达到了0，新的许可请求线程将被挂起</td>
+<td>release：每调用 添加一个许可，释放一个正在阻塞的获取者</td>
+<td>tryAcquireShared tryReleaseShared</td>
+<td></td>
+<td>表示初始化的许可数</td>
+<td>共享锁</td>
+<td>每一次请求acquire()一个许可都会导致计数器减少1，同样每次释放一个许可release()都会导致计数器增加1，一旦达到了0，新的许可请求线程将被挂起。</td>
+</tr>
+<tr>
+<td>CountDownLatch</td>
+<td>把一组线程全部关在外面，在某个状态时候放开。一种同步机制来保证一个或多个线程等待其他线程完成。</td>
+<td>await：在计数器不为0时候阻塞调用线程，为0时候立即返回</td>
+<td>countDown ：计数递减</td>
+<td>tryAcquireShared tryReleaseShared</td>
+<td></td>
+<td>维护一个计数器</td>
+<td>共享锁</td>
+<td>初始化一个计数，每次调用countDown方法计数递减，在计数递减到0之前，调用await的线程都会阻塞</td>
+</tr>
+<tr>
+<td>ReentrantLock</td>
+<td>标准的互斥操作，也就是一次只能有一个线程持有锁</td>
+<td>lock：如果没有线程使用则立即返回，并设置state为1；如果当前线程已经占有锁，则state加1；如果其他线程占有锁，则当前线程不可用，等待 tryLock：如果锁可用，则获取锁，并立即返回值 true。如果锁不可用，则此方法将立即返回值 false</td>
+<td>unlock：尝试释放锁，如果当前线程占有锁则count减一，如果count为0则释放锁。如果占有线程不是当前线程，则抛异常</td>
+<td>tryAcquire tryRelease</td>
+<td>nonfairTryAcquir</td>
+<td>state表示获得锁的线程对锁的重入次数。</td>
+<td>排他锁。</td>
+<td>获取锁时，如果没有线程使用则立即返回，并设置state为1；如果当前线程已经占有锁，则state加1；如果其他线程占有锁，则当前线程不可用。释放锁时，在该方法中主要作用是state状态位减少release个，表示释放锁，如果更新后的state为0，表示当前线程释放锁，如果不为0，表示持有锁的当前线程重入数减少</td>
+</tr>
+<tr>
+<td>ReentrantReadWriteLock</td>
+<td>读写锁。允许多个读线程同时持有锁，但是只有一个写线程可以持有锁。写线程获取写入锁后可以再次获取读取锁，但是读线程获取读取锁后却不能获取写入锁</td>
+<td>ReadLock#lock ：获取读锁 ReadLock#tryLock:尝试当前没有其他线程当前持有写锁时获取读锁 WriteLock#lock：获取写锁 WriteLock#tryLock：尝试当前没有其他线程持有写锁时，呼气写锁。</td>
+<td>ReadLock#unlock：释放读锁 WriteLock#unlock：释放写锁</td>
+<td>acquireShared releaseShared tryAcquire tryRelease</td>
+<td>tryReadLock tryWriteLock</td>
+<td>高16位表示共享锁的数量，低16位表示独占锁的重入次数</td>
+<td>读锁：共享 写锁：排他</td>
+<td>对于共享锁，state是计数器的概念。一个共享锁就相对于一次计数器操作，一次获取共享锁相当于计数器加1，释放一个共享锁就相当于计数器减1；排他锁维护类似于可重入锁。</td>
+</tr>
+<tr>
+<td>FutureTask</td>
+<td>封装一个执行任务交给其他线程去执行，开始执行后可以被取消，可以查看执行结果，如果执行结果未完成则阻塞。</td>
+<td>V get()</td>
+<td>run() set(V) cancel(boolean)</td>
+<td>tryAcquireShared tryReleaseShared</td>
+<td>innerGet innerRun() innerSet innerIsCancelled</td>
+<td>state状态位来存储执行状态RUNNING、RUN、CANCELLED</td>
+<td>共享锁</td>
+<td>获取执行结果的线程(可以有多个)一直阻塞，直到执行任务的线程执行完毕，或者执行任务被取消。</td>
+</tr>
+</tbody>
+</table>
+
+
+  
+
+  
+
+</article> 
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 ml-auto blog-sidebar">
+  
+
+  
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+    
+
+    
+    <footer class="blog-footer">
+      <p dir="auto">
+      
+      <!-- raw HTML omitted -->浙ICP备18050493号-1<!-- raw HTML omitted --> 浙公网安备 33010802006262号
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+    
+
+  </body>
+
+</html>

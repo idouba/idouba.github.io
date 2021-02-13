@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<meta property="og:title" content="Opentracing 调用链服务端埋点" />
+<meta property="og:description" content="1 前言 通过一个最简单的代码例子来看使用opentracing在服务端埋点的逻辑。因为调用链的抽象模型都是来自dapper这篇论文，所以其他的方式也是类似，只是接口方法上稍有不同。 2 关于服务端埋点 主要流程看上是： 收到请求 从通信协议（如常用的HTTP header）中解出客户端传递的trace； 构造span 保存span 服务端返回请求 关闭span，将span的数据结构上传到调用链的数据存储节点。 下面结合一个例子中的额使用看下2 3 4 6四个调用链埋点步骤具体做了哪些事情。 3 主要流程 以最典型的http服务端为" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://idouba.net/opentracing-serverside-tracing/" />
+<meta property="article:published_time" content="2018-01-01T14:17:31+00:00" />
+<meta property="article:modified_time" content="2018-01-01T14:17:31+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Opentracing 调用链服务端埋点"/>
+<meta name="twitter:description" content="1 前言 通过一个最简单的代码例子来看使用opentracing在服务端埋点的逻辑。因为调用链的抽象模型都是来自dapper这篇论文，所以其他的方式也是类似，只是接口方法上稍有不同。 2 关于服务端埋点 主要流程看上是： 收到请求 从通信协议（如常用的HTTP header）中解出客户端传递的trace； 构造span 保存span 服务端返回请求 关闭span，将span的数据结构上传到调用链的数据存储节点。 下面结合一个例子中的额使用看下2 3 4 6四个调用链埋点步骤具体做了哪些事情。 3 主要流程 以最典型的http服务端为"/>
+<meta name="generator" content="Hugo 0.80.0" />
+
+
+    
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Opentracing 调用链服务端埋点",
+  "url": "http:\/\/idouba.net\/opentracing-serverside-tracing\/",
+  "wordCount": "3177",
+  "datePublished": "2018-01-01T14:17:31+00:00",
+  "dateModified": "2018-01-01T14:17:31+00:00",
+  "author": {
+    "@type": "Person",
+    "name": "idouba"
+  },
+  "keywords": "tracing, cncf, go"
+}
+</script>
+
+
+
+    <link rel="canonical" href="http://idouba.net/opentracing-serverside-tracing/">
+
+    <title>Opentracing 调用链服务端埋点 | 爱豆吧！</title>
+
+    
+    <!-- combined, minified CSS -->
+    
+    <link href="http://idouba.net/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    
+
+    <!-- minified Font Awesome for SVG icons -->
+    
+    <script defer src="http://idouba.net/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+
+    <!-- RSS 2.0 feed -->
+    
+
+    
+
+    
+
+  </head>
+
+  <body>
+
+    
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="http://idouba.net/">Home</a>
+        </nav>
+      </div>
+    </div>
+    
+
+    
+    
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.net/" rel="home">爱豆吧！</a></h1>
+        <p class="lead blog-description" dir="auto">idouba@beta.</p>
+      </div>
+    </header>
+    
+    
+
+    
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/opentracing-serverside-tracing/">Opentracing 调用链服务端埋点</a></h2>
+    <p class="blog-post-meta"><time datetime="2018-01-01T14:17:31Z">Mon Jan 01, 2018</time> by idouba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/tracing/" rel="category tag">tracing</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/cncf/" rel="tag">cncf</a>, <a href="/tags/go/" rel="tag">go</a>, <a href="/tags/tracing/" rel="tag">tracing</a>
+
+</p>
+  </header>
+  <h3 id="1-前言">1 前言</h3>
+<p>通过一个最简单的代码例子来看使用<a href="http://opentracing.io">opentracing</a>在服务端埋点的逻辑。因为调用链的抽象模型都是来自<a href="https://research.google.com/pubs/pub36356.html">dapper</a>这篇论文，所以其他的方式也是类似，只是接口方法上稍有不同。</p>
+<h3 id="2-关于服务端埋点">2 关于服务端埋点</h3>
+<p>主要流程看上是：</p>
+<ul>
+<li>
+<ol>
+<li>收到请求</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>从通信协议（如常用的HTTP header）中解出客户端传递的trace；</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>构造span</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>保存span</li>
+</ol>
+</li>
+<li>
+<ol start="5">
+<li>服务端返回请求</li>
+</ol>
+</li>
+<li>
+<ol start="6">
+<li>关闭span，将span的数据结构上传到调用链的数据存储节点。</li>
+</ol>
+</li>
+</ul>
+<p>下面结合一个例子中的额使用看下2 3 4 6四个调用链埋点步骤具体做了哪些事情。</p>
+<h3 id="3-主要流程">3 主要流程</h3>
+<p>以最典型的http服务端为例。如下面是个http服务端的里，一般的最简单的一个http服务端写出来可能是这样，从request中解到请求的参数，然后执行服务端处理的逻辑，然后结果写到response。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">s</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">httpService</span>) <span style="color:#a6e22e">sumHandler</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">req</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) {
+<span style="color:#75715e">// parse query parameters
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">URL</span>.<span style="color:#a6e22e">Query</span>()
+<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">ParseInt</span>(<span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">Get</span>(<span style="color:#960050;background-color:#1e0010">“</span><span style="color:#a6e22e">a</span><span style="color:#960050;background-color:#1e0010">”</span>), <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">64</span>)
+<span style="color:#a6e22e">b</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">ParseInt</span>(<span style="color:#a6e22e">v</span>.<span style="color:#a6e22e">Get</span>(<span style="color:#960050;background-color:#1e0010">“</span><span style="color:#a6e22e">b</span><span style="color:#960050;background-color:#1e0010">”</span>), <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">64</span>)
+<span style="color:#75715e">// call our Sum binding
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">result</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">service</span>.<span style="color:#a6e22e">Sum</span>(<span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">Context</span>(), <span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span>)
+<span style="color:#75715e">// return the result
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">w</span>.<span style="color:#a6e22e">Write</span>([]byte(<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#960050;background-color:#1e0010">“</span><span style="color:#f92672">%</span><span style="color:#a6e22e">d</span><span style="color:#960050;background-color:#1e0010">”</span>, <span style="color:#a6e22e">result</span>)))
+}
+</code></pre></div><p>看下如果在这端代码中加入埋点，能把对这个接口的调用跟踪起来。</p>
+<p>下面是埋点的接口，在构造handler的时候通过了一个wrapper方法加入了埋点。即将一个handler Decorator成了另外一个handler，即在业务的handler上加入了埋点功能。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">NewHTTPHandler</span>(<span style="color:#a6e22e">tracer</span> <span style="color:#a6e22e">opentracing</span>.<span style="color:#a6e22e">Tracer</span>, <span style="color:#a6e22e">service</span> <span style="color:#a6e22e">Service</span>) <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Handler</span> {
+<span style="color:#a6e22e">vc</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">httpService</span>{<span style="color:#a6e22e">service</span>: <span style="color:#a6e22e">service</span>}
+<span style="color:#75715e">// Create the mux.
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">mux</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">NewServeMux</span>()
+<span style="color:#75715e">// Create the Sum handler.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">sumHandler</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Handler</span>
+<span style="color:#a6e22e">sumHandler</span> = <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">HandlerFunc</span>(<span style="color:#a6e22e">svc</span>.<span style="color:#a6e22e">sumHandler</span>)
+<span style="color:#75715e">// Wrap the Sum handler with our tracing middleware.
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">sumHandler</span> = <span style="color:#a6e22e">middleware</span>.<span style="color:#a6e22e">FromHTTPRequest</span>(<span style="color:#a6e22e">tracer</span>, <span style="color:#960050;background-color:#1e0010">“</span><span style="color:#a6e22e">Sum</span><span style="color:#960050;background-color:#1e0010">”</span>)(<span style="color:#a6e22e">sumHandler</span>)
+<span style="color:#75715e">// Wire up the mux.
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">mux</span>.<span style="color:#a6e22e">Handle</span>(<span style="color:#960050;background-color:#1e0010">“</span><span style="color:#f92672">/</span><span style="color:#a6e22e">sum</span><span style="color:#f92672">/</span><span style="color:#960050;background-color:#1e0010">”</span>, <span style="color:#a6e22e">sumHandler</span>)
+<span style="color:#75715e">// Return the mux.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">return</span> <span style="color:#a6e22e">mux</span>
+}
+</code></pre></div><p>那么这修饰器的逻辑就是埋点的逻辑了。详细的解析这部分代码来看使用opentracing在服务端埋点的逻辑。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">FromHTTPRequest</span>(<span style="color:#a6e22e">tracer</span> <span style="color:#a6e22e">opentracing</span>.<span style="color:#a6e22e">Tracer</span>, <span style="color:#a6e22e">operationName</span> <span style="color:#66d9ef">string</span>,
+) <span style="color:#a6e22e">HandlerFunc</span> {
+<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">next</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Handler</span>) <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Handler</span> {
+<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">HandlerFunc</span>(<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">req</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) {
+<span style="color:#75715e">// Try to join to a trace propagated in `req`.
+</span><span style="color:#75715e">//步骤1 解客户端span
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">wireContext</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">tracer</span>.<span style="color:#a6e22e">Extract</span>(
+<span style="color:#a6e22e">opentracing</span>.<span style="color:#a6e22e">TextMap</span>,
+<span style="color:#a6e22e">opentracing</span>.<span style="color:#a6e22e">HTTPHeadersCarrier</span>(<span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">Header</span>),
+)
+<span style="color:#75715e">//步骤2 启动服务端span
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">span</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">tracer</span>.<span style="color:#a6e22e">StartSpan</span>(<span style="color:#a6e22e">operationName</span>, <span style="color:#a6e22e">ext</span>.<span style="color:#a6e22e">RPCServerOption</span>(<span style="color:#a6e22e">wireContext</span>))
+<span style="color:#a6e22e">span</span>.<span style="color:#a6e22e">SetTag</span>(<span style="color:#960050;background-color:#1e0010">“</span><span style="color:#a6e22e">serverSide</span><span style="color:#960050;background-color:#1e0010">”</span>, <span style="color:#960050;background-color:#1e0010">“</span><span style="color:#a6e22e">here</span><span style="color:#960050;background-color:#1e0010">”</span>)
+<span style="color:#75715e">//部署4 关闭span
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">span</span>.<span style="color:#a6e22e">Finish</span>()
+<span style="color:#75715e">// 部署3 store span in context
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">ctx</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">opentracing</span>.<span style="color:#a6e22e">ContextWithSpan</span>(<span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">Context</span>(), <span style="color:#a6e22e">span</span>)
+<span style="color:#75715e">// update request context to include our new span
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">req</span> = <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">WithContext</span>(<span style="color:#a6e22e">ctx</span>)
+<span style="color:#75715e">// next middleware or actual request handler
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">next</span>.<span style="color:#a6e22e">ServeHTTP</span>(<span style="color:#a6e22e">w</span>, <span style="color:#a6e22e">req</span>)
+})
+}
+}
+</code></pre></div><p>代码中间的注释了下这4个步骤，这里详细描述下：</p>
+<p>**步骤1 **从Request中解出SpanContext，即调用Tracer接口上定义的Extract方法。</p>
+<p>Opentracing定义了inject和extract方法，将span的信息（SpanContext）编码到carrier中。当一个埋点的客户端发起请求时，span信息就加到了请求内容中。</p>
+<p>Extract和Inject是跨进程Tracing的主要机制，一个span的发起方是在客户端，响应方是在服务端，要共享一个调用Id，在tracing中术语是spanId，需要有一种机制能从客户端发出来，在服务端再解出来（当然实际使用中不止这点信息，详细参照Span的数据结构和trace的模型定义），需要在跨进程调用的时候能传递出来，不管是RPC，消息队列还是HTTP等其他协议的调用。</p>
+<p>Extract方法作为opentracing <a href="https://github.com/opentracing/opentracing-go/blob/master/tracer.go">Tracer</a>的三个基础方法之一，在opentracing接口中被定义。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">Extract</span>(<span style="color:#a6e22e">format</span> <span style="color:#66d9ef">interface</span>{}, <span style="color:#a6e22e">carrier</span> <span style="color:#66d9ef">interface</span>{}) (<span style="color:#a6e22e">SpanContext</span>, <span style="color:#66d9ef">error</span>)
+</code></pre></div><p>在各个Opentracing的实现中，会有对应的实现。如<a href="https://github.com/openzipkin/zipkin-go-opentracing/blob/master/tracer.go">openzipkin/zipkin-go-opentracing</a> 有对应的实现：</p>
+<p>对于http类型的服务调用也就是从http header里解出客户端传来的trace信息。</p>
+<p>关于extract和inject详细可以参照opentracing中<a href="http://opentracing.io/documentation/pages/api/cross-process-tracing.html">这部分</a>描述。</p>
+<p>**步骤2 **启动span</p>
+<p>如果可以解出来客户端的span，则说明这个请求的客户端已经埋点，服务端的处理会和客户端在一个trace上，如果未解出来，则客户端未埋点，或者埋点数据丢失，在服务端重新创建一个span，即开始一个新的trace。在span的模型中，对客户端Span存在也是有两种风格的处理一种是服务端构造一个新的Span，parentspan设为客户端那个span，另外一种是直接更新解出来客户端的那个span。</p>
+<p>**步骤3 **保存span</p>
+<p>在服务端的请求过程中需要，需要保存span信息，以便在业务需要的时候可以访问到span。只有这样业务代码才可以设置自定义的tag，记录event，或者根据需要创建子span（如果需要对服务内部的调用详情在追踪的话）。</p>
+<p>在openttracing的go的埋点方中是将span保存到到Request的context中，后面处理请求的业务代码会根据需要从Request中得到Context。关于为什么没有使用threadlocal而是使用Contex参照关于<a href="https://blog.golang.org/context">context</a>的设计思想。</p>
+<p><a href="github.com/opentracing/opentracing-go/gocontext.go">gocontext.go</a>其实就是把span作为一个固定key的value设置给context，并借助context向下传递。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">contextKey</span> <span style="color:#66d9ef">struct</span>{}
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">activeSpanKey</span> = <span style="color:#a6e22e">contextKey</span>{}
+<span style="color:#75715e">// ContextWithSpan returns a new `context.Context` that holds a reference to
+</span><span style="color:#75715e">// `span`’s SpanContext.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">ContextWithSpan</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">span</span> <span style="color:#a6e22e">Span</span>) <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span> {
+<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">WithValue</span>(<span style="color:#a6e22e">ctx</span>, <span style="color:#a6e22e">activeSpanKey</span>, <span style="color:#a6e22e">span</span>)
+}
+</code></pre></div><p>如在前面例子中sumHandler的业务方法Sum就可以从Request的context中得到当前span并进行操作。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">s</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">svc1</span>) <span style="color:#a6e22e">Sum</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span> <span style="color:#66d9ef">int64</span>) (<span style="color:#66d9ef">int64</span>, <span style="color:#66d9ef">error</span>) {
+<span style="color:#a6e22e">span</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">opentracing</span>.<span style="color:#a6e22e">SpanFromContext</span>(<span style="color:#a6e22e">ctx</span>)
+<span style="color:#a6e22e">span</span>.<span style="color:#a6e22e">SetTag</span>(<span style="color:#960050;background-color:#1e0010">“</span><span style="color:#a6e22e">proxy</span><span style="color:#f92672">-</span><span style="color:#a6e22e">to</span><span style="color:#960050;background-color:#1e0010">”</span>, <span style="color:#960050;background-color:#1e0010">“</span><span style="color:#a6e22e">svc2</span><span style="color:#960050;background-color:#1e0010">″</span>)
+<span style="color:#960050;background-color:#1e0010">…</span>
+<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">result</span>, <span style="color:#66d9ef">nil</span>
+}
+</code></pre></div><p>其中SpanFromContext是从Context中解出对应的对象</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">SpanFromContext</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>) <span style="color:#a6e22e">Span</span> {
+<span style="color:#a6e22e">val</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">Value</span>(<span style="color:#a6e22e">activeSpanKey</span>)
+<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">sp</span>, <span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">val</span>.(<span style="color:#a6e22e">Span</span>); <span style="color:#a6e22e">ok</span> {
+<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">sp</span>
+}
+<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+}
+</code></pre></div><p><strong>步骤4</strong> 结束span。就是服务端调处理完毕调用结束span。主要是标注span结束时间，同时通过recorder接口上报span。</p>
+<p>这个方法定义在opentracing的span接口上，一般实现是这样（如zipkin-go-opentracing中）</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">s</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">spanImpl</span>) <span style="color:#a6e22e">Finish</span>() {
+<span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">FinishWithOptions</span>(<span style="color:#a6e22e">opentracing</span>.<span style="color:#a6e22e">FinishOptions</span>{})
+}
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">s</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">spanImpl</span>) <span style="color:#a6e22e">FinishWithOptions</span>(<span style="color:#a6e22e">opts</span> <span style="color:#a6e22e">opentracing</span>.<span style="color:#a6e22e">FinishOptions</span>) {
+<span style="color:#a6e22e">finishTime</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">opts</span>.<span style="color:#a6e22e">FinishTime</span>
+<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">finishTime</span>.<span style="color:#a6e22e">IsZero</span>() {
+<span style="color:#a6e22e">finishTime</span> = <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>()
+}
+<span style="color:#a6e22e">duration</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">finishTime</span>.<span style="color:#a6e22e">Sub</span>(<span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">raw</span>.<span style="color:#a6e22e">Start</span>)
+<span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">raw</span>.<span style="color:#a6e22e">Duration</span> = <span style="color:#a6e22e">duration</span>
+<span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">onFinish</span>(<span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">raw</span>)
+<span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">tracer</span>.<span style="color:#a6e22e">options</span>.<span style="color:#a6e22e">recorder</span>.<span style="color:#a6e22e">RecordSpan</span>(<span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">raw</span>)
+}
+</code></pre></div><p>即记录span结束时间，并通过recordspan保存span，这就是调用方span的埋点数据。通过一种通道（实现了recorder接口的方法）上报到调用链的服务中心去，供调用链检索。</p>
+<p>如<a href="github.com%5Copenzipkin%5Czipkin-go-opentracing%5Czipkin-recorder.go">zipkin-recorder.go</a></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Recorder</span>) <span style="color:#a6e22e">RecordSpan</span>(<span style="color:#a6e22e">sp</span> <span style="color:#a6e22e">RawSpan</span>) {
+<span style="color:#66d9ef">if</span> !<span style="color:#a6e22e">sp</span>.<span style="color:#a6e22e">Context</span>.<span style="color:#a6e22e">Sampled</span> {
+<span style="color:#66d9ef">return</span>
+}
+<span style="color:#a6e22e">span</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">zipkincore</span>.<span style="color:#a6e22e">Span</span>{
+<span style="color:#a6e22e">Name</span>: <span style="color:#a6e22e">sp</span>.<span style="color:#a6e22e">Operation</span>,
+<span style="color:#a6e22e">ID</span>: int64(<span style="color:#a6e22e">sp</span>.<span style="color:#a6e22e">Context</span>.<span style="color:#a6e22e">SpanID</span>),
+<span style="color:#a6e22e">TraceID</span>: int64(<span style="color:#a6e22e">sp</span>.<span style="color:#a6e22e">Context</span>.<span style="color:#a6e22e">TraceID</span>.<span style="color:#a6e22e">Low</span>),
+<span style="color:#a6e22e">TraceIDHigh</span>: <span style="color:#a6e22e">traceIDHigh</span>,
+<span style="color:#a6e22e">ParentID</span>: <span style="color:#a6e22e">parentSpanID</span>,
+<span style="color:#a6e22e">Debug</span>: <span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">debug</span> <span style="color:#f92672">||</span> (<span style="color:#a6e22e">sp</span>.<span style="color:#a6e22e">Context</span>.<span style="color:#a6e22e">Flags</span><span style="color:#f92672">&amp;</span><span style="color:#a6e22e">flag</span>.<span style="color:#a6e22e">Debug</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">flag</span>.<span style="color:#a6e22e">Debug</span>),
+}
+<span style="color:#960050;background-color:#1e0010">…</span><span style="color:#a6e22e">_</span> = <span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">collector</span>.<span style="color:#a6e22e">Collect</span>(<span style="color:#a6e22e">span</span>)
+}
+</code></pre></div><p>将rawspan的数据格式转换为，然后通过一个collector上报到服务端。</p>
+<p>上报方式collector可以有不同的实现，可以有基于<a href="https://github.com/openzipkin/zipkin-go-opentracing/blob/master/collector-http.go">http</a>,也可以由基于<a href="https://github.com/openzipkin/zipkin-go-opentracing/blob/master/collector-kafka.go">消息</a>方式的。</p>
+<p>zipkin的span定义在<a href="https://github.com/openzipkin/zipkin-go-opentracing/blob/master/thrift/gen-go/zipkincore/zipkinCore.go">这里</a>，包括比较完备的解释参照原文件中注释。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Span</span> <span style="color:#66d9ef">struct</span> {
+<span style="color:#a6e22e">TraceID</span> <span style="color:#66d9ef">int64</span> <span style="color:#e6db74">`thrift:”trace_id,1″ json:”trace_id”`</span>
+<span style="color:#75715e">// unused field # 2
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">Name</span> <span style="color:#66d9ef">string</span> <span style="color:#e6db74">`thrift:”name,3″ json:”name”`</span>
+<span style="color:#a6e22e">ID</span> <span style="color:#66d9ef">int64</span> <span style="color:#e6db74">`thrift:”id,4″ json:”id”`</span>
+<span style="color:#a6e22e">ParentID</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">int64</span> <span style="color:#e6db74">`thrift:”parent_id,5″ json:”parent_id,omitempty”`</span>
+<span style="color:#a6e22e">Annotations</span> []<span style="color:#f92672">*</span><span style="color:#a6e22e">Annotation</span> <span style="color:#e6db74">`thrift:”annotations,6″ json:”annotations”`</span>
+<span style="color:#75715e">// unused field # 7
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">BinaryAnnotations</span> []<span style="color:#f92672">*</span><span style="color:#a6e22e">BinaryAnnotation</span> <span style="color:#e6db74">`thrift:”binary_annotations,8″ json:”binary_annotations”`</span>
+<span style="color:#a6e22e">Debug</span> <span style="color:#66d9ef">bool</span> <span style="color:#e6db74">`thrift:”debug,9″ json:”debug,omitempty”`</span>
+<span style="color:#a6e22e">Timestamp</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">int64</span> <span style="color:#e6db74">`thrift:”timestamp,10″ json:”timestamp,omitempty”`</span>
+<span style="color:#a6e22e">Duration</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">int64</span> <span style="color:#e6db74">`thrift:”duration,11″ json:”duration,omitempty”`</span>
+<span style="color:#a6e22e">TraceIDHigh</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">int64</span> <span style="color:#e6db74">`thrift:”trace_id_high,12″ json:”trace_id_high,omitempty”`</span>
+}
+</code></pre></div><h3 id="4-最后">4 最后</h3>
+<p>服务端埋点这部分逻辑，需要在服务端有个合适的地方修改，类似过滤器，或者相应请求的公共地方，避免在每个业务请求中加代码。</p>
+<p>除了例子中的这个 <a href="https://github.com/openzipkin/zipkin-go-opentracing">zipkin-go-opentracing</a> ，还有<a href="http://opentracing.io/documentation/pages/supported-tracers.html">很多调用链的项目</a>实行了opentracing的规范和定义。</p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+
+
+  
+
+  
+
+</article> 
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 ml-auto blog-sidebar">
+  
+
+  
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+    
+
+    
+    <footer class="blog-footer">
+      <p dir="auto">
+      
+      <!-- raw HTML omitted -->浙ICP备18050493号-1<!-- raw HTML omitted --> 浙公网安备 33010802006262号
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+    
+
+  </body>
+
+</html>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>oracle on 爱豆吧！</title>
+    <link>http://idouba.net/categories/oracle/</link>
+    <description>Recent content in oracle on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>&lt;a href=&#39;https://beian.miit.gov.cn/&#39; target=&#39;_blank&#39;&gt;浙ICP备18050493号-1&lt;/a&gt; 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Tue, 14 Oct 2014 08:53:14 +0000</lastBuildDate><atom:link href="http://idouba.net/categories/oracle/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>oracle分页技术性能比较</title>
+      <link>http://idouba.net/performance-comparison-of-oracle-paging/</link>
+      <pubDate>Tue, 14 Oct 2014 08:53:14 +0000</pubDate>
+      
+      <guid>http://idouba.net/performance-comparison-of-oracle-paging/</guid>
+      <description>一、前言 在一个有30亿条数据的大表上分页，为了对方案进行性能测试，先忽略其他条件查询的影响，单看下分页部分的性能，顺便考察说明下oracle中rownum使用中一些比较tricky的地方。实验条件： 表结构如下，内有2千万条实验数据。 二、实验 提供7种不同方式（其实是5种，二和四是一种、三和五是一种）方式的 。第一种只是为了demo一下假设的一种错误逻辑方式，第二种和第四种是一种逻辑正确，但是性能极差的方式。筛选下来看上去性能可行的方式是第五、第六、第七方式。 这里仅仅记录没中方式的执行结果和计划。 方式</description>
+    </item>
+    
+  </channel>
+</rss>

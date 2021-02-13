@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<meta property="og:title" content="从Count看Oracle执行计划的选择" />
+<meta property="og:description" content="一、 前言 在调查一个性能问题的时候，一个同事问道，为什么数据库有些时候这么不聪明，明明表上有索引，但是在执行一个简单的count的时候居然全表扫描了！难道不知道走索引更快么？ 试图从最简单的count来重新了解oracle查询计划的选择，以及最终产生的结果。虽然有些结果会让人觉得有些意外，并且可能会鄙视，这个查询计划选择真的不够聪明。但稍微用心点的去了解，做的已经足够细致了。大多数情况下，根据我们输入的信息，来自输入的SQL、表结构、索引状况、统计信息，会得出一个比较优的计划。所以和前面一直试图讲到" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://idouba.net/analysis-oracle-execute-plan-from-count/" />
+<meta property="article:published_time" content="2014-03-24T12:53:50+00:00" />
+<meta property="article:modified_time" content="2014-03-24T12:53:50+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="从Count看Oracle执行计划的选择"/>
+<meta name="twitter:description" content="一、 前言 在调查一个性能问题的时候，一个同事问道，为什么数据库有些时候这么不聪明，明明表上有索引，但是在执行一个简单的count的时候居然全表扫描了！难道不知道走索引更快么？ 试图从最简单的count来重新了解oracle查询计划的选择，以及最终产生的结果。虽然有些结果会让人觉得有些意外，并且可能会鄙视，这个查询计划选择真的不够聪明。但稍微用心点的去了解，做的已经足够细致了。大多数情况下，根据我们输入的信息，来自输入的SQL、表结构、索引状况、统计信息，会得出一个比较优的计划。所以和前面一直试图讲到"/>
+<meta name="generator" content="Hugo 0.80.0" />
+
+
+    
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "从Count看Oracle执行计划的选择",
+  "url": "http:\/\/idouba.net\/analysis-oracle-execute-plan-from-count\/",
+  "wordCount": "5784",
+  "datePublished": "2014-03-24T12:53:50+00:00",
+  "dateModified": "2014-03-24T12:53:50+00:00",
+  "author": {
+    "@type": "Person",
+    "name": "idouba"
+  },
+  "keywords": "database, excute plan, oracle"
+}
+</script>
+
+
+
+    <link rel="canonical" href="http://idouba.net/analysis-oracle-execute-plan-from-count/">
+
+    <title>从Count看Oracle执行计划的选择 | 爱豆吧！</title>
+
+    
+    <!-- combined, minified CSS -->
+    
+    <link href="http://idouba.net/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    
+
+    <!-- minified Font Awesome for SVG icons -->
+    
+    <script defer src="http://idouba.net/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+
+    <!-- RSS 2.0 feed -->
+    
+
+    
+
+    
+
+  </head>
+
+  <body>
+
+    
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="http://idouba.net/">Home</a>
+        </nav>
+      </div>
+    </div>
+    
+
+    
+    
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.net/" rel="home">爱豆吧！</a></h1>
+        <p class="lead blog-description" dir="auto">idouba@beta.</p>
+      </div>
+    </header>
+    
+    
+
+    
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/analysis-oracle-execute-plan-from-count/">从Count看Oracle执行计划的选择</a></h2>
+    <p class="blog-post-meta"><time datetime="2014-03-24T12:53:50Z">Mon Mar 24, 2014</time> by idouba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/database/" rel="category tag">database</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/excute-plan/" rel="tag">excute plan</a>, <a href="/tags/oracle/" rel="tag">oracle</a>
+
+</p>
+  </header>
+  <h3 id="一-前言">一、 前言</h3>
+<p>在调查一个性能问题的时候，一个同事问道，为什么数据库有些时候这么不聪明，明明表上有索引，但是在执行一个简单的count的时候居然全表扫描了！难道不知道走索引更快么？</p>
+<p>试图从最简单的count来重新了解oracle查询计划的选择，以及最终产生的结果。虽然有些结果会让人觉得有些意外，并且可能会鄙视，这个查询计划选择真的不够聪明。但稍微用心点的去了解，做的已经足够细致了。大多数情况下，根据我们输入的信息，来自输入的SQL、表结构、索引状况、统计信息，会得出一个比较优的计划。所以和前面一直试图讲到索引和join方式一样，所有这样的选择不是因为数据库厂商这样规定的，而是基于存储的数据的实际情况，就**应该(甚至说不得不)**这么去选择。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- Create table
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> IDOUBA.APP_APPLICATIONAUDIT
+(
+  ID              NUMBER,
+  UNIQUEID        NUMBER,
+  POLICYID        NUMBER,
+  IP              VARCHAR2(<span style="color:#ae81ff">200</span>) <span style="color:#66d9ef">not</span> <span style="color:#66d9ef">null</span>,
+  IPNUM           NUMBER <span style="color:#66d9ef">not</span> <span style="color:#66d9ef">null</span>,
+  MAC             VARCHAR2(<span style="color:#ae81ff">200</span>),
+  USERVISIT       VARCHAR2(<span style="color:#ae81ff">100</span>),
+  PHONE           VARCHAR2(<span style="color:#ae81ff">200</span>),
+  GROUPNAME       VARCHAR2(<span style="color:#ae81ff">100</span>),
+  PORT            NUMBER,
+  APP_URL         VARCHAR2(<span style="color:#ae81ff">200</span>),
+  TITLE           VARCHAR2(<span style="color:#ae81ff">200</span>),
+  REQUESTS        VARCHAR2(<span style="color:#ae81ff">1000</span>),
+  REQIDENTITYCARD VARCHAR2(<span style="color:#ae81ff">1000</span>),
+  REQKEY      VARCHAR2(<span style="color:#ae81ff">1000</span>),
+  RESPONSEEKEY     VARCHAR2(<span style="color:#ae81ff">3000</span>),
+  UPDATETIME      DATE,
+  AUDITTYPE       NUMBER,
+  TITLEID         NUMBER,
+  SUBTITLEID      NUMBER,
+  SERVERIP        VARCHAR2(<span style="color:#ae81ff">200</span>),
+  DOMAINNAME      VARCHAR2(<span style="color:#ae81ff">200</span>)
+)
+tablespace USERS
+  pctfree <span style="color:#ae81ff">10</span>
+  initrans <span style="color:#ae81ff">1</span>
+  maxtrans <span style="color:#ae81ff">255</span>
+  <span style="color:#66d9ef">storage</span>
+  (
+    initial <span style="color:#ae81ff">64</span>K
+    minextents <span style="color:#ae81ff">1</span>
+    maxextents unlimited
+  );
+<span style="color:#75715e">-- Create/Recreate indexes 
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">create</span> <span style="color:#66d9ef">index</span> INDEX_UPDATETIME <span style="color:#66d9ef">on</span> IDOUBA.APP_APPLICATIONAUDIT (UPDATETIME)
+  tablespace <span style="color:#66d9ef">SYSTEM</span>
+  pctfree <span style="color:#ae81ff">10</span>
+  initrans <span style="color:#ae81ff">2</span>
+  maxtrans <span style="color:#ae81ff">255</span>
+  <span style="color:#66d9ef">storage</span>
+  (
+    initial <span style="color:#ae81ff">64</span>K
+    minextents <span style="color:#ae81ff">1</span>
+    maxextents unlimited
+  );
+</code></pre></div><p>表中有20001000条记录，有二十多个字段，包括几个长度比较大的字段。为了实验测试，只是讲IP字段设置为not null。在UpdateTime上建了默认的B树索引。</p>
+<h3 id="三输入">三、输入</h3>
+<p>分为三种场景来讨论，然后比较其结果，然后分析该结果。说明数据库的执行计划的选择其实是足够聪明的。</p>
+<h4 id="场景一">场景一：</h4>
+<ul>
+<li>表结构：只是在有一个可以为null的列UpdateTime上建了一个索引</li>
+<li>SQL：最简单的Count。</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(<span style="color:#f92672">*</span>) <span style="color:#66d9ef">from</span> IDOUBA.App_ApplicationAudit;      <span style="color:#75715e">--count(*)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(PolicyId) <span style="color:#66d9ef">from</span> IDOUBA.App_ApplicationAudit;      <span style="color:#75715e">--count(可以null的列)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(IP) <span style="color:#66d9ef">from</span> IDOUBA.App_ApplicationAudit;      <span style="color:#75715e">--count(不可null的列)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(UpdateTime) <span style="color:#66d9ef">from</span> IDOUBA.App_ApplicationAudit;  <span style="color:#75715e">--count(可以为null并且建了索引的列)
+</span></code></pre></div><h4 id="场景二">场景二：</h4>
+<ul>
+<li>表结构：和场景一完全相同，只是在有一个可以为null的列UpdateTime上建了一个索引</li>
+<li>SQL：多了个Where子句，在Where子句中涉及到建了索引的可以为null的列。</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(<span style="color:#f92672">*</span>) <span style="color:#66d9ef">from</span> IDOUBA.App_ApplicationAudit <span style="color:#66d9ef">where</span> updatetime <span style="color:#f92672">&gt;</span> to_date(<span style="color:#e6db74">&#39;2013-05-01 10:23:44&#39;</span>, <span style="color:#e6db74">&#39;yyyy-mm-dd hh24:mi:ss&#39;</span>) ;      <span style="color:#75715e">--count(*)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(PolicyId) <span style="color:#66d9ef">from</span> IDOUBA.App_ApplicationAudit <span style="color:#66d9ef">where</span> updatetime <span style="color:#f92672">&gt;</span> to_date(<span style="color:#e6db74">&#39;2013-05-01 10:23:44&#39;</span>, <span style="color:#e6db74">&#39;yyyy-mm-dd hh24:mi:ss&#39;</span>) ;    <span style="color:#75715e">--count(可以null的列)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(IP) <span style="color:#66d9ef">from</span> IDOUBA.App_ApplicationAudit <span style="color:#66d9ef">where</span> updatetime <span style="color:#f92672">&gt;</span> to_date(<span style="color:#e6db74">&#39;2013-05-01 10:23:44&#39;</span>, <span style="color:#e6db74">&#39;yyyy-mm-dd hh24:mi:ss&#39;</span>) ;      <span style="color:#75715e">--count(不可null的列)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(UpdateTime) <span style="color:#66d9ef">from</span> y IDOUBA.App_ApplicationAudit <span style="color:#66d9ef">where</span> updatetime <span style="color:#f92672">&gt;</span> to_date(<span style="color:#e6db74">&#39;2013-05-01 10:23:44&#39;</span>, <span style="color:#e6db74">&#39;yyyy-mm-dd hh24:mi:ss&#39;</span>) ;  <span style="color:#75715e">--count(可以为null并且建了索引的列)
+</span></code></pre></div><h4 id="场景三">场景三：</h4>
+<ul>
+<li>表结构：除了有一个可以为null的列UpdateTime上建了一个索引外，设置另外一列IpNum列为not null，并且在其上创建索引。</li>
+<li>SQL：最简单的Count。</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(<span style="color:#f92672">*</span>) <span style="color:#66d9ef">from</span> IDOUBA.App_ApplicationAudit;      <span style="color:#75715e">--count(*)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(PolicyId) <span style="color:#66d9ef">from</span> IDOUBA.App_ApplicationAudit;      <span style="color:#75715e">--count(可以null的列)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(IP) <span style="color:#66d9ef">from</span> IDOUBA.App_ApplicationAudit;      <span style="color:#75715e">--count(不可null的列)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(UpdateTime) <span style="color:#66d9ef">from</span> IDOUBA.App_ApplicationAudit;  <span style="color:#75715e">--count(可以为null并且建了索引的列)
+</span></code></pre></div><h3 id="四实验结果">四、实验结果</h3>
+<table>
+<thead>
+<tr>
+<th>场景/Count类型</th>
+<th>Count(*)</th>
+<th>Count(PolicyId) 非索引可null的列</th>
+<th>Count(IP)非索引not null 的列</th>
+<th>Count(Updatetime)可以null的索引列</th>
+<th>Count(IPNum) not null 的索引列</th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>执行时间(秒)</td>
+<td>物理读</td>
+<td>执行操作</td>
+<td>执行时间(秒)</td>
+<td>物理读</td>
+<td>执行操作</td>
+<td>执行时间(秒)</td>
+<td>物理读</td>
+<td>执行操作</td>
+<td>执行时间(秒)</td>
+<td>物理读</td>
+<td>执行操作</td>
+<td>执行时间(秒)</td>
+<td>物理读 physical reads</td>
+<td>执行操作</td>
+<td></td>
+</tr>
+<tr>
+<td>场景一</td>
+<td>50.98</td>
+<td>51671</td>
+<td>表扫描</td>
+<td>47.43</td>
+<td>451672</td>
+<td>表扫描</td>
+<td>47.73</td>
+<td>451672</td>
+<td>表扫描</td>
+<td>8.7</td>
+<td>82393</td>
+<td>UpdateTime上快速索引扫描</td>
+<td>无</td>
+<td>无</td>
+<td>无</td>
+</tr>
+<tr>
+<td>场景二</td>
+<td>9.28</td>
+<td>82395</td>
+<td>UpdateTime上快速索引扫描</td>
+<td>48.12</td>
+<td>451673</td>
+<td>表扫描</td>
+<td>9.65</td>
+<td>82428</td>
+<td>UpdateTime上快速索引扫描</td>
+<td>9.03</td>
+<td>82394</td>
+<td>UpdateTime上快速索引扫描</td>
+<td>无</td>
+<td>无</td>
+<td>无</td>
+</tr>
+<tr>
+<td>场景三</td>
+<td>5.14</td>
+<td>50224</td>
+<td>IpNum上快速索引扫描</td>
+<td>47.89</td>
+<td>451672</td>
+<td>表扫描</td>
+<td>2.25</td>
+<td>15153</td>
+<td>IpNum上快速索引扫描</td>
+<td>9.06</td>
+<td>82393</td>
+<td>UpdateTime上快速索引扫描</td>
+<td>3.2</td>
+<td>82393</td>
+<td>IpNum上快速索引扫描</td>
+</tr>
+</tbody>
+</table>
+<h3 id="五结果分析">五、结果分析</h3>
+<p>其实观察查询计划，也就两种，一种快速索引扫描(INDEX FAST FULL SCAN)，另外一种是全表扫描（TABLE ACCESS FULL|）。因为实验表中数据量还是不算小，有两千多万，两者的对比还是比较明显。主要体现在总的执行时间，和物理读取上面，差着一个量级。下面对表中的执行结果逐个进行总结和解释。</p>
+<h4 id="场景一-1">场景一：</h4>
+<p>当表中只在一个可以null的列上建索引的情况下。观察到count(*) 、count not null的列count(IP)，count 可以null的列PolicyId的count(PolicyId)的效果一样都是走全表扫描（TABLE ACCESS FULL|）；而对于count建了索引并且列可以null的列count(UpdateTime)，走快速索引扫描(INDEX FAST FULL SCAN)。即只在索引列UpdateTime上， count会走快速索引扫描(INDEX FAST FULL SCAN)，其他都是全表扫描。</p>
+<p><strong>解释</strong>：因为oracle不会索引null，因此扫描该列上的索引只能知道该列上非null的值，而count(*) 和count(非空列)都是统计总行数，从索引上不能获得该信息，只能全表扫描。而count(可空列)就更不能参照该索引了，建了索引的可空列上非null的行数，和在count的可空列上非null的行数没有任何关系，因此也只能全表扫描了。</p>
+<h4 id="场景二-1">场景二：</h4>
+<p>比场景一where子句中包含了可以null的列update的条件where updatetime &gt; to_date(’2013-05-01 10:23:44′, ‘yyyy-mm-dd hh24:mi:ss’) 。观察到count(*)和count not null的列count(IP)和count UpdateTime一样都走updatetime上的快速索引扫描(INDEX FAST FULL SCAN)；而count 可null列PolicyId的count(PolicyId)还是全表扫描。</p>
+<p>解释：满足类似于pdatetime &gt; to_date(’2013-05-01 10:23:44′, ‘yyyy-mm-dd hh24:mi:ss’)这样可空列上的条件，其实隐含的意思是满足该条件并且该列上取值不为null的行的行数。则在这列上的count，count(*)，在其他非null列上的count，表达的都是这个意思，因此可以利用该索引来做索引扫描。而在另外一个可null的列上的count是表示满足该where条件同时在count列上值非null的记录行数，索引列上不为空的行可能在该列上为空，因此不能参照那个索引，只能全表扫描。</p>
+<h4 id="场景三-1">场景三：</h4>
+<p>当表中存在一个not null的列IpNum上建了索引。观察到count(*)和count（IP）在非空索引上快速索引扫描(INDEX FAST FULL SCAN)，但是count(ProjectId)还是走原来的全表扫描。即：当表上在一个not null列上建了索引，则只有可Null的列的count走全表扫描，其他的都会走这个建了索引的no null 列的快速索引扫描(INDEX FAST FULL SCAN)。</p>
+<p>解释：有一个not null的列上建了索引，则这个索引上的记录数就是表的行数，count(*),count(非空列)都是数行数。但是count(可null 列)是数这个列上不为空的记录数，因此不能参照索引，只能全表扫描了。</p>
+<h3 id="六总结">六、总结</h3>
+<p>在Oracle中，Count(Column)是计算Column上不为该列取值不为null的行数，Count一个not null的列其实就是总行数。而Count(*)是不区分null或者not null就是所有记录行数。因此二者语义是一样的，实验也证明了在各种情况下其执行计划总是一样的。对于这两种Count，表上无论哪个索引能提供这样的语义（在例子中场景二和场景三的两个不同索引分别提供了这样的语义），就会走这个索引。如果没有索引能提供这个语义，就不得不走全表扫描了。而Count一个可以为null的列，因为要数本列上到底有多少行的值不为null，因此不能参照别的列，必须在该列上数数，如果该列上有索引，则会在该列的索引上扫描，如果该列上没有索引，则<strong>不得不</strong>全表扫描。</p>
+<h3 id="附各种场景的执行计划">附：各种场景的执行计划</h3>
+<ol>
+<li>只是在有一个可以为null的列UpdateTime上建了一个索引的Count(*)</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">SQL</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(<span style="color:#f92672">*</span>) <span style="color:#66d9ef">from</span> IDOUBA.App_ApplicationAudit;
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">COUNT</span>(<span style="color:#f92672">*</span>)
+<span style="color:#75715e">----------
+</span><span style="color:#75715e"></span>  <span style="color:#ae81ff">20001000</span>
+<span style="color:#960050;background-color:#1e0010">已用时间</span>:  <span style="color:#ae81ff">00</span>: <span style="color:#ae81ff">00</span>: <span style="color:#ae81ff">50</span>.<span style="color:#ae81ff">98</span>
+<span style="color:#960050;background-color:#1e0010">执行计划</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>Plan hash value: <span style="color:#ae81ff">2649150711</span>
+<span style="color:#75715e">-----------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span> Id  <span style="color:#f92672">|</span> <span style="color:#66d9ef">Operation</span>          <span style="color:#f92672">|</span> Name                 <span style="color:#f92672">|</span> <span style="color:#66d9ef">Rows</span>  <span style="color:#f92672">|</span> Cost (<span style="color:#f92672">%</span>CPU)<span style="color:#f92672">|</span> Time     <span style="color:#f92672">|</span>
+<span style="color:#75715e">-----------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span>   <span style="color:#ae81ff">0</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#66d9ef">STATEMENT</span>   <span style="color:#f92672">|</span>                      <span style="color:#f92672">|</span>     <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span> <span style="color:#ae81ff">99985</span>   (<span style="color:#ae81ff">2</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">20</span>:<span style="color:#ae81ff">00</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>  SORT <span style="color:#66d9ef">AGGREGATE</span>    <span style="color:#f92672">|</span>                      <span style="color:#f92672">|</span>     <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>            <span style="color:#f92672">|</span>          <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span>   <span style="color:#66d9ef">TABLE</span> <span style="color:#66d9ef">ACCESS</span> <span style="color:#66d9ef">FULL</span><span style="color:#f92672">|</span> APP_APPLICATIONAUDIT <span style="color:#f92672">|</span>    <span style="color:#ae81ff">19</span>M<span style="color:#f92672">|</span> <span style="color:#ae81ff">99985</span>   (<span style="color:#ae81ff">2</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">20</span>:<span style="color:#ae81ff">00</span> <span style="color:#f92672">|</span>
+<span style="color:#75715e">-----------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#960050;background-color:#1e0010">统计信息</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>   <span style="color:#ae81ff">166</span>  <span style="color:#66d9ef">recursive</span> calls
+      <span style="color:#ae81ff">0</span>  db block gets
+ <span style="color:#ae81ff">451721</span>  consistent gets
+ <span style="color:#ae81ff">451671</span>  physical <span style="color:#66d9ef">reads</span>
+      <span style="color:#ae81ff">0</span>  redo <span style="color:#66d9ef">size</span>
+    <span style="color:#ae81ff">410</span>  bytes sent via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">to</span> client
+    <span style="color:#ae81ff">385</span>  bytes received via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">from</span> client
+      <span style="color:#ae81ff">2</span>  <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net roundtrips <span style="color:#66d9ef">to</span><span style="color:#f92672">/</span><span style="color:#66d9ef">from</span> client
+      <span style="color:#ae81ff">5</span>  sorts (memory)
+      <span style="color:#ae81ff">0</span>  sorts (disk)
+      <span style="color:#ae81ff">1</span>  <span style="color:#66d9ef">rows</span> processed
+</code></pre></div><ol start="2">
+<li>只是在有一个可以为null的列UpdateTime上建了一个索引的Count一个可以null的列policyId</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">SQL</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(policyId) <span style="color:#66d9ef">from</span> IDOUBA.App_ApplicationAudit;
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">COUNT</span>(POLICYID)
+<span style="color:#75715e">---------------
+</span><span style="color:#75715e"></span>       <span style="color:#ae81ff">20001000</span>
+<span style="color:#960050;background-color:#1e0010">已用时间</span>:  <span style="color:#ae81ff">00</span>: <span style="color:#ae81ff">00</span>: <span style="color:#ae81ff">47</span>.<span style="color:#ae81ff">43</span>
+<span style="color:#960050;background-color:#1e0010">执行计划</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>Plan hash value: <span style="color:#ae81ff">2649150711</span>
+<span style="color:#75715e">-------------------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span> Id  <span style="color:#f92672">|</span> <span style="color:#66d9ef">Operation</span>          <span style="color:#f92672">|</span> Name                 <span style="color:#f92672">|</span> <span style="color:#66d9ef">Rows</span>  <span style="color:#f92672">|</span> Bytes <span style="color:#f92672">|</span> Cost (<span style="color:#f92672">%</span>CPU)<span style="color:#f92672">|</span> Time     <span style="color:#f92672">|</span>
+<span style="color:#75715e">-------------------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span>   <span style="color:#ae81ff">0</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#66d9ef">STATEMENT</span>   <span style="color:#f92672">|</span>                      <span style="color:#f92672">|</span>     <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>     <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span>   <span style="color:#ae81ff">100</span>K  (<span style="color:#ae81ff">2</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">20</span>:<span style="color:#ae81ff">02</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>  SORT <span style="color:#66d9ef">AGGREGATE</span>    <span style="color:#f92672">|</span>                      <span style="color:#f92672">|</span>     <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>     <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span>            <span style="color:#f92672">|</span>          <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span>   <span style="color:#66d9ef">TABLE</span> <span style="color:#66d9ef">ACCESS</span> <span style="color:#66d9ef">FULL</span><span style="color:#f92672">|</span> APP_APPLICATIONAUDIT <span style="color:#f92672">|</span>    <span style="color:#ae81ff">19</span>M<span style="color:#f92672">|</span>    <span style="color:#ae81ff">38</span>M<span style="color:#f92672">|</span>   <span style="color:#ae81ff">100</span>K  (<span style="color:#ae81ff">2</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">20</span>:<span style="color:#ae81ff">02</span> <span style="color:#f92672">|</span>
+<span style="color:#75715e">-------------------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#960050;background-color:#1e0010">统计信息</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>      <span style="color:#ae81ff">1</span>  <span style="color:#66d9ef">recursive</span> calls
+      <span style="color:#ae81ff">0</span>  db block gets
+ <span style="color:#ae81ff">451701</span>  consistent gets
+ <span style="color:#ae81ff">451672</span>  physical <span style="color:#66d9ef">reads</span>
+      <span style="color:#ae81ff">0</span>  redo <span style="color:#66d9ef">size</span>
+    <span style="color:#ae81ff">417</span>  bytes sent via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">to</span> client
+    <span style="color:#ae81ff">385</span>  bytes received via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">from</span> client
+      <span style="color:#ae81ff">2</span>  <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net roundtrips <span style="color:#66d9ef">to</span><span style="color:#f92672">/</span><span style="color:#66d9ef">from</span> client
+      <span style="color:#ae81ff">0</span>  sorts (memory)
+      <span style="color:#ae81ff">0</span>  sorts (disk)
+      <span style="color:#ae81ff">1</span>	<span style="color:#66d9ef">rows</span> processed
+</code></pre></div><ol start="3">
+<li>只是在有一个可以为null的列UpdateTime上建了一个索引的Count一个可以null的索引列updatetime：Count(UpdateTime)</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">SQL</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(updatetime) <span style="color:#66d9ef">from</span> IDOUBA.App_ApplicationAudit;
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">COUNT</span>(UPDATETIME)
+<span style="color:#75715e">-----------------
+</span><span style="color:#75715e"></span>         <span style="color:#ae81ff">20001000</span>
+<span style="color:#960050;background-color:#1e0010">已用时间</span>:  <span style="color:#ae81ff">00</span>: <span style="color:#ae81ff">00</span>: <span style="color:#ae81ff">08</span>.<span style="color:#ae81ff">70</span>
+<span style="color:#960050;background-color:#1e0010">执行计划</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>Plan hash value: <span style="color:#ae81ff">3909306724</span>
+<span style="color:#75715e">------------------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span> Id  <span style="color:#f92672">|</span> <span style="color:#66d9ef">Operation</span>             <span style="color:#f92672">|</span> Name             <span style="color:#f92672">|</span> <span style="color:#66d9ef">Rows</span>  <span style="color:#f92672">|</span> Bytes <span style="color:#f92672">|</span> Cost (<span style="color:#f92672">%</span>CPU)<span style="color:#f92672">|</span> Time     <span style="color:#f92672">|</span>
+<span style="color:#75715e">------------------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span>   <span style="color:#ae81ff">0</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#66d9ef">STATEMENT</span>      <span style="color:#f92672">|</span>                  <span style="color:#f92672">|</span>     <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>     <span style="color:#ae81ff">8</span> <span style="color:#f92672">|</span> <span style="color:#ae81ff">18204</span>   (<span style="color:#ae81ff">3</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">03</span>:<span style="color:#ae81ff">39</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>  SORT <span style="color:#66d9ef">AGGREGATE</span>       <span style="color:#f92672">|</span>                  <span style="color:#f92672">|</span>     <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>     <span style="color:#ae81ff">8</span> <span style="color:#f92672">|</span>            <span style="color:#f92672">|</span>          <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span>   <span style="color:#66d9ef">INDEX</span> FAST <span style="color:#66d9ef">FULL</span> SCAN<span style="color:#f92672">|</span> INDEX_UPDATETIME <span style="color:#f92672">|</span>    <span style="color:#ae81ff">19</span>M<span style="color:#f92672">|</span>   <span style="color:#ae81ff">152</span>M<span style="color:#f92672">|</span> <span style="color:#ae81ff">18204</span>   (<span style="color:#ae81ff">3</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">03</span>:<span style="color:#ae81ff">39</span> <span style="color:#f92672">|</span>
+<span style="color:#75715e">------------------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#960050;background-color:#1e0010">统计信息</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>   <span style="color:#ae81ff">164</span>  <span style="color:#66d9ef">recursive</span> calls
+      <span style="color:#ae81ff">0</span>  db block gets
+  <span style="color:#ae81ff">82448</span>  consistent gets
+  <span style="color:#ae81ff">82393</span>  physical <span style="color:#66d9ef">reads</span>
+      <span style="color:#ae81ff">0</span>  redo <span style="color:#66d9ef">size</span>
+    <span style="color:#ae81ff">419</span>  bytes sent via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">to</span> client
+    <span style="color:#ae81ff">385</span>  bytes received via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">from</span> client
+      <span style="color:#ae81ff">2</span>  <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net roundtrips <span style="color:#66d9ef">to</span><span style="color:#f92672">/</span><span style="color:#66d9ef">from</span> client
+      <span style="color:#ae81ff">5</span>  sorts (memory)
+      <span style="color:#ae81ff">0</span>  sorts (disk)
+      <span style="color:#ae81ff">1</span>  <span style="color:#66d9ef">rows</span> processed
+</code></pre></div><ol start="4">
+<li>只是在有一个可以为null的列UpdateTime上建了一个索引的Count一个not null的非索引列IP：Count(IP)</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">SQL</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(Ip) <span style="color:#66d9ef">from</span> IDOUBA.App_ApplicationAudit;
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">COUNT</span>(IP)
+<span style="color:#75715e">----------
+</span><span style="color:#75715e"></span>  <span style="color:#ae81ff">20001000</span>
+<span style="color:#960050;background-color:#1e0010">已用时间</span>:  <span style="color:#ae81ff">00</span>: <span style="color:#ae81ff">00</span>: <span style="color:#ae81ff">47</span>.<span style="color:#ae81ff">73</span>
+<span style="color:#960050;background-color:#1e0010">执行计划</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>Plan hash value: <span style="color:#ae81ff">2649150711</span>
+<span style="color:#75715e">-----------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span> Id  <span style="color:#f92672">|</span> <span style="color:#66d9ef">Operation</span>          <span style="color:#f92672">|</span> Name                 <span style="color:#f92672">|</span> <span style="color:#66d9ef">Rows</span>  <span style="color:#f92672">|</span> Cost (<span style="color:#f92672">%</span>CPU)<span style="color:#f92672">|</span> Time     <span style="color:#f92672">|</span>
+<span style="color:#75715e">-----------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span>   <span style="color:#ae81ff">0</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#66d9ef">STATEMENT</span>   <span style="color:#f92672">|</span>                      <span style="color:#f92672">|</span>     <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span> <span style="color:#ae81ff">99985</span>   (<span style="color:#ae81ff">2</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">20</span>:<span style="color:#ae81ff">00</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>  SORT <span style="color:#66d9ef">AGGREGATE</span>    <span style="color:#f92672">|</span>                      <span style="color:#f92672">|</span>     <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>            <span style="color:#f92672">|</span>          <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span>   <span style="color:#66d9ef">TABLE</span> <span style="color:#66d9ef">ACCESS</span> <span style="color:#66d9ef">FULL</span><span style="color:#f92672">|</span> APP_APPLICATIONAUDIT <span style="color:#f92672">|</span>    <span style="color:#ae81ff">19</span>M<span style="color:#f92672">|</span> <span style="color:#ae81ff">99985</span>   (<span style="color:#ae81ff">2</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">20</span>:<span style="color:#ae81ff">00</span> <span style="color:#f92672">|</span>
+<span style="color:#75715e">-----------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#960050;background-color:#1e0010">统计信息</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>    <span style="color:#ae81ff">218</span>  <span style="color:#66d9ef">recursive</span> calls
+      <span style="color:#ae81ff">0</span>  db block gets
+ <span style="color:#ae81ff">451730</span>  consistent gets
+ <span style="color:#ae81ff">451672</span>  physical <span style="color:#66d9ef">reads</span>
+      <span style="color:#ae81ff">0</span>  redo <span style="color:#66d9ef">size</span>
+    <span style="color:#ae81ff">411</span>  bytes sent via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">to</span> client
+    <span style="color:#ae81ff">385</span>  bytes received via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">from</span> client
+      <span style="color:#ae81ff">2</span>  <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net roundtrips <span style="color:#66d9ef">to</span><span style="color:#f92672">/</span><span style="color:#66d9ef">from</span> client
+      <span style="color:#ae81ff">5</span>  sorts (memory)
+      <span style="color:#ae81ff">0</span>  sorts (disk)
+      <span style="color:#ae81ff">1</span>	<span style="color:#66d9ef">rows</span> processed
+</code></pre></div><ol start="5">
+<li>只是在有一个可以为null的列UpdateTime上建了一个索引，Query的Where子句中包含该UpdateTime列的条件where updatetime &gt; to_date(’2013-05-01 10:23:44′, ‘yyyy-mm-dd hh24:mi:ss’) ，Count(*)</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">SQL</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(<span style="color:#f92672">*</span>) <span style="color:#66d9ef">from</span> IDOUBA.App_ApplicationAudit  <span style="color:#66d9ef">where</span> updatetime <span style="color:#f92672">&gt;</span> to_date(<span style="color:#e6db74">&#39;2013-05-01 10:23:44&#39;</span>, <span style="color:#e6db74">&#39;yyyy-mm-dd hh24:mi:ss&#39;</span>) ;
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">COUNT</span>(<span style="color:#f92672">*</span>)
+<span style="color:#75715e">----------
+</span><span style="color:#75715e"></span>  <span style="color:#ae81ff">20001000</span>
+<span style="color:#960050;background-color:#1e0010">已用时间</span>:  <span style="color:#ae81ff">00</span>: <span style="color:#ae81ff">00</span>: <span style="color:#ae81ff">09</span>.<span style="color:#ae81ff">28</span>
+<span style="color:#960050;background-color:#1e0010">执行计划</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>Plan hash value: <span style="color:#ae81ff">3909306724</span>
+<span style="color:#75715e">------------------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span> Id  <span style="color:#f92672">|</span> <span style="color:#66d9ef">Operation</span>             <span style="color:#f92672">|</span> Name             <span style="color:#f92672">|</span> <span style="color:#66d9ef">Rows</span>  <span style="color:#f92672">|</span> Bytes <span style="color:#f92672">|</span> Cost (<span style="color:#f92672">%</span>CPU)<span style="color:#f92672">|</span> Time     <span style="color:#f92672">|</span>
+<span style="color:#75715e">------------------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span>   <span style="color:#ae81ff">0</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#66d9ef">STATEMENT</span>      <span style="color:#f92672">|</span>                  <span style="color:#f92672">|</span>     <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>     <span style="color:#ae81ff">8</span> <span style="color:#f92672">|</span> <span style="color:#ae81ff">18373</span>   (<span style="color:#ae81ff">4</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">03</span>:<span style="color:#ae81ff">41</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>  SORT <span style="color:#66d9ef">AGGREGATE</span>       <span style="color:#f92672">|</span>                  <span style="color:#f92672">|</span>     <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>     <span style="color:#ae81ff">8</span> <span style="color:#f92672">|</span>            <span style="color:#f92672">|</span>          <span style="color:#f92672">|</span>
+<span style="color:#f92672">|*</span>  <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span>   <span style="color:#66d9ef">INDEX</span> FAST <span style="color:#66d9ef">FULL</span> SCAN<span style="color:#f92672">|</span> INDEX_UPDATETIME <span style="color:#f92672">|</span>    <span style="color:#ae81ff">19</span>M<span style="color:#f92672">|</span>   <span style="color:#ae81ff">152</span>M<span style="color:#f92672">|</span> <span style="color:#ae81ff">18373</span>   (<span style="color:#ae81ff">4</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">03</span>:<span style="color:#ae81ff">41</span> <span style="color:#f92672">|</span>
+<span style="color:#75715e">------------------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span>Predicate Information (identified <span style="color:#66d9ef">by</span> <span style="color:#66d9ef">operation</span> id):
+<span style="color:#75715e">---------------------------------------------------
+</span><span style="color:#75715e"></span>   <span style="color:#ae81ff">2</span> <span style="color:#f92672">-</span> filter(<span style="color:#e6db74">&#34;UPDATETIME&#34;</span><span style="color:#f92672">&amp;</span>gt;TO_DATE(<span style="color:#e6db74">&#39;2013-05-01 10:23:44&#39;</span>, <span style="color:#e6db74">&#39;yyyy-mm-dd
+</span><span style="color:#e6db74">              hh24:mi:ss&#39;</span>))
+<span style="color:#960050;background-color:#1e0010">统计信息</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>    <span style="color:#ae81ff">227</span>  <span style="color:#66d9ef">recursive</span> calls
+      <span style="color:#ae81ff">0</span>  db block gets
+  <span style="color:#ae81ff">82464</span>  consistent gets
+  <span style="color:#ae81ff">82395</span>  physical <span style="color:#66d9ef">reads</span>
+      <span style="color:#ae81ff">0</span>  redo <span style="color:#66d9ef">size</span>
+    <span style="color:#ae81ff">410</span>  bytes sent via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">to</span> client
+    <span style="color:#ae81ff">385</span>  bytes received via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">from</span> client
+      <span style="color:#ae81ff">2</span>  <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net roundtrips <span style="color:#66d9ef">to</span><span style="color:#f92672">/</span><span style="color:#66d9ef">from</span> client
+      <span style="color:#ae81ff">5</span>  sorts (memory)
+      <span style="color:#ae81ff">0</span>  sorts (disk)
+      <span style="color:#ae81ff">1</span>  <span style="color:#66d9ef">rows</span> processed<span style="color:#f92672">&lt;/</span>pre<span style="color:#f92672">&gt;</span>
+</code></pre></div><ol start="6">
+<li>只是在有一个可以为null的列UpdateTime上建了一个索引，Query的Where子句中包含该UpdateTime列的条件where updatetime &gt; to_date(’2013-05-01 10:23:44′, ‘yyyy-mm-dd hh24:mi:ss’) 。Count一个可以null的列PolicyId：Count(PolicyId)</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">SQL</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(policyId) <span style="color:#66d9ef">from</span> IDOUBA.App_ApplicationAudit  <span style="color:#66d9ef">where</span> updatetime <span style="color:#f92672">&gt;</span> to_date(<span style="color:#e6db74">&#39;2013-05-01 10:23:44&#39;</span>, <span style="color:#e6db74">&#39;yyyy-mm-dd hh24:mi:ss&#39;</span>) ;
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">COUNT</span>(POLICYID)
+<span style="color:#75715e">---------------
+</span><span style="color:#75715e"></span>       <span style="color:#ae81ff">20001000</span>
+<span style="color:#960050;background-color:#1e0010">已用时间</span>:  <span style="color:#ae81ff">00</span>: <span style="color:#ae81ff">00</span>: <span style="color:#ae81ff">48</span>.<span style="color:#ae81ff">12</span>
+<span style="color:#960050;background-color:#1e0010">执行计划</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>Plan hash value: <span style="color:#ae81ff">2649150711</span>
+<span style="color:#75715e">-------------------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span> Id  <span style="color:#f92672">|</span> <span style="color:#66d9ef">Operation</span>          <span style="color:#f92672">|</span> Name                 <span style="color:#f92672">|</span> <span style="color:#66d9ef">Rows</span>  <span style="color:#f92672">|</span> Bytes <span style="color:#f92672">|</span> Cost (<span style="color:#f92672">%</span>CPU)<span style="color:#f92672">|</span> Time     <span style="color:#f92672">|</span>
+<span style="color:#75715e">-------------------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span>   <span style="color:#ae81ff">0</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#66d9ef">STATEMENT</span>   <span style="color:#f92672">|</span>                      <span style="color:#f92672">|</span>     <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>    <span style="color:#ae81ff">10</span> <span style="color:#f92672">|</span>   <span style="color:#ae81ff">101</span>K  (<span style="color:#ae81ff">3</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">20</span>:<span style="color:#ae81ff">20</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>  SORT <span style="color:#66d9ef">AGGREGATE</span>    <span style="color:#f92672">|</span>                      <span style="color:#f92672">|</span>     <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>    <span style="color:#ae81ff">10</span> <span style="color:#f92672">|</span>            <span style="color:#f92672">|</span>          <span style="color:#f92672">|</span>
+<span style="color:#f92672">|*</span>  <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span>   <span style="color:#66d9ef">TABLE</span> <span style="color:#66d9ef">ACCESS</span> <span style="color:#66d9ef">FULL</span><span style="color:#f92672">|</span> APP_APPLICATIONAUDIT <span style="color:#f92672">|</span>    <span style="color:#ae81ff">19</span>M<span style="color:#f92672">|</span>   <span style="color:#ae81ff">190</span>M<span style="color:#f92672">|</span>   <span style="color:#ae81ff">101</span>K  (<span style="color:#ae81ff">3</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">20</span>:<span style="color:#ae81ff">20</span> <span style="color:#f92672">|</span>
+<span style="color:#75715e">-------------------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span>Predicate Information (identified <span style="color:#66d9ef">by</span> <span style="color:#66d9ef">operation</span> id):
+<span style="color:#75715e">---------------------------------------------------
+</span><span style="color:#75715e"></span>   <span style="color:#ae81ff">2</span> <span style="color:#f92672">-</span> filter(<span style="color:#e6db74">&#34;UPDATETIME&#34;</span><span style="color:#f92672">&amp;</span>gt;TO_DATE(<span style="color:#e6db74">&#39;2013-05-01 10:23:44&#39;</span>, <span style="color:#e6db74">&#39;yyyy-mm-dd hh24:mi:ss&#39;</span>))
+<span style="color:#960050;background-color:#1e0010">统计信息</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>    <span style="color:#ae81ff">227</span>  <span style="color:#66d9ef">recursive</span> calls
+      <span style="color:#ae81ff">0</span>  db block gets
+ <span style="color:#ae81ff">451737</span>  consistent gets
+ <span style="color:#ae81ff">451673</span>  physical <span style="color:#66d9ef">reads</span>
+      <span style="color:#ae81ff">0</span>  redo <span style="color:#66d9ef">size</span>
+    <span style="color:#ae81ff">417</span>  bytes sent via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">to</span> client
+    <span style="color:#ae81ff">385</span>  bytes received via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">from</span> client
+      <span style="color:#ae81ff">2</span>  <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net roundtrips <span style="color:#66d9ef">to</span><span style="color:#f92672">/</span><span style="color:#66d9ef">from</span> client
+      <span style="color:#ae81ff">5</span>  sorts (memory)
+      <span style="color:#ae81ff">0</span>  sorts (disk)
+      <span style="color:#ae81ff">1</span>  <span style="color:#66d9ef">rows</span> processed
+</code></pre></div><ol start="7">
+<li>只是在有一个可以为null的列UpdateTime上建了一个索引，Query的Where子句中包含该UpdateTime列的条件where updatetime &gt; to_date(’2013-05-01 10:23:44′, ‘yyyy-mm-dd hh24:mi:ss’) 。Count一个not null的列IP：Count(IP)</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">   <span style="color:#66d9ef">SQL</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(ip) <span style="color:#66d9ef">from</span> IDOUBA.App_ApplicationAudit  <span style="color:#66d9ef">where</span> updatetime <span style="color:#f92672">&gt;</span> to_date(<span style="color:#e6db74">&#39;2013-05-01 10:23:44&#39;</span>, <span style="color:#e6db74">&#39;yyyy-mm-dd hh24:mi:ss&#39;</span>) ;
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">COUNT</span>(IP)
+<span style="color:#75715e">----------
+</span><span style="color:#75715e"></span>  <span style="color:#ae81ff">20001000</span>
+<span style="color:#960050;background-color:#1e0010">已用时间</span>:  <span style="color:#ae81ff">00</span>: <span style="color:#ae81ff">00</span>: <span style="color:#ae81ff">09</span>.<span style="color:#ae81ff">65</span>
+
+<span style="color:#960050;background-color:#1e0010">执行计划</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>Plan hash value: <span style="color:#ae81ff">3909306724</span>
+<span style="color:#75715e">------------------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span> Id  <span style="color:#f92672">|</span> <span style="color:#66d9ef">Operation</span>             <span style="color:#f92672">|</span> Name             <span style="color:#f92672">|</span> <span style="color:#66d9ef">Rows</span>  <span style="color:#f92672">|</span> Bytes <span style="color:#f92672">|</span> Cost (<span style="color:#f92672">%</span>CPU)<span style="color:#f92672">|</span> Time     <span style="color:#f92672">|</span>
+<span style="color:#75715e">------------------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span>   <span style="color:#ae81ff">0</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#66d9ef">STATEMENT</span>      <span style="color:#f92672">|</span>                  <span style="color:#f92672">|</span>     <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>     <span style="color:#ae81ff">8</span> <span style="color:#f92672">|</span> <span style="color:#ae81ff">18373</span>   (<span style="color:#ae81ff">4</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">03</span>:<span style="color:#ae81ff">41</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>  SORT <span style="color:#66d9ef">AGGREGATE</span>       <span style="color:#f92672">|</span>                  <span style="color:#f92672">|</span>     <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>     <span style="color:#ae81ff">8</span> <span style="color:#f92672">|</span>            <span style="color:#f92672">|</span>          <span style="color:#f92672">|</span>
+<span style="color:#f92672">|*</span>  <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span>   <span style="color:#66d9ef">INDEX</span> FAST <span style="color:#66d9ef">FULL</span> SCAN<span style="color:#f92672">|</span> INDEX_UPDATETIME <span style="color:#f92672">|</span>    <span style="color:#ae81ff">19</span>M<span style="color:#f92672">|</span>   <span style="color:#ae81ff">152</span>M<span style="color:#f92672">|</span> <span style="color:#ae81ff">18373</span>   (<span style="color:#ae81ff">4</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">03</span>:<span style="color:#ae81ff">41</span> <span style="color:#f92672">|</span>
+<span style="color:#75715e">------------------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span>Predicate Information (identified <span style="color:#66d9ef">by</span> <span style="color:#66d9ef">operation</span> id):
+<span style="color:#75715e">---------------------------------------------------
+</span><span style="color:#75715e"></span>   <span style="color:#ae81ff">2</span> <span style="color:#f92672">-</span> filter(<span style="color:#e6db74">&#34;UPDATETIME&#34;</span><span style="color:#f92672">&amp;</span>gt;TO_DATE(<span style="color:#e6db74">&#39;2013-05-01 10:23:44&#39;</span>, <span style="color:#e6db74">&#39;yyyy-mm-dd hh24:mi:ss&#39;</span>))
+<span style="color:#960050;background-color:#1e0010">统计信息</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>      <span style="color:#ae81ff">1</span>  <span style="color:#66d9ef">recursive</span> calls
+      <span style="color:#ae81ff">0</span>  db block gets
+  <span style="color:#ae81ff">82428</span>  consistent gets
+  <span style="color:#ae81ff">82393</span>  physical <span style="color:#66d9ef">reads</span>
+      <span style="color:#ae81ff">0</span>  redo <span style="color:#66d9ef">size</span>
+    <span style="color:#ae81ff">411</span>  bytes sent via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">to</span> client
+    <span style="color:#ae81ff">385</span>  bytes received via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">from</span> client
+      <span style="color:#ae81ff">2</span>  <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net roundtrips <span style="color:#66d9ef">to</span><span style="color:#f92672">/</span><span style="color:#66d9ef">from</span> client
+      <span style="color:#ae81ff">0</span>  sorts (memory)
+      <span style="color:#ae81ff">0</span>  sorts (disk)
+      <span style="color:#ae81ff">1</span>  <span style="color:#66d9ef">rows</span> processed
+</code></pre></div><ol start="8">
+<li>只是在有一个可以为null的列UpdateTime上建了一个索引，Query的Where子句中包含该UpdateTime列的条件where updatetime &gt; to_date(’2013-05-01 10:23:44′, ‘yyyy-mm-dd hh24:mi:ss’) 。Count该可以 null的索引列UpdateTime：Count(UpdateTime)</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">SQL</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(updatetime) <span style="color:#66d9ef">from</span> IDOUBA.App_ApplicationAudit <span style="color:#66d9ef">where</span> updatetime <span style="color:#f92672">&gt;</span> to_date(<span style="color:#e6db74">&#39;2013-05-01 10:23:44&#39;</span>, <span style="color:#e6db74">&#39;yyyy-mm-dd hh24:mi:ss&#39;</span>) ;
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">COUNT</span>(UPDATETIME)
+<span style="color:#75715e">-----------------
+</span><span style="color:#75715e"></span>         <span style="color:#ae81ff">20001000</span>
+<span style="color:#960050;background-color:#1e0010">已用时间</span>:  <span style="color:#ae81ff">00</span>: <span style="color:#ae81ff">00</span>: <span style="color:#ae81ff">09</span>.<span style="color:#ae81ff">03</span>
+<span style="color:#960050;background-color:#1e0010">执行计划</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>Plan hash value: <span style="color:#ae81ff">3909306724</span>
+<span style="color:#75715e">------------------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span> Id  <span style="color:#f92672">|</span> <span style="color:#66d9ef">Operation</span>             <span style="color:#f92672">|</span> Name             <span style="color:#f92672">|</span> <span style="color:#66d9ef">Rows</span>  <span style="color:#f92672">|</span> Bytes <span style="color:#f92672">|</span> Cost (<span style="color:#f92672">%</span>CPU)<span style="color:#f92672">|</span> Time     <span style="color:#f92672">|</span>
+<span style="color:#75715e">------------------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span>   <span style="color:#ae81ff">0</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#66d9ef">STATEMENT</span>      <span style="color:#f92672">|</span>                  <span style="color:#f92672">|</span>     <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>     <span style="color:#ae81ff">8</span> <span style="color:#f92672">|</span> <span style="color:#ae81ff">18204</span>   (<span style="color:#ae81ff">3</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">03</span>:<span style="color:#ae81ff">39</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>  SORT <span style="color:#66d9ef">AGGREGATE</span>       <span style="color:#f92672">|</span>                  <span style="color:#f92672">|</span>     <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>     <span style="color:#ae81ff">8</span> <span style="color:#f92672">|</span>            <span style="color:#f92672">|</span>          <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span>   <span style="color:#66d9ef">INDEX</span> FAST <span style="color:#66d9ef">FULL</span> SCAN<span style="color:#f92672">|</span> INDEX_UPDATETIME <span style="color:#f92672">|</span>    <span style="color:#ae81ff">19</span>M<span style="color:#f92672">|</span>   <span style="color:#ae81ff">152</span>M<span style="color:#f92672">|</span> <span style="color:#ae81ff">18204</span>   (<span style="color:#ae81ff">3</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">03</span>:<span style="color:#ae81ff">39</span> <span style="color:#f92672">|</span>
+<span style="color:#75715e">------------------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#960050;background-color:#1e0010">统计信息</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>    <span style="color:#ae81ff">185</span>  <span style="color:#66d9ef">recursive</span> calls
+      <span style="color:#ae81ff">0</span>  db block gets
+  <span style="color:#ae81ff">82460</span>  consistent gets
+  <span style="color:#ae81ff">82394</span>  physical <span style="color:#66d9ef">reads</span>
+      <span style="color:#ae81ff">0</span>  redo <span style="color:#66d9ef">size</span>
+    <span style="color:#ae81ff">419</span>  bytes sent via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">to</span> client
+    <span style="color:#ae81ff">385</span>  bytes received via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">from</span> client
+      <span style="color:#ae81ff">2</span>  <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net roundtrips <span style="color:#66d9ef">to</span><span style="color:#f92672">/</span><span style="color:#66d9ef">from</span> client
+      <span style="color:#ae81ff">5</span>  sorts (memory)
+      <span style="color:#ae81ff">0</span>  sorts (disk)
+      <span style="color:#ae81ff">1</span>  <span style="color:#66d9ef">rows</span> processed
+</code></pre></div><ol start="9">
+<li>在一个not null的列IPNum创建索引count（*）</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">SQL</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(<span style="color:#f92672">*</span>) <span style="color:#66d9ef">from</span> IDOUBA.App_ApplicationAudit;
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">COUNT</span>(<span style="color:#f92672">*</span>)
+<span style="color:#75715e">----------
+</span><span style="color:#75715e"></span>  <span style="color:#ae81ff">20001000</span>
+<span style="color:#960050;background-color:#1e0010">已用时间</span>:  <span style="color:#ae81ff">00</span>: <span style="color:#ae81ff">00</span>: <span style="color:#ae81ff">05</span>.<span style="color:#ae81ff">14</span>
+<span style="color:#960050;background-color:#1e0010">执行计划</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>Plan hash value: <span style="color:#ae81ff">2581539037</span>
+<span style="color:#75715e">-----------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span> Id  <span style="color:#f92672">|</span> <span style="color:#66d9ef">Operation</span>             <span style="color:#f92672">|</span> Name        <span style="color:#f92672">|</span> <span style="color:#66d9ef">Rows</span>  <span style="color:#f92672">|</span> Cost (<span style="color:#f92672">%</span>CPU)<span style="color:#f92672">|</span> Time     <span style="color:#f92672">|</span>
+<span style="color:#75715e">-----------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span>   <span style="color:#ae81ff">0</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#66d9ef">STATEMENT</span>      <span style="color:#f92672">|</span>             <span style="color:#f92672">|</span>     <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span> <span style="color:#ae81ff">11435</span>   (<span style="color:#ae81ff">5</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">02</span>:<span style="color:#ae81ff">18</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>  SORT <span style="color:#66d9ef">AGGREGATE</span>       <span style="color:#f92672">|</span>             <span style="color:#f92672">|</span>     <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>            <span style="color:#f92672">|</span>          <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span>   <span style="color:#66d9ef">INDEX</span> FAST <span style="color:#66d9ef">FULL</span> SCAN<span style="color:#f92672">|</span> INDEX_IPNUM <span style="color:#f92672">|</span>    <span style="color:#ae81ff">19</span>M<span style="color:#f92672">|</span> <span style="color:#ae81ff">11435</span>   (<span style="color:#ae81ff">5</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">02</span>:<span style="color:#ae81ff">18</span> <span style="color:#f92672">|</span>
+<span style="color:#75715e">-----------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#960050;background-color:#1e0010">统计信息</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>      <span style="color:#ae81ff">1</span>  <span style="color:#66d9ef">recursive</span> calls
+      <span style="color:#ae81ff">0</span>  db block gets
+  <span style="color:#ae81ff">50253</span>  consistent gets
+  <span style="color:#ae81ff">50224</span>  physical <span style="color:#66d9ef">reads</span>
+      <span style="color:#ae81ff">0</span>  redo <span style="color:#66d9ef">size</span>
+    <span style="color:#ae81ff">410</span>  bytes sent via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">to</span> client
+    <span style="color:#ae81ff">385</span>  bytes received via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">from</span> client
+      <span style="color:#ae81ff">2</span>  <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net roundtrips <span style="color:#66d9ef">to</span><span style="color:#f92672">/</span><span style="color:#66d9ef">from</span> client
+      <span style="color:#ae81ff">0</span>  sorts (memory)
+      <span style="color:#ae81ff">0</span>  sorts (disk)
+      <span style="color:#ae81ff">1</span>	<span style="color:#66d9ef">rows</span> processed
+</code></pre></div><p>10 在一个not null的列IPNum创建索引。Count可null的列PolicyId：Count(PolicyId)</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">SQL</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(policyId) <span style="color:#66d9ef">from</span> IDOUBA.App_ApplicationAudit;
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">COUNT</span>(POLICYID)
+<span style="color:#75715e">---------------
+</span><span style="color:#75715e"></span>       <span style="color:#ae81ff">20001000</span>
+<span style="color:#960050;background-color:#1e0010">已用时间</span>:  <span style="color:#ae81ff">00</span>: <span style="color:#ae81ff">00</span>: <span style="color:#ae81ff">47</span>.<span style="color:#ae81ff">89</span>
+<span style="color:#960050;background-color:#1e0010">执行计划</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>Plan hash value: <span style="color:#ae81ff">2649150711</span>
+<span style="color:#75715e">-------------------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span> Id  <span style="color:#f92672">|</span> <span style="color:#66d9ef">Operation</span>          <span style="color:#f92672">|</span> Name                 <span style="color:#f92672">|</span> <span style="color:#66d9ef">Rows</span>  <span style="color:#f92672">|</span> Bytes <span style="color:#f92672">|</span> Cost (<span style="color:#f92672">%</span>CPU)<span style="color:#f92672">|</span> Time     <span style="color:#f92672">|</span>
+<span style="color:#75715e">-------------------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span>   <span style="color:#ae81ff">0</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#66d9ef">STATEMENT</span>   <span style="color:#f92672">|</span>                      <span style="color:#f92672">|</span>     <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>     <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span>   <span style="color:#ae81ff">100</span>K  (<span style="color:#ae81ff">2</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">20</span>:<span style="color:#ae81ff">02</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>  SORT <span style="color:#66d9ef">AGGREGATE</span>    <span style="color:#f92672">|</span>                      <span style="color:#f92672">|</span>     <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>     <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span>            <span style="color:#f92672">|</span>          <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span>   <span style="color:#66d9ef">TABLE</span> <span style="color:#66d9ef">ACCESS</span> <span style="color:#66d9ef">FULL</span><span style="color:#f92672">|</span> APP_APPLICATIONAUDIT <span style="color:#f92672">|</span>    <span style="color:#ae81ff">19</span>M<span style="color:#f92672">|</span>    <span style="color:#ae81ff">38</span>M<span style="color:#f92672">|</span>   <span style="color:#ae81ff">100</span>K  (<span style="color:#ae81ff">2</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">20</span>:<span style="color:#ae81ff">02</span> <span style="color:#f92672">|</span>
+<span style="color:#75715e">-------------------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#960050;background-color:#1e0010">统计信息</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>      <span style="color:#ae81ff">1</span>  <span style="color:#66d9ef">recursive</span> calls
+      <span style="color:#ae81ff">0</span>  db block gets
+ <span style="color:#ae81ff">451701</span>  consistent gets
+ <span style="color:#ae81ff">451672</span>  physical <span style="color:#66d9ef">reads</span>
+      <span style="color:#ae81ff">0</span>  redo <span style="color:#66d9ef">size</span>
+    <span style="color:#ae81ff">417</span>  bytes sent via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">to</span> client
+    <span style="color:#ae81ff">385</span>  bytes received via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">from</span> client
+      <span style="color:#ae81ff">2</span>  <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net roundtrips <span style="color:#66d9ef">to</span><span style="color:#f92672">/</span><span style="color:#66d9ef">from</span> client
+      <span style="color:#ae81ff">0</span>  sorts (memory)
+      <span style="color:#ae81ff">0</span>  sorts (disk)
+      <span style="color:#ae81ff">1</span>	<span style="color:#66d9ef">rows</span> processed
+</code></pre></div><p>11 在一个not null的列IPNum创建索引。Count not null的列IP：Count(IP)</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">SQL</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(Ip) <span style="color:#66d9ef">from</span> IDOUBA.App_ApplicationAudit;
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">COUNT</span>(IP)
+<span style="color:#75715e">----------
+</span><span style="color:#75715e"></span>  <span style="color:#ae81ff">20001000</span>
+<span style="color:#960050;background-color:#1e0010">已用时间</span>:  <span style="color:#ae81ff">00</span>: <span style="color:#ae81ff">00</span>: <span style="color:#ae81ff">02</span>.<span style="color:#ae81ff">25</span>
+<span style="color:#960050;background-color:#1e0010">执行计划</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>Plan hash value: <span style="color:#ae81ff">2581539037</span>
+<span style="color:#75715e">-----------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span> Id  <span style="color:#f92672">|</span> <span style="color:#66d9ef">Operation</span>             <span style="color:#f92672">|</span> Name        <span style="color:#f92672">|</span> <span style="color:#66d9ef">Rows</span>  <span style="color:#f92672">|</span> Cost (<span style="color:#f92672">%</span>CPU)<span style="color:#f92672">|</span> Time     <span style="color:#f92672">|</span>
+<span style="color:#75715e">-----------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span>   <span style="color:#ae81ff">0</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#66d9ef">STATEMENT</span>      <span style="color:#f92672">|</span>             <span style="color:#f92672">|</span>     <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span> <span style="color:#ae81ff">11435</span>   (<span style="color:#ae81ff">5</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">02</span>:<span style="color:#ae81ff">18</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>  SORT <span style="color:#66d9ef">AGGREGATE</span>       <span style="color:#f92672">|</span>             <span style="color:#f92672">|</span>     <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>            <span style="color:#f92672">|</span>          <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span>   <span style="color:#66d9ef">INDEX</span> FAST <span style="color:#66d9ef">FULL</span> SCAN<span style="color:#f92672">|</span> INDEX_IPNUM <span style="color:#f92672">|</span>    <span style="color:#ae81ff">19</span>M<span style="color:#f92672">|</span> <span style="color:#ae81ff">11435</span>   (<span style="color:#ae81ff">5</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">02</span>:<span style="color:#ae81ff">18</span> <span style="color:#f92672">|</span>
+<span style="color:#75715e">-----------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#960050;background-color:#1e0010">统计信息</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>    <span style="color:#ae81ff">196</span>  <span style="color:#66d9ef">recursive</span> calls
+      <span style="color:#ae81ff">0</span>  db block gets
+  <span style="color:#ae81ff">50290</span>  consistent gets
+  <span style="color:#ae81ff">15153</span>  physical <span style="color:#66d9ef">reads</span>
+      <span style="color:#ae81ff">0</span>  redo <span style="color:#66d9ef">size</span>
+    <span style="color:#ae81ff">411</span>  bytes sent via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">to</span> client
+    <span style="color:#ae81ff">385</span>  bytes received via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">from</span> client
+      <span style="color:#ae81ff">2</span>  <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net roundtrips <span style="color:#66d9ef">to</span><span style="color:#f92672">/</span><span style="color:#66d9ef">from</span> client
+      <span style="color:#ae81ff">5</span>  sorts (memory)
+      <span style="color:#ae81ff">0</span>  sorts (disk)
+      <span style="color:#ae81ff">1</span>	<span style="color:#66d9ef">rows</span> processed
+</code></pre></div><p>12 在一个not null的列IPNum创建索引。Count另外一个建了索引的可null的列UpdateTime：Count(UpdateTime)</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">SQL</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(updatetime) <span style="color:#66d9ef">from</span> IDOUBA.App_ApplicationAudit;
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">COUNT</span>(UPDATETIME)
+<span style="color:#75715e">-----------------
+</span><span style="color:#75715e"></span>         <span style="color:#ae81ff">20001000</span>
+<span style="color:#960050;background-color:#1e0010">已用时间</span>:  <span style="color:#ae81ff">00</span>: <span style="color:#ae81ff">00</span>: <span style="color:#ae81ff">09</span>.<span style="color:#ae81ff">06</span>
+<span style="color:#960050;background-color:#1e0010">执行计划</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>Plan hash value: <span style="color:#ae81ff">3909306724</span>
+<span style="color:#75715e">------------------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span> Id  <span style="color:#f92672">|</span> <span style="color:#66d9ef">Operation</span>             <span style="color:#f92672">|</span> Name             <span style="color:#f92672">|</span> <span style="color:#66d9ef">Rows</span>  <span style="color:#f92672">|</span> Bytes <span style="color:#f92672">|</span> Cost (<span style="color:#f92672">%</span>CPU)<span style="color:#f92672">|</span> Time     <span style="color:#f92672">|</span>
+<span style="color:#75715e">------------------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span>   <span style="color:#ae81ff">0</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#66d9ef">STATEMENT</span>      <span style="color:#f92672">|</span>                  <span style="color:#f92672">|</span>     <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>     <span style="color:#ae81ff">8</span> <span style="color:#f92672">|</span> <span style="color:#ae81ff">18204</span>   (<span style="color:#ae81ff">3</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">03</span>:<span style="color:#ae81ff">39</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>  SORT <span style="color:#66d9ef">AGGREGATE</span>       <span style="color:#f92672">|</span>                  <span style="color:#f92672">|</span>     <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>     <span style="color:#ae81ff">8</span> <span style="color:#f92672">|</span>            <span style="color:#f92672">|</span>          <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span>   <span style="color:#66d9ef">INDEX</span> FAST <span style="color:#66d9ef">FULL</span> SCAN<span style="color:#f92672">|</span> INDEX_UPDATETIME <span style="color:#f92672">|</span>    <span style="color:#ae81ff">19</span>M<span style="color:#f92672">|</span>   <span style="color:#ae81ff">152</span>M<span style="color:#f92672">|</span> <span style="color:#ae81ff">18204</span>   (<span style="color:#ae81ff">3</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">03</span>:<span style="color:#ae81ff">39</span> <span style="color:#f92672">|</span>
+<span style="color:#75715e">------------------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#960050;background-color:#1e0010">统计信息</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>      <span style="color:#ae81ff">1</span>  <span style="color:#66d9ef">recursive</span> calls
+      <span style="color:#ae81ff">0</span>  db block gets
+  <span style="color:#ae81ff">82428</span>  consistent gets
+  <span style="color:#ae81ff">82393</span>  physical <span style="color:#66d9ef">reads</span>
+      <span style="color:#ae81ff">0</span>  redo <span style="color:#66d9ef">size</span>
+    <span style="color:#ae81ff">419</span>  bytes sent via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">to</span> client
+    <span style="color:#ae81ff">385</span>  bytes received via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">from</span> client
+      <span style="color:#ae81ff">2</span>  <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net roundtrips <span style="color:#66d9ef">to</span><span style="color:#f92672">/</span><span style="color:#66d9ef">from</span> client
+      <span style="color:#ae81ff">0</span>  sorts (memory)
+      <span style="color:#ae81ff">0</span>  sorts (disk)
+      <span style="color:#ae81ff">1</span>	<span style="color:#66d9ef">rows</span> processed
+</code></pre></div><h3 id="完">完。</h3>
+
+
+  
+
+  
+
+</article> 
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 ml-auto blog-sidebar">
+  
+
+  
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+    
+
+    
+    <footer class="blog-footer">
+      <p dir="auto">
+      
+      <!-- raw HTML omitted -->浙ICP备18050493号-1<!-- raw HTML omitted --> 浙公网安备 33010802006262号
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+    
+
+  </body>
+
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<meta property="og:title" content="tracing" />
+<meta property="og:description" content="idouba@beta." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://idouba.net/tags/tracing/" />
+<meta property="og:updated_time" content="2018-11-29T15:23:04+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="tracing"/>
+<meta name="twitter:description" content="idouba@beta."/>
+<meta name="generator" content="Hugo 0.80.0" />
+
+
+    
+      
+    
+
+    <link rel="canonical" href="http://idouba.net/tags/tracing/">
+
+    <title>爱豆吧！</title>
+
+    
+    <!-- combined, minified CSS -->
+    
+    <link href="http://idouba.net/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    
+
+    <!-- minified Font Awesome for SVG icons -->
+    
+    <script defer src="http://idouba.net/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+
+    <!-- RSS 2.0 feed -->
+    <link rel="alternate" type="application/rss+xml" href="http://idouba.net/tags/tracing/index.xml" title="爱豆吧！" />
+    
+
+    
+
+    
+
+  </head>
+
+  <body>
+
+    
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="http://idouba.net/">Home</a>
+        </nav>
+      </div>
+    </div>
+    
+
+    
+    
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.net/" rel="home">爱豆吧！</a></h1>
+        <p class="lead blog-description" dir="auto">idouba@beta.</p>
+      </div>
+    </header>
+    
+    
+
+    
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/istio-tracing-is-not-zero-code-change/">Istio 调用链埋点原理剖析—是否真的“零修改”？</a></h2>
+    <p class="blog-post-meta"><time datetime="2018-11-29T15:23:04Z">Thu Nov 29, 2018</time> by idouba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">Istio</a>, <a href="/categories/tracing/" rel="category tag">Tracing</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/istio/" rel="tag">istio</a>, <a href="/tags/published/" rel="tag">published</a>, <a href="/tags/mesh/" rel="tag">mesh</a>, <a href="/tags/tracing/" rel="tag">tracing</a>
+
+</p>
+  </header>
+  发在Infoq上的一篇文章，答疑当前大家工作中碰到的Istio调用链的问题，最终澄清了观点，并推动社区修改了说法，避免误解。 前言 在 Istio 的实践中最近经常被问到一个问题，使用 Istio 做调用链用户的业务代码是不是完全 0 侵入，到底要不要修改业务代码？ 看官方介绍： Istio makes it easy to create a network of deployed services with load balancing, service-to-service authentication, monitoring, and more, without any changes in service code. 是不用修改任何代码即可做各种治理。实际使用中应用程序不做任何修改，使用 Istio 的调用链输出总是断开的，这到底是什么原因呢？ 对以上问题关注的人比较多，但是貌似说的都不是特别清楚，在最近的 K8S 技术社区的 Meetup 上笔者专门做
+  <a href='http://idouba.net/istio-tracing-is-not-zero-code-change/'>Read more →</a>
+</article> 
+
+
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/istio-tracing-meetup-02/">Istio调用链埋点原理剖析—是否真的“零修改”分享实录（下）</a></h2>
+    <p class="blog-post-meta"><time datetime="2018-11-10T15:36:10Z">Sat Nov 10, 2018</time> by idouba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">Istio</a>, <a href="/categories/tracing/" rel="category tag">Tracing</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/istio/" rel="tag">istio</a>, <a href="/tags/speak/" rel="tag">speak</a>, <a href="/tags/tracing/" rel="tag">tracing</a>
+
+</p>
+  </header>
+  接上文Istio调用链埋点原理剖析—是否真的“零修改”分享实录（上） Isito调用链** 调用链原理和场景 正如Service Mesh的诞生是为了解决大规模分布式服务访问的治理问题，调用链的出现也是为了对应于大规模的复杂的分布式系统运行中碰到的故障定位定界问题。大量的服务调用、跨进程、跨服务器，可能还会跨多个物理机房。无论是服务自身问题还是网络环境的问题导致调用上链路上出现问题都比较复杂，如何定位就比单进程的一个服务打印一个异常栈来找出某个方法要困难的多。需要有一个类似的调用链路的跟踪，经一次请求的
+  <a href='http://idouba.net/istio-tracing-meetup-02/'>Read more →</a>
+</article> 
+
+
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/istio-tracing-meetup-01/">Istio调用链埋点原理剖析—是否真的“零修改”分享实录（上）</a></h2>
+    <p class="blog-post-meta"><time datetime="2018-11-10T15:07:36Z">Sat Nov 10, 2018</time> by idouba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">Istio</a>, <a href="/categories/tracing/" rel="category tag">tracing</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/istio/" rel="tag">istio</a>, <a href="/tags/speak/" rel="tag">speak</a>, <a href="/tags/tracing/" rel="tag">tracing</a>
+
+</p>
+  </header>
+  前言 大家好，我是zhangchaomeng，来自华为Cloud BU，当前在做华为云应用服务网格。今天跟大家分享的主题是Istio调用链相关内容。通过剖析Istio的架构机制与Istio中调用链的工作原理来解答一个大家经常问道的一个问题：Istio是否像其官方文档中宣传的一样，对业务代码完全的无侵入，无需用做任何修改就可以完成所有的治理能力，包括调用链的埋点？ 关于这个问题，可以提前透漏下，答案是让人有点沮丧的，得改点。在Isito中你不用在自己的代码里使用各种埋点的SDK来做埋点的逻辑，但是必须要
+  <a href='http://idouba.net/istio-tracing-meetup-01/'>Read more →</a>
+</article> 
+
+
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/opentracing-serverside-tracing/">Opentracing 调用链服务端埋点</a></h2>
+    <p class="blog-post-meta"><time datetime="2018-01-01T14:17:31Z">Mon Jan 01, 2018</time> by idouba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/tracing/" rel="category tag">tracing</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/cncf/" rel="tag">cncf</a>, <a href="/tags/go/" rel="tag">go</a>, <a href="/tags/tracing/" rel="tag">tracing</a>
+
+</p>
+  </header>
+  1 前言 通过一个最简单的代码例子来看使用opentracing在服务端埋点的逻辑。因为调用链的抽象模型都是来自dapper这篇论文，所以其他的方式也是类似，只是接口方法上稍有不同。 2 关于服务端埋点 主要流程看上是： 收到请求 从通信协议（如常用的HTTP header）中解出客户端传递的trace； 构造span 保存span 服务端返回请求 关闭span，将span的数据结构上传到调用链的数据存储节点。 下面结合一个例子中的额使用看下2 3 4 6四个调用链埋点步骤具体做了哪些事情。 3 主要流程 以最典型的http服务端为
+  <a href='http://idouba.net/opentracing-serverside-tracing/'>Read more →</a>
+</article> 
+
+
+
+
+
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 ml-auto blog-sidebar">
+  
+
+  
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+    
+
+    
+    <footer class="blog-footer">
+      <p dir="auto">
+      
+      <!-- raw HTML omitted -->浙ICP备18050493号-1<!-- raw HTML omitted --> 浙公网安备 33010802006262号
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+    
+
+  </body>
+
+</html>

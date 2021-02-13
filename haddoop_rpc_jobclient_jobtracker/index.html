@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<meta property="og:title" content="【hadoop代码笔记】通过JobClient对Jobtracker的调用详细了解Hadoop RPC" />
+<meta property="og:description" content="Hadoop的各个服务间，客户端和服务间的交互采用RPC方式。关于这种机制介绍的资源很多，也不难理解，这里不做背景介绍。只是尝试从Jobclient向JobTracker提交作业这个最简单的客户端服务器交互的代码中，去跟踪和了解下RPC是怎么被使用的。不同于准备发表博客时搜索的几篇博文，试图通过一种具体的场景来介绍，属于比较初级。其他DataNode和Namenode之间，Tasktracker和JobTracker之间的交互基本也都一样。为了引用的代码篇幅尽可能少，忽略了代码中写日志（包括Me" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://idouba.net/haddoop_rpc_jobclient_jobtracker/" />
+<meta property="article:published_time" content="2014-01-11T12:02:36+00:00" />
+<meta property="article:modified_time" content="2014-01-11T12:02:36+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="【hadoop代码笔记】通过JobClient对Jobtracker的调用详细了解Hadoop RPC"/>
+<meta name="twitter:description" content="Hadoop的各个服务间，客户端和服务间的交互采用RPC方式。关于这种机制介绍的资源很多，也不难理解，这里不做背景介绍。只是尝试从Jobclient向JobTracker提交作业这个最简单的客户端服务器交互的代码中，去跟踪和了解下RPC是怎么被使用的。不同于准备发表博客时搜索的几篇博文，试图通过一种具体的场景来介绍，属于比较初级。其他DataNode和Namenode之间，Tasktracker和JobTracker之间的交互基本也都一样。为了引用的代码篇幅尽可能少，忽略了代码中写日志（包括Me"/>
+<meta name="generator" content="Hugo 0.80.0" />
+
+
+    
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "【hadoop代码笔记】通过JobClient对Jobtracker的调用详细了解Hadoop RPC",
+  "url": "http:\/\/idouba.net\/haddoop_rpc_jobclient_jobtracker\/",
+  "wordCount": "7060",
+  "datePublished": "2014-01-11T12:02:36+00:00",
+  "dateModified": "2014-01-11T12:02:36+00:00",
+  "author": {
+    "@type": "Person",
+    "name": "douba"
+  },
+  "keywords": "hadoop, java, mapreduce, RPC, source"
+}
+</script>
+
+
+
+    <link rel="canonical" href="http://idouba.net/haddoop_rpc_jobclient_jobtracker/">
+
+    <title>【hadoop代码笔记】通过JobClient对Jobtracker的调用详细了解Hadoop RPC | 爱豆吧！</title>
+
+    
+    <!-- combined, minified CSS -->
+    
+    <link href="http://idouba.net/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    
+
+    <!-- minified Font Awesome for SVG icons -->
+    
+    <script defer src="http://idouba.net/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+
+    <!-- RSS 2.0 feed -->
+    
+
+    
+
+    
+
+  </head>
+
+  <body>
+
+    
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="http://idouba.net/">Home</a>
+        </nav>
+      </div>
+    </div>
+    
+
+    
+    
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.net/" rel="home">爱豆吧！</a></h1>
+        <p class="lead blog-description" dir="auto">idouba@beta.</p>
+      </div>
+    </header>
+    
+    
+
+    
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/haddoop_rpc_jobclient_jobtracker/">【hadoop代码笔记】通过JobClient对Jobtracker的调用详细了解Hadoop RPC</a></h2>
+    <p class="blog-post-meta"><time datetime="2014-01-11T12:02:36Z">Sat Jan 11, 2014</time> by douba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/hadoop/" rel="category tag">hadoop</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/hadoop/" rel="tag">hadoop</a>, <a href="/tags/java/" rel="tag">java</a>, <a href="/tags/mapreduce/" rel="tag">mapreduce</a>, <a href="/tags/rpc/" rel="tag">RPC</a>, <a href="/tags/source/" rel="tag">source</a>
+
+</p>
+  </header>
+  <p>Hadoop的各个服务间，客户端和服务间的交互采用<a href="http://archive.cloudera.com/cdh/testing/hadoop-0.20/api/org/apache/hadoop/ipc/RPC.html">RPC</a>方式。关于这种机制介绍的资源很多，也不难理解，这里不做背景介绍。只是尝试从<a href="http://archive.cloudera.com/cdh/testing/hadoop-0.20/api/org/apache/hadoop/mapred/JobClient.html">Jobclient</a>向<a href="http://archive.cloudera.com/cdh/testing/hadoop-0.20/api/org/apache/hadoop/mapred/JobTracker.html">JobTracker</a>提交作业这个最简单的客户端服务器交互的代码中，去跟踪和了解下RPC是怎么被使用的。不同于准备发表博客时搜索的<a href="../haddoop_rpc_jobclient_jobtracker#reference">几篇博文</a>，试图通过一种具体的场景来介绍，属于比较初级。其他DataNode和Namenode之间，Tasktracker和JobTracker之间的交互基本也都一样。为了引用的代码篇幅尽可能少，忽略了代码中写日志（包括Metrics）、某些判断等辅助代码。</p>
+<h3 id="1-rpc客户端请求从jobclient2的jobsubmitclient-入手"><strong>1 RPC客户端请求（从<a href="http://archive.cloudera.com/cdh/testing/hadoop-0.20/api/org/apache/hadoop/mapred/JobClient.html">JobClient</a>的jobSubmitClient 入手）</strong></h3>
+<p>Jobclient包含一个JobSubmissionProtocol jobSubmitClient类型的句柄，从<a href="../hadoop_jobclient_submit">作业提交一节</a>的介绍中看到Jobclient的计划所有重要操作都是通过jobSubmitClient来完成的。包括</p>
+<p><img src="../wp-content/uploads/2014/01/JobSubmissionProtocol-jobSubmitClient.jpg" alt=""></p>
+<p><strong>JobSubmissionProtocol Outline</strong></p>
+<p>所有这些方法都在JobSubmissionProtocol接口中定义。在0.20.1的时候已经到Version 20了，在2.2.0好像到了Version 40了,说明功能一直在增强。
+<!-- raw HTML omitted -->客户端的某个方法调用如何会调用到服务端的方法呢？在客户端机器上调用<!-- raw HTML omitted -->JobClient<!-- raw HTML omitted -->的getAllJobs(),怎么调用到了服务端<!-- raw HTML omitted -->JobTracker<!-- raw HTML omitted -->的getAllJobs()。这也是我尝试讲明白的核心内容。<!-- raw HTML omitted -->为了体现代码的一步一步分析总结在<!-- raw HTML omitted -->最后<!-- raw HTML omitted -->。可能循序渐进的作用没起到，还会笔记读起来笔记乱，感受有点不太好可能:-(。
+首先看客户端JobClient中的jobSubmitClient初始化方法。在JobClient的init方法中判断不是local的方式则会调用createRPCProxy方法，进而调用RPC的<!-- raw HTML omitted -->getProxy<!-- raw HTML omitted --><!-- raw HTML omitted -->方法。<!-- raw HTML omitted -->方法连接对应IP的服务器。比较客户端和服务端的RPC版本一致，返回一个JobSubmissionProtocol类型的句柄，抛出<!-- raw HTML omitted -->VersionMismatch<!-- raw HTML omitted -->异常。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">private</span> JobSubmissionProtocol <span style="color:#a6e22e">createRPCProxy</span><span style="color:#f92672">(</span>InetSocketAddress addr<span style="color:#f92672">,</span>
+      Configuration conf<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> IOException <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">return</span> <span style="color:#f92672">(</span>JobSubmissionProtocol<span style="color:#f92672">)</span> RPC<span style="color:#f92672">.</span><span style="color:#a6e22e">getProxy</span><span style="color:#f92672">(</span>JobSubmissionProtocol<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">,</span>
+        JobSubmissionProtocol<span style="color:#f92672">.</span><span style="color:#a6e22e">versionID</span><span style="color:#f92672">,</span> addr<span style="color:#f92672">,</span> getUGI<span style="color:#f92672">(</span>conf<span style="color:#f92672">),</span> conf<span style="color:#f92672">,</span>
+        NetUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">getSocketFactory</span><span style="color:#f92672">(</span>conf<span style="color:#f92672">,</span> JobSubmissionProtocol<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">));</span>
+  <span style="color:#f92672">}</span>
+  <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> VersionedProtocol <span style="color:#a6e22e">getProxy</span><span style="color:#f92672">(</span>Class<span style="color:#f92672">&lt;</span> <span style="color:#f92672">&gt;</span> protocol<span style="color:#f92672">,</span>
+      <span style="color:#66d9ef">long</span> clientVersion<span style="color:#f92672">,</span> InetSocketAddress addr<span style="color:#f92672">,</span> UserGroupInformation ticket<span style="color:#f92672">,</span>
+      Configuration conf<span style="color:#f92672">,</span> SocketFactory factory<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> IOException <span style="color:#f92672">{</span>    
+
+    VersionedProtocol proxy <span style="color:#f92672">=</span>
+        <span style="color:#f92672">(</span>VersionedProtocol<span style="color:#f92672">)</span> Proxy<span style="color:#f92672">.</span><span style="color:#a6e22e">newProxyInstance</span><span style="color:#f92672">(</span>
+            protocol<span style="color:#f92672">.</span><span style="color:#a6e22e">getClassLoader</span><span style="color:#f92672">(),</span> <span style="color:#66d9ef">new</span> Class<span style="color:#f92672">[]</span> <span style="color:#f92672">{</span> protocol <span style="color:#f92672">},</span>
+            <span style="color:#66d9ef">new</span> Invoker<span style="color:#f92672">(</span>addr<span style="color:#f92672">,</span> ticket<span style="color:#f92672">,</span> conf<span style="color:#f92672">,</span> factory<span style="color:#f92672">));</span>
+    <span style="color:#66d9ef">long</span> serverVersion <span style="color:#f92672">=</span> proxy<span style="color:#f92672">.</span><span style="color:#a6e22e">getProtocolVersion</span><span style="color:#f92672">(</span>protocol<span style="color:#f92672">.</span><span style="color:#a6e22e">getName</span><span style="color:#f92672">(),</span> 
+                                                  clientVersion<span style="color:#f92672">);</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>serverVersion <span style="color:#f92672">==</span> clientVersion<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+      <span style="color:#66d9ef">return</span> proxy<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+      <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> VersionMismatch<span style="color:#f92672">(</span>protocol<span style="color:#f92672">.</span><span style="color:#a6e22e">getName</span><span style="color:#f92672">(),</span> clientVersion<span style="color:#f92672">,</span> 
+                                serverVersion<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>注意到调用了java的<!-- raw HTML omitted -->反射代理<!-- raw HTML omitted -->在构建VersionedProtocol的时候<!-- raw HTML omitted -->Proxy<!-- raw HTML omitted --><!-- raw HTML omitted -->newProxyInstance<!-- raw HTML omitted -->方法初始化了一个Invoker类型的对象。
+该对象是<a href="http://archive.cloudera.com/cdh/testing/hadoop-0.20/api/org/apache/hadoop/ipc/package-frame.html">org.apache.hadoop.ipc.RPC</a>.包下<a href="http://archive.cloudera.com/cdh/testing/hadoop-0.20/api/org/apache/hadoop/ipc/Server.html">Server</a>类的一个内部类。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Invoker</span> <span style="color:#66d9ef">implements</span> InvocationHandler
+</code></pre></div><p>这下明白了！基于java的reflect机制提供的一种Proxy使用方式。<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/InvocationHandler.html">InvocationHandler</a>这个Interface的作用就是把proxy 上的方法调用派发到实现了InvocationHandler的类上来。即Jobclient上中jobSubmitClient的任何调用都会派发到这个Invoker上来。</p>
+<p>那么Invoker中做了什么事情呢？Invoker类实现了InvocationHandler接口定义的唯一的invoke方法。只是把传入的调用信息，包括方面名，方法参数封装为一个invocation对象，调用用Client client对象的call方法来执行操作。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> Object <span style="color:#a6e22e">invoke</span><span style="color:#f92672">(</span>Object proxy<span style="color:#f92672">,</span> Method method<span style="color:#f92672">,</span> Object<span style="color:#f92672">[]</span> args<span style="color:#f92672">)</span>
+      <span style="color:#66d9ef">throws</span> Throwable <span style="color:#f92672">{</span>
+         ObjectWritable value <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>ObjectWritable<span style="color:#f92672">)</span>
+        client<span style="color:#f92672">.</span><span style="color:#a6e22e">call</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Invocation<span style="color:#f92672">(</span>method<span style="color:#f92672">,</span> args<span style="color:#f92672">),</span> address<span style="color:#f92672">,</span> 
+                    method<span style="color:#f92672">.</span><span style="color:#a6e22e">getDeclaringClass</span><span style="color:#f92672">(),</span> ticket<span style="color:#f92672">);</span>
+      <span style="color:#66d9ef">return</span> value<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">();}</span>
+</code></pre></div><p>了解<a href="http://archive.cloudera.com/cdh/testing/hadoop-0.20/api/org/apache/hadoop/ipc/Client.html">Client</a>的<a href="http://archive.cloudera.com/cdh/testing/hadoop-0.20/api/org/apache/hadoop/ipc/Client.html#call(org.apache.hadoop.io.Writable,%20java.net.InetSocketAddress,%20java.lang.Class,%20org.apache.hadoop.security.UserGroupInformation)">call</a>方法，该方法的主要作用是把参数发送给指定服务端地址上的<a href="http://archive.cloudera.com/cdh/testing/hadoop-0.20/api/org/apache/hadoop/ipc/RPC.Server.html">IPC server</a>。并获取结果。构建一个Call对象，封装了请求参数（其实是Invocation封装了方法和参数的对象），创建一个连接到IPC服务器的connection，然后发送出去。（client发送请求还是有些业务的，包括<a href="http://archive.cloudera.com/cdh/testing/hadoop-0.20/api/org/apache/hadoop/ipc/Client.html">Client</a>下的几个内部类的工作，在此略去）</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> Writable <span style="color:#a6e22e">call</span><span style="color:#f92672">(</span>Writable param<span style="color:#f92672">,</span> InetSocketAddress addr<span style="color:#f92672">,</span>
+            Class<span style="color:#f92672">&lt;</span> <span style="color:#f92672">&gt;</span> protocol<span style="color:#f92672">,</span> UserGroupInformation ticket<span style="color:#f92672">)</span>
+            <span style="color:#f92672">{</span>
+        Call call <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Call<span style="color:#f92672">(</span>param<span style="color:#f92672">);</span>
+        Connection connection <span style="color:#f92672">=</span> getConnection<span style="color:#f92672">(</span>addr<span style="color:#f92672">,</span> protocol<span style="color:#f92672">,</span> ticket<span style="color:#f92672">,</span> call<span style="color:#f92672">);</span>
+        connection<span style="color:#f92672">.</span><span style="color:#a6e22e">sendParam</span><span style="color:#f92672">(</span>call<span style="color:#f92672">);</span> <span style="color:#75715e">// send the parameter
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">return</span> call<span style="color:#f92672">.</span><span style="color:#a6e22e">value</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><p>客户端的主要过程总结如下：客户端Jobclient的创建一个JobSubmissionProtocol <strong>jobSubmitClient，jobSubmitClient的所有请求都会通过Invoker封装成一个请求，通过Client的call方法发送到服务端。</strong></p>
+<h3 id="2-rpc服务端处理看jobtracker3的intertrackerserver响应请求"><strong>2 RPC服务端处理(看<a href="http://archive.cloudera.com/cdh/testing/hadoop-0.20/api/org/apache/hadoop/mapred/JobTracker.html">Jobtracker</a>的interTrackerServer响应请求)</strong></h3>
+<p>接下来看法服务器是如何接收请求，Client的call将请求发送到什么样的服务器？服务器如何解释这些请求，如何响应请求的。</p>
+<p>服务端JobTracker实现了JobSubmissionProtocol接口，因此提供了JobSubmissionProtocol定义的所有方法</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">JobTracker</span> <span style="color:#66d9ef">implements</span> MRConstants<span style="color:#f92672">,</span> InterTrackerProtocol<span style="color:#f92672">,</span>
+    JobSubmissionProtocol<span style="color:#f92672">,</span> TaskTrackerManager<span style="color:#f92672">,</span> RefreshAuthorizationPolicyProtocol
+</code></pre></div><p>在JobTracker内包含一个类型org.apache.hadoop.ipc.Server的的实例interTrackerServer ，该实例其实是响应客户端的的RPC调用的服务实例。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">interTrackerServer</span> <span style="color:#f92672">=</span> RPC<span style="color:#f92672">.</span><span style="color:#a6e22e">getServer</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">,</span> addr<span style="color:#f92672">.</span><span style="color:#a6e22e">getHostName</span><span style="color:#f92672">(),</span> addr<span style="color:#f92672">.</span><span style="color:#a6e22e">getPort</span><span style="color:#f92672">(),</span> handlerCount<span style="color:#f92672">,</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">,</span> conf<span style="color:#f92672">);</span>
+</code></pre></div><p>查看RPC的getServer方法</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> Server <span style="color:#a6e22e">getServer</span><span style="color:#f92672">(</span><span style="color:#66d9ef">final</span> Object instance<span style="color:#f92672">,</span> <span style="color:#66d9ef">final</span> String bindAddress<span style="color:#f92672">,</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> port<span style="color:#f92672">,</span>
+                                     <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> numHandlers<span style="color:#f92672">,</span>
+                                     <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">boolean</span> verbose<span style="color:#f92672">,</span> Configuration conf<span style="color:#f92672">)</span> 
+        <span style="color:#66d9ef">throws</span> IOException <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> Server<span style="color:#f92672">(</span>instance<span style="color:#f92672">,</span> conf<span style="color:#f92672">,</span> bindAddress<span style="color:#f92672">,</span> port<span style="color:#f92672">,</span> numHandlers<span style="color:#f92672">,</span> verbose<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><p>再往下看其实Server的构造函数，就是在某个Ip和端口上监听，响应客户端发起的请求。多么典型的客户端服务器模式呀。代码看上去多么想Socket通信那一套呀。看到了bindAddress，看到了port，还看到socketSendBufferSize。没错！</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">protected</span> <span style="color:#a6e22e">Server</span><span style="color:#f92672">(</span>String bindAddress<span style="color:#f92672">,</span> <span style="color:#66d9ef">int</span> port<span style="color:#f92672">,</span> 
+                  Class<span style="color:#f92672">&lt;</span>  <span style="color:#66d9ef">extends</span> Writable<span style="color:#f92672">&gt;</span> paramClass<span style="color:#f92672">,</span> <span style="color:#66d9ef">int</span> handlerCount<span style="color:#f92672">,</span> 
+                  Configuration conf<span style="color:#f92672">,</span> String serverName<span style="color:#f92672">)</span> 
+    <span style="color:#66d9ef">throws</span> IOException <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">bindAddress</span> <span style="color:#f92672">=</span> bindAddress<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">conf</span> <span style="color:#f92672">=</span> conf<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">port</span> <span style="color:#f92672">=</span> port<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">paramClass</span> <span style="color:#f92672">=</span> paramClass<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">handlerCount</span> <span style="color:#f92672">=</span> handlerCount<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">socketSendBufferSize</span> <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">maxQueueSize</span> <span style="color:#f92672">=</span> handlerCount <span style="color:#f92672">*</span> MAX_QUEUE_SIZE_PER_HANDLER<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">callQueue</span>  <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedBlockingQueue<span style="color:#f92672">&lt;</span>Call<span style="color:#f92672">&gt;(</span>maxQueueSize<span style="color:#f92672">);</span> 
+    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">maxIdleTime</span> <span style="color:#f92672">=</span> 2<span style="color:#f92672">*</span>conf<span style="color:#f92672">.</span><span style="color:#a6e22e">getInt</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;ipc.client.connection.maxidletime&#34;</span><span style="color:#f92672">,</span> 1000<span style="color:#f92672">);</span>
+    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">maxConnectionsToNuke</span> <span style="color:#f92672">=</span> conf<span style="color:#f92672">.</span><span style="color:#a6e22e">getInt</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;ipc.client.kill.max&#34;</span><span style="color:#f92672">,</span> 10<span style="color:#f92672">);</span>
+    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">thresholdIdleConnections</span> <span style="color:#f92672">=</span> conf<span style="color:#f92672">.</span><span style="color:#a6e22e">getInt</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;ipc.client.idlethreshold&#34;</span><span style="color:#f92672">,</span> 4000<span style="color:#f92672">);</span>
+
+    <span style="color:#75715e">// Start the listener here and let it bind to the port
+</span><span style="color:#75715e"></span>    listener <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Listener<span style="color:#f92672">();</span>
+    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">port</span> <span style="color:#f92672">=</span> listener<span style="color:#f92672">.</span><span style="color:#a6e22e">getAddress</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getPort</span><span style="color:#f92672">();</span>    
+    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">rpcMetrics</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> RpcMetrics<span style="color:#f92672">(</span>serverName<span style="color:#f92672">,</span>
+                          Integer<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">port</span><span style="color:#f92672">),</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
+    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">tcpNoDelay</span> <span style="color:#f92672">=</span> conf<span style="color:#f92672">.</span><span style="color:#a6e22e">getBoolean</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;ipc.server.tcpnodelay&#34;</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">);</span>
+    
+    <span style="color:#75715e">// Create the responder here
+</span><span style="color:#75715e"></span>    responder <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Responder<span style="color:#f92672">();</span>
+  <span style="color:#f92672">}</span>
+</code></pre></div><p>同时不小心注意到<!-- raw HTML omitted -->Server<!-- raw HTML omitted -->类的outline阵容还是很宏大的，除了一长串的方法外，还包括Call, Connection, Handler,Listener, responder 五个内部类，猜就是这些协作来完成Server的服务响应处理。</p>
+<p><img src="../wp-content/uploads/2014/01/ipc_server.jpg" alt="">
+<strong>ipc_server outline</strong>
+同时注意到Server中包含的如下几个重要的实例</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">private</span> BlockingQueue<span style="color:#f92672">&lt;</span>Call<span style="color:#f92672">&gt;</span> callQueue<span style="color:#f92672">;</span> <span style="color:#75715e">// queued calls
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">private</span> List<span style="color:#f92672">&lt;</span>Connection<span style="color:#f92672">&gt;</span> connectionList <span style="color:#f92672">=</span>
+    Collections<span style="color:#f92672">.</span><span style="color:#a6e22e">synchronizedList</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> LinkedList<span style="color:#f92672">&lt;</span>Connection<span style="color:#f92672">&gt;());</span>
+  <span style="color:#66d9ef">private</span> Listener listener <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+  <span style="color:#66d9ef">private</span> Responder responder <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+  <span style="color:#66d9ef">private</span> Handler<span style="color:#f92672">[]</span> handlers <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+</code></pre></div><p>再看看Server的start（）方法</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">synchronized</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">start</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> IOException <span style="color:#f92672">{</span>
+    responder<span style="color:#f92672">.</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
+    listener<span style="color:#f92672">.</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
+    handlers <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Handler<span style="color:#f92672">[</span>handlerCount<span style="color:#f92672">];</span>
+
+    <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;</span> handlerCount<span style="color:#f92672">;</span> i<span style="color:#f92672">++)</span> <span style="color:#f92672">{</span>
+      handlers<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Handler<span style="color:#f92672">(</span>i<span style="color:#f92672">);</span>
+      handlers<span style="color:#f92672">[</span>i<span style="color:#f92672">].</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>其中，在Server的构造函数中看到了两个差不多能猜到其功能的东西：Listener &amp; Responder。从命名上几乎就能猜到，他们分别是监听用户请求和响应用户请求的线程？应该是线程吧？居然猜对了！</p>
+<p>先看下Listener。构造函数如下</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#a6e22e">Listener</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> IOException <span style="color:#f92672">{</span>
+          address <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> InetSocketAddress<span style="color:#f92672">(</span>bindAddress<span style="color:#f92672">,</span> port<span style="color:#f92672">);</span>
+          <span style="color:#75715e">// Create a new server socket and set to non blocking mode
+</span><span style="color:#75715e"></span>          acceptChannel <span style="color:#f92672">=</span> ServerSocketChannel<span style="color:#f92672">.</span><span style="color:#a6e22e">open</span><span style="color:#f92672">();</span>
+          acceptChannel<span style="color:#f92672">.</span><span style="color:#a6e22e">configureBlocking</span><span style="color:#f92672">(</span><span style="color:#66d9ef">false</span><span style="color:#f92672">);</span>
+
+          <span style="color:#75715e">// Bind the server socket to the local host and port
+</span><span style="color:#75715e"></span>          bind<span style="color:#f92672">(</span>acceptChannel<span style="color:#f92672">.</span><span style="color:#a6e22e">socket</span><span style="color:#f92672">(),</span> address<span style="color:#f92672">,</span> backlogLength<span style="color:#f92672">);</span>
+          port <span style="color:#f92672">=</span> acceptChannel<span style="color:#f92672">.</span><span style="color:#a6e22e">socket</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getLocalPort</span><span style="color:#f92672">();</span> <span style="color:#75715e">//Could be an ephemeral port
+</span><span style="color:#75715e"></span>          <span style="color:#75715e">// create a selector;
+</span><span style="color:#75715e"></span>          selector<span style="color:#f92672">=</span> Selector<span style="color:#f92672">.</span><span style="color:#a6e22e">open</span><span style="color:#f92672">();</span>
+    
+          <span style="color:#75715e">// Register accepts on the server socket with the selector.
+</span><span style="color:#75715e"></span>          acceptChannel<span style="color:#f92672">.</span><span style="color:#a6e22e">register</span><span style="color:#f92672">(</span>selector<span style="color:#f92672">,</span> SelectionKey<span style="color:#f92672">.</span><span style="color:#a6e22e">OP_ACCEPT</span><span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>重点看下线程的业务方法，即其run方法做了些啥。方法虽然很长，但是业务很典型，在服务端监听，收到数据就接收。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+          SERVER<span style="color:#f92672">.</span><span style="color:#a6e22e">set</span><span style="color:#f92672">(</span>Server<span style="color:#f92672">.</span><span style="color:#a6e22e">this</span><span style="color:#f92672">);</span>
+          <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span>running<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            SelectionKey key <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+                     selector<span style="color:#f92672">.</span><span style="color:#a6e22e">select</span><span style="color:#f92672">();</span>
+              Iterator<span style="color:#f92672">&lt;</span>SelectionKey<span style="color:#f92672">&gt;</span> iter <span style="color:#f92672">=</span> selector<span style="color:#f92672">.</span><span style="color:#a6e22e">selectedKeys</span><span style="color:#f92672">().</span><span style="color:#a6e22e">iterator</span><span style="color:#f92672">();</span>
+              <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span>iter<span style="color:#f92672">.</span><span style="color:#a6e22e">hasNext</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+                key <span style="color:#f92672">=</span> iter<span style="color:#f92672">.</span><span style="color:#a6e22e">next</span><span style="color:#f92672">();</span>
+                iter<span style="color:#f92672">.</span><span style="color:#a6e22e">remove</span><span style="color:#f92672">();</span>
+                <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+                  <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>key<span style="color:#f92672">.</span><span style="color:#a6e22e">isValid</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+                    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>key<span style="color:#f92672">.</span><span style="color:#a6e22e">isAcceptable</span><span style="color:#f92672">())</span>
+                      doAccept<span style="color:#f92672">(</span>key<span style="color:#f92672">);</span>
+                    <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>key<span style="color:#f92672">.</span><span style="color:#a6e22e">isReadable</span><span style="color:#f92672">())</span>
+                      doRead<span style="color:#f92672">(</span>key<span style="color:#f92672">);</span>
+                  <span style="color:#f92672">}</span>
+
+                <span style="color:#f92672">}</span>
+</code></pre></div><p>接着看下接受数据的 doAccept(SelectionKey key)和doRead(SelectionKey key)方法。</p>
+<p>doAccept做的事情是把每一个数据连接的请求绑定到一个Connection对象上，并把Connection全部添加到connectionList集合中；doRead做的事情是对每个Connection执行readAndProcess操作。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">doAccept</span><span style="color:#f92672">(</span>SelectionKey key<span style="color:#f92672">)</span>
+    <span style="color:#f92672">{</span>
+    Connection c <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+    ServerSocketChannel server <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>ServerSocketChannel<span style="color:#f92672">)</span> key<span style="color:#f92672">.</span><span style="color:#a6e22e">channel</span><span style="color:#f92672">();</span>
+    <span style="color:#75715e">// accept up to 10 connections
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i<span style="color:#f92672">=</span>0<span style="color:#f92672">;</span> i<span style="color:#f92672">&lt;</span>10<span style="color:#f92672">;</span> i<span style="color:#f92672">++)</span> <span style="color:#f92672">{</span>
+      SocketChannel channel <span style="color:#f92672">=</span> server<span style="color:#f92672">.</span><span style="color:#a6e22e">accept</span><span style="color:#f92672">();</span>
+      SelectionKey readKey <span style="color:#f92672">=</span> channel<span style="color:#f92672">.</span><span style="color:#a6e22e">register</span><span style="color:#f92672">(</span>selector<span style="color:#f92672">,</span> SelectionKey<span style="color:#f92672">.</span><span style="color:#a6e22e">OP_READ</span><span style="color:#f92672">);</span>
+      c <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Connection<span style="color:#f92672">(</span>readKey<span style="color:#f92672">,</span> channel<span style="color:#f92672">,</span> System<span style="color:#f92672">.</span><span style="color:#a6e22e">currentTimeMillis</span><span style="color:#f92672">());</span>
+      readKey<span style="color:#f92672">.</span><span style="color:#a6e22e">attach</span><span style="color:#f92672">(</span>c<span style="color:#f92672">);</span>
+      <span style="color:#66d9ef">synchronized</span> <span style="color:#f92672">(</span>connectionList<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        connectionList<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>numConnections<span style="color:#f92672">,</span> c<span style="color:#f92672">);</span>
+        numConnections<span style="color:#f92672">++;</span>
+      <span style="color:#f92672">}</span>
+      <span style="color:#f92672">}</span>
+
+  <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">doRead</span><span style="color:#f92672">(</span>SelectionKey key<span style="color:#f92672">)</span> 
+  <span style="color:#f92672">{</span>  
+    Connection c <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>Connection<span style="color:#f92672">)</span>key<span style="color:#f92672">.</span><span style="color:#a6e22e">attachment</span><span style="color:#f92672">();</span>
+    c<span style="color:#f92672">.</span><span style="color:#a6e22e">setLastContact</span><span style="color:#f92672">(</span>System<span style="color:#f92672">.</span><span style="color:#a6e22e">currentTimeMillis</span><span style="color:#f92672">());</span>
+    count <span style="color:#f92672">=</span> c<span style="color:#f92672">.</span><span style="color:#a6e22e">readAndProcess</span><span style="color:#f92672">();</span>  
+  <span style="color:#f92672">}</span>
+</code></pre></div><p>需要关注下org.apache.hadoop.ipc.Server.Connection类。重点看listener doRead 中调用的readAndProcess方法</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">data <span style="color:#f92672">=</span> ByteBuffer<span style="color:#f92672">.</span><span style="color:#a6e22e">allocate</span><span style="color:#f92672">(</span>dataLength<span style="color:#f92672">);</span>
+   count <span style="color:#f92672">=</span> channelRead<span style="color:#f92672">(</span>channel<span style="color:#f92672">,</span> data<span style="color:#f92672">);</span>
+
+          <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>headerRead<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            processData<span style="color:#f92672">();</span>
+            data <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+            <span style="color:#66d9ef">return</span> count<span style="color:#f92672">;</span>
+          <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+            processHeader<span style="color:#f92672">();</span>
+            headerRead <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
+            data <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span>
+ authorize<span style="color:#f92672">(</span>user<span style="color:#f92672">,</span> header<span style="color:#f92672">);</span>
+</code></pre></div><p>其中的processHeader()作用是解析出通信的protocol类</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">header<span style="color:#f92672">.</span><span style="color:#a6e22e">readFields</span><span style="color:#f92672">(</span>in<span style="color:#f92672">);</span>
+String protocolClassName <span style="color:#f92672">=</span> header<span style="color:#f92672">.</span><span style="color:#a6e22e">getProtocol</span><span style="color:#f92672">();</span>
+protocol <span style="color:#f92672">=</span> getProtocolClass<span style="color:#f92672">(</span>header<span style="color:#f92672">.</span><span style="color:#a6e22e">getProtocol</span><span style="color:#f92672">(),</span> conf<span style="color:#f92672">);</span>
+</code></pre></div><p>processData的主要代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">int</span> id <span style="color:#f92672">=</span> dis<span style="color:#f92672">.</span><span style="color:#a6e22e">readInt</span><span style="color:#f92672">();</span>               
+Writable param <span style="color:#f92672">=</span> ReflectionUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">newInstance</span><span style="color:#f92672">(</span>paramClass<span style="color:#f92672">,</span> conf<span style="color:#f92672">);</span>                 param<span style="color:#f92672">.</span><span style="color:#a6e22e">readFields</span><span style="color:#f92672">(</span>dis<span style="color:#f92672">);</span>        
+ Call call <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Call<span style="color:#f92672">(</span>id<span style="color:#f92672">,</span> param<span style="color:#f92672">,</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
+callQueue<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>call<span style="color:#f92672">);</span>
+</code></pre></div><p>读取调用Id，从读取的数据中构建参数，并构造一个Call对象，放置到BlockingQueue<!-- raw HTML omitted --> 类型的集合中callQueue。
+至此Listener的所有功能就是接收客户端发起的请求，构造Call对象并放置到队列中等待处理。
+接下来是发送响应的Responder类。
+重点是processResponse，是真正的写response的地方，即把执行结果写会对应的channel。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">processResponse</span><span style="color:#f92672">(</span>LinkedList<span style="color:#f92672">&lt;</span>Call<span style="color:#f92672">&gt;</span> responseQueue<span style="color:#f92672">,</span>
+                                    <span style="color:#66d9ef">boolean</span> inHandler<span style="color:#f92672">)</span>
+<span style="color:#f92672">{</span>
+call <span style="color:#f92672">=</span> responseQueue<span style="color:#f92672">.</span><span style="color:#a6e22e">removeFirst</span><span style="color:#f92672">();</span>
+          SocketChannel channel <span style="color:#f92672">=</span> call<span style="color:#f92672">.</span><span style="color:#a6e22e">connection</span><span style="color:#f92672">.</span><span style="color:#a6e22e">channel</span><span style="color:#f92672">;</span>
+          <span style="color:#66d9ef">int</span> numBytes <span style="color:#f92672">=</span> channelWrite<span style="color:#f92672">(</span>channel<span style="color:#f92672">,</span> call<span style="color:#f92672">.</span><span style="color:#a6e22e">response</span><span style="color:#f92672">);</span> 
+<span style="color:#f92672">}</span>
+</code></pre></div><p>Handler是处理请求的线程。是对队列中的每个call进行处理的类。前面看Server包含的实例的时候看到了，Server包含一个Handler数组，在Server的start方法中启动了Listener，Responder线程，同时初始化了handlerCount个Handler线程并且启动。
+主要还是看run方法。主要是从请求队列callQueue中逐个取出call了，并进行处理。处理过程即，对每个call，执行Server的call[ 方法，（实际的call方法是从org.apache.hadoop.ipc.RPC.Server，继承了org.apache.hadoop.ipc.Server，不是一个Server哦！这个在后面RPC类中会讲到）并调用Responder方法doRespond，把结果返回。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span>running<span style="color:#f92672">)</span>  
+<span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">final</span> Call call <span style="color:#f92672">=</span> callQueue<span style="color:#f92672">.</span><span style="color:#a6e22e">take</span><span style="color:#f92672">();</span> <span style="color:#75715e">// pop the queue; maybe blocked here
+</span><span style="color:#75715e"></span>        CurCall<span style="color:#f92672">.</span><span style="color:#a6e22e">set</span><span style="color:#f92672">(</span>call<span style="color:#f92672">);</span>
+        value <span style="color:#f92672">=</span>  Subject<span style="color:#f92672">.</span><span style="color:#a6e22e">doAs</span><span style="color:#f92672">(</span>call<span style="color:#f92672">.</span><span style="color:#a6e22e">connection</span><span style="color:#f92672">.</span><span style="color:#a6e22e">user</span><span style="color:#f92672">,</span> 
+                                   <span style="color:#66d9ef">new</span> PrivilegedExceptionAction<span style="color:#f92672">&lt;</span>Writable<span style="color:#f92672">&gt;()</span> <span style="color:#f92672">{</span>
+                                      <span style="color:#a6e22e">@Override</span>
+                                      <span style="color:#66d9ef">public</span> Writable <span style="color:#a6e22e">run</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> Exception <span style="color:#f92672">{</span>
+                                        <span style="color:#75715e">// make the call
+</span><span style="color:#75715e"></span>                                        <span style="color:#66d9ef">return</span> call<span style="color:#f92672">(</span>call<span style="color:#f92672">.</span><span style="color:#a6e22e">connection</span><span style="color:#f92672">.</span><span style="color:#a6e22e">protocol</span><span style="color:#f92672">,</span> 
+                                                    call<span style="color:#f92672">.</span><span style="color:#a6e22e">param</span><span style="color:#f92672">,</span> call<span style="color:#f92672">.</span><span style="color:#a6e22e">timestamp</span><span style="color:#f92672">);</span>
+                                      <span style="color:#f92672">}</span>
+                                   <span style="color:#f92672">}</span>
+                                  <span style="color:#f92672">);</span>
+        CurCall<span style="color:#f92672">.</span><span style="color:#a6e22e">set</span><span style="color:#f92672">(</span><span style="color:#66d9ef">null</span><span style="color:#f92672">);</span>
+        setupResponse<span style="color:#f92672">(</span>buf<span style="color:#f92672">,</span> call<span style="color:#f92672">,</span> 
+                                <span style="color:#f92672">(</span>error <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span>   Status<span style="color:#f92672">.</span><span style="color:#a6e22e">SUCCESS</span> <span style="color:#f92672">:</span> Status<span style="color:#f92672">.</span><span style="color:#a6e22e">ERROR</span><span style="color:#f92672">,</span> 
+                                value<span style="color:#f92672">,</span> errorClass<span style="color:#f92672">,</span> error<span style="color:#f92672">);</span>
+        responder<span style="color:#f92672">.</span><span style="color:#a6e22e">doRespond</span><span style="color:#f92672">(</span>call<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+</code></pre></div><p>调用的setupResponse方法</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setupResponse</span><span style="color:#f92672">(</span>ByteArrayOutputStream response<span style="color:#f92672">,</span> 
+                             Call call<span style="color:#f92672">,</span> Status status<span style="color:#f92672">,</span> 
+                             Writable rv<span style="color:#f92672">,</span> String errorClass<span style="color:#f92672">,</span> String error<span style="color:#f92672">)</span>
+
+DataOutputStream out <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> DataOutputStream<span style="color:#f92672">(</span>response<span style="color:#f92672">);</span>
+    out<span style="color:#f92672">.</span><span style="color:#a6e22e">writeInt</span><span style="color:#f92672">(</span>call<span style="color:#f92672">.</span><span style="color:#a6e22e">id</span><span style="color:#f92672">);</span>                <span style="color:#75715e">// write call id
+</span><span style="color:#75715e"></span>    out<span style="color:#f92672">.</span><span style="color:#a6e22e">writeInt</span><span style="color:#f92672">(</span>status<span style="color:#f92672">.</span><span style="color:#a6e22e">state</span><span style="color:#f92672">);</span>         <span style="color:#75715e">// write status
+</span><span style="color:#75715e"></span>     rv<span style="color:#f92672">.</span><span style="color:#a6e22e">write</span><span style="color:#f92672">(</span>out<span style="color:#f92672">);</span>
+call<span style="color:#f92672">.</span><span style="color:#a6e22e">setResponse</span><span style="color:#f92672">(</span>ByteBuffer<span style="color:#f92672">.</span><span style="color:#a6e22e">wrap</span><span style="color:#f92672">(</span>response<span style="color:#f92672">.</span><span style="color:#a6e22e">toByteArray</span><span style="color:#f92672">()));</span>
+</code></pre></div><p>核心就一句，把执行结果写到Call中去。
+顺便看下上面方法调用的Responder的doRespond方法，即把经过handler处理的带有结果的call放到对应的响应队列中，等待responder线程来逐个返回给客户端，注意看到一个，如果队列中只有一个对象时，直接调用processResponse触发把结果翻过给客户端。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">doRespond</span><span style="color:#f92672">(</span>Call call<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> IOException <span style="color:#f92672">{</span>
+   <span style="color:#f92672">{</span>
+        call<span style="color:#f92672">.</span><span style="color:#a6e22e">connection</span><span style="color:#f92672">.</span><span style="color:#a6e22e">responseQueue</span><span style="color:#f92672">.</span><span style="color:#a6e22e">addLast</span><span style="color:#f92672">(</span>call<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>call<span style="color:#f92672">.</span><span style="color:#a6e22e">connection</span><span style="color:#f92672">.</span><span style="color:#a6e22e">responseQueue</span><span style="color:#f92672">.</span><span style="color:#a6e22e">size</span><span style="color:#f92672">()</span> <span style="color:#f92672">==</span> 1<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+          processResponse<span style="color:#f92672">(</span>call<span style="color:#f92672">.</span><span style="color:#a6e22e">connection</span><span style="color:#f92672">.</span><span style="color:#a6e22e">responseQueue</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+      <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>即handler完成call之后就开始向客户端写call结果，但是结果可能太多，无法通过一次性发送完毕，而发送之后还要等待client接受完毕才能再发，如果现在handler在那里等待客户端接受完毕，然后再发，效率不高。解决办法是handler处理完毕之后，只向client发送一次处理结果。如果这一次将处理结果发送完毕，接下来就没有response的事情了，如果没有发送完毕，接下来response负责将剩下的处理结果发送给客户端。这样handler的并发量会大一些。详细可参照Responder线程的run方法和</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">writeSelector<span style="color:#f92672">.</span><span style="color:#a6e22e">select</span><span style="color:#f92672">(</span>PURGE_INTERVAL<span style="color:#f92672">);</span>
+          Iterator<span style="color:#f92672">&lt;</span>SelectionKey<span style="color:#f92672">&gt;</span> iter <span style="color:#f92672">=</span> writeSelector<span style="color:#f92672">.</span><span style="color:#a6e22e">selectedKeys</span><span style="color:#f92672">().</span><span style="color:#a6e22e">iterator</span><span style="color:#f92672">();</span>
+          <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span>iter<span style="color:#f92672">.</span><span style="color:#a6e22e">hasNext</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+            SelectionKey key <span style="color:#f92672">=</span> iter<span style="color:#f92672">.</span><span style="color:#a6e22e">next</span><span style="color:#f92672">();</span>
+            iter<span style="color:#f92672">.</span><span style="color:#a6e22e">remove</span><span style="color:#f92672">();</span>
+                 <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>key<span style="color:#f92672">.</span><span style="color:#a6e22e">isValid</span><span style="color:#f92672">()</span> <span style="color:#f92672">&amp;&amp;</span> key<span style="color:#f92672">.</span><span style="color:#a6e22e">isWritable</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+                  doAsyncWrite<span style="color:#f92672">(</span>key<span style="color:#f92672">);</span>
+              <span style="color:#f92672">}</span>
+</code></pre></div><p>//在doAsyncWrite方法中，从key中获得Call，并对每个call执行processResponse方法。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">doAsyncWrite</span><span style="color:#f92672">(</span>SelectionKey key<span style="color:#f92672">)</span> 
+      Call call <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>Call<span style="color:#f92672">)</span>key<span style="color:#f92672">.</span><span style="color:#a6e22e">attachment</span><span style="color:#f92672">();</span> 
+       processResponse<span style="color:#f92672">(</span>call<span style="color:#f92672">.</span><span style="color:#a6e22e">connection</span><span style="color:#f92672">.</span><span style="color:#a6e22e">responseQueue</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">))</span>
+</code></pre></div><p>至此观察到服务端的工作的主要过程是：</p>
+<ul>
+<li>
+<p>Server启动的时候，启动一个listener线程，一个Responder线程，若干个Handler线程。</p>
+</li>
+<li>
+<p>Listener线程接受客户端发起的请求（在doAccept中接收请求，并且每个请求构建一个Connection，绑定到一个SelectionKey上），读取请求数据，根据请求数据构造call对象，将Call加入队列。</p>
+</li>
+<li>
+<p>Handler线程从请求队列（callQueue）中获取每个Call，进行处理，把处理结果放到对应的connection的应答队列中）（responseQueue，通过调用responder.doRespond）。Responder线程检查负责把结果返回给客户端。（processResponse，把responseQueue队列的结果数据返回）</p>
+</li>
+</ul>
+<p>有一点需要继续关注一下，就是Handler中处理了客户端发起的请求，并且将结果通过Responder返回。但是并没有发现Handler是调用到了Jobtracker的方法。需要继续向下多看一点即可。
+从代码看Handler的call方法调用的是org.apache.hadoop.ipc.Server.的抽象方法</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">abstract</span> Writable <span style="color:#a6e22e">call</span><span style="color:#f92672">(</span>Class<span style="color:#f92672">&lt;</span> <span style="color:#f92672">&gt;</span> protocol<span style="color:#f92672">,</span> Writable param<span style="color:#f92672">,</span> <span style="color:#66d9ef">long</span> receiveTime<span style="color:#f92672">)</span>
+</code></pre></div><p>实际调用是<!-- raw HTML omitted -->org.apache.hadoop.ipc.Server<!-- raw HTML omitted -->的子类<!-- raw HTML omitted -->org.apache.hadoop.ipc.RPC.Server<!-- raw HTML omitted -->的call方法从org.apache.hadoop.ipc.RPC.Server的<a href="%22http://archive.cloudera.com/cdh/testing/hadoop-0.20/api/org/apache/hadoop/ipc/RPC.html#call(java.lang.reflect.Method,%20java.lang.Object%5B%5D%5B%5D,%20java.net.InetSocketAddress%5B%5D,%20org.apache.hadoop.conf.Configuration)">call</a>方法入手，该类在是RPC类的一个静态内部类。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//传入的param其实是一个Invocation对象。根据该对象的方面明，参数声明构造Method，调用Method，得到执行结果，根据返回值得类型，构造一个Writable的对象。
+</span><span style="color:#75715e"></span>Writable <span style="color:#a6e22e">call</span><span style="color:#f92672">(</span>Class<span style="color:#f92672">&lt;</span> <span style="color:#f92672">&gt;</span> protocol<span style="color:#f92672">,</span> Writable param<span style="color:#f92672">,</span> <span style="color:#66d9ef">long</span> receivedTime<span style="color:#f92672">)</span>
+<span style="color:#f92672">{</span>
+Invocation call <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>Invocation<span style="color:#f92672">)</span>param<span style="color:#f92672">;</span>
+         Method method <span style="color:#f92672">=</span>
+          protocol<span style="color:#f92672">.</span><span style="color:#a6e22e">getMethod</span><span style="color:#f92672">(</span>call<span style="color:#f92672">.</span><span style="color:#a6e22e">getMethodName</span><span style="color:#f92672">(),</span>
+                                   call<span style="color:#f92672">.</span><span style="color:#a6e22e">getParameterClasses</span><span style="color:#f92672">());</span>
+        method<span style="color:#f92672">.</span><span style="color:#a6e22e">setAccessible</span><span style="color:#f92672">(</span><span style="color:#66d9ef">true</span><span style="color:#f92672">);</span>
+              Object value <span style="color:#f92672">=</span> method<span style="color:#f92672">.</span><span style="color:#a6e22e">invoke</span><span style="color:#f92672">(</span>instance<span style="color:#f92672">,</span> call<span style="color:#f92672">.</span><span style="color:#a6e22e">getParameters</span><span style="color:#f92672">());</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> ObjectWritable<span style="color:#f92672">(</span>method<span style="color:#f92672">.</span><span style="color:#a6e22e">getReturnType</span><span style="color:#f92672">(),</span> value<span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>重点看这一句</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">    Object value <span style="color:#f92672">=</span> method<span style="color:#f92672">.</span><span style="color:#a6e22e">invoke</span><span style="color:#f92672">(</span>instance<span style="color:#f92672">,</span> call<span style="color:#f92672">.</span><span style="color:#a6e22e">getParameters</span><span style="color:#f92672">());</span>
+</code></pre></div><p>即最终是调用该instance上的对应名称的方法。而instance是那个实例呢？而从Server的构造方法中得到答案。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">interTrackerServer</span> <span style="color:#f92672">=</span> RPC<span style="color:#f92672">.</span><span style="color:#a6e22e">getServer</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">,</span> addr<span style="color:#f92672">.</span><span style="color:#a6e22e">getHostName</span><span style="color:#f92672">(),</span> addr<span style="color:#f92672">.</span><span style="color:#a6e22e">getPort</span><span style="color:#f92672">(),</span> handlerCount<span style="color:#f92672">,</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">,</span> conf<span style="color:#f92672">);&lt;/</span>pre<span style="color:#f92672">&gt;</span>
+</code></pre></div><p>即最终调用到JobTracker的对应方法。</p>
+<h3 id="3-主要流程总结">3 主要流程总结</h3>
+<p>整个调用过程总结如下：根据接口JobSubmissionProtocol动态代理生成一个代理对象jobSubmitClient，调用这个代理对象的时候;用户的调用请求被RPC的Invoker捕捉到，然后包装成调用请求，序列化成数据流发送到服务端Jobtracker的interTrackerServer实例；服务端interTrackerServer从数据流中解析出调用请求，然后根据用户所希望调用的接口JobSubmissionProtocol，通过反射调用接口真正的实现对象Jobtracker，再把调用结果返回给客户端的jobSubmitClient。</p>
+<h3 id="4-主要类功能描述">4 主要类功能描述</h3>
+<p>至此根据Jobclient通过RPC方式向JobTracker请求服务的过程就描述完毕，到此主要内容应该介绍完毕。但是看到cover的代码，发现RPC的主要功能在里面了。</p>
+<p><img src="../wp-content/uploads/2014/01/rpc_package.jpg" alt="">
+<strong>rpc package</strong></p>
+<p>为了功能完整期间，在动态的串联这些类以为，把涉及到主要类的功能做个描述，其实大部分在前面代码中也有提到。</p>
+<p>RPC类是对Server、Client的具体化。在RPC类中规定，客户程序发出请求调用时，参数类型必须是Invocation；从服务器返回的值类型必须是ObjectWritable。RPC类是对Server、Client的包装，简化用户的使用。如果一个类需充当服务器，只需通过RPC类的静态方法getServer获得Server实例，然后start。同时此类提供协议接口的实现。如果一个类充当客户端，可以通过getProxy或者waitForProxy获得一个实现了协议接口的proxy object，与服务器端交互。</p>
+<p><a href="http://archive.cloudera.com/cdh/testing/hadoop-0.20/api/org/apache/hadoop/ipc/Server.html">org.apache.hadoop.ipc.Server</a></p>
+<ul>
+<li>Server.Listener： RPC Server的监听者，用来接收RPC Client的连接请求和数据，其中数据封装成Call后PUSH到Call队列。</li>
+<li>Server.Handler： RPC Server的Call处理者，和Server.Listener通过Call队列交互。</li>
+<li>Server.Responder： RPC Server的响应者。Server.Handler按照异步非阻塞的方式向RPC Client发送响应，如果有未发送出的数据，交由Server.Responder来完成。</li>
+<li>Server.Connection： RPC Server数据接收者。提供接收数据，解析数据包的功能。</li>
+<li>Server.Call： 持有客户端的Call信息。
+<a href="http://www.cnblogs.com/douba/admin/Client">org.apache.hadoop.ipc.Client</a></li>
+<li>Client.ConnectionId：到RPC Server对象连接的标识</li>
+<li>Client.Call： Call调用信息。</li>
+<li>Client.ParallelResults： Call响应。
+<a href="http://archive.cloudera.com/cdh/testing/hadoop-0.20/api/org/apache/hadoop/ipc/RPC.html">org.apache.hadoop.ipc.RPC</a></li>
+<li>RPC.Invoker 对InvocationHandler的实现，提供invoke方法，实现RPC Client对RPC Server对象的调用。
+RPC.Invocation 用来序列化和反序列化RPC Client的调用信息。（主要应用JAVA的反射机制和InputStream/OutputStream）</li>
+</ul>
+<h3 id="5-versionedprotocol13的其他子接口">5 <a href="http://archive.cloudera.com/cdh/testing/hadoop-0.20/api/org/apache/hadoop/ipc/VersionedProtocol.html">VersionedProtocol</a>的其他子接口</h3>
+<p>除了JobClient和Jobtracker之间通信的JobSubmissionProtocol外，最后查看下<a href="http://archive.cloudera.com/cdh/testing/hadoop-0.20/api/org/apache/hadoop/ipc/VersionedProtocol.html">VersionedProtocol</a> 的继承树
+<img src="../wp-content/uploads/2014/01/versionprotocol.jpg" alt="">
+versionprotocol继承结构</p>
+<p>Hadoop中主要服务进程分别实现了各种接口，进而向外提供各种服务，其客户端通过RPC调用对应的服务。当然此处的客户端只是指调用上的客户端。
+<a href="http://archive.cloudera.com/cdh/testing/hadoop-0.20/api/org/apache/hadoop/ipc/VersionedProtocol.html"><strong>VersionedProtocol</strong></a> ：它是所有RPC协议接口的父接口，只有一个方法：getProtocolVersion（）。其子类接口的功能分别如下。
+<strong>HDFS相关</strong>：</p>
+<ul>
+<li><strong>ClientDatanodeProtocol</strong> ：一个客户端和datanode之间的协议接口，用于数据块恢复</li>
+<li><strong>ClientProtocol</strong> ：client与Namenode交互的接口，所有控制流的请求均在这里，如：创建文件、删除文件等；</li>
+<li><strong>DatanodeProtocol</strong> : Datanode与Namenode交互的接口，如心跳、blockreport等；</li>
+<li><strong>NamenodeProtocol</strong> ：SecondaryNode与Namenode交互的接口。
+<strong>Mapreduce相关</strong></li>
+<li><strong>InterDatanodeProtocol</strong> ：Datanode内部交互的接口，用来更新block的元数据；</li>
+<li><strong>InnerTrackerProtocol</strong> ：TaskTracker与JobTracker交互的接口，功能与DatanodeProtocol相似；</li>
+<li><strong>JobSubmissionProtocol</strong> ：JobClient与JobTracker交互的接口，用来提交Job、获得Job等与Job相关的操作；</li>
+<li><strong>TaskUmbilicalProtocol</strong> ：Task中子进程与母进程交互的接口，子进程即map、reduce等操作，母进程即TaskTracker，该接口可以回报子进程的运行状态。</li>
+</ul>
+<pre><code>
+</code></pre>
+
+  
+
+  
+
+</article> 
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 ml-auto blog-sidebar">
+  
+
+  
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+    
+
+    
+    <footer class="blog-footer">
+      <p dir="auto">
+      
+      <!-- raw HTML omitted -->浙ICP备18050493号-1<!-- raw HTML omitted --> 浙公网安备 33010802006262号
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+    
+
+  </body>
+
+</html>

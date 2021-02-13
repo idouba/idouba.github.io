@@ -1,0 +1,9 @@
+[0.0048] Info: WP_Query results written to log
+[0.0006] Registered sizes: ["thumbnail","medium","large","wp_rp_thumbnail","full"]
+[0.0008] Meta indexed so far: 1 / 279
+[0.0022] Sample meta:
+{"width":1693,"height":1180,"file":"2014\/01\/hadoop_mapreduce_tasktracker_child_reduce.png","sizes":{"thumbnail":{"file":"hadoop_mapreduce_tasktracker_child_reduce-150x150.png","width":150,"height":150,"mime-type":"image\/png"},"medium":{"file":"hadoop_mapreduce_tasktracker_child_reduce-300x209.png","width":300,"height":209,"mime-type":"image\/png"},"large":{"file":"hadoop_mapreduce_tasktracker_child_reduce-1024x713.png","width":1024,"height":713,"mime-type":"image\/png"}},"image_meta":{"aperture":0,"credit":"","camera":"","caption":"","created_timestamp":0,"copyright":"","focal_length":0,"iso":0,"shutter_speed":0,"title":""}}
+[0.0006] Uknown error: Please see returned value below
+{\"continue\":true,\"errormsg\":null,\"halt\":false}<br />
+<b>Notice</b>:  ob_end_flush() [<a href=\'ref.outcontrol\'>ref.outcontrol</a>]: failed to delete and flush buffer. No buffer to delete or flush. in <b>/data/home/qxu1084910484/htdocs/wp-content/plugins/googlefontsto360/googlefontsto360.php</b> on line <b>19</b><br />
+

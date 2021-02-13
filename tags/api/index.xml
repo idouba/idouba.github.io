@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>API on 爱豆吧！</title>
+    <link>http://idouba.net/tags/api/</link>
+    <description>Recent content in API on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>&lt;a href=&#39;https://beian.miit.gov.cn/&#39; target=&#39;_blank&#39;&gt;浙ICP备18050493号-1&lt;/a&gt; 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Sat, 05 May 2018 15:53:52 +0000</lastBuildDate><atom:link href="http://idouba.net/tags/api/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>详析Istio最新v1alpha3 流量管理规则</title>
+      <link>http://idouba.net/istio-traffic-management-v1alpha3-by-example/</link>
+      <pubDate>Sat, 05 May 2018 15:53:52 +0000</pubDate>
+      
+      <guid>http://idouba.net/istio-traffic-management-v1alpha3-by-example/</guid>
+      <description>前言 isto提供了一种简单的语法来描述如何进行流量管理。可以给服务配置熔断、超时、重试等规则，也可以配置规则来切分流量从而实现金丝雀发布、A/B测试等发布功能。一个典型场景如官方文档中的case，将一定比例的流量或者满足一定条件的请求的流量切分到一个特定版本上。 Istio的route rule从v1alpha1到v1alpha3 变化特别大，可以看出对规则设计上完全进行了重构。看上去v1alpha3功能上更强了，可以预见未来1.0后alpha3风格的语法因为提供了更强的表达能力，将逐步取代alpha</description>
+    </item>
+    
+  </channel>
+</rss>

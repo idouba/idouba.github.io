@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>jvm on 爱豆吧！</title>
+    <link>http://idouba.net/categories/jvm/</link>
+    <description>Recent content in jvm on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>&lt;a href=&#39;https://beian.miit.gov.cn/&#39; target=&#39;_blank&#39;&gt;浙ICP备18050493号-1&lt;/a&gt; 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Tue, 15 Jul 2014 05:49:37 +0000</lastBuildDate><atom:link href="http://idouba.net/categories/jvm/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>最简单例子图解JVM内存分配和回收</title>
+      <link>http://idouba.net/a-simple-example-demo-jvm-allocation-and-gc/</link>
+      <pubDate>Tue, 15 Jul 2014 05:49:37 +0000</pubDate>
+      
+      <guid>http://idouba.net/a-simple-example-demo-jvm-allocation-and-gc/</guid>
+      <description>一、简介 JVM采用分代垃圾回收。在JVM的内存空间中把堆空间分为年老代和年轻代。将大量（据说是90%以上）创建了没多久就会消亡的对象存储在年轻代，而年老代中存放生命周期长久的实例对象。年轻代中又被分为Eden区(圣经中的伊甸园)、和两个Survivor区。新的对象分配是首先放在Eden区，Survivor区作为Eden区和Old区的缓冲，在Survivor区的对象经历若干次收集仍然存活的，就会被转移到年老区。 简单讲，就是生命期短的对象放在一起，将少数生命期长的对象放在一起，分别采用不同的回收策略</description>
+    </item>
+    
+  </channel>
+</rss>

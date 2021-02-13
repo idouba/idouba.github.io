@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<meta property="og:title" content="Istio技术与实践02：源码解析之Istio on Kubernetes 统一服务发现" />
+<meta property="og:description" content="【摘要】 本文基于Pilot服务发现Kubernetes部分源码重点介绍在Istio on Kubernetes环境下，如何基于Pilot的Adapter机制实现Istio管理的服务直接使用Kubernetes service来做统一服务发现，避免了其他微服务框架运行在Kubernetes环境时上下两套服务目录的局面。并以此为入口从架构、场景等方面总结下Istio和Kubernetes的结合关系。 前言 文章Istio技术与实践01： 源码解析之Pilot多云平台服务发现机制结合Pilot的代码实现介绍了Ist" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://idouba.net/istio-01-code-pilot-service-discovery-upon-k8s/" />
+<meta property="article:published_time" content="2018-07-23T14:35:50+00:00" />
+<meta property="article:modified_time" content="2018-07-23T14:35:50+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Istio技术与实践02：源码解析之Istio on Kubernetes 统一服务发现"/>
+<meta name="twitter:description" content="【摘要】 本文基于Pilot服务发现Kubernetes部分源码重点介绍在Istio on Kubernetes环境下，如何基于Pilot的Adapter机制实现Istio管理的服务直接使用Kubernetes service来做统一服务发现，避免了其他微服务框架运行在Kubernetes环境时上下两套服务目录的局面。并以此为入口从架构、场景等方面总结下Istio和Kubernetes的结合关系。 前言 文章Istio技术与实践01： 源码解析之Pilot多云平台服务发现机制结合Pilot的代码实现介绍了Ist"/>
+<meta name="generator" content="Hugo 0.80.0" />
+
+
+    
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Istio技术与实践02：源码解析之Istio on Kubernetes 统一服务发现",
+  "url": "http:\/\/idouba.net\/istio-01-code-pilot-service-discovery-upon-k8s\/",
+  "wordCount": "3880",
+  "datePublished": "2018-07-23T14:35:50+00:00",
+  "dateModified": "2018-07-23T14:35:50+00:00",
+  "author": {
+    "@type": "Person",
+    "name": "idouba"
+  },
+  "keywords": "Istio, Code"
+}
+</script>
+
+
+
+    <link rel="canonical" href="http://idouba.net/istio-01-code-pilot-service-discovery-upon-k8s/">
+
+    <title>Istio技术与实践02：源码解析之Istio on Kubernetes 统一服务发现 | 爱豆吧！</title>
+
+    
+    <!-- combined, minified CSS -->
+    
+    <link href="http://idouba.net/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    
+
+    <!-- minified Font Awesome for SVG icons -->
+    
+    <script defer src="http://idouba.net/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+
+    <!-- RSS 2.0 feed -->
+    
+
+    
+
+    
+
+  </head>
+
+  <body>
+
+    
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="http://idouba.net/">Home</a>
+        </nav>
+      </div>
+    </div>
+    
+
+    
+    
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.net/" rel="home">爱豆吧！</a></h1>
+        <p class="lead blog-description" dir="auto">idouba@beta.</p>
+      </div>
+    </header>
+    
+    
+
+    
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/istio-01-code-pilot-service-discovery-upon-k8s/">Istio技术与实践02：源码解析之Istio on Kubernetes 统一服务发现</a></h2>
+    <p class="blog-post-meta"><time datetime="2018-07-23T14:35:50Z">Mon Jul 23, 2018</time> by idouba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">Istio</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/code/" rel="tag">Code</a>, <a href="/tags/istio/" rel="tag">Istio</a>
+
+</p>
+  </header>
+  <p>【摘要】 本文基于Pilot服务发现Kubernetes部分源码重点介绍在Istio on Kubernetes环境下，如何基于Pilot的Adapter机制实现Istio管理的服务直接使用Kubernetes service来做统一服务发现，避免了其他微服务框架运行在Kubernetes环境时上下两套服务目录的局面。并以此为入口从架构、场景等方面总结下Istio和Kubernetes的结合关系。</p>
+<h2 id="前言">前言</h2>
+<p>文章<a href="http://www.idouba.net/istio-01-code-pilot-service-discovery-adapter/">Istio技术与实践01： 源码解析之Pilot多云平台服务发现机制</a>结合Pilot的代码实现介绍了Istio的<a href="https://github.com/istio/old_pilot_repo/blob/master/doc/service-registry.md">抽象服务模型</a>和基于该模型的数据结构定义，了解到Istio上只是定义的服务发现的接口，并未实现服务发现的功能，而是通过Adapter机制以一种可扩展的方式来集成各种不同的服务发现。本文重点讲解Adapter机制在Kubernetes平台上的使用。即Istio on Kubernetes如何实现服务发现。</p>
+<h2 id="kubernetes和istio的结合kubernetes和istio的结合">Kubernetes和Istio的结合Kubernetes和Istio的结合</h2>
+<p>从场景和架构上看Istio和Kubernetes都是非常契合的一种搭配。从场景和架构上看Istio和Kubernetes都是非常契合的一种搭配。</p>
+<p><img src="../wp-content/uploads/2019/08/640.jpg" alt=""></p>
+<p>首先从场景上看Kuberntes为应用负载的部署、运维、扩缩容等提供了强大的支持。通过<a href="https://kubernetes.io/docs/concepts/services-networking/service/">Service</a>机制提供了负载间访问机制，通过域名结合Kubeproxy提供的转发机制可以方便的访问到对端的服务实例。因此如上图可以认为Kubernetes提供了一定的服务发现和负载均衡能力，但是较深入细致的流量治理能力，因为Kubnernetes所处的基础位置并未提供，而Istio正是补齐了这部分能力，两者的结合提供了一个端到端的容器服务运行和治理的解决方案。</p>
+<p>从架构看Istio和Kubernetes更是深度的结合。 得益于Kuberntes Pod的设计，数据面的Sidecar作为一种高性能轻量的代理自动注入到Pod中和业务容器部署在一起，接管业务容器的inbound和outbound的流量，从而实现对业务容器中服务访问的治理。在控制面上Istio基于其Adapter机制集成Kubernetes的域名，从而避免了两套名字服务的尴尬场景。</p>
+<p><img src="../wp-content/uploads/2019/08/641.jpg" alt=""></p>
+<p>在本文中将结合Pilot的代码实现来重点描述图中上半部分的实现，下半部分的内容Pilot提供的通用的API给Envoy使用可参照上一篇文章的DiscoverServer部分的描述。</p>
+<!-- raw HTML omitted -->
+<p>理解了Pilot的<a href="">ServiceDiscovery</a>的Adapter的主流程后，了解这部分内容比较容易。Pilot-discovery在<a href="">initServiceControllers</a>时，根据服务注册配置的方式，如果是Kubernetes，则会走到这个分支来构造K8sServiceController。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">case</span> <span style="color:#a6e22e">serviceregistry</span>.<span style="color:#a6e22e">KubernetesRegistry</span>:
+<span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">createK8sServiceControllers</span>(<span style="color:#a6e22e">serviceControllers</span>, <span style="color:#a6e22e">args</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
+}
+</code></pre></div><p>创建controller其实就是创建了一个Kubenernetes的controller，可以看到List/Watch了Service、Endpoints、Node、Pod几个资源对象。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// NewController creates a new Kubernetes controller
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">NewController</span>(<span style="color:#a6e22e">client</span> <span style="color:#a6e22e">kubernetes</span>.<span style="color:#a6e22e">Interface</span>, <span style="color:#a6e22e">options</span> <span style="color:#a6e22e">ControllerOptions</span>) <span style="color:#f92672">*</span><span style="color:#a6e22e">Controller</span> {
+    <span style="color:#a6e22e">out</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">Controller</span>{
+       <span style="color:#a6e22e">domainSuffix</span>: <span style="color:#a6e22e">options</span>.<span style="color:#a6e22e">DomainSuffix</span>,
+       <span style="color:#a6e22e">client</span>:       <span style="color:#a6e22e">client</span>,
+       <span style="color:#a6e22e">queue</span>:        <span style="color:#a6e22e">NewQueue</span>(<span style="color:#ae81ff">1</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>),
+    }
+    <span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">services</span> = <span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">createInformer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">v1</span>.<span style="color:#a6e22e">Service</span>{}, <span style="color:#e6db74">&#34;Service&#34;</span>, <span style="color:#a6e22e">options</span>.<span style="color:#a6e22e">ResyncPeriod</span>,
+       <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">opts</span> <span style="color:#a6e22e">meta_v1</span>.<span style="color:#a6e22e">ListOptions</span>) (<span style="color:#a6e22e">runtime</span>.<span style="color:#a6e22e">Object</span>, <span style="color:#66d9ef">error</span>) {
+          <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">client</span>.<span style="color:#a6e22e">CoreV1</span>().<span style="color:#a6e22e">Services</span>(<span style="color:#a6e22e">options</span>.<span style="color:#a6e22e">WatchedNamespace</span>).<span style="color:#a6e22e">List</span>(<span style="color:#a6e22e">opts</span>)
+       },
+       <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">opts</span> <span style="color:#a6e22e">meta_v1</span>.<span style="color:#a6e22e">ListOptions</span>) (<span style="color:#a6e22e">watch</span>.<span style="color:#a6e22e">Interface</span>, <span style="color:#66d9ef">error</span>) {
+          <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">client</span>.<span style="color:#a6e22e">CoreV1</span>().<span style="color:#a6e22e">Services</span>(<span style="color:#a6e22e">options</span>.<span style="color:#a6e22e">WatchedNamespace</span>).<span style="color:#a6e22e">Watch</span>(<span style="color:#a6e22e">opts</span>)
+       })
+    <span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">endpoints</span> = <span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">createInformer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">v1</span>.<span style="color:#a6e22e">Endpoints</span>{}, <span style="color:#e6db74">&#34;Endpoints&#34;</span>, <span style="color:#a6e22e">options</span>.<span style="color:#a6e22e">ResyncPeriod</span>,
+       <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">opts</span> <span style="color:#a6e22e">meta_v1</span>.<span style="color:#a6e22e">ListOptions</span>) (<span style="color:#a6e22e">runtime</span>.<span style="color:#a6e22e">Object</span>, <span style="color:#66d9ef">error</span>) {
+          <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">client</span>.<span style="color:#a6e22e">CoreV1</span>().<span style="color:#a6e22e">Endpoints</span>(<span style="color:#a6e22e">options</span>.<span style="color:#a6e22e">WatchedNamespace</span>).<span style="color:#a6e22e">List</span>(<span style="color:#a6e22e">opts</span>)
+       },
+       <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">opts</span> <span style="color:#a6e22e">meta_v1</span>.<span style="color:#a6e22e">ListOptions</span>) (<span style="color:#a6e22e">watch</span>.<span style="color:#a6e22e">Interface</span>, <span style="color:#66d9ef">error</span>) {
+          <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">client</span>.<span style="color:#a6e22e">CoreV1</span>().<span style="color:#a6e22e">Endpoints</span>(<span style="color:#a6e22e">options</span>.<span style="color:#a6e22e">WatchedNamespace</span>).<span style="color:#a6e22e">Watch</span>(<span style="color:#a6e22e">opts</span>)
+       })
+    <span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">nodes</span> = <span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">createInformer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">v1</span>.<span style="color:#a6e22e">Node</span>{}, <span style="color:#e6db74">&#34;Node&#34;</span>, <span style="color:#a6e22e">options</span>.<span style="color:#a6e22e">ResyncPeriod</span>,
+       <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">opts</span> <span style="color:#a6e22e">meta_v1</span>.<span style="color:#a6e22e">ListOptions</span>) (<span style="color:#a6e22e">runtime</span>.<span style="color:#a6e22e">Object</span>, <span style="color:#66d9ef">error</span>) {
+          <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">client</span>.<span style="color:#a6e22e">CoreV1</span>().<span style="color:#a6e22e">Nodes</span>().<span style="color:#a6e22e">List</span>(<span style="color:#a6e22e">opts</span>)
+       },
+       <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">opts</span> <span style="color:#a6e22e">meta_v1</span>.<span style="color:#a6e22e">ListOptions</span>) (<span style="color:#a6e22e">watch</span>.<span style="color:#a6e22e">Interface</span>, <span style="color:#66d9ef">error</span>) {
+          <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">client</span>.<span style="color:#a6e22e">CoreV1</span>().<span style="color:#a6e22e">Nodes</span>().<span style="color:#a6e22e">Watch</span>(<span style="color:#a6e22e">opts</span>)
+       })
+    <span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">pods</span> = <span style="color:#a6e22e">newPodCache</span>(<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">createInformer</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">v1</span>.<span style="color:#a6e22e">Pod</span>{}, <span style="color:#e6db74">&#34;Pod&#34;</span>, <span style="color:#a6e22e">options</span>.<span style="color:#a6e22e">ResyncPeriod</span>,
+       <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">opts</span> <span style="color:#a6e22e">meta_v1</span>.<span style="color:#a6e22e">ListOptions</span>) (<span style="color:#a6e22e">runtime</span>.<span style="color:#a6e22e">Object</span>, <span style="color:#66d9ef">error</span>) {
+          <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">client</span>.<span style="color:#a6e22e">CoreV1</span>().<span style="color:#a6e22e">Pods</span>(<span style="color:#a6e22e">options</span>.<span style="color:#a6e22e">WatchedNamespace</span>).<span style="color:#a6e22e">List</span>(<span style="color:#a6e22e">opts</span>)
+       },
+       <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">opts</span> <span style="color:#a6e22e">meta_v1</span>.<span style="color:#a6e22e">ListOptions</span>) (<span style="color:#a6e22e">watch</span>.<span style="color:#a6e22e">Interface</span>, <span style="color:#66d9ef">error</span>) {
+          <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">client</span>.<span style="color:#a6e22e">CoreV1</span>().<span style="color:#a6e22e">Pods</span>(<span style="color:#a6e22e">options</span>.<span style="color:#a6e22e">WatchedNamespace</span>).<span style="color:#a6e22e">Watch</span>(<span style="color:#a6e22e">opts</span>)
+       }))
+<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">out</span>
+</code></pre></div><p>}</p>
+<p>在 createInformer 中其实就是创建了SharedIndexInformer。这种方式在Kubernetes的各种Controller中广泛使用。Informer调用 APIserver的 List 和 Watch 两种类型的 API。在初始化的时，先调用 List API 获得全部资源对象，缓存在内存中; 然后，调用 Watch API 去 Watch这种这种资源对象，维护缓存。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">Service</span> <span style="color:#a6e22e">informer</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">cache</span>.<span style="color:#a6e22e">NewSharedIndexInformer</span>(
+    <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">cache</span>.<span style="color:#a6e22e">ListWatch</span>{<span style="color:#a6e22e">ListFunc</span>: <span style="color:#a6e22e">lf</span>, <span style="color:#a6e22e">WatchFunc</span>: <span style="color:#a6e22e">wf</span>}, <span style="color:#a6e22e">o</span>,
+    <span style="color:#a6e22e">resyncPeriod</span>, <span style="color:#a6e22e">cache</span>.<span style="color:#a6e22e">Indexers</span>{})
+</code></pre></div><p>下面看下Kubernetes场景下对<a href="">ServiceDiscovery</a>接口的实现。我们看下Kubernetes下提供的<a href="https://github.com/istio/istio/blob/3bea9a15cbcef19f21b87eb5245c4aa340f76410/pilot/pkg/serviceregistry/kube/controller.go#L237">服务发现</a>的接口，包括获取服务列表和服务实例列表。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Controller</span>) <span style="color:#a6e22e">GetService</span>(<span style="color:#a6e22e">hostname</span> <span style="color:#a6e22e">model</span>.<span style="color:#a6e22e">Hostname</span>) (<span style="color:#f92672">*</span><span style="color:#a6e22e">model</span>.<span style="color:#a6e22e">Service</span>, <span style="color:#66d9ef">error</span>) {
+ <span style="color:#a6e22e">name</span>, <span style="color:#a6e22e">namespace</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">parseHostname</span>(<span style="color:#a6e22e">hostname</span>)
+ <span style="color:#a6e22e">item</span>, <span style="color:#a6e22e">exists</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">serviceByKey</span>(<span style="color:#a6e22e">name</span>, <span style="color:#a6e22e">namespace</span>)
+ <span style="color:#a6e22e">svc</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">convertService</span>(<span style="color:#f92672">*</span><span style="color:#a6e22e">item</span>, <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">domainSuffix</span>)
+ <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">svc</span>, <span style="color:#66d9ef">nil</span>
+ }
+</code></pre></div><p>最终是从infromer的缓存中获取Service资源对象。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Controller</span>) <span style="color:#a6e22e">serviceByKey</span>(<span style="color:#a6e22e">name</span>, <span style="color:#a6e22e">namespace</span> <span style="color:#66d9ef">string</span>) (<span style="color:#f92672">*</span><span style="color:#a6e22e">v1</span>.<span style="color:#a6e22e">Service</span>, <span style="color:#66d9ef">bool</span>) {
+ <span style="color:#a6e22e">item</span>, <span style="color:#a6e22e">exists</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">services</span>.<span style="color:#a6e22e">informer</span>.<span style="color:#a6e22e">GetStore</span>().<span style="color:#a6e22e">GetByKey</span>(<span style="color:#a6e22e">KeyFunc</span>(<span style="color:#a6e22e">name</span>, <span style="color:#a6e22e">namespace</span>))
+ <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">item</span>.(<span style="color:#f92672">*</span><span style="color:#a6e22e">v1</span>.<span style="color:#a6e22e">Service</span>), <span style="color:#66d9ef">true</span>
+}
+</code></pre></div><p>获取服务实例列表也是类似，也是从Informer的缓存中获取对应资源，只是涉及的对象和处理过程比Service要复杂一些。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Controller</span>) <span style="color:#a6e22e">InstancesByPort</span>(<span style="color:#a6e22e">hostname</span> <span style="color:#a6e22e">model</span>.<span style="color:#a6e22e">Hostname</span>, <span style="color:#a6e22e">reqSvcPort</span> <span style="color:#66d9ef">int</span>,
+  <span style="color:#a6e22e">labelsList</span> <span style="color:#a6e22e">model</span>.<span style="color:#a6e22e">LabelsCollection</span>) ([]<span style="color:#f92672">*</span><span style="color:#a6e22e">model</span>.<span style="color:#a6e22e">ServiceInstance</span>, <span style="color:#66d9ef">error</span>) {
+  <span style="color:#75715e">// Get actual service by name
+</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">name</span>, <span style="color:#a6e22e">namespace</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">parseHostname</span>(<span style="color:#a6e22e">hostname</span>)
+  <span style="color:#a6e22e">item</span>, <span style="color:#a6e22e">exists</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">serviceByKey</span>(<span style="color:#a6e22e">name</span>, <span style="color:#a6e22e">namespace</span>)
+  <span style="color:#a6e22e">svc</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">convertService</span>(<span style="color:#f92672">*</span><span style="color:#a6e22e">item</span>, <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">domainSuffix</span>)
+  <span style="color:#a6e22e">svcPortEntry</span>, <span style="color:#a6e22e">exists</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">svc</span>.<span style="color:#a6e22e">Ports</span>.<span style="color:#a6e22e">GetByPort</span>(<span style="color:#a6e22e">reqSvcPort</span>)
+  <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">item</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">endpoints</span>.<span style="color:#a6e22e">informer</span>.<span style="color:#a6e22e">GetStore</span>().<span style="color:#a6e22e">List</span>() {
+  <span style="color:#a6e22e">ep</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">item</span>.(<span style="color:#f92672">*</span><span style="color:#a6e22e">v1</span>.<span style="color:#a6e22e">Endpoints</span>)
+  <span style="color:#960050;background-color:#1e0010">…</span>
+  }
+ <span style="color:#960050;background-color:#1e0010">…</span> }
+ }
+<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>, <span style="color:#66d9ef">nil</span>
+ }
+</code></pre></div><p>可以看到就是做了如下的转换,将Kubernetes的对一个服务发现的数据结构转换成Istio的抽象模型对应的数据结构。</p>
+<p><img src="../wp-content/uploads/2018/07/642.jpg" alt=""></p>
+<p>其实在conversion.go中提供了多个convert的方法将Kubernetes的数据对象转换成Istio的标准格式。除了上面的对Service、Instance的convert外，还包含对port，label、protocol的convert。如下面protocol的convert就值得一看。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">ConvertProtocol</span>(<span style="color:#a6e22e">name</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">proto</span> <span style="color:#a6e22e">v1</span>.<span style="color:#a6e22e">Protocol</span>) <span style="color:#a6e22e">model</span>.<span style="color:#a6e22e">Protocol</span> {
+    <span style="color:#a6e22e">out</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">model</span>.<span style="color:#a6e22e">ProtocolTCP</span>
+    <span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">proto</span> {
+    <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">v1</span>.<span style="color:#a6e22e">ProtocolUDP</span>:
+       <span style="color:#a6e22e">out</span> = <span style="color:#a6e22e">model</span>.<span style="color:#a6e22e">ProtocolUDP</span>
+    <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">v1</span>.<span style="color:#a6e22e">ProtocolTCP</span>:
+       <span style="color:#a6e22e">prefix</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">name</span>
+       <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Index</span>(<span style="color:#a6e22e">name</span>, <span style="color:#e6db74">&#34;-&#34;</span>)
+       <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">gt</span>;= <span style="color:#ae81ff">0</span> {
+          <span style="color:#a6e22e">prefix</span> = <span style="color:#a6e22e">name</span>[:<span style="color:#a6e22e">i</span>]
+       }
+       <span style="color:#a6e22e">protocol</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">model</span>.<span style="color:#a6e22e">ParseProtocol</span>(<span style="color:#a6e22e">prefix</span>)
+       <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">protocol</span> <span style="color:#f92672">!=</span> <span style="color:#a6e22e">model</span>.<span style="color:#a6e22e">ProtocolUDP</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">protocol</span> <span style="color:#f92672">!=</span> <span style="color:#a6e22e">model</span>.<span style="color:#a6e22e">ProtocolUnsupported</span> {
+          <span style="color:#a6e22e">out</span> = <span style="color:#a6e22e">protocol</span>
+       }
+    }
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">out</span>
+ }
+</code></pre></div><p>看过Istio文档的都知道在使用Istio和Kuberntes结合的场景下创建Pod时要求满足<a href="https://preliminary.istio.io/docs/setup/kubernetes/sidecar-injection/">4个约束</a>。其中重要的一个是Port必须要有名，且Port的名字名字的格式有严格要求：Service 的端口必须命名，且端口的名字必须满足格式 <!-- raw HTML omitted -->&lt;protocol&gt;[-&lt;suffix&gt;]<!-- raw HTML omitted -->，例如<!-- raw HTML omitted -->name: http2-foo<!-- raw HTML omitted --> 。在K8s场景下这部分我们一般可以不对Pod命名的，看这段解析的代码可以看服务的Protocol是从name中解析出来的。如果Service的protocol是UDP的，则协议UDP；如果是TCP的，则会从名字中继续解析协议。如果名称是不可识别的前缀或者端口上的流量就会作为普通的 TCP 流量来处理。</p>
+<p>另外同时在Informer 中添加对add、delete、和update事件的回调，分别对应 informer 监听到创建、更新和删除这三种事件类型。可以看到这里是将待执行的回调操作包装成一个task，再压到Queue中，然后在<a href="https://github.com/istio/istio/blob/aeff05e42fcd2bfb8e0e27e7b4111f8eb92aee01/pilot/pkg/serviceregistry/kube/queue.go#L85">Queue</a>的run()方法中拿出去挨个执行，这部分不细看了。</p>
+<p>到这里Kuberntes特有的服务发现能力就介绍完了。即<a href="https://github.com/istio/istio/blob/3bea9a15cbcef19f21b87eb5245c4aa340f76410/pilot/pkg/serviceregistry/kube/controller.go">kube\controller</a>也实现了<a href="https://github.com/istio/istio/blob/505af9a54033c52137becca1149744b15aebd4ba/pilot/pkg/model/service.go#L333">ServiceDiscovery</a>中规定的服务发现的接口中定义的全部发方法。除了初始化了一个kube controller来从Kubeapiserver中获取和维护服务发现数据外，在pilot server初始化的时候，还有一个重要的<a href="https://github.com/istio/istio/blob/d62583f00c23beec9b975781faf15ded7bab684b/pilot/pkg/bootstrap/server.go#L736">initDiscoveryService</a>初始化<a href="https://github.com/istio/istio/blob/1acd38dd9989a28665dd44600e94843ad573612f/pilot/pkg/proxy/envoy/v2/discovery.go">DiscoveryServer</a>，这个discoveryserver使用contrller，其实是<a href="https://github.com/istio/istio/blob/505af9a54033c52137becca1149744b15aebd4ba/pilot/pkg/model/service.go#L333">ServiceDiscovery</a>上的服务发现供。发布成通用协议的接口，V1是rest，V2是gRPC,进而提供服务发现的能力给Envoy调用，这部分是Pilot服务发现的通用机制，在上篇文章的adapter机制中有详细描述，这里不再赘述。</p>
+<!-- raw HTML omitted -->
+<p>以上介绍了istio基于Kubernetes的名字服务实现服务发现的机制和流程。整个调用关系如下，可以看到和其他的Adapter实现其实类似。</p>
+<p><img src="../wp-content/uploads/2018/07/643.png" alt=""></p>
+<ul>
+<li>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+</li>
+<li>
+<p>Discoveryserver基于Controller上维护的服务发现数据，发布成gRPC协议的服务供Envoy使用。</p>
+</li>
+</ul>
+<p>前面只是提到了服务发现的数据维护，可以看到在Kubernetes场景下，Istio只是是使用了kubeAPIServer中service这种资源对象。在执行层面，说到Service就不得不说Kuberproxy，因为Service只是一个逻辑的描述，真正执行转发动作的是Kubeproxy，他运行在集群的每个节点上，把对Service的访问转发到后端pod上。在引入Istio后，将不再使用Kubeproxy做转发了，而是将这些映射关系转换成为pilot的转发模型，下发到envoy进行转发，执行更复杂的控制。这些在后面分析Discoveryserver和Sidecar的交互时再详细分析。</p>
+<p>在和Kubnernetes结合的场景下强调下几个概念：</p>
+<p>Istio的治理Service就是Kubernetes的Service。不管是服务描述的manifest还是存在于服务注册表中服务的定义都一样。 Istio治理的是服务间的通信。这里的服务并不一定是所谓的微服务，并不在乎是否做了微服务化。只要有服务间的访问，需要治理就可以用。一个大的单体服务打成一个镜像在Kuberntes里部署起来被其他负载访问和分拆成微服务后被访问，在治理看来没有任何差别。</p>
+<p><img src="../wp-content/uploads/2018/07/644.jpg" alt=""></p>
+<p>本文只是描述了在服务发现上两者的结合，随着分析的深入，会发现Istio和Kubernetes的更多契合。K8s编排容器服务已经成为一种事实上的标准；微服务与容器在轻量、快速部署运维等特征的匹配，微服务运行在容器中也正成为一种标准实践；随着istio的成熟和ServiceMesh技术的流行，使用Istio进行微服务治理的实践也正越来越多；而istio和k8s的这种天然融合使得上面形成了一个完美的闭环。对于云原生应用，采用kubernetes构建微服务部署和集群管理能力，采用Istio构建服务治理能力，也将成为微服务真正落地的一个最可能的途径。有幸参与其中让我们一起去见证和经历这个趋势吧。</p>
+<p>注：文中代码基于commit：<a href="https://github.com/istio/istio/tree/505af9a54033c52137becca1149744b15aebd4ba">505af9a54033c52137becca1149744b15aebd4ba</a></p>
+
+
+  
+
+  
+
+</article> 
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 ml-auto blog-sidebar">
+  
+
+  
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+    
+
+    
+    <footer class="blog-footer">
+      <p dir="auto">
+      
+      <!-- raw HTML omitted -->浙ICP备18050493号-1<!-- raw HTML omitted --> 浙公网安备 33010802006262号
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+    
+
+  </body>
+
+</html>

@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<meta property="og:title" content="【hadoop代码笔记】hadoop作业提交之TaskTracker获取Task" />
+<meta property="og:description" content="一、概要描述 在上上一篇博文和上一篇博文中 分别描述了jobTracker和其服务（功能）模块初始化完成后，接收JobClient提交的作业，并进行初始化。本文着重描 述，JobTracker如何选择作业的Task分发到TaskTracker。本文只是描述一个TaskTracker如何从JobTracker获取 Task任务。Task任务在TaskTracker如何执行将在后面博文中描述。 二、 流程描述 TaskTracker在run中调用offerService()方法一直死循环的去连接Jobtracke" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://idouba.net/hadoop_mapreduce_tasktracker_retrieve_task/" />
+<meta property="article:published_time" content="2014-01-18T14:50:50+00:00" />
+<meta property="article:modified_time" content="2014-01-18T14:50:50+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="【hadoop代码笔记】hadoop作业提交之TaskTracker获取Task"/>
+<meta name="twitter:description" content="一、概要描述 在上上一篇博文和上一篇博文中 分别描述了jobTracker和其服务（功能）模块初始化完成后，接收JobClient提交的作业，并进行初始化。本文着重描 述，JobTracker如何选择作业的Task分发到TaskTracker。本文只是描述一个TaskTracker如何从JobTracker获取 Task任务。Task任务在TaskTracker如何执行将在后面博文中描述。 二、 流程描述 TaskTracker在run中调用offerService()方法一直死循环的去连接Jobtracke"/>
+<meta name="generator" content="Hugo 0.80.0" />
+
+
+    
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "【hadoop代码笔记】hadoop作业提交之TaskTracker获取Task",
+  "url": "http:\/\/idouba.net\/hadoop_mapreduce_tasktracker_retrieve_task\/",
+  "wordCount": "8989",
+  "datePublished": "2014-01-18T14:50:50+00:00",
+  "dateModified": "2014-01-18T14:50:50+00:00",
+  "author": {
+    "@type": "Person",
+    "name": "douba"
+  },
+  "keywords": "hadoop, java, mapreduce, source"
+}
+</script>
+
+
+
+    <link rel="canonical" href="http://idouba.net/hadoop_mapreduce_tasktracker_retrieve_task/">
+
+    <title>【hadoop代码笔记】hadoop作业提交之TaskTracker获取Task | 爱豆吧！</title>
+
+    
+    <!-- combined, minified CSS -->
+    
+    <link href="http://idouba.net/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    
+
+    <!-- minified Font Awesome for SVG icons -->
+    
+    <script defer src="http://idouba.net/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+
+    <!-- RSS 2.0 feed -->
+    
+
+    
+
+    
+
+  </head>
+
+  <body>
+
+    
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="http://idouba.net/">Home</a>
+        </nav>
+      </div>
+    </div>
+    
+
+    
+    
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.net/" rel="home">爱豆吧！</a></h1>
+        <p class="lead blog-description" dir="auto">idouba@beta.</p>
+      </div>
+    </header>
+    
+    
+
+    
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/hadoop_mapreduce_tasktracker_retrieve_task/">【hadoop代码笔记】hadoop作业提交之TaskTracker获取Task</a></h2>
+    <p class="blog-post-meta"><time datetime="2014-01-18T14:50:50Z">Sat Jan 18, 2014</time> by douba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/hadoop/" rel="category tag">hadoop</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/hadoop/" rel="tag">hadoop</a>, <a href="/tags/java/" rel="tag">java</a>, <a href="/tags/mapreduce/" rel="tag">mapreduce</a>, <a href="/tags/source/" rel="tag">source</a>
+
+</p>
+  </header>
+  <p><strong>一、概要描述</strong></p>
+<p>在<a href="../hadoop_mapreduce_jobadded">上上一篇博文</a>和<a href="../hadoop_mapreduce_job_init">上一篇博文</a>中 分别描述了jobTracker和其服务（功能）模块初始化完成后，接收JobClient提交的作业，并进行初始化。本文着重描 述，JobTracker如何选择作业的Task分发到TaskTracker。本文只是描述一个TaskTracker如何从JobTracker获取 Task任务。Task任务在TaskTracker如何执行将在<a href="../hadoop_mapreduce_tasktracker_launch_task">后面博文</a>中描述。</p>
+<p><strong>二、 流程描述</strong></p>
+<ol>
+<li>TaskTracker在run中调用offerService()方法一直死循环的去连接Jobtracker，先Jobtracker发送心跳，发送自身状态，并从Jobtracker获取任务指令来执行。</li>
+<li>在JobTracker的heartbeat方法中，对于来自每一个TaskTracker的心跳请求，根据一定的作业调度策略调用assignTasks方法选择一定Task</li>
+<li>Scheduler调用对应的LoadManager的canAssignMap方法和canAssignReduce方法以决定是否可以给 tasktracker分配任务。默认的是CapBasedLoad，全局平均分配。即根据全局的任务槽数，全局的map任务数的比值得到一个load系 数，该系数乘以待分配任务的tasktracker的最大map任务数，即是该tasktracker能分配得到的任务数。如果太tracker当前运行 的任务数小于可运行的任务数，则任务可以分配新作业给他。（图中缺失了LoadManager的表达，也画不下了，就不加了。在代码详细分析中有）</li>
+<li>Scheduler的调用TaskSelector的obtainNewMapTask或者obtainNewReduceTask选择Task。</li>
+<li>在DefaultTaskSelector中选择Task的方法其实只是封装了JobInProgress的对应方法。</li>
+<li>JobTracker根据得到的Task构造TaskTrackerAction设置到到HeartbeatResponse返回给TaskTracker。</li>
+<li>TaskTracker中将来自JobTracker的任务加入到TaskQueue中等待执行。</li>
+</ol>
+<p><img src="../wp-content/uploads/2014/01/hadoop_mapreduce_tasktracker_retrieve_task.png" alt=""></p>
+<p><strong>TaskTracker获取Task</strong></p>
+<p><strong>三、代码详细</strong></p>
+<p><strong>1. TaskTracker的入口函数main</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">JobConf conf<span style="color:#f92672">=</span><span style="color:#66d9ef">new</span> JobConf<span style="color:#f92672">();</span>
+      <span style="color:#75715e">// enable the server to track time spent waiting on locks
+</span><span style="color:#75715e"></span>      ReflectionUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">setContentionTracing</span>
+        <span style="color:#f92672">(</span>conf<span style="color:#f92672">.</span><span style="color:#a6e22e">getBoolean</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;tasktracker.contention.tracking&#34;</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">));</span>
+      <span style="color:#66d9ef">new</span> TaskTracker<span style="color:#f92672">(</span>conf<span style="color:#f92672">).</span><span style="color:#a6e22e">run</span><span style="color:#f92672">();</span>
+</code></pre></div><ol start="2">
+<li>TaskTracker的构造函数</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">maxCurrentMapTasks <span style="color:#f92672">=</span> conf<span style="color:#f92672">.</span><span style="color:#a6e22e">getInt</span><span style="color:#f92672">(</span>
+                  <span style="color:#e6db74">&#34;mapred.tasktracker.map.tasks.maximum&#34;</span><span style="color:#f92672">,</span> 2<span style="color:#f92672">);</span>
+maxCurrentReduceTasks <span style="color:#f92672">=</span> conf<span style="color:#f92672">.</span><span style="color:#a6e22e">getInt</span><span style="color:#f92672">(</span>
+                  <span style="color:#e6db74">&#34;mapred.tasktracker.reduce.tasks.maximum&#34;</span><span style="color:#f92672">,</span> 2<span style="color:#f92672">);</span>
+<span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">jobTrackAddr</span> <span style="color:#f92672">=</span> JobTracker<span style="color:#f92672">.</span><span style="color:#a6e22e">getAddress</span><span style="color:#f92672">(</span>conf<span style="color:#f92672">);</span>
+
+<span style="color:#75715e">//启动httpserver 展示tasktracker状态。
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">server</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HttpServer<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;task&#34;</span><span style="color:#f92672">,</span> httpBindAddress<span style="color:#f92672">,</span> httpPort<span style="color:#f92672">,</span>
+        httpPort <span style="color:#f92672">==</span> 0<span style="color:#f92672">,</span> conf<span style="color:#f92672">);</span>
+server<span style="color:#f92672">.</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
+<span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">httpPort</span> <span style="color:#f92672">=</span> server<span style="color:#f92672">.</span><span style="color:#a6e22e">getPort</span><span style="color:#f92672">();</span>
+<span style="color:#75715e">//初始化方法
+</span><span style="color:#75715e"></span>initialize<span style="color:#f92672">();</span>
+</code></pre></div><ol start="3">
+<li>TaskTracker的initialize方法，完成TaskTracker的初始化工作。</li>
+</ol>
+<p>主要流程</p>
+<p>1)检查可以创建本地文件夹</p>
+<p>2)清理或者初始化需要用到的实例集合变量</p>
+<p>3)初始化RPC服务器，接受task的请求。</p>
+<p>4)清除临时文件</p>
+<p>5)jobtracker的代理，负责处理和jobtracker的交互，通过RPC方式。</p>
+<p>6)一个线程，获取map完成事件。</p>
+<p>7)初始化内存管理</p>
+<p>8)分别启动map和reduce的tasklauncher</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">synchronized</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">initialize</span><span style="color:#f92672">()</span>
+    <span style="color:#f92672">{</span>
+  <span style="color:#75715e">//检查可以创建本地文件夹
+</span><span style="color:#75715e"></span>  checkLocalDirs<span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">fConf</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getLocalDirs</span><span style="color:#f92672">());</span>
+  fConf<span style="color:#f92672">.</span><span style="color:#a6e22e">deleteLocalFiles</span><span style="color:#f92672">(</span>SUBDIR<span style="color:#f92672">);</span>
+  <span style="color:#75715e">//清理或者初始化需要用到的实例集合变量
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">tasks</span><span style="color:#f92672">.</span><span style="color:#a6e22e">clear</span><span style="color:#f92672">();</span>
+      <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">runningTasks</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedHashMap<span style="color:#f92672">&lt;</span>TaskAttemptID<span style="color:#f92672">,</span> TaskInProgress<span style="color:#f92672">&gt;();</span>
+      <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">runningJobs</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> TreeMap<span style="color:#f92672">&lt;</span>JobID<span style="color:#f92672">,</span> RunningJob<span style="color:#f92672">&gt;();</span>
+  <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">jvmManager</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> JvmManager<span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
+  <span style="color:#75715e">//初始化RPC服务器，接受task的请求。
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">taskReportServer</span> <span style="color:#f92672">=</span>
+        RPC<span style="color:#f92672">.</span><span style="color:#a6e22e">getServer</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">,</span> bindAddress<span style="color:#f92672">,</span> tmpPort<span style="color:#f92672">,</span> 2 <span style="color:#f92672">*</span> max<span style="color:#f92672">,</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">fConf</span><span style="color:#f92672">);</span>
+      <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">taskReportServer</span><span style="color:#f92672">.</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
+    <span style="color:#75715e">// 清除临时文件
+</span><span style="color:#75715e"></span>      DistributedCache<span style="color:#f92672">.</span><span style="color:#a6e22e">purgeCache</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">fConf</span><span style="color:#f92672">);</span>
+     cleanupStorage<span style="color:#f92672">();</span>
+
+  <span style="color:#75715e">//jobtracker的代理，负责处理和jobtracker的交互，通过RPC方式。
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">jobClient</span> <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>InterTrackerProtocol<span style="color:#f92672">)</span> 
+        RPC<span style="color:#f92672">.</span><span style="color:#a6e22e">waitForProxy</span><span style="color:#f92672">(</span>InterTrackerProtocol<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">,</span>
+                         InterTrackerProtocol<span style="color:#f92672">.</span><span style="color:#a6e22e">versionID</span><span style="color:#f92672">,</span> 
+                         jobTrackAddr<span style="color:#f92672">,</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">fConf</span><span style="color:#f92672">);</span>
+
+  <span style="color:#75715e">//一个线程，获取map完成事件。
+</span><span style="color:#75715e"></span>      <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">mapEventsFetcher</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> MapEventsFetcherThread<span style="color:#f92672">();</span>
+      mapEventsFetcher<span style="color:#f92672">.</span><span style="color:#a6e22e">setDaemon</span><span style="color:#f92672">(</span><span style="color:#66d9ef">true</span><span style="color:#f92672">);</span>
+      mapEventsFetcher<span style="color:#f92672">.</span><span style="color:#a6e22e">setName</span><span style="color:#f92672">(</span>
+                               <span style="color:#e6db74">&#34;Map-events fetcher for all reduce tasks &#34;</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;on &#34;</span> <span style="color:#f92672">+</span>  taskTrackerName<span style="color:#f92672">);</span>
+      mapEventsFetcher<span style="color:#f92672">.</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
+  <span style="color:#75715e">//初始化内存管理
+</span><span style="color:#75715e"></span>  initializeMemoryManagement<span style="color:#f92672">();</span>
+  <span style="color:#75715e">//分别启动map和reduce的tasklauncher
+</span><span style="color:#75715e"></span>  mapLauncher <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> TaskLauncher<span style="color:#f92672">(</span>maxCurrentMapTasks<span style="color:#f92672">);</span>
+      reduceLauncher <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> TaskLauncher<span style="color:#f92672">(</span>maxCurrentReduceTasks<span style="color:#f92672">);</span>
+      mapLauncher<span style="color:#f92672">.</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
+      reduceLauncher<span style="color:#f92672">.</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
+
+<span style="color:#f92672">}</span>
+</code></pre></div><ol start="4">
+<li><strong>TaskTracker</strong> <strong>的<strong><strong>run</strong></strong>方法，在其中一直尝试执行offerService方法</strong></li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span><span style="color:#f92672">()</span>
+<span style="color:#f92672">{</span>
+   <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span>running <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>staleState <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>shuttingDown <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>denied<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+State osState <span style="color:#f92672">=</span> offerService<span style="color:#f92672">();</span>
+<span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p><strong>5. TaskTracker 的offerService方法</strong></p>
+<ol>
+<li>
+<p>通过RPC调用获得Jobtracker的系统目录。</p>
+</li>
+<li>
+<p>发送心跳并且获取Jobtracker的应答</p>
+</li>
+<li>
+<p>从JobTrackeer的应答中获取指令</p>
+</li>
+<li>
+<p>不同的指令类型执行不同的动作</p>
+</li>
+<li>
+<p>对于要launch的task加入到taskQueue中去</p>
+</li>
+<li>
+<p>对于清理动作，加入待清理的task集合，会有线程自动清理</p>
+</li>
+<li>
+<p>杀死那些过久未反馈进度的task</p>
+</li>
+<li>
+<p>当磁盘空间不够时，杀死某些task以腾出空间</p>
+</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">State <span style="color:#a6e22e">offerService</span><span style="color:#f92672">()</span>
+        <span style="color:#f92672">{</span>
+        <span style="color:#75715e">//通过RPC调用获得Jobtracker的系统目录。
+</span><span style="color:#75715e"></span>        String dir <span style="color:#f92672">=</span> jobClient<span style="color:#f92672">.</span><span style="color:#a6e22e">getSystemDir</span><span style="color:#f92672">();</span>
+                  <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>dir <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                    <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IOException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Failed to get system directory&#34;</span><span style="color:#f92672">);</span>
+                  <span style="color:#f92672">}</span>
+                  systemDirectory <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Path<span style="color:#f92672">(</span>dir<span style="color:#f92672">);</span>
+                  systemFS <span style="color:#f92672">=</span> systemDirectory<span style="color:#f92672">.</span><span style="color:#a6e22e">getFileSystem</span><span style="color:#f92672">(</span>fConf<span style="color:#f92672">);</span>
+                <span style="color:#f92672">}</span>
+        <span style="color:#75715e">// 发送心跳并且获取Jobtracker的应答
+</span><span style="color:#75715e"></span>        HeartbeatResponse heartbeatResponse <span style="color:#f92672">=</span> transmitHeartBeat<span style="color:#f92672">(</span>now<span style="color:#f92672">);</span>
+        <span style="color:#75715e">//从JobTrackeer的应答中获取指令
+</span><span style="color:#75715e"></span>        TaskTrackerAction<span style="color:#f92672">[]</span> actions <span style="color:#f92672">=</span> heartbeatResponse<span style="color:#f92672">.</span><span style="color:#a6e22e">getActions</span><span style="color:#f92672">();</span>
+        <span style="color:#75715e">//不同的指令类型执行不同的动作
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>actions <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">){</span> 
+                  <span style="color:#66d9ef">for</span><span style="color:#f92672">(</span>TaskTrackerAction action<span style="color:#f92672">:</span> actions<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#75715e">//对于要launch的task加入到taskQueue中去
+</span><span style="color:#75715e"></span>                    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>action <span style="color:#66d9ef">instanceof</span> LaunchTaskAction<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>addToTaskQueue<span style="color:#f92672">((</span>LaunchTaskAction<span style="color:#f92672">)</span>action<span style="color:#f92672">);</span>            <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>action <span style="color:#66d9ef">instanceof</span> CommitTaskAction<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                      CommitTaskAction commitAction <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>CommitTaskAction<span style="color:#f92672">)</span>action<span style="color:#f92672">;</span>
+                      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>commitResponses<span style="color:#f92672">.</span><span style="color:#a6e22e">contains</span><span style="color:#f92672">(</span>commitAction<span style="color:#f92672">.</span><span style="color:#a6e22e">getTaskID</span><span style="color:#f92672">()))</span> <span style="color:#f92672">{</span>commitResponses<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>commitAction<span style="color:#f92672">.</span><span style="color:#a6e22e">getTaskID</span><span style="color:#f92672">());}</span>
+        <span style="color:#75715e">//加入待清理的task集合，会有线程自动清理
+</span><span style="color:#75715e"></span>        <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>tasksToCleanup<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>action<span style="color:#f92672">);</span>
+                    <span style="color:#f92672">}</span>
+                  <span style="color:#f92672">}</span>
+                <span style="color:#f92672">}</span>
+        <span style="color:#75715e">//杀死那些过久未反馈进度的task
+</span><span style="color:#75715e"></span>        markUnresponsiveTasks<span style="color:#f92672">();</span>
+        <span style="color:#75715e">//当磁盘空间不够时，杀死某些task以腾出空间
+</span><span style="color:#75715e"></span>         killOverflowingTasks<span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span>
+</code></pre></div><p><strong>6. TaskTracker的 transmitHeartBeat方法，定时向JobTracker发心跳。其实是通过RPC的方式向调用Jobtracker的heartbeat方法。</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">private</span> HeartbeatResponse <span style="color:#a6e22e">transmitHeartBeat</span><span style="color:#f92672">(</span><span style="color:#66d9ef">long</span> now<span style="color:#f92672">)</span>
+<span style="color:#f92672">{</span>
+<span style="color:#66d9ef">boolean</span> askForNewTask<span style="color:#f92672">;</span>
+<span style="color:#66d9ef">long</span> localMinSpaceStart<span style="color:#f92672">;</span>
+<span style="color:#66d9ef">synchronized</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+<span style="color:#75715e">//判断该Tasktracker是否可以接受新的task，依赖于
+</span><span style="color:#75715e"></span>      askForNewTask <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>status<span style="color:#f92672">.</span><span style="color:#a6e22e">countMapTasks</span><span style="color:#f92672">()</span> <span style="color:#f92672">&lt;</span> maxCurrentMapTasks <span style="color:#f92672">||</span> 
+                       status<span style="color:#f92672">.</span><span style="color:#a6e22e">countReduceTasks</span><span style="color:#f92672">()</span> <span style="color:#f92672">&lt;</span> maxCurrentReduceTasks<span style="color:#f92672">)</span> <span style="color:#f92672">&amp;&amp;</span>
+                      acceptNewTasks<span style="color:#f92672">;</span> 
+      localMinSpaceStart <span style="color:#f92672">=</span> minSpaceStart<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>askForNewTask<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+      checkLocalDirs<span style="color:#f92672">(</span>fConf<span style="color:#f92672">.</span><span style="color:#a6e22e">getLocalDirs</span><span style="color:#f92672">());</span>
+<span style="color:#75715e">//判断本地空间是否足够，以决定是否接受新的task
+</span><span style="color:#75715e"></span>      askForNewTask <span style="color:#f92672">=</span> enoughFreeSpace<span style="color:#f92672">(</span>localMinSpaceStart<span style="color:#f92672">);</span>
+ <span style="color:#66d9ef">long</span> freeDiskSpace <span style="color:#f92672">=</span> getFreeSpace<span style="color:#f92672">();</span>
+ <span style="color:#66d9ef">long</span> totVmem <span style="color:#f92672">=</span> getTotalVirtualMemoryOnTT<span style="color:#f92672">();</span>
+ <span style="color:#66d9ef">long</span> totPmem <span style="color:#f92672">=</span> getTotalPhysicalMemoryOnTT<span style="color:#f92672">();</span>
+      status<span style="color:#f92672">.</span><span style="color:#a6e22e">getResourceStatus</span><span style="color:#f92672">().</span><span style="color:#a6e22e">setAvailableSpace</span><span style="color:#f92672">(</span>freeDiskSpace<span style="color:#f92672">);</span> status<span style="color:#f92672">.</span><span style="color:#a6e22e">getResourceStatus</span><span style="color:#f92672">().</span><span style="color:#a6e22e">setTotalVirtualMemory</span><span style="color:#f92672">(</span>totVmem<span style="color:#f92672">);</span> status<span style="color:#f92672">.</span><span style="color:#a6e22e">getResourceStatus</span><span style="color:#f92672">().</span><span style="color:#a6e22e">setTotalPhysicalMemory</span><span style="color:#f92672">(</span>totPmem<span style="color:#f92672">);</span> status<span style="color:#f92672">.</span><span style="color:#a6e22e">getResourceStatus</span><span style="color:#f92672">().</span><span style="color:#a6e22e">setMapSlotMemorySizeOnTT</span><span style="color:#f92672">(</span>mapSlotMemorySizeOnTT<span style="color:#f92672">);</span> status<span style="color:#f92672">.</span><span style="color:#a6e22e">getResourceStatus</span><span style="color:#f92672">().</span><span style="color:#a6e22e">setReduceSlotMemorySizeOnTT</span><span style="color:#f92672">(</span>reduceSlotSizeMemoryOnTT<span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span>  
+<span style="color:#75715e">//通过jobclient通过RPC的方式向调用Jobtracker的heartbeat方法。
+</span><span style="color:#75715e"></span>HeartbeatResponse heartbeatResponse <span style="color:#f92672">=</span> jobClient<span style="color:#f92672">.</span><span style="color:#a6e22e">heartbeat</span><span style="color:#f92672">(</span>status<span style="color:#f92672">,</span> ustStarted<span style="color:#f92672">,</span>justInited<span style="color:#f92672">,</span> askForNewTask<span style="color:#f92672">,</span>                                                               heartbeatResponseId<span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p><strong>6. JobTracker的 heartbeat方法。Jobtracker 接受并处理 tasktracker上报的状态，在返回的应答信息中指示tasktracker完成启停job或启动某个task的动作。</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>动作类型类</strong></th>
+<th><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CommitTaskAction</td>
+<td>指示Task保存输出，即提交</td>
+</tr>
+<tr>
+<td>KillJobAction</td>
+<td>杀死属于这个Job的任何一个Task</td>
+</tr>
+<tr>
+<td>KillTaskAction</td>
+<td>杀死指定的Task</td>
+</tr>
+<tr>
+<td>LaunchTaskAction</td>
+<td>开启某个task</td>
+</tr>
+<tr>
+<td>ReinitTrackerAction</td>
+<td>重新初始化taskTracker</td>
+</tr>
+</tbody>
+</table>
+<p>主要流程如下：</p>
+<ol>
+<li>
+<p>acceptTaskTracker(status)方法通过查询inHostsList(status) &amp;&amp; !inExcludedHostsList确认Tasktracker是否在JobTracker的允许列表中。</p>
+</li>
+<li>
+<p>当得知TaskTracker重启的标记，从jobtracker的潜在故障名单中移除该tasktracker</p>
+</li>
+<li>
+<p>如果initialContact为否表示这次心跳请求不是该taskTracker第一次连接jobtracker，但是如果在jobtracker的 trackerToHeartbeatResponseMap记录中没有之前的响应记录，则说明发生了笔记严重的错误。发送指令给tasktracker 要求其重新初始化。</p>
+</li>
+<li>
+<p>如果这是有问题的tasktracker重新接回来的第一个心跳，则通知recoveryManager recoveryManager从的recoveredTrackers列表中移除该tracker以表示该tracker又正常的接回来了。</p>
+</li>
+<li>
+<p>如果initialContact != true 并且 revHeartbeatResponse != null表示上一个心跳应答存在，但是tasktracker表示第一次请求，则说上一个initialContact请求的应答丢失了，未传送到 tasktracker。则只是简单的把原来的应答重发一下即可。</p>
+</li>
+<li>
+<p>构造应答的Id，是递加的。</p>
+</li>
+<li>
+<p>处理心跳，其实就是在jobTracker端更新该tasktracker的状态</p>
+</li>
+<li>
+<p>检查tasktracker可以运行新的task</p>
+</li>
+<li>
+<p>调用JobTracker配置的taskSceduler来调度task给对应的TaskTracker。从submit到JobTracker的Job列表中选择每个job的每个Task，适合交给该TaskTracker调度的Task</p>
+</li>
+<li>
+<p>把分配的Task加入到expireLaunchingTasks，监视并处理其是否超时。</p>
+</li>
+<li>
+<p>根据调度器发获得要启动的task构造LaunchTaskAction，通知taskTracker启动这些task。</p>
+</li>
+<li>
+<p>把属于该tasktracker的，job已经结束的task加入到killTasksList，发送到tasktracker杀死。即结束那些在tasktracker上已经结束了的作业的task，不管作业是完成还失败。</p>
+</li>
+<li>
+<p>判定哪些作业需要清理的，构造Action加入到action列表中。trackerToJobsToCleanup是一个结合，当job gc的时候，调用 finalizeJob进而调用 addJobForCleanup 把作业加入到trackerToJobsToCleanup中</p>
+</li>
+<li>
+<p>判定那些task可以提交输出，构造action加入到action列表。</p>
+</li>
+<li>
+<p>计算下一次心跳的间隔，设置到应答消息中。</p>
+</li>
+<li>
+<p>把上面这些Action设置到response中返回。</p>
+</li>
+<li>
+<p>把本次应答保存到trackerToHeartbeatResponseMap中</p>
+</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">synchronized</span> HeartbeatResponse <span style="color:#a6e22e">heartbeat</span><span style="color:#f92672">(</span>TaskTrackerStatus status<span style="color:#f92672">,</span> 
+  2             <span style="color:#66d9ef">boolean</span> restarted<span style="color:#f92672">,</span>
+  3             <span style="color:#66d9ef">boolean</span> initialContact<span style="color:#f92672">,</span>
+  4             <span style="color:#66d9ef">boolean</span> acceptNewTasks<span style="color:#f92672">,</span> 
+  5             <span style="color:#66d9ef">short</span> responseId<span style="color:#f92672">)</span> 
+  6 <span style="color:#66d9ef">throws</span> IOException <span style="color:#f92672">{</span>
+  7 
+  8 <span style="color:#75715e">//1) acceptTaskTracker(status)方法通过查询inHostsList(status) &amp;&amp; !inExcludedHostsList确认Tasktracker是否在JobTracker的允许列表中。
+</span><span style="color:#75715e"></span>  9 <span style="color:#a6e22e">if</span> <span style="color:#f92672">(!</span>acceptTaskTracker<span style="color:#f92672">(</span>status<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+ 10 <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">DisallowedTaskTrackerException</span><span style="color:#f92672">(</span>status<span style="color:#f92672">);</span>
+ 11 <span style="color:#f92672">}</span>
+ 12 String trackerName <span style="color:#f92672">=</span> status<span style="color:#f92672">.</span><span style="color:#a6e22e">getTrackerName</span><span style="color:#f92672">();</span>
+ 13 <span style="color:#66d9ef">long</span> now <span style="color:#f92672">=</span> System<span style="color:#f92672">.</span><span style="color:#a6e22e">currentTimeMillis</span><span style="color:#f92672">();</span>
+ 14 <span style="color:#66d9ef">boolean</span> isBlacklisted <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+ 15 <span style="color:#a6e22e">if</span> <span style="color:#f92672">(</span>restarted<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+ 16 <span style="color:#75715e">//2)当得知TaskTracker重启的标记，从jobtracker的潜在故障名单中移除该tasktracker
+</span><span style="color:#75715e"></span> 17 faultyTrackers<span style="color:#f92672">.</span><span style="color:#a6e22e">markTrackerHealthy</span><span style="color:#f92672">(</span>status<span style="color:#f92672">.</span><span style="color:#a6e22e">getHost</span><span style="color:#f92672">());</span>
+ 18 <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+ 19 isBlacklisted <span style="color:#f92672">=</span> 
+ 20 faultyTrackers<span style="color:#f92672">.</span><span style="color:#a6e22e">shouldAssignTasksToTracker</span><span style="color:#f92672">(</span>status<span style="color:#f92672">.</span><span style="color:#a6e22e">getHost</span><span style="color:#f92672">(),</span> now<span style="color:#f92672">);</span>
+ 21 <span style="color:#f92672">}</span>
+ 22 
+ 23 HeartbeatResponse prevHeartbeatResponse <span style="color:#f92672">=</span>trackerToHeartbeatResponseMap<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>trackerName<span style="color:#f92672">);</span>
+ 24 <span style="color:#66d9ef">boolean</span> addRestartInfo <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+ 25 
+ 26 <span style="color:#a6e22e">if</span> <span style="color:#f92672">(</span>initialContact <span style="color:#f92672">!=</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+ 27 <span style="color:#75715e">//3)如果initialContact为否表示这次心跳请求不是该taskTracker第一次连接jobtracker，但是如果在jobtracker的trackerToHeartbeatResponseMap记录中没有之前的响应记录，则说明发生了笔记严重的错误。发送指令给tasktracker要求其重新初始化。
+</span><span style="color:#75715e"></span> 28 <span style="color:#a6e22e">if</span> <span style="color:#f92672">(</span>prevHeartbeatResponse <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+ 29 <span style="color:#75715e">// This is the first heartbeat from the old tracker to the newly 
+</span><span style="color:#75715e"></span> 30 <span style="color:#75715e">// started JobTracker
+</span><span style="color:#75715e"></span> 31 <span style="color:#75715e">//4)如果这是有问题的tasktracker重新接回来的第一个心跳，则通知recoveryManager
+</span><span style="color:#75715e"></span> 32 <span style="color:#a6e22e">if</span> <span style="color:#f92672">(</span>hasRestarted<span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+ 33 addRestartInfo <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
+ 34 <span style="color:#75715e">// recoveryManager从的recoveredTrackers列表中移除该tracker以表示该tracker又正常的接回来了。
+</span><span style="color:#75715e"></span> 35 recoveryManager<span style="color:#f92672">.</span><span style="color:#a6e22e">unMarkTracker</span><span style="color:#f92672">(</span>trackerName<span style="color:#f92672">);</span>
+ 36 <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+ 37 <span style="color:#75715e">//发送指令让tasktracker重新初始化。
+</span><span style="color:#75715e"></span> 38 <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">HeartbeatResponse</span><span style="color:#f92672">(</span>responseId<span style="color:#f92672">,</span> 
+ 39 <span style="color:#66d9ef">new</span> TaskTrackerAction<span style="color:#f92672">[]</span> <span style="color:#f92672">{</span><span style="color:#66d9ef">new</span> ReinitTrackerAction<span style="color:#f92672">()});</span>
+ 40 <span style="color:#f92672">}</span>
+ 41 
+ 42 <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+ 43 
+ 44 <span style="color:#75715e">//如果initialContact != true 并且 revHeartbeatResponse != null表示上一个心跳应答存在，但是tasktracker表示第一次请求，则说上一个initialContact请求的应答丢失了，未传送到tasktracker。则只是简单的把原来的应答重发一下即可。
+</span><span style="color:#75715e"></span> 45 <span style="color:#a6e22e">if</span> <span style="color:#f92672">(</span>prevHeartbeatResponse<span style="color:#f92672">.</span><span style="color:#a6e22e">getResponseId</span><span style="color:#f92672">()</span> <span style="color:#f92672">!=</span> responseId<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+ 46 LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Ignoring &#39;duplicate&#39; heartbeat from &#39;&#34;</span> <span style="color:#f92672">+</span> 
+ 47 trackerName <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;&#39;; resending the previous &#39;lost&#39; response&#34;</span><span style="color:#f92672">);</span>
+ 48 <span style="color:#66d9ef">return</span> prevHeartbeatResponse<span style="color:#f92672">;</span>
+ 49 <span style="color:#f92672">}</span>
+ 50 <span style="color:#f92672">}</span>
+ 51 <span style="color:#f92672">}</span>
+ 52 
+ 53 <span style="color:#75715e">// 应答的Id是递加的。 
+</span><span style="color:#75715e"></span> 54 <span style="color:#66d9ef">short</span> newResponseId <span style="color:#f92672">=</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">short</span><span style="color:#f92672">)(</span>responseId <span style="color:#f92672">+</span> 1<span style="color:#f92672">);</span>
+ 55 status<span style="color:#f92672">.</span><span style="color:#a6e22e">setLastSeen</span><span style="color:#f92672">(</span>now<span style="color:#f92672">);</span>
+ 56 <span style="color:#75715e">//处理心跳，其实就是在jobTracker端更新该tasktracker的状态
+</span><span style="color:#75715e"></span> 57 <span style="color:#a6e22e">if</span> <span style="color:#f92672">(!</span>processHeartbeat<span style="color:#f92672">(</span>status<span style="color:#f92672">,</span> initialContact<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+ 58 <span style="color:#a6e22e">if</span> <span style="color:#f92672">(</span>prevHeartbeatResponse <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+ 59 trackerToHeartbeatResponseMap<span style="color:#f92672">.</span><span style="color:#a6e22e">remove</span><span style="color:#f92672">(</span>trackerName<span style="color:#f92672">);</span>
+ 60 <span style="color:#f92672">}</span>
+ 61 <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">HeartbeatResponse</span><span style="color:#f92672">(</span>newResponseId<span style="color:#f92672">,</span> 
+ 62 <span style="color:#66d9ef">new</span> TaskTrackerAction<span style="color:#f92672">[]</span> <span style="color:#f92672">{</span><span style="color:#66d9ef">new</span> ReinitTrackerAction<span style="color:#f92672">()});</span>
+ 63 <span style="color:#f92672">}</span>
+ 64 
+ 65 <span style="color:#75715e">// 检查tasktracker可以运行新的task
+</span><span style="color:#75715e"></span> 66 <span style="color:#a6e22e">if</span> <span style="color:#f92672">(</span>recoveryManager<span style="color:#f92672">.</span><span style="color:#a6e22e">shouldSchedule</span><span style="color:#f92672">()</span> <span style="color:#f92672">&amp;&amp;</span> acceptNewTasks <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>isBlacklisted<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+ 67 TaskTrackerStatus taskTrackerStatus <span style="color:#f92672">=</span> getTaskTracker<span style="color:#f92672">(</span>trackerName<span style="color:#f92672">);</span>
+ 68 <span style="color:#a6e22e">if</span> <span style="color:#f92672">(</span>taskTrackerStatus <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+ 69 <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+ 70 List<span style="color:#f92672">&lt;</span>Task<span style="color:#f92672">&gt;</span> tasks <span style="color:#f92672">=</span> getSetupAndCleanupTasks<span style="color:#f92672">(</span>taskTrackerStatus<span style="color:#f92672">);</span>
+ 71 <span style="color:#a6e22e">if</span> <span style="color:#f92672">(</span>tasks <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+ 72 <span style="color:#75715e">//2调用JobTracker配置的taskSceduler来调度task给对应的TaskTracker。从submit到JobTracker的Job列表中选择每个job的每个Task，适合交给该TaskTracker调度的Task
+</span><span style="color:#75715e"></span> 73 
+ 74 tasks <span style="color:#f92672">=</span> taskScheduler<span style="color:#f92672">.</span><span style="color:#a6e22e">assignTasks</span><span style="color:#f92672">(</span>taskTrackerStatus<span style="color:#f92672">);}</span>
+ 75 <span style="color:#a6e22e">if</span> <span style="color:#f92672">(</span>tasks <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+ 76 <span style="color:#75715e">//把分配的Task加入到expireLaunchingTasks，监视并处理其是否超时。
+</span><span style="color:#75715e"></span> 77 <span style="color:#a6e22e">for</span> <span style="color:#f92672">(</span>Task task <span style="color:#f92672">:</span> tasks<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+ 78 Object expireLaunchingTasks<span style="color:#f92672">;</span>
+ 79 expireLaunchingTasks<span style="color:#f92672">.</span><span style="color:#a6e22e">addNewTask</span><span style="color:#f92672">(</span>task<span style="color:#f92672">.</span><span style="color:#a6e22e">getTaskID</span><span style="color:#f92672">());</span>
+ 80 actions<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> LaunchTaskAction<span style="color:#f92672">(</span>task<span style="color:#f92672">));</span>
+ 81 <span style="color:#f92672">}</span>
+ 82 <span style="color:#f92672">}</span>
+ 83 <span style="color:#f92672">}</span>
+ 84 <span style="color:#f92672">}</span>
+ 85 
+ 86 <span style="color:#75715e">//把属于该tasktracker的，job已经结束的task加入到killTasksList，发送到tasktracker杀死。即结束那些在tasktracker上已经结束了的作业的task，不管作业是完成还失败。
+</span><span style="color:#75715e"></span> 87 List<span style="color:#f92672">&lt;</span>TaskTrackerAction<span style="color:#f92672">&gt;</span> killTasksList <span style="color:#f92672">=</span> getTasksToKill<span style="color:#f92672">(</span>trackerName<span style="color:#f92672">);</span>
+ 88 <span style="color:#a6e22e">if</span> <span style="color:#f92672">(</span>killTasksList <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+ 89 actions<span style="color:#f92672">.</span><span style="color:#a6e22e">addAll</span><span style="color:#f92672">(</span>killTasksList<span style="color:#f92672">);</span>
+ 90 <span style="color:#f92672">}</span>
+ 91 
+ 92 <span style="color:#75715e">//判定哪些作业需要清理。finalizeJob-&gt; addJobForCleanup 当gc一个job的时候，会调用以上方法把其加入到trackerToJobsToCleanup中
+</span><span style="color:#75715e"></span> 93 List<span style="color:#f92672">&lt;</span>TaskTrackerAction<span style="color:#f92672">&gt;</span> killJobsList <span style="color:#f92672">=</span> getJobsForCleanup<span style="color:#f92672">(</span>trackerName<span style="color:#f92672">);</span>
+ 94 <span style="color:#a6e22e">if</span> <span style="color:#f92672">(</span>killJobsList <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+ 95 actions<span style="color:#f92672">.</span><span style="color:#a6e22e">addAll</span><span style="color:#f92672">(</span>killJobsList<span style="color:#f92672">);</span>
+ 96 
+ 97 <span style="color:#75715e">//判定那些task可以提交输出。
+</span><span style="color:#75715e"></span> 98 List<span style="color:#f92672">&lt;</span>TaskTrackerAction<span style="color:#f92672">&gt;</span> commitTasksList <span style="color:#f92672">=</span> getTasksToSave<span style="color:#f92672">(</span>status<span style="color:#f92672">);</span>
+ 99 <span style="color:#a6e22e">if</span> <span style="color:#f92672">(</span>commitTasksList <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+100 actions<span style="color:#f92672">.</span><span style="color:#a6e22e">addAll</span><span style="color:#f92672">(</span>commitTasksList<span style="color:#f92672">);</span>
+101 <span style="color:#f92672">}</span>
+102 
+103 <span style="color:#75715e">//calculate next heartbeat interval and put in heartbeat response
+</span><span style="color:#75715e"></span>104 <span style="color:#75715e">//计算下一次心跳的间隔，设置到应答消息中。
+</span><span style="color:#75715e"></span>105 <span style="color:#66d9ef">int</span> nextInterval <span style="color:#f92672">=</span> getNextHeartbeatInterval<span style="color:#f92672">();</span>
+106 response<span style="color:#f92672">.</span><span style="color:#a6e22e">setHeartbeatInterval</span><span style="color:#f92672">(</span>nextInterval<span style="color:#f92672">);</span>
+107 
+108 <span style="color:#75715e">//把上面这些Action设置到response中返回。
+</span><span style="color:#75715e"></span>109 response<span style="color:#f92672">.</span><span style="color:#a6e22e">setActions</span><span style="color:#f92672">(</span>actions<span style="color:#f92672">.</span><span style="color:#a6e22e">toArray</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> TaskTrackerAction<span style="color:#f92672">[</span>actions<span style="color:#f92672">.</span><span style="color:#a6e22e">size</span><span style="color:#f92672">()]));</span>
+110 <span style="color:#75715e">//把本次应答保存到trackerToHeartbeatResponseMap中
+</span><span style="color:#75715e"></span>111 trackerToHeartbeatResponseMap<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>trackerName<span style="color:#f92672">,</span> response<span style="color:#f92672">);</span>
+112 <span style="color:#66d9ef">return</span> response<span style="color:#f92672">;</span>
+113 
+114 <span style="color:#f92672">}</span>
+</code></pre></div><p><strong>7.FairScheduler的assignTasks方法。JobTracker就是调用该方法来实现作业的分配的。</strong></p>
+<p>主要流程如下：</p>
+<p>1)分别计算可运行的maptask和reducetask总数</p>
+<p>2)ClusterStatus 维护了当前Map/Reduce作业框架的总体状况。根据ClusterStatus计算得到获得map task的槽数，reduce task的槽数。</p>
+<p>3)调用LoadManager方法决定是否可以为该tasktracker分配任务(默认CapBasedLoadManager方法根据全局的任务槽数， 全局的map任务数的比值得到一个load系数，该系数乘以待分配任务的tasktracker的最大map任务数，即是该tasktracker能分配 得到的任务数。如果太tracker当前运行的任务数小于可运行的任务数，则任务可以分配新作业给他)</p>
+<p>4)从job列表中找出那些job需要运行map或reduce任务，加到List<!-- raw HTML omitted --> candidates集合中</p>
+<p>5)对candidates集合中的job排序，对每个job调用taskSelector的obtainNewMapTask或者 obtainNewReduceTask方法获取要执行的task。把所以的task放到task集合中返回。从而实现了作业Job的任务Task分配。</p>
+<p>6)并对candidates集合中的每个job，更新Jobinfo信息，即其正在运行的task数，需要运行的task数，以便其后续调度用。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">1     <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">synchronized</span> List<span style="color:#f92672">&lt;</span>Task<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">assignTasks</span><span style="color:#f92672">(</span>TaskTrackerStatus tracker<span style="color:#f92672">)</span>
+ 2             <span style="color:#66d9ef">throws</span> IOException <span style="color:#f92672">{</span>
+ 3         <span style="color:#a6e22e">if</span> <span style="color:#f92672">(!</span>initialized<span style="color:#f92672">)</span> <span style="color:#75715e">// Don&#39;t try to assign tasks if we haven&#39;t yet started up
+</span><span style="color:#75715e"></span> 4             <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+ 5 
+ 6         oolMgr<span style="color:#f92672">.</span><span style="color:#a6e22e">reloadAllocsIfNecessary</span><span style="color:#f92672">();</span>
+ 7 
+ 8         <span style="color:#75715e">// 分别计算可运行的maptask和reducetask总数
+</span><span style="color:#75715e"></span> 9         <span style="color:#66d9ef">int</span> runnableMaps <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span>
+10         <span style="color:#66d9ef">int</span> runnableReduces <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span>
+11         <span style="color:#a6e22e">for</span> <span style="color:#f92672">(</span>JobInProgress job<span style="color:#f92672">:</span> infos<span style="color:#f92672">.</span><span style="color:#a6e22e">keySet</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+12             runnableMaps <span style="color:#f92672">+=</span> runnableTasks<span style="color:#f92672">(</span>job<span style="color:#f92672">,</span> TaskType<span style="color:#f92672">.</span><span style="color:#a6e22e">MAP</span><span style="color:#f92672">);</span>
+13             runnableReduces <span style="color:#f92672">+=</span> runnableTasks<span style="color:#f92672">(</span>job<span style="color:#f92672">,</span> TaskType<span style="color:#f92672">.</span><span style="color:#a6e22e">REDUCE</span><span style="color:#f92672">);</span>
+14         <span style="color:#f92672">}</span>
+15 
+16         <span style="color:#75715e">// ClusterStatus 维护了当前Map/Reduce作业框架的总体状况。
+</span><span style="color:#75715e"></span>17         ClusterStatus clusterStatus <span style="color:#f92672">=</span> taskTrackerManager<span style="color:#f92672">.</span><span style="color:#a6e22e">getClusterStatus</span><span style="color:#f92672">();</span>
+18         <span style="color:#75715e">//计算得到获得map task的槽数，reduce task的槽数。
+</span><span style="color:#75715e"></span>19         <span style="color:#66d9ef">int</span> totalMapSlots <span style="color:#f92672">=</span> getTotalSlots<span style="color:#f92672">(</span>TaskType<span style="color:#f92672">.</span><span style="color:#a6e22e">MAP</span><span style="color:#f92672">,</span> clusterStatus<span style="color:#f92672">);</span>
+20         <span style="color:#66d9ef">int</span> totalReduceSlots <span style="color:#f92672">=</span> getTotalSlots<span style="color:#f92672">(</span>TaskType<span style="color:#f92672">.</span><span style="color:#a6e22e">REDUCE</span><span style="color:#f92672">,</span> clusterStatus<span style="color:#f92672">);</span>
+21 
+22         <span style="color:#75715e">//从job列表中找出那些job需要运行map或reduce任务，加到List&lt;JobInProgress&gt; candidates集合中
+</span><span style="color:#75715e"></span>23         ArrayList<span style="color:#f92672">&lt;</span>Task<span style="color:#f92672">&gt;</span> tasks <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">&lt;</span>Task<span style="color:#f92672">&gt;();</span>
+24         TaskType<span style="color:#f92672">[]</span> types <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> TaskType<span style="color:#f92672">[]</span> <span style="color:#f92672">{</span>TaskType<span style="color:#f92672">.</span><span style="color:#a6e22e">MAP</span><span style="color:#f92672">,</span> TaskType<span style="color:#f92672">.</span><span style="color:#a6e22e">REDUCE</span><span style="color:#f92672">};</span>
+25         <span style="color:#a6e22e">for</span> <span style="color:#f92672">(</span>TaskType taskType<span style="color:#f92672">:</span> types<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+26             <span style="color:#66d9ef">boolean</span> canAssign <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>taskType <span style="color:#f92672">==</span> TaskType<span style="color:#f92672">.</span><span style="color:#a6e22e">MAP</span><span style="color:#f92672">)</span>  
+27                     <span style="color:#75715e">//CapBasedLoadManager方法根据全局的任务槽数，全局的map任务数的比值得到一个load系数，该系数乘以待分配任务的tasktracker的最大map任务数，即是该tasktracker能分配得到的任务数。如果太tracker当前运行的任务数小于可运行的任务数，则任务可以分配新作业给他           
+</span><span style="color:#75715e"></span>28                     loadMgr<span style="color:#f92672">.</span><span style="color:#a6e22e">canAssignMap</span><span style="color:#f92672">(</span>tracker<span style="color:#f92672">,</span> runnableMaps<span style="color:#f92672">,</span> totalMapSlots<span style="color:#f92672">)</span> <span style="color:#f92672">:</span>
+29                         loadMgr<span style="color:#f92672">.</span><span style="color:#a6e22e">canAssignReduce</span><span style="color:#f92672">(</span>tracker<span style="color:#f92672">,</span> runnableReduces<span style="color:#f92672">,</span> totalReduceSlots<span style="color:#f92672">);</span>
+30                     <span style="color:#a6e22e">if</span> <span style="color:#f92672">(</span>canAssign<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+31                         List<span style="color:#f92672">&lt;</span>JobInProgress<span style="color:#f92672">&gt;</span> candidates <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">&lt;</span>JobInProgress<span style="color:#f92672">&gt;();</span>
+32                         <span style="color:#a6e22e">for</span> <span style="color:#f92672">(</span>JobInProgress job<span style="color:#f92672">:</span> infos<span style="color:#f92672">.</span><span style="color:#a6e22e">keySet</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+33                             <span style="color:#a6e22e">if</span> <span style="color:#f92672">(</span>job<span style="color:#f92672">.</span><span style="color:#a6e22e">getStatus</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getRunState</span><span style="color:#f92672">()</span> <span style="color:#f92672">==</span> JobStatus<span style="color:#f92672">.</span><span style="color:#a6e22e">RUNNING</span> <span style="color:#f92672">&amp;&amp;</span> 
+34                                     <span style="color:#a6e22e">neededTasks</span><span style="color:#f92672">(</span>job<span style="color:#f92672">,</span> taskType<span style="color:#f92672">)</span> <span style="color:#f92672">&gt;</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+35                                 candidates<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>job<span style="color:#f92672">);</span>
+36                             <span style="color:#f92672">}</span>
+37                         <span style="color:#f92672">}</span>
+38                         <span style="color:#75715e">//对candidates集合中的job排序，对每个job调用taskSelector的obtainNewMapTask或者obtainNewReduceTask方法获取要执行的task。把所以的task放到task集合中返回。
+</span><span style="color:#75715e"></span>39                         <span style="color:#75715e">// Sort jobs by deficit (for Fair Sharing) or submit time (for FIFO)
+</span><span style="color:#75715e"></span>40                         Comparator<span style="color:#f92672">&lt;</span>JobInProgress<span style="color:#f92672">&gt;</span> comparator <span style="color:#f92672">=</span> useFifo 
+41                                 <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">FifoJobComparator</span><span style="color:#f92672">()</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">new</span> DeficitComparator<span style="color:#f92672">(</span>taskType<span style="color:#f92672">);</span>
+42                                 Collections<span style="color:#f92672">.</span><span style="color:#a6e22e">sort</span><span style="color:#f92672">(</span>candidates<span style="color:#f92672">,</span> comparator<span style="color:#f92672">);</span>
+43                                 <span style="color:#a6e22e">for</span> <span style="color:#f92672">(</span>JobInProgress job<span style="color:#f92672">:</span> candidates<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+44                                     Task task <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>taskType <span style="color:#f92672">==</span> TaskType<span style="color:#f92672">.</span><span style="color:#a6e22e">MAP</span>  
+45                                             taskSelector<span style="color:#f92672">.</span><span style="color:#a6e22e">obtainNewMapTask</span><span style="color:#f92672">(</span>tracker<span style="color:#f92672">,</span> job<span style="color:#f92672">)</span> <span style="color:#f92672">:</span>
+46                                                 taskSelector<span style="color:#f92672">.</span><span style="color:#a6e22e">obtainNewReduceTask</span><span style="color:#f92672">(</span>tracker<span style="color:#f92672">,</span> job<span style="color:#f92672">));</span>
+47                                     <span style="color:#a6e22e">if</span> <span style="color:#f92672">(</span>task <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+48                                         <span style="color:#75715e">//并对candidates集合中的每个job，更新Jobinfo信息，即其正在运行的task数，需要运行的task数。
+</span><span style="color:#75715e"></span>49                                         JobInfo info <span style="color:#f92672">=</span> infos<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>job<span style="color:#f92672">);</span>
+50                                         <span style="color:#a6e22e">if</span> <span style="color:#f92672">(</span>taskType <span style="color:#f92672">==</span> TaskType<span style="color:#f92672">.</span><span style="color:#a6e22e">MAP</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+51                                             info<span style="color:#f92672">.</span><span style="color:#a6e22e">runningMaps</span><span style="color:#f92672">++;</span>
+52                                             info<span style="color:#f92672">.</span><span style="color:#a6e22e">neededMaps</span><span style="color:#f92672">--;</span>
+53                                         <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+54                                             info<span style="color:#f92672">.</span><span style="color:#a6e22e">runningReduces</span><span style="color:#f92672">++;</span>
+55                                             info<span style="color:#f92672">.</span><span style="color:#a6e22e">neededReduces</span><span style="color:#f92672">--;</span>
+56                                         <span style="color:#f92672">}</span>
+57                                         tasks<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>task<span style="color:#f92672">);</span>
+58                                         <span style="color:#a6e22e">if</span> <span style="color:#f92672">(!</span>assignMultiple<span style="color:#f92672">)</span>
+59                                             <span style="color:#66d9ef">return</span> tasks<span style="color:#f92672">;</span>
+60                                         <span style="color:#66d9ef">break</span><span style="color:#f92672">;</span>
+61                                     <span style="color:#f92672">}</span>
+62                                 <span style="color:#f92672">}</span>
+63                     <span style="color:#f92672">}</span>
+64         <span style="color:#f92672">}</span>
+65 
+66         <span style="color:#75715e">// If no tasks were found, return null
+</span><span style="color:#75715e"></span>67         <span style="color:#66d9ef">return</span> tasks<span style="color:#f92672">.</span><span style="color:#a6e22e">isEmpty</span><span style="color:#f92672">()</span>  <span style="color:#66d9ef">null</span> <span style="color:#f92672">:</span> tasks<span style="color:#f92672">;</span>
+68     <span style="color:#f92672">}</span>
+</code></pre></div><p>**8.CapBasedLoadManager的canAssignMap方法和canAssignReduce方法。**一 种简单的算法在FairScheduler中用来决定是否可以给某个tasktracker分配maptask或者reducetask。总体思路是对于 某种类型的task，map或者reduce，考虑jobtracker管理的mapreduce集群全部的任务数，和全部的任务槽数，和该 tasktracker上面当前的任务数，以决定是否给他分配任务。如对于maptask，根据全局的任务槽数，全局的map任务数的比值得到一个 load系数，该系数乘以待分配任务的tasktracker的最大map任务数，即是该tasktracker能分配得到的任务数。如果太 tracker当前运行的任务数小于可运行的任务数，则任务可以分配新作业给他。reducetask同理。即尽量做到全局平均。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">getCap</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> totalRunnableTasks<span style="color:#f92672">,</span> <span style="color:#66d9ef">int</span> localMaxTasks<span style="color:#f92672">,</span> <span style="color:#66d9ef">int</span> totalSlots<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">double</span> load <span style="color:#f92672">=</span> <span style="color:#f92672">((</span><span style="color:#66d9ef">double</span><span style="color:#f92672">)</span>totalRunnableTasks<span style="color:#f92672">)</span> <span style="color:#f92672">/</span> totalSlots<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">return</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span><span style="color:#f92672">)</span> Math<span style="color:#f92672">.</span><span style="color:#a6e22e">ceil</span><span style="color:#f92672">(</span>localMaxTasks <span style="color:#f92672">*</span> Math<span style="color:#f92672">.</span><span style="color:#a6e22e">min</span><span style="color:#f92672">(</span>1<span style="color:#f92672">.</span><span style="color:#a6e22e">0</span><span style="color:#f92672">,</span> load<span style="color:#f92672">));</span>
+  <span style="color:#f92672">}</span>
+
+  <span style="color:#a6e22e">@Override</span>
+  <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">canAssignMap</span><span style="color:#f92672">(</span>TaskTrackerStatus tracker<span style="color:#f92672">,</span>
+      <span style="color:#66d9ef">int</span> totalRunnableMaps<span style="color:#f92672">,</span> <span style="color:#66d9ef">int</span> totalMapSlots<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">return</span> tracker<span style="color:#f92672">.</span><span style="color:#a6e22e">countMapTasks</span><span style="color:#f92672">()</span> <span style="color:#f92672">&lt;</span> getCap<span style="color:#f92672">(</span>totalRunnableMaps<span style="color:#f92672">,</span>
+        tracker<span style="color:#f92672">.</span><span style="color:#a6e22e">getMaxMapTasks</span><span style="color:#f92672">(),</span> totalMapSlots<span style="color:#f92672">);</span>
+  <span style="color:#f92672">}</span>
+
+  <span style="color:#a6e22e">@Override</span>
+  <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">canAssignReduce</span><span style="color:#f92672">(</span>TaskTrackerStatus tracker<span style="color:#f92672">,</span>
+      <span style="color:#66d9ef">int</span> totalRunnableReduces<span style="color:#f92672">,</span> <span style="color:#66d9ef">int</span> totalReduceSlots<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">return</span> tracker<span style="color:#f92672">.</span><span style="color:#a6e22e">countReduceTasks</span><span style="color:#f92672">()</span> <span style="color:#f92672">&lt;</span> getCap<span style="color:#f92672">(</span>totalRunnableReduces<span style="color:#f92672">,</span>
+        tracker<span style="color:#f92672">.</span><span style="color:#a6e22e">getMaxReduceTasks</span><span style="color:#f92672">(),</span> totalReduceSlots<span style="color:#f92672">);</span>
+  <span style="color:#f92672">}</span>
+</code></pre></div><p><strong>9.DefaultTaskSelector继承自TaskSelector，其两个方法其实只是对jobInprogress得封装，没有做什么特别的事情。</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Override</span>
+  <span style="color:#66d9ef">public</span> Task <span style="color:#a6e22e">obtainNewMapTask</span><span style="color:#f92672">(</span>TaskTrackerStatus taskTracker<span style="color:#f92672">,</span> JobInProgress job<span style="color:#f92672">)</span>
+      <span style="color:#66d9ef">throws</span> IOException <span style="color:#f92672">{</span>
+    ClusterStatus clusterStatus <span style="color:#f92672">=</span> taskTrackerManager<span style="color:#f92672">.</span><span style="color:#a6e22e">getClusterStatus</span><span style="color:#f92672">();</span>
+    <span style="color:#66d9ef">int</span> numTaskTrackers <span style="color:#f92672">=</span> clusterStatus<span style="color:#f92672">.</span><span style="color:#a6e22e">getTaskTrackers</span><span style="color:#f92672">();</span>
+    <span style="color:#66d9ef">return</span> job<span style="color:#f92672">.</span><span style="color:#a6e22e">obtainNewMapTask</span><span style="color:#f92672">(</span>taskTracker<span style="color:#f92672">,</span> numTaskTrackers<span style="color:#f92672">,</span>
+        taskTrackerManager<span style="color:#f92672">.</span><span style="color:#a6e22e">getNumberOfUniqueHosts</span><span style="color:#f92672">());</span>
+  <span style="color:#f92672">}</span>
+
+  <span style="color:#a6e22e">@Override</span>
+  <span style="color:#66d9ef">public</span> Task <span style="color:#a6e22e">obtainNewReduceTask</span><span style="color:#f92672">(</span>TaskTrackerStatus taskTracker<span style="color:#f92672">,</span> JobInProgress job<span style="color:#f92672">)</span>
+      <span style="color:#66d9ef">throws</span> IOException <span style="color:#f92672">{</span>
+    ClusterStatus clusterStatus <span style="color:#f92672">=</span> taskTrackerManager<span style="color:#f92672">.</span><span style="color:#a6e22e">getClusterStatus</span><span style="color:#f92672">();</span>
+    <span style="color:#66d9ef">int</span> numTaskTrackers <span style="color:#f92672">=</span> clusterStatus<span style="color:#f92672">.</span><span style="color:#a6e22e">getTaskTrackers</span><span style="color:#f92672">();</span>
+    <span style="color:#66d9ef">return</span> job<span style="color:#f92672">.</span><span style="color:#a6e22e">obtainNewReduceTask</span><span style="color:#f92672">(</span>taskTracker<span style="color:#f92672">,</span> numTaskTrackers<span style="color:#f92672">,</span>
+        taskTrackerManager<span style="color:#f92672">.</span><span style="color:#a6e22e">getNumberOfUniqueHosts</span><span style="color:#f92672">());</span>
+  <span style="color:#f92672">}</span>
+</code></pre></div><p><strong>10. JobInProgress的obtainNewMapTask方法。其实主要逻辑是在findNewMapTask方法中实现。</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">synchronized</span> Task <span style="color:#a6e22e">obtainNewMapTask</span><span style="color:#f92672">(</span>TaskTrackerStatus tts<span style="color:#f92672">,</span> 
+                                            <span style="color:#66d9ef">int</span> clusterSize<span style="color:#f92672">,</span> 
+                                            <span style="color:#66d9ef">int</span> numUniqueHosts
+                                           <span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> IOException <span style="color:#f92672">{</span>
+
+    <span style="color:#66d9ef">int</span> target <span style="color:#f92672">=</span> findNewMapTask<span style="color:#f92672">(</span>tts<span style="color:#f92672">,</span> clusterSize<span style="color:#f92672">,</span> numUniqueHosts<span style="color:#f92672">,</span> anyCacheLevel<span style="color:#f92672">,</span>
+                                status<span style="color:#f92672">.</span><span style="color:#a6e22e">mapProgress</span><span style="color:#f92672">());</span>
+    
+    Task result <span style="color:#f92672">=</span> maps<span style="color:#f92672">[</span>target<span style="color:#f92672">].</span><span style="color:#a6e22e">getTaskToRun</span><span style="color:#f92672">(</span>tts<span style="color:#f92672">.</span><span style="color:#a6e22e">getTrackerName</span><span style="color:#f92672">());</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>result <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+      addRunningTaskToTIP<span style="color:#f92672">(</span>maps<span style="color:#f92672">[</span>target<span style="color:#f92672">],</span> result<span style="color:#f92672">.</span><span style="color:#a6e22e">getTaskID</span><span style="color:#f92672">(),</span> tts<span style="color:#f92672">,</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+    
+    <span style="color:#66d9ef">return</span> result<span style="color:#f92672">;</span>
+  <span style="color:#f92672">}</span>
+</code></pre></div><p><strong>11 JobInProgress的findNewMapTask方法。</strong></p>
+<p>根据待派发Task的TaskTracker根据集群中的TaskTracker数量（<strong>clusterSize</strong>），运行TraskTracker的服务器数（<strong>numUniqueHosts</strong>），该Job中map task的平均进度（<strong>avgProgress</strong>），可以调度map的最大水平（距离其实），选择一个task执行。考虑到map的本地化。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">synchronized</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">findNewMapTask</span><span style="color:#f92672">(</span><span style="color:#66d9ef">final</span> TaskTrackerStatus tts<span style="color:#f92672">,</span> 
+            <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> clusterSize<span style="color:#f92672">,</span>
+            <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> numUniqueHosts<span style="color:#f92672">,</span>
+            <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> maxCacheLevel<span style="color:#f92672">,</span>
+            <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">double</span> avgProgress<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        String taskTracker <span style="color:#f92672">=</span> tts<span style="color:#f92672">.</span><span style="color:#a6e22e">getTrackerName</span><span style="color:#f92672">();</span>
+        TaskInProgress tip <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+
+        <span style="color:#75715e">//1）更新TaskTracker总数。
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">clusterSize</span> <span style="color:#f92672">=</span> clusterSize<span style="color:#f92672">;</span>
+    
+        <span style="color:#75715e">//2）如果这个TraskTracker上面之前有很多map都会失败，则返回标记，不分配给他。
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>shouldRunOnTaskTracker<span style="color:#f92672">(</span>taskTracker<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span>1<span style="color:#f92672">;</span>
+    
+            <span style="color:#75715e">//3） 检查该TaskTracker有足够的资源运行。估算output的方法有点意思，根据（job现有的map数+当前job的map数）*已完成map数*2*已完成的map的输出size/已经完成map的输入size，即根据完成估算总数。
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">long</span> outSize <span style="color:#f92672">=</span> resourceEstimator<span style="color:#f92672">.</span><span style="color:#a6e22e">getEstimatedMapOutputSize</span><span style="color:#f92672">();</span>
+            <span style="color:#66d9ef">long</span> availSpace <span style="color:#f92672">=</span> tts<span style="color:#f92672">.</span><span style="color:#a6e22e">getResourceStatus</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getAvailableSpace</span><span style="color:#f92672">();</span>
+            <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>availSpace <span style="color:#f92672">&lt;</span> outSize<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">warn</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;No room for map task. Node &#34;</span> <span style="color:#f92672">+</span> tts<span style="color:#f92672">.</span><span style="color:#a6e22e">getHost</span><span style="color:#f92672">()</span> <span style="color:#f92672">+</span> 
+                        <span style="color:#e6db74">&#34; has &#34;</span> <span style="color:#f92672">+</span> availSpace <span style="color:#f92672">+</span> 
+                        <span style="color:#e6db74">&#34; bytes free; but we expect map to take &#34;</span> <span style="color:#f92672">+</span> outSize<span style="color:#f92672">);</span>
+                <span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span>1<span style="color:#f92672">;</span> 
+            <span style="color:#f92672">}</span>
+    
+            <span style="color:#75715e">// For scheduling a map task, we have two caches and a list (optional)
+</span><span style="color:#75715e"></span>            <span style="color:#75715e">//  I)   one for non-running task
+</span><span style="color:#75715e"></span>            <span style="color:#75715e">//  II)  one for running task (this is for handling speculation)
+</span><span style="color:#75715e"></span>            <span style="color:#75715e">//  III) a list of TIPs that have empty locations (e.g., dummy splits),
+</span><span style="color:#75715e"></span>            <span style="color:#75715e">//       the list is empty if all TIPs have associated locations
+</span><span style="color:#75715e"></span>    
+            <span style="color:#75715e">// First a look up is done on the non-running cache and on a miss, a look 
+</span><span style="color:#75715e"></span>            <span style="color:#75715e">// up is done on the running cache. The order for lookup within the cache:
+</span><span style="color:#75715e"></span>            <span style="color:#75715e">//   1. from local node to root [bottom up]
+</span><span style="color:#75715e"></span>            <span style="color:#75715e">//   2. breadth wise for all the parent nodes at max level
+</span><span style="color:#75715e"></span>    
+            <span style="color:#75715e">// We fall to linear scan of the list (III above) if we have misses in the 
+</span><span style="color:#75715e"></span>            <span style="color:#75715e">// above caches
+</span><span style="color:#75715e"></span>    
+            <span style="color:#75715e">//4）获得jobTracker所在的Node
+</span><span style="color:#75715e"></span>            Node node <span style="color:#f92672">=</span> jobtracker<span style="color:#f92672">.</span><span style="color:#a6e22e">getNode</span><span style="color:#f92672">(</span>tts<span style="color:#f92672">.</span><span style="color:#a6e22e">getHost</span><span style="color:#f92672">());</span>
+    
+            <span style="color:#75715e">// I) Non-running TIP :
+</span><span style="color:#75715e"></span>            <span style="color:#75715e">//5） 从未运行的作业集合中选择一个nonRunningMapCache 加入到运行集合runningMapCache中。加入时根据待添加的Task的split的位置信息，在runningMapCache中保存Node和Task集合的对应关系。
+</span><span style="color:#75715e"></span>    
+            <span style="color:#75715e">// 1. check from local node to the root [bottom up cache lookup]
+</span><span style="color:#75715e"></span>            <span style="color:#75715e">//    i.e if the cache is available and the host has been resolved
+</span><span style="color:#75715e"></span>            <span style="color:#75715e">//    (node!=null)
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>node <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                Node key <span style="color:#f92672">=</span> node<span style="color:#f92672">;</span>
+                <span style="color:#66d9ef">int</span> level <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span>
+                <span style="color:#75715e">// maxCacheLevel might be greater than this.maxLevel if findNewMapTask is
+</span><span style="color:#75715e"></span>                <span style="color:#75715e">// called to schedule any task (local, rack-local, off-switch or speculative)
+</span><span style="color:#75715e"></span>                <span style="color:#75715e">// tasks or it might be NON_LOCAL_CACHE_LEVEL (i.e. -1) if findNewMapTask is
+</span><span style="color:#75715e"></span>                <span style="color:#75715e">//  (i.e. -1) if findNewMapTask is to only schedule off-switch/speculative
+</span><span style="color:#75715e"></span>                <span style="color:#75715e">// tasks
+</span><span style="color:#75715e"></span>                <span style="color:#75715e">//从taskTracker本地开始由近至远查找要加入的Task 到runningMapCache中。
+</span><span style="color:#75715e"></span>                <span style="color:#66d9ef">int</span> maxLevelToSchedule <span style="color:#f92672">=</span> Math<span style="color:#f92672">.</span><span style="color:#a6e22e">min</span><span style="color:#f92672">(</span>maxCacheLevel<span style="color:#f92672">,</span> maxLevel<span style="color:#f92672">);</span>
+                <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>level <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span>level <span style="color:#f92672">&lt;</span> maxLevelToSchedule<span style="color:#f92672">;</span> <span style="color:#f92672">++</span>level<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                    List <span style="color:#f92672">&lt;</span>TaskInProgress<span style="color:#f92672">&gt;</span> cacheForLevel <span style="color:#f92672">=</span> nonRunningMapCache<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>key<span style="color:#f92672">);</span>
+                    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>cacheForLevel <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                        tip <span style="color:#f92672">=</span> findTaskFromList<span style="color:#f92672">(</span>cacheForLevel<span style="color:#f92672">,</span> tts<span style="color:#f92672">,</span> 
+                                numUniqueHosts<span style="color:#f92672">,</span>level <span style="color:#f92672">==</span> 0<span style="color:#f92672">);</span>
+                        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>tip <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                            <span style="color:#75715e">// 把该map任务加入到runningMapCache
+</span><span style="color:#75715e"></span>                            scheduleMap<span style="color:#f92672">(</span>tip<span style="color:#f92672">);</span>
+                            <span style="color:#66d9ef">return</span> tip<span style="color:#f92672">.</span><span style="color:#a6e22e">getIdWithinJob</span><span style="color:#f92672">();</span>
+                        <span style="color:#f92672">}</span>
+                    <span style="color:#f92672">}</span>
+                    key <span style="color:#f92672">=</span> key<span style="color:#f92672">.</span><span style="color:#a6e22e">getParent</span><span style="color:#f92672">();</span>
+                <span style="color:#f92672">}</span>
+    
+                <span style="color:#75715e">// Check if we need to only schedule a local task (node-local/rack-local)
+</span><span style="color:#75715e"></span>                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>level <span style="color:#f92672">==</span> maxCacheLevel<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                    <span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span>1<span style="color:#f92672">;</span>
+                <span style="color:#f92672">}</span>
+            <span style="color:#f92672">}</span>
+    
+            <span style="color:#75715e">//2. Search breadth-wise across parents at max level for non-running 
+</span><span style="color:#75715e"></span>            <span style="color:#75715e">//   TIP if
+</span><span style="color:#75715e"></span>            <span style="color:#75715e">//     - cache exists and there is a cache miss 
+</span><span style="color:#75715e"></span>            <span style="color:#75715e">//     - node information for the tracker is missing (tracker&#39;s topology
+</span><span style="color:#75715e"></span>            <span style="color:#75715e">//       info not obtained yet)
+</span><span style="color:#75715e"></span>    
+            <span style="color:#75715e">// collection of node at max level in the cache structure
+</span><span style="color:#75715e"></span>            Collection<span style="color:#f92672">&lt;</span>Node<span style="color:#f92672">&gt;</span> nodesAtMaxLevel <span style="color:#f92672">=</span> jobtracker<span style="color:#f92672">.</span><span style="color:#a6e22e">getNodesAtMaxLevel</span><span style="color:#f92672">();</span>
+    
+            <span style="color:#75715e">// get the node parent at max level
+</span><span style="color:#75715e"></span>            Node nodeParentAtMaxLevel <span style="color:#f92672">=</span> 
+                    <span style="color:#f92672">(</span>node <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span>  <span style="color:#66d9ef">null</span> <span style="color:#f92672">:</span> JobTracker<span style="color:#f92672">.</span><span style="color:#a6e22e">getParentNode</span><span style="color:#f92672">(</span>node<span style="color:#f92672">,</span> maxLevel <span style="color:#f92672">-</span> 1<span style="color:#f92672">);</span>
+    
+            <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>Node parent <span style="color:#f92672">:</span> nodesAtMaxLevel<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    
+                <span style="color:#75715e">// skip the parent that has already been scanned
+</span><span style="color:#75715e"></span>                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>parent <span style="color:#f92672">==</span> nodeParentAtMaxLevel<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                    <span style="color:#66d9ef">continue</span><span style="color:#f92672">;</span>
+                <span style="color:#f92672">}</span>
+    
+                List<span style="color:#f92672">&lt;</span>TaskInProgress<span style="color:#f92672">&gt;</span> cache <span style="color:#f92672">=</span> nonRunningMapCache<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>parent<span style="color:#f92672">);</span>
+                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>cache <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                    tip <span style="color:#f92672">=</span> findTaskFromList<span style="color:#f92672">(</span>cache<span style="color:#f92672">,</span> tts<span style="color:#f92672">,</span> numUniqueHosts<span style="color:#f92672">,</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">);</span>
+                    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>tip <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                        <span style="color:#75715e">// Add to the running cache
+</span><span style="color:#75715e"></span>                        scheduleMap<span style="color:#f92672">(</span>tip<span style="color:#f92672">);</span>
+    
+                        <span style="color:#75715e">// remove the cache if empty
+</span><span style="color:#75715e"></span>                        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>cache<span style="color:#f92672">.</span><span style="color:#a6e22e">size</span><span style="color:#f92672">()</span> <span style="color:#f92672">==</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                            nonRunningMapCache<span style="color:#f92672">.</span><span style="color:#a6e22e">remove</span><span style="color:#f92672">(</span>parent<span style="color:#f92672">);</span>
+                        <span style="color:#f92672">}</span>
+                        LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Choosing a non-local task &#34;</span> <span style="color:#f92672">+</span> tip<span style="color:#f92672">.</span><span style="color:#a6e22e">getTIPId</span><span style="color:#f92672">());</span>
+                        <span style="color:#66d9ef">return</span> tip<span style="color:#f92672">.</span><span style="color:#a6e22e">getIdWithinJob</span><span style="color:#f92672">();</span>
+                    <span style="color:#f92672">}</span>
+                <span style="color:#f92672">}</span>
+            <span style="color:#f92672">}</span>
+    
+            <span style="color:#75715e">//搜索非本地Map
+</span><span style="color:#75715e"></span>            tip <span style="color:#f92672">=</span> findTaskFromList<span style="color:#f92672">(</span>nonLocalMaps<span style="color:#f92672">,</span> tts<span style="color:#f92672">,</span> numUniqueHosts<span style="color:#f92672">,</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">);</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>tip <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                <span style="color:#75715e">// Add to the running list
+</span><span style="color:#75715e"></span>                scheduleMap<span style="color:#f92672">(</span>tip<span style="color:#f92672">);</span>
+    
+                LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Choosing a non-local task &#34;</span> <span style="color:#f92672">+</span> tip<span style="color:#f92672">.</span><span style="color:#a6e22e">getTIPId</span><span style="color:#f92672">());</span>
+                <span style="color:#66d9ef">return</span> tip<span style="color:#f92672">.</span><span style="color:#a6e22e">getIdWithinJob</span><span style="color:#f92672">();</span>
+            <span style="color:#f92672">}</span>
+    
+            <span style="color:#75715e">//
+</span><span style="color:#75715e"></span>            <span style="color:#75715e">// II) Running TIP :
+</span><span style="color:#75715e"></span>            <span style="color:#75715e">// 
+</span><span style="color:#75715e"></span>    
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>hasSpeculativeMaps<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">long</span> currentTime <span style="color:#f92672">=</span> System<span style="color:#f92672">.</span><span style="color:#a6e22e">currentTimeMillis</span><span style="color:#f92672">();</span>
+    
+                <span style="color:#75715e">// 1. Check bottom up for speculative tasks from the running cache
+</span><span style="color:#75715e"></span>                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>node <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                    Node key <span style="color:#f92672">=</span> node<span style="color:#f92672">;</span>
+                    <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> level <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> level <span style="color:#f92672">&lt;</span> maxLevel<span style="color:#f92672">;</span> <span style="color:#f92672">++</span>level<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                        Set<span style="color:#f92672">&lt;</span>TaskInProgress<span style="color:#f92672">&gt;</span> cacheForLevel <span style="color:#f92672">=</span> runningMapCache<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>key<span style="color:#f92672">);</span>
+                        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>cacheForLevel <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                            tip <span style="color:#f92672">=</span> findSpeculativeTask<span style="color:#f92672">(</span>cacheForLevel<span style="color:#f92672">,</span> tts<span style="color:#f92672">,</span> 
+                                    avgProgress<span style="color:#f92672">,</span> currentTime<span style="color:#f92672">,</span> level <span style="color:#f92672">==</span> 0<span style="color:#f92672">);</span>
+                            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>tip <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>cacheForLevel<span style="color:#f92672">.</span><span style="color:#a6e22e">size</span><span style="color:#f92672">()</span> <span style="color:#f92672">==</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                                    runningMapCache<span style="color:#f92672">.</span><span style="color:#a6e22e">remove</span><span style="color:#f92672">(</span>key<span style="color:#f92672">);</span>
+                                <span style="color:#f92672">}</span>
+                                <span style="color:#66d9ef">return</span> tip<span style="color:#f92672">.</span><span style="color:#a6e22e">getIdWithinJob</span><span style="color:#f92672">();</span>
+                            <span style="color:#f92672">}</span>
+                        <span style="color:#f92672">}</span>
+                        key <span style="color:#f92672">=</span> key<span style="color:#f92672">.</span><span style="color:#a6e22e">getParent</span><span style="color:#f92672">();</span>
+                    <span style="color:#f92672">}</span>
+                <span style="color:#f92672">}</span>
+    
+                <span style="color:#75715e">// 2. Check breadth-wise for speculative tasks
+</span><span style="color:#75715e"></span>    
+                <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>Node parent <span style="color:#f92672">:</span> nodesAtMaxLevel<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                    <span style="color:#75715e">// ignore the parent which is already scanned
+</span><span style="color:#75715e"></span>                    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>parent <span style="color:#f92672">==</span> nodeParentAtMaxLevel<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                        <span style="color:#66d9ef">continue</span><span style="color:#f92672">;</span>
+                    <span style="color:#f92672">}</span>
+    
+                    Set<span style="color:#f92672">&lt;</span>TaskInProgress<span style="color:#f92672">&gt;</span> cache <span style="color:#f92672">=</span> runningMapCache<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>parent<span style="color:#f92672">);</span>
+                    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>cache <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                        tip <span style="color:#f92672">=</span> findSpeculativeTask<span style="color:#f92672">(</span>cache<span style="color:#f92672">,</span> tts<span style="color:#f92672">,</span> avgProgress<span style="color:#f92672">,</span> 
+                                currentTime<span style="color:#f92672">,</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">);</span>
+                        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>tip <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                            <span style="color:#75715e">// remove empty cache entries
+</span><span style="color:#75715e"></span>                            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>cache<span style="color:#f92672">.</span><span style="color:#a6e22e">size</span><span style="color:#f92672">()</span> <span style="color:#f92672">==</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                                runningMapCache<span style="color:#f92672">.</span><span style="color:#a6e22e">remove</span><span style="color:#f92672">(</span>parent<span style="color:#f92672">);</span>
+                            <span style="color:#f92672">}</span>
+                            LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Choosing a non-local task &#34;</span> <span style="color:#f92672">+</span> tip<span style="color:#f92672">.</span><span style="color:#a6e22e">getTIPId</span><span style="color:#f92672">()</span> 
+                                    <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; for speculation&#34;</span><span style="color:#f92672">);</span>
+                            <span style="color:#66d9ef">return</span> tip<span style="color:#f92672">.</span><span style="color:#a6e22e">getIdWithinJob</span><span style="color:#f92672">();</span>
+                        <span style="color:#f92672">}</span>
+                    <span style="color:#f92672">}</span>
+                <span style="color:#f92672">}</span>
+    
+                <span style="color:#75715e">// 3. Check non-local tips for speculation
+</span><span style="color:#75715e"></span>                tip <span style="color:#f92672">=</span> findSpeculativeTask<span style="color:#f92672">(</span>nonLocalRunningMaps<span style="color:#f92672">,</span> tts<span style="color:#f92672">,</span> avgProgress<span style="color:#f92672">,</span> 
+                        currentTime<span style="color:#f92672">,</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">);</span>
+                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>tip <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                    LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Choosing a non-local task &#34;</span> <span style="color:#f92672">+</span> tip<span style="color:#f92672">.</span><span style="color:#a6e22e">getTIPId</span><span style="color:#f92672">()</span> 
+                            <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; for speculation&#34;</span><span style="color:#f92672">);</span>
+                    <span style="color:#66d9ef">return</span> tip<span style="color:#f92672">.</span><span style="color:#a6e22e">getIdWithinJob</span><span style="color:#f92672">();</span>
+                <span style="color:#f92672">}</span>
+            <span style="color:#f92672">}</span>
+    
+            <span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span>1<span style="color:#f92672">;</span>
+    
+        <span style="color:#f92672">}</span>
+</code></pre></div><p><strong>12 JobInProgress的obtainNewReduceTask方法返回一个ReduceTask，实际调用的是findNewReduceTask方法。</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">synchronized</span> Task <span style="color:#a6e22e">obtainNewReduceTask</span><span style="color:#f92672">(</span>TaskTrackerStatus tts<span style="color:#f92672">,</span>
+                                               <span style="color:#66d9ef">int</span> clusterSize<span style="color:#f92672">,</span>
+                                               <span style="color:#66d9ef">int</span> numUniqueHosts
+                                              <span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> IOException <span style="color:#f92672">{</span>
+  <span style="color:#75715e">//判定有足够的map已经完成。，
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>scheduleReduces<span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+      <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">int</span>  target <span style="color:#f92672">=</span> findNewReduceTask<span style="color:#f92672">(</span>tts<span style="color:#f92672">,</span> clusterSize<span style="color:#f92672">,</span> numUniqueHosts<span style="color:#f92672">,</span> 
+                                    status<span style="color:#f92672">.</span><span style="color:#a6e22e">reduceProgress</span><span style="color:#f92672">());</span>
+    Task result <span style="color:#f92672">=</span> reduces<span style="color:#f92672">[</span>target<span style="color:#f92672">].</span><span style="color:#a6e22e">getTaskToRun</span><span style="color:#f92672">(</span>tts<span style="color:#f92672">.</span><span style="color:#a6e22e">getTrackerName</span><span style="color:#f92672">());</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>result <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+      addRunningTaskToTIP<span style="color:#f92672">(</span>reduces<span style="color:#f92672">[</span>target<span style="color:#f92672">],</span> result<span style="color:#f92672">.</span><span style="color:#a6e22e">getTaskID</span><span style="color:#f92672">(),</span> tts<span style="color:#f92672">,</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+    
+    <span style="color:#66d9ef">return</span> result<span style="color:#f92672">;</span>
+  <span style="color:#f92672">}</span>
+</code></pre></div><p><strong>13 JobInProgress的findNewReduceTask方法，为指定的TaskTracker选择Reduce task。不用考虑本地化。</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">synchronized</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">findNewReduceTask</span><span style="color:#f92672">(</span>TaskTrackerStatus tts<span style="color:#f92672">,</span> 
+                                             <span style="color:#66d9ef">int</span> clusterSize<span style="color:#f92672">,</span>
+                                             <span style="color:#66d9ef">int</span> numUniqueHosts<span style="color:#f92672">,</span>
+                                             <span style="color:#66d9ef">double</span> avgProgress<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    String taskTracker <span style="color:#f92672">=</span> tts<span style="color:#f92672">.</span><span style="color:#a6e22e">getTrackerName</span><span style="color:#f92672">();</span>
+    TaskInProgress tip <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+
+    <span style="color:#75715e">// Update the last-known clusterSize
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">clusterSize</span> <span style="color:#f92672">=</span> clusterSize<span style="color:#f92672">;</span>
+    <span style="color:#75715e">// 该taskTracker可用性符合要求
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>shouldRunOnTaskTracker<span style="color:#f92672">(</span>taskTracker<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+      <span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span>1<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+<span style="color:#75715e">//估算Reduce的输入，根据map的总输出来和reduce的个数来计算。
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">long</span> outSize <span style="color:#f92672">=</span> resourceEstimator<span style="color:#f92672">.</span><span style="color:#a6e22e">getEstimatedReduceInputSize</span><span style="color:#f92672">();</span>
+    <span style="color:#66d9ef">long</span> availSpace <span style="color:#f92672">=</span> tts<span style="color:#f92672">.</span><span style="color:#a6e22e">getResourceStatus</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getAvailableSpace</span><span style="color:#f92672">();</span>
+    <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>availSpace <span style="color:#f92672">&lt;</span> outSize<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+      LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">warn</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;No room for reduce task. Node &#34;</span> <span style="color:#f92672">+</span> taskTracker <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; has &#34;</span> <span style="color:#f92672">+</span>
+                availSpace <span style="color:#f92672">+</span> 
+               <span style="color:#e6db74">&#34; bytes free; but we expect reduce input to take &#34;</span> <span style="color:#f92672">+</span> outSize<span style="color:#f92672">);</span>
+
+      <span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span>1<span style="color:#f92672">;</span> <span style="color:#75715e">//see if a different TIP might work better. 
+</span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
+    
+    <span style="color:#75715e">// 1. check for a never-executed reduce tip
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// reducers don&#39;t have a cache and so pass -1 to explicitly call that out
+</span><span style="color:#75715e"></span>    tip <span style="color:#f92672">=</span> findTaskFromList<span style="color:#f92672">(</span>nonRunningReduces<span style="color:#f92672">,</span> tts<span style="color:#f92672">,</span> numUniqueHosts<span style="color:#f92672">,</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">);</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>tip <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+      scheduleReduce<span style="color:#f92672">(</span>tip<span style="color:#f92672">);</span>
+      <span style="color:#66d9ef">return</span> tip<span style="color:#f92672">.</span><span style="color:#a6e22e">getIdWithinJob</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+    
+    <span style="color:#75715e">// 2. check for a reduce tip to be speculated
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>hasSpeculativeReduces<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+      tip <span style="color:#f92672">=</span> findSpeculativeTask<span style="color:#f92672">(</span>runningReduces<span style="color:#f92672">,</span> tts<span style="color:#f92672">,</span> avgProgress<span style="color:#f92672">,</span> 
+                                System<span style="color:#f92672">.</span><span style="color:#a6e22e">currentTimeMillis</span><span style="color:#f92672">(),</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">);</span>
+      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>tip <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        scheduleReduce<span style="color:#f92672">(</span>tip<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">return</span> tip<span style="color:#f92672">.</span><span style="color:#a6e22e">getIdWithinJob</span><span style="color:#f92672">();</span>
+      <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+    
+    <span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span>1<span style="color:#f92672">;</span>
+  <span style="color:#f92672">}</span>
+</code></pre></div><p><strong>14 TaskTracker 的addToTaskQueue方法。对于要launch的task加入到taskQueue中去，不同类型的Task有不同类型额launcher。</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">addToTaskQueue</span><span style="color:#f92672">(</span>LaunchTaskAction action<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>action<span style="color:#f92672">.</span><span style="color:#a6e22e">getTask</span><span style="color:#f92672">().</span><span style="color:#a6e22e">isMapTask</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+      mapLauncher<span style="color:#f92672">.</span><span style="color:#a6e22e">addToTaskQueue</span><span style="color:#f92672">(</span>action<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+      reduceLauncher<span style="color:#f92672">.</span><span style="color:#a6e22e">addToTaskQueue</span><span style="color:#f92672">(</span>action<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>完。</p>
+
+
+  
+
+  
+
+</article> 
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 ml-auto blog-sidebar">
+  
+
+  
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+    
+
+    
+    <footer class="blog-footer">
+      <p dir="auto">
+      
+      <!-- raw HTML omitted -->浙ICP备18050493号-1<!-- raw HTML omitted --> 浙公网安备 33010802006262号
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+    
+
+  </body>
+
+</html>

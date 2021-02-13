@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<meta property="og:title" content="database concept" />
+<meta property="og:description" content="idouba@beta." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://idouba.net/categories/database-concept/" />
+<meta property="og:updated_time" content="2014-01-05T12:23:26+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="database concept"/>
+<meta name="twitter:description" content="idouba@beta."/>
+<meta name="generator" content="Hugo 0.80.0" />
+
+
+    
+      
+    
+
+    <link rel="canonical" href="http://idouba.net/categories/database-concept/">
+
+    <title>爱豆吧！</title>
+
+    
+    <!-- combined, minified CSS -->
+    
+    <link href="http://idouba.net/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    
+
+    <!-- minified Font Awesome for SVG icons -->
+    
+    <script defer src="http://idouba.net/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+
+    <!-- RSS 2.0 feed -->
+    <link rel="alternate" type="application/rss+xml" href="http://idouba.net/categories/database-concept/index.xml" title="爱豆吧！" />
+    
+
+    
+
+    
+
+  </head>
+
+  <body>
+
+    
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="http://idouba.net/">Home</a>
+        </nav>
+      </div>
+    </div>
+    
+
+    
+    
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.net/" rel="home">爱豆吧！</a></h1>
+        <p class="lead blog-description" dir="auto">idouba@beta.</p>
+      </div>
+    </header>
+    
+    
+
+    
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/wikipedia_isolation/">【译】数据库事务隔离级别</a></h2>
+    <p class="blog-post-meta"><time datetime="2014-01-05T12:23:26Z">Sun Jan 05, 2014</time> by douba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/database/" rel="category tag">database</a>, <a href="/categories/database-concept/" rel="category tag">database concept</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/database/" rel="tag">database</a>, <a href="/tags/theory/" rel="tag">theory</a>
+
+</p>
+  </header>
+  <p>看到wikipedia中文关于数据库相关的几个<!-- raw HTML omitted -->经典<!-- raw HTML omitted -->条目有点老旧，尤其和英文条目相比。确定开始翻译其中几篇，先从<!-- raw HTML omitted -->事务隔离等级<!-- raw HTML omitted -->开始。格式采用维基Sandbox发布后的格式。翻译完后自己校对过几遍，质量还可以。:-)
+已经在中文维基发布。
+翻译的中文条目地址：<!-- raw HTML omitted -->事务隔离等级<!-- raw HTML omitted -->；
+对应的英文条目地址：<!-- raw HTML omitted -->Isolation (database systems)<!-- raw HTML omitted --></p>
+<p>欢迎大家指正，可以直接在维基上对应条目更新的！。</p>
+<p>**事务隔离（isolation）**定义了<a href="http://en.wikipedia.org/wiki/Database" title="Database">数据库</a>系统中一个操作产生的影响什么时候以哪种方式可以对其他<a href="http://en.wikipedia.org/wiki/Concurrency_%28computer_science%29" title="Concurrency (computer science)">并发</a>操作可见。隔离是事务<a href="http://en.wikipedia.org/wiki/ACID" title="ACID">ACID</a> (原子性、一致性性、隔离性、持久性)四大属性中的一个重要属性。</p>
+<p><!-- raw HTML omitted -->1 并发控制(Concurrency control)<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->2 隔离级别(Isolation levels)<!-- raw HTML omitted -->
+<!-- raw HTML omitted --> 2.1 可序列化(Serializable)<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->2.2 可重复读(Repeatable reads)<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->2.3 授权读(Read committed)<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->2.4 未授权读(Read uncommitted)<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->3 默认隔离级别<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->4 读现象(Read phenomena)<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->4.1 脏读(Dirty reads (Uncommitted Dependency))<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->4.2 不可重复读(non-repeatable read)<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->4.3 幻影读(phantom read)<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->5 隔离级别、读现象和锁(Isolation Levels, Read Phenomena and Locks)<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->5.1 隔离级别vs读现象(Isolation Levels vs Read Phenomena)<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->5.2 隔离级别vs 锁持续时间(Isolation Levels vs Lock Duration)<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->6 参照<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->7 相关条目<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->8 外部链接<!-- raw HTML omitted --></p>
+<h2 id="并发控制concurrency-control">并发控制(Concurrency control)</h2>
+<p><a href="http://en.wikipedia.org/wiki/Concurrency_control" title="Concurrency control">并发控制</a>描述了数据库处理隔离以保证数据正确性的机制。为了保证并行事务执行的准确执行数据库和存储引擎在设计的时候着重强调了这一点。典型的事务相关机制限制数据的访问顺序(<a href="http://en.wikipedia.org/wiki/Schedule_%28computer_science%29" title="Schedule (computer science)">执行调度</a>)以满足<a href="http://en.wikipedia.org/wiki/Serializability" title="Serializability">可序列化</a> 和<a href="http://en.wikipedia.org/wiki/Recoverability" title="Recoverability">可恢复性</a>。限制数据访问意味着降低了执行的性能，并发控制机制就是要保证在满足这些限制的前提下提供尽可能高的性能。经常在不损害正确性的情况下，为了达到更好的性能，<a href="http://en.wikipedia.org/wiki/Serializability" title="Serializability">可序列化</a>的的要求会减低一些，但是为了避免数据一致性的破坏，<a href="http://en.wikipedia.org/wiki/Recoverability" title="Recoverability">可恢复性</a>必须保证。</p>
+<p><a href="http://en.wikipedia.org/wiki/Two-phase_locking" title="Two-phase locking">两阶段锁</a>是关系数据库中最常见的提供了<a href="http://en.wikipedia.org/wiki/Serializability" title="Serializability">可序列化</a> 和<a href="http://en.wikipedia.org/wiki/Recoverability" title="Recoverability">可恢复性</a>的并发控制机制，为了访问一个数据库对象，事务首先要获得这个对象的 <a href="http://en.wikipedia.org/wiki/Lock_%28database%29" title="Lock (database)">锁</a>。对于不同的访问类型（如对对象的读写操作）和锁的类型，如果另外一个事务正持有这个对象的锁，获得锁的过程会被阻塞或者延迟。</p>
+<h2 id="隔离级别isolation-levels">隔离级别(Isolation levels)</h2>
+<p>在<a href="http://en.wikipedia.org/w/index.php?title=%E6%95%B0%E6%8D%AE%E5%BA%93&amp;action=edit&amp;redlink=1" title="数据库 (page does not exist)">数据库</a>事务的<a href="http://en.wikipedia.org/wiki/ACID" title="ACID">ACID</a>四个属性中，隔离性是一个最常放松的一个。为了获取更高的隔离等级，数据库系统的 <a href="http://en.wikipedia.org/wiki/Lock_%28database%29" title="Lock (database)">锁</a>机制或者<a href="http://en.wikipedia.org/wiki/Multiversion_concurrency_control" title="Multiversion concurrency control">多版本并发控制</a>机制都会影响<a href="http://en.wikipedia.org/wiki/Concurrency_%28computer_science%29" title="Concurrency (computer science)">并发</a>。 <a href="http://en.wikipedia.org/wiki/Software_application" title="Software application">应用软件</a>也需要额外的逻辑来使其正常工作。</p>
+<p>很多<a href="http://en.wikipedia.org/wiki/DBMS" title="DBMS">DBMS</a>定义了不同的“事务隔离等级”来控制锁的程度。在很多数据库系统中，多数的数据库事务都避免高等级的隔离等级（如可序列化）从而减少对系统的锁定开销。程序员需要小心的分析数据库访问部分的代码来保证隔离级别的降低不会造成难以发现的代码bug。相反的，更高的隔离级别会增加<a href="http://en.wikipedia.org/wiki/Deadlock" title="Deadlock">死锁</a>发生的几率，同样需要编程过程中去避免。</p>
+<p><a href="http://en.wikipedia.org/wiki/American_National_Standards_Institute" title="American National Standards Institute">ANSI</a>/<a href="http://en.wikipedia.org/wiki/International_Organization_for_Standardization" title="International Organization for Standardization">ISO</a> <a href="http://en.wikipedia.org/wiki/SQL" title="SQL">SQL</a>定义的标准隔离级别如下。</p>
+  <a href='http://idouba.net/wikipedia_isolation/'>Read more →</a>
+</article> 
+
+
+
+
+
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 ml-auto blog-sidebar">
+  
+
+  
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+    
+
+    
+    <footer class="blog-footer">
+      <p dir="auto">
+      
+      <!-- raw HTML omitted -->浙ICP备18050493号-1<!-- raw HTML omitted --> 浙公网安备 33010802006262号
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+    
+
+  </body>
+
+</html>

@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<meta property="og:title" content="【hadoop代码笔记】Mapreduce shuffle过程之Map输出过程" />
+<meta property="og:description" content="一、概要描述
+shuffle是MapReduce的一个核心过程，因此没有在前面的MapReduce作业提交的过程中描述，而是单独拿出来比较详细的描述。 根据官方的流程图示如下：
+
+本篇文章中只是想尝试从代码分析来说明在map端是如何将map的输出保存下来等待reduce来取。 在执行每个map task时，无论map方法中执行什么逻辑，最终都是要把输出写到磁盘上。如果没有reduce阶段，则直接输出到hdfs上，如果有有reduce作业，则每个map方法的输出在写磁盘前线在内存中缓存。每个map task都有一个环状的内存缓冲区，存储着map的输出结果，默认100m，在每次当缓冲区快满的时候由一个独立的线程将缓冲区的数据以一个溢出文件的方式存放到磁盘，当整个map task结束后再对磁盘中这个map task产生的所有溢出文件做合并，被合并成已分区且已排序的输出文件。然后等待reduce task来拉数据。
+二、 流程描述
+
+在child进程调用到runNewMapper时，会设置output为NewOutputCollector，来负责map的输出。
+在map方法的最后，不管经过什么逻辑的map处理，最终一般都要调用到TaskInputOutputContext的write方法，进而调用到设置的output即NewOutputCollector的write方法
+NewOutputCollector其实只是对MapOutputBuffer的一个封装，其write方法调用的是MapOutputBuffer的collect方法。
+MapOutputBuffer的collect方法中把key和value序列化后存储在一个环形缓存中，如果缓存满了则会调用startspill方法设置信号量，使得一个独立的线程SpillThread可以对缓存中的数据进行处理。
+SpillThread线程的run方法中调用sortAndSpill方法对缓存中的数据进行排序后写溢出文件。
+当map输出完成后，会调用output的close方法。
+在close方法中调用flush方法，对剩余的缓存进行处理，最后调用mergeParts方法，将前面过程的多个溢出文件合并为一个。
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://idouba.net/hadoop_mapreduce_shuffle_map_output/" />
+<meta property="article:published_time" content="2014-02-05T15:58:39+00:00" />
+<meta property="article:modified_time" content="2014-02-05T15:58:39+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="【hadoop代码笔记】Mapreduce shuffle过程之Map输出过程"/>
+<meta name="twitter:description" content="一、概要描述
+shuffle是MapReduce的一个核心过程，因此没有在前面的MapReduce作业提交的过程中描述，而是单独拿出来比较详细的描述。 根据官方的流程图示如下：
+
+本篇文章中只是想尝试从代码分析来说明在map端是如何将map的输出保存下来等待reduce来取。 在执行每个map task时，无论map方法中执行什么逻辑，最终都是要把输出写到磁盘上。如果没有reduce阶段，则直接输出到hdfs上，如果有有reduce作业，则每个map方法的输出在写磁盘前线在内存中缓存。每个map task都有一个环状的内存缓冲区，存储着map的输出结果，默认100m，在每次当缓冲区快满的时候由一个独立的线程将缓冲区的数据以一个溢出文件的方式存放到磁盘，当整个map task结束后再对磁盘中这个map task产生的所有溢出文件做合并，被合并成已分区且已排序的输出文件。然后等待reduce task来拉数据。
+二、 流程描述
+
+在child进程调用到runNewMapper时，会设置output为NewOutputCollector，来负责map的输出。
+在map方法的最后，不管经过什么逻辑的map处理，最终一般都要调用到TaskInputOutputContext的write方法，进而调用到设置的output即NewOutputCollector的write方法
+NewOutputCollector其实只是对MapOutputBuffer的一个封装，其write方法调用的是MapOutputBuffer的collect方法。
+MapOutputBuffer的collect方法中把key和value序列化后存储在一个环形缓存中，如果缓存满了则会调用startspill方法设置信号量，使得一个独立的线程SpillThread可以对缓存中的数据进行处理。
+SpillThread线程的run方法中调用sortAndSpill方法对缓存中的数据进行排序后写溢出文件。
+当map输出完成后，会调用output的close方法。
+在close方法中调用flush方法，对剩余的缓存进行处理，最后调用mergeParts方法，将前面过程的多个溢出文件合并为一个。
+"/>
+<meta name="generator" content="Hugo 0.80.0" />
+
+
+    
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "【hadoop代码笔记】Mapreduce shuffle过程之Map输出过程",
+  "url": "http:\/\/idouba.net\/hadoop_mapreduce_shuffle_map_output\/",
+  "wordCount": "9106",
+  "datePublished": "2014-02-05T15:58:39+00:00",
+  "dateModified": "2014-02-05T15:58:39+00:00",
+  "author": {
+    "@type": "Person",
+    "name": "douba"
+  },
+  "keywords": "hadoop, java, mapreduce, source"
+}
+</script>
+
+
+
+    <link rel="canonical" href="http://idouba.net/hadoop_mapreduce_shuffle_map_output/">
+
+    <title>【hadoop代码笔记】Mapreduce shuffle过程之Map输出过程 | 爱豆吧！</title>
+
+    
+    <!-- combined, minified CSS -->
+    
+    <link href="http://idouba.net/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    
+
+    <!-- minified Font Awesome for SVG icons -->
+    
+    <script defer src="http://idouba.net/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+
+    <!-- RSS 2.0 feed -->
+    
+
+    
+
+    
+
+  </head>
+
+  <body>
+
+    
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="http://idouba.net/">Home</a>
+        </nav>
+      </div>
+    </div>
+    
+
+    
+    
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.net/" rel="home">爱豆吧！</a></h1>
+        <p class="lead blog-description" dir="auto">idouba@beta.</p>
+      </div>
+    </header>
+    
+    
+
+    
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/hadoop_mapreduce_shuffle_map_output/">【hadoop代码笔记】Mapreduce shuffle过程之Map输出过程</a></h2>
+    <p class="blog-post-meta"><time datetime="2014-02-05T15:58:39Z">Wed Feb 05, 2014</time> by douba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/hadoop/" rel="category tag">hadoop</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/hadoop/" rel="tag">hadoop</a>, <a href="/tags/java/" rel="tag">java</a>, <a href="/tags/mapreduce/" rel="tag">mapreduce</a>, <a href="/tags/source/" rel="tag">source</a>
+
+</p>
+  </header>
+  <h3 id="一概要描述"><strong>一、概要描述</strong></h3>
+<p>shuffle是MapReduce的一个核心过程，因此没有在<a href="../hadoop_job_submit_conclusion/" title="【hadoop代码笔记】hadoop作业提交之汇总">前面的MapReduce作业提交的过程</a>中描述，而是单独拿出来比较详细的描述。 根据官方的流程图示如下：</p>
+<p><img src="../wp-content/uploads/2014/02/shuffle.png" alt=""></p>
+<p><strong>本篇文章中只是想尝试从代码分析来说明在map端是如何将map的输出保存下来等待reduce来取</strong>。 在执行每个map task时，无论map方法中执行什么逻辑，最终都是要把输出写到磁盘上。如果没有reduce阶段，则直接输出到hdfs上，如果有有reduce作业，则每个map方法的输出在写磁盘前线在内存中缓存。每个map task都有一个环状的内存缓冲区，存储着map的输出结果，默认100m，在每次当缓冲区快满的时候由一个独立的线程将缓冲区的数据以一个溢出文件的方式存放到磁盘，当整个map task结束后再对磁盘中这个map task产生的所有溢出文件做合并，被合并成已分区且已排序的输出文件。然后等待reduce task来拉数据。</p>
+<h3 id="二-流程描述"><strong>二、 流程描述</strong></h3>
+<ol>
+<li>在child进程调用到runNewMapper时，会设置output为NewOutputCollector，来负责map的输出。</li>
+<li>在map方法的最后，不管经过什么逻辑的map处理，最终一般都要调用到TaskInputOutputContext的write方法，进而调用到设置的output即NewOutputCollector的write方法</li>
+<li>NewOutputCollector其实只是对MapOutputBuffer的一个封装，其write方法调用的是MapOutputBuffer的collect方法。</li>
+<li>MapOutputBuffer的collect方法中把key和value序列化后存储在一个环形缓存中，如果缓存满了则会调用startspill方法设置信号量，使得一个独立的线程SpillThread可以对缓存中的数据进行处理。</li>
+<li>SpillThread线程的run方法中调用sortAndSpill方法对缓存中的数据进行排序后写溢出文件。</li>
+<li>当map输出完成后，会调用output的close方法。</li>
+<li>在close方法中调用flush方法，对剩余的缓存进行处理，最后调用mergeParts方法，将前面过程的多个溢出文件合并为一个。</li>
+</ol>
+<p><img src="../wp-content/uploads/2014/02/mapper_output_code_flow.jpg" alt=""></p>
+<p>​                              Mapreduce shuffle过程之Map输出过程代码流程</p>
+<h3 id="三代码详细">三、代码详细</h3>
+<h4 id="1-maptask的runnewmapper方法">1. MapTask的runNewMapper方法</h4>
+<p>注意到有这样一段代码。即当job中只有map没有reduce的时候，这个rg.apache.hadoop.mapreduce.RecordWriter类型的对象 output是一Outputformat中定义的writer，即直接写到输出中。如果是有Reduce，则output是一个NewOutputCollector类型输出。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>job<span style="color:#f92672">.</span><span style="color:#a6e22e">getNumReduceTasks</span><span style="color:#f92672">()</span> <span style="color:#f92672">==</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        output <span style="color:#f92672">=</span> outputFormat<span style="color:#f92672">.</span><span style="color:#a6e22e">getRecordWriter</span><span style="color:#f92672">(</span>taskContext<span style="color:#f92672">);</span>
+      <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+        output <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> NewOutputCollector<span style="color:#f92672">(</span>taskContext<span style="color:#f92672">,</span> job<span style="color:#f92672">,</span> umbilical<span style="color:#f92672">,</span> reporter<span style="color:#f92672">);</span>
+      <span style="color:#f92672">}</span>
+      mapperContext <span style="color:#f92672">=</span> contextConstructor<span style="color:#f92672">.</span><span style="color:#a6e22e">newInstance</span><span style="color:#f92672">(</span>mapper<span style="color:#f92672">,</span> job<span style="color:#f92672">,</span> getTaskID<span style="color:#f92672">(),</span>input<span style="color:#f92672">,</span> output<span style="color:#f92672">,</span> committer<span style="color:#f92672">,</span>                                                 reporter<span style="color:#f92672">,</span> split<span style="color:#f92672">);</span>
+      input<span style="color:#f92672">.</span><span style="color:#a6e22e">initialize</span><span style="color:#f92672">(</span>split<span style="color:#f92672">,</span> mapperContext<span style="color:#f92672">);</span>
+      mapper<span style="color:#f92672">.</span><span style="color:#a6e22e">run</span><span style="color:#f92672">(</span>mapperContext<span style="color:#f92672">);</span>
+</code></pre></div><p>和其他的RecordWriter一样，NewOutputCollector也继承自RecordWriter抽象类。除了一个close方法释放资源外，该抽象类定义的最主要的方法就一个<strong>void</strong> write(K key, V )。即写入key，value。</p>
+<h4 id="2-mapper的run方法对每个输出执行map方法">2. Mapper的run方法，对每个输出执行map方法。</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span><span style="color:#f92672">(</span>Context context<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> IOException<span style="color:#f92672">,</span> InterruptedException <span style="color:#f92672">{</span>
+    setup<span style="color:#f92672">(</span>context<span style="color:#f92672">);</span>
+    <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span>context<span style="color:#f92672">.</span><span style="color:#a6e22e">nextKeyValue</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+  map<span style="color:#f92672">(</span>context<span style="color:#f92672">.</span><span style="color:#a6e22e">getCurrentKey</span><span style="color:#f92672">(),</span> context<span style="color:#f92672">.</span><span style="color:#a6e22e">getCurrentValue</span><span style="color:#f92672">(),</span> context<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+    cleanup<span style="color:#f92672">(</span>context<span style="color:#f92672">);</span>
+</code></pre></div><h4 id="3-mapper的map方法默认是直接把key和value写入">3. Mapper的map方法，默认是直接把key和value写入</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">map</span><span style="color:#f92672">(</span>KEYIN key<span style="color:#f92672">,</span> VALUEIN value<span style="color:#f92672">,</span> 
+                     Context context<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> IOException<span style="color:#f92672">,</span> InterruptedException <span style="color:#f92672">{</span>
+    context<span style="color:#f92672">.</span><span style="color:#a6e22e">write</span><span style="color:#f92672">((</span>KEYOUT<span style="color:#f92672">)</span> key<span style="color:#f92672">,</span> <span style="color:#f92672">(</span>VALUEOUT<span style="color:#f92672">)</span> value<span style="color:#f92672">);</span>
+  <span style="color:#f92672">}</span>
+</code></pre></div><p>一般使用中会做很多我们需要的操作，如著名的wordcount中，把一行单词切分后，数一（value都设为_one_ = **new** IntWritable(1)），但最终都是要把结果写入。即调用context.write(key,value)</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">map</span><span style="color:#f92672">(</span>Object key<span style="color:#f92672">,</span> Text value<span style="color:#f92672">,</span> Context context
+                    <span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> IOException<span style="color:#f92672">,</span> InterruptedException <span style="color:#f92672">{</span>
+      StringTokenizer itr <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> StringTokenizer<span style="color:#f92672">(</span>value<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">());</span>
+      <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span>itr<span style="color:#f92672">.</span><span style="color:#a6e22e">hasMoreTokens</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+        word<span style="color:#f92672">.</span><span style="color:#a6e22e">set</span><span style="color:#f92672">(</span>itr<span style="color:#f92672">.</span><span style="color:#a6e22e">nextToken</span><span style="color:#f92672">());</span>
+        context<span style="color:#f92672">.</span><span style="color:#a6e22e">write</span><span style="color:#f92672">(</span>word<span style="color:#f92672">,</span> one<span style="color:#f92672">);</span>
+      <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><h4 id="4-taskinputoutputcontext的write方法">4. TaskInputOutputContext的write方法。</h4>
+<p>调用的是contex中的RecordWriter的write方法。即调用的是NewOutputCollector的write方法。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">write</span><span style="color:#f92672">(</span>KEYOUT key<span style="color:#f92672">,</span> VALUEOUT value
+                    <span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> IOException<span style="color:#f92672">,</span> InterruptedException <span style="color:#f92672">{</span>
+    output<span style="color:#f92672">.</span><span style="color:#a6e22e">write</span><span style="color:#f92672">(</span>key<span style="color:#f92672">,</span> value<span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><h4 id="5-newoutputcollector的write方法">5. NewOutputCollector的write方法</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">write</span><span style="color:#f92672">(</span>K key<span style="color:#f92672">,</span> V value<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> IOException<span style="color:#f92672">,</span> InterruptedException <span style="color:#f92672">{</span>
+      collector<span style="color:#f92672">.</span><span style="color:#a6e22e">collect</span><span style="color:#f92672">(</span>key<span style="color:#f92672">,</span> value<span style="color:#f92672">,</span>
+                        partitioner<span style="color:#f92672">.</span><span style="color:#a6e22e">getPartition</span><span style="color:#f92672">(</span>key<span style="color:#f92672">,</span> value<span style="color:#f92672">,</span> partitions<span style="color:#f92672">));</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>从方法名上不难看出提供写数据的是MapOutputCollector&lt;K,V&gt;类型的 collector对象.从NewOutputCollector的构造函数中看到collector的初始化。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">collector <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> MapOutputBuffer<span style="color:#f92672">&lt;</span>K<span style="color:#f92672">,</span>V<span style="color:#f92672">&gt;(</span>umbilical<span style="color:#f92672">,</span> job<span style="color:#f92672">,</span> reporter<span style="color:#f92672">);</span>
+</code></pre></div><h4 id="6-mapoutputbuffer的构造函数">6. MapOutputBuffer的构造函数</h4>
+<p>在了解MapOutputBuffer的collect方法前，先了解下期构造函数，看做了哪些初始化。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#a6e22e">MapOutputBuffer</span><span style="color:#f92672">(</span>TaskUmbilicalProtocol umbilical<span style="color:#f92672">,</span> JobConf job<span style="color:#f92672">,</span>
+                           TaskReporter reporter
+                           <span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> IOException<span style="color:#f92672">,</span> ClassNotFoundException <span style="color:#f92672">{</span>
+      <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">job</span> <span style="color:#f92672">=</span> job<span style="color:#f92672">;</span>
+      <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">reporter</span> <span style="color:#f92672">=</span> reporter<span style="color:#f92672">;</span>
+      localFs <span style="color:#f92672">=</span> FileSystem<span style="color:#f92672">.</span><span style="color:#a6e22e">getLocal</span><span style="color:#f92672">(</span>job<span style="color:#f92672">);</span>
+     <span style="color:#75715e">//1）设定map的分区数，即作业 配置中的的reduce数
+</span><span style="color:#75715e"></span>      partitions <span style="color:#f92672">=</span> job<span style="color:#f92672">.</span><span style="color:#a6e22e">getNumReduceTasks</span><span style="color:#f92672">();</span>
+      rfs <span style="color:#f92672">=</span> <span style="color:#f92672">((</span>LocalFileSystem<span style="color:#f92672">)</span>localFs<span style="color:#f92672">).</span><span style="color:#a6e22e">getRaw</span><span style="color:#f92672">();</span>
+      indexCacheList <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">&lt;</span>SpillRecord<span style="color:#f92672">&gt;();</span>
+    
+      <span style="color:#75715e">//2）重要的参数
+</span><span style="color:#75715e"></span>      <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">float</span> spillper <span style="color:#f92672">=</span> job<span style="color:#f92672">.</span><span style="color:#a6e22e">getFloat</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;io.sort.spill.percent&#34;</span><span style="color:#f92672">,(</span><span style="color:#66d9ef">float</span><span style="color:#f92672">)</span>0<span style="color:#f92672">.</span><span style="color:#a6e22e">8</span><span style="color:#f92672">);</span>
+      <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">float</span> recper <span style="color:#f92672">=</span> job<span style="color:#f92672">.</span><span style="color:#a6e22e">getFloat</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;io.sort.record.percent&#34;</span><span style="color:#f92672">,(</span><span style="color:#66d9ef">float</span><span style="color:#f92672">)</span>0<span style="color:#f92672">.</span><span style="color:#a6e22e">05</span><span style="color:#f92672">);</span>
+      <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> sortmb <span style="color:#f92672">=</span> job<span style="color:#f92672">.</span><span style="color:#a6e22e">getInt</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;io.sort.mb&#34;</span><span style="color:#f92672">,</span> 100<span style="color:#f92672">);</span>
+      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>spillper <span style="color:#f92672">&gt;</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">float</span><span style="color:#f92672">)</span>1<span style="color:#f92672">.</span><span style="color:#a6e22e">0</span> <span style="color:#f92672">||</span> spillper <span style="color:#f92672">&lt;</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">float</span><span style="color:#f92672">)</span>0<span style="color:#f92672">.</span><span style="color:#a6e22e">0</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IOException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Invalid \&#34;io.sort.spill.percent\&#34;: &#34;</span> <span style="color:#f92672">+</span> spillper<span style="color:#f92672">);</span>
+      <span style="color:#f92672">}</span>
+      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>recper <span style="color:#f92672">&gt;</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">float</span><span style="color:#f92672">)</span>1<span style="color:#f92672">.</span><span style="color:#a6e22e">0</span> <span style="color:#f92672">||</span> recper <span style="color:#f92672">&lt;</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">float</span><span style="color:#f92672">)</span>0<span style="color:#f92672">.</span><span style="color:#a6e22e">01</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IOException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Invalid \&#34;io.sort.record.percent\&#34;: &#34;</span> <span style="color:#f92672">+</span> recper<span style="color:#f92672">);</span>
+      <span style="color:#f92672">}</span>
+      <span style="color:#66d9ef">if</span> <span style="color:#f92672">((</span>sortmb <span style="color:#f92672">&amp;</span> 0x7FF<span style="color:#f92672">)</span> <span style="color:#f92672">!=</span> sortmb<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IOException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Invalid \&#34;io.sort.mb\&#34;: &#34;</span> <span style="color:#f92672">+</span> sortmb<span style="color:#f92672">);</span>
+      <span style="color:#f92672">}</span>
+      <span style="color:#75715e">//3)sorter,使用其对map的输出在partition内进行内排序。
+</span><span style="color:#75715e"></span>      sorter <span style="color:#f92672">=</span> ReflectionUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">newInstance</span><span style="color:#f92672">(</span>
+            job<span style="color:#f92672">.</span><span style="color:#a6e22e">getClass</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;map.sort.class&#34;</span><span style="color:#f92672">,</span> QuickSort<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">,</span> IndexedSorter<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">),</span> job<span style="color:#f92672">);</span>
+      LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;io.sort.mb = &#34;</span> <span style="color:#f92672">+</span> sortmb<span style="color:#f92672">);</span>
+      <span style="color:#75715e">// buffers and accounting
+</span><span style="color:#75715e"></span>     <span style="color:#75715e">//把单位是M的sortmb设定左移20，还原单位为个
+</span><span style="color:#75715e"></span>      <span style="color:#66d9ef">int</span> maxMemUsage <span style="color:#f92672">=</span> sortmb <span style="color:#f92672">&lt;&lt;</span> 20<span style="color:#f92672">;</span>
+      <span style="color:#66d9ef">int</span> recordCapacity <span style="color:#f92672">=</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span><span style="color:#f92672">)(</span>maxMemUsage <span style="color:#f92672">*</span> recper<span style="color:#f92672">);</span>
+      recordCapacity <span style="color:#f92672">-=</span> recordCapacity <span style="color:#f92672">%</span> RECSIZE<span style="color:#f92672">;</span>
+      <span style="color:#75715e">//输出缓存
+</span><span style="color:#75715e"></span>      kvbuffer <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">byte</span><span style="color:#f92672">[</span>maxMemUsage <span style="color:#f92672">-</span> recordCapacity<span style="color:#f92672">];</span>
+      bufvoid <span style="color:#f92672">=</span> kvbuffer<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">;</span>
+      recordCapacity <span style="color:#f92672">/=</span> RECSIZE<span style="color:#f92672">;</span>
+      kvoffsets <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">int</span><span style="color:#f92672">[</span>recordCapacity<span style="color:#f92672">];</span>
+      kvindices <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">int</span><span style="color:#f92672">[</span>recordCapacity <span style="color:#f92672">*</span> ACCTSIZE<span style="color:#f92672">];</span>
+      softBufferLimit <span style="color:#f92672">=</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span><span style="color:#f92672">)(</span>kvbuffer<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span> <span style="color:#f92672">*</span> spillper<span style="color:#f92672">);</span>
+      softRecordLimit <span style="color:#f92672">=</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span><span style="color:#f92672">)(</span>kvoffsets<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span> <span style="color:#f92672">*</span> spillper<span style="color:#f92672">);</span>
+      LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;data buffer = &#34;</span> <span style="color:#f92672">+</span> softBufferLimit <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/&#34;</span> <span style="color:#f92672">+</span> kvbuffer<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">);</span>
+      LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;record buffer = &#34;</span> <span style="color:#f92672">+</span> softRecordLimit <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/&#34;</span> <span style="color:#f92672">+</span> kvoffsets<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">);</span>
+      <span style="color:#75715e">// k/v serialization
+</span><span style="color:#75715e"></span>      comparator <span style="color:#f92672">=</span> job<span style="color:#f92672">.</span><span style="color:#a6e22e">getOutputKeyComparator</span><span style="color:#f92672">();</span>
+      keyClass <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>Class<span style="color:#f92672">&lt;</span>K<span style="color:#f92672">&gt;)</span>job<span style="color:#f92672">.</span><span style="color:#a6e22e">getMapOutputKeyClass</span><span style="color:#f92672">();</span>
+      valClass <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>Class<span style="color:#f92672">&lt;</span>V<span style="color:#f92672">&gt;)</span>job<span style="color:#f92672">.</span><span style="color:#a6e22e">getMapOutputValueClass</span><span style="color:#f92672">();</span>
+      serializationFactory <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> SerializationFactory<span style="color:#f92672">(</span>job<span style="color:#f92672">);</span>
+      keySerializer <span style="color:#f92672">=</span> serializationFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">getSerializer</span><span style="color:#f92672">(</span>keyClass<span style="color:#f92672">);</span>
+      keySerializer<span style="color:#f92672">.</span><span style="color:#a6e22e">open</span><span style="color:#f92672">(</span>bb<span style="color:#f92672">);</span>
+      valSerializer <span style="color:#f92672">=</span> serializationFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">getSerializer</span><span style="color:#f92672">(</span>valClass<span style="color:#f92672">);</span>
+      valSerializer<span style="color:#f92672">.</span><span style="color:#a6e22e">open</span><span style="color:#f92672">(</span>bb<span style="color:#f92672">);</span>
+      <span style="color:#75715e">// counters
+</span><span style="color:#75715e"></span>      mapOutputByteCounter <span style="color:#f92672">=</span> reporter<span style="color:#f92672">.</span><span style="color:#a6e22e">getCounter</span><span style="color:#f92672">(</span>MAP_OUTPUT_BYTES<span style="color:#f92672">);</span>
+      mapOutputRecordCounter <span style="color:#f92672">=</span> reporter<span style="color:#f92672">.</span><span style="color:#a6e22e">getCounter</span><span style="color:#f92672">(</span>MAP_OUTPUT_RECORDS<span style="color:#f92672">);</span>
+      Counters<span style="color:#f92672">.</span><span style="color:#a6e22e">Counter</span> combineInputCounter <span style="color:#f92672">=</span> 
+        reporter<span style="color:#f92672">.</span><span style="color:#a6e22e">getCounter</span><span style="color:#f92672">(</span>COMBINE_INPUT_RECORDS<span style="color:#f92672">);</span>
+      combineOutputCounter <span style="color:#f92672">=</span> reporter<span style="color:#f92672">.</span><span style="color:#a6e22e">getCounter</span><span style="color:#f92672">(</span>COMBINE_OUTPUT_RECORDS<span style="color:#f92672">);</span>
+      <span style="color:#75715e">// 4）compression
+</span><span style="color:#75715e"></span>      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>job<span style="color:#f92672">.</span><span style="color:#a6e22e">getCompressMapOutput</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+        Class<span style="color:#f92672">&lt;?</span> <span style="color:#66d9ef">extends</span> CompressionCodec<span style="color:#f92672">&gt;</span> codecClass <span style="color:#f92672">=</span>
+          job<span style="color:#f92672">.</span><span style="color:#a6e22e">getMapOutputCompressorClass</span><span style="color:#f92672">(</span>DefaultCodec<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
+        codec <span style="color:#f92672">=</span> ReflectionUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">newInstance</span><span style="color:#f92672">(</span>codecClass<span style="color:#f92672">,</span> job<span style="color:#f92672">);</span>
+      <span style="color:#f92672">}</span>
+      <span style="color:#75715e">// 5）combiner是一个NewCombinerRunner类型，调用Job的reducer来对map的输出在map端进行combine。
+</span><span style="color:#75715e"></span>      combinerRunner <span style="color:#f92672">=</span> CombinerRunner<span style="color:#f92672">.</span><span style="color:#a6e22e">create</span><span style="color:#f92672">(</span>job<span style="color:#f92672">,</span> getTaskID<span style="color:#f92672">(),</span> 
+                                             combineInputCounter<span style="color:#f92672">,</span>
+                                             reporter<span style="color:#f92672">,</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">);</span>
+      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>combinerRunner <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        combineCollector<span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> CombineOutputCollector<span style="color:#f92672">&lt;</span>K<span style="color:#f92672">,</span>V<span style="color:#f92672">&gt;(</span>combineOutputCounter<span style="color:#f92672">);</span>
+      <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+        combineCollector <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+      <span style="color:#f92672">}</span>
+      <span style="color:#75715e">//6)启动一个SpillThread线程来
+</span><span style="color:#75715e"></span>      minSpillsForCombine <span style="color:#f92672">=</span> job<span style="color:#f92672">.</span><span style="color:#a6e22e">getInt</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;min.num.spills.for.combine&#34;</span><span style="color:#f92672">,</span> 3<span style="color:#f92672">);</span>
+      spillThread<span style="color:#f92672">.</span><span style="color:#a6e22e">setDaemon</span><span style="color:#f92672">(</span><span style="color:#66d9ef">true</span><span style="color:#f92672">);</span>
+      spillThread<span style="color:#f92672">.</span><span style="color:#a6e22e">setName</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;SpillThread&#34;</span><span style="color:#f92672">);</span>
+      spillLock<span style="color:#f92672">.</span><span style="color:#a6e22e">lock</span><span style="color:#f92672">();</span>
+      <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+        spillThread<span style="color:#f92672">.</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
+        <span style="color:#66d9ef">while</span> <span style="color:#f92672">(!</span>spillThreadRunning<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+          spillDone<span style="color:#f92672">.</span><span style="color:#a6e22e">await</span><span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span>
+      <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>InterruptedException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">throw</span> <span style="color:#f92672">(</span>IOException<span style="color:#f92672">)</span><span style="color:#66d9ef">new</span> IOException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Spill thread failed to initialize&#34;</span>
+            <span style="color:#f92672">).</span><span style="color:#a6e22e">initCause</span><span style="color:#f92672">(</span>sortSpillException<span style="color:#f92672">);</span>
+      <span style="color:#f92672">}</span> <span style="color:#66d9ef">finally</span> <span style="color:#f92672">{</span>
+        spillLock<span style="color:#f92672">.</span><span style="color:#a6e22e">unlock</span><span style="color:#f92672">();</span>
+      <span style="color:#f92672">}</span>
+      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>sortSpillException <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">throw</span> <span style="color:#f92672">(</span>IOException<span style="color:#f92672">)</span><span style="color:#66d9ef">new</span> IOException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Spill thread failed to initialize&#34;</span>
+            <span style="color:#f92672">).</span><span style="color:#a6e22e">initCause</span><span style="color:#f92672">(</span>sortSpillException<span style="color:#f92672">);</span>
+      <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><h4 id="7-mapoutputbuffer的collect方法">7. MapOutputBuffer的collect方法。</h4>
+<p>参数partition是partitioner根据key计算得到的当前key value属于的partition索引。写key和value写入缓存，当缓存满足spill条件时，通过调用startSpill方法设置变量并通过spillReady.signal()，通知spillThread；并等待spill结束（通过spillDone.await()等待）缓冲区的作用是批量收集map结果，减少磁盘IO的影响。key/value对以及Partition的结果都会被写入缓冲区。写入之前，key与value值都会被序列化成字节数组。kvindices保持了记录所属的分区，key在缓冲区开始的位置和value在缓冲区开始的位置，通过kvindices，可以在缓冲区中找到对应的记录。
+输出缓冲区中，和kvstart，kvend和kvindex对应的是bufstart，bufend和bufmark。这部分还涉及到变量bufvoid，用于表明实际使用的缓冲区结尾和变量bufmark，用于标记记录的结尾。需要bufmark，是因为key或value的输出是变长的。</p>
+<!-- raw HTML omitted -->
+<p>​                                     <strong>Key Value序列化后缓存</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">synchronized</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">collect</span><span style="color:#f92672">(</span>K key<span style="color:#f92672">,</span> V value<span style="color:#f92672">,</span> <span style="color:#66d9ef">int</span> partition
+                                     <span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> IOException <span style="color:#f92672">{</span>
+      reporter<span style="color:#f92672">.</span><span style="color:#a6e22e">progress</span><span style="color:#f92672">();</span>
+      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>key<span style="color:#f92672">.</span><span style="color:#a6e22e">getClass</span><span style="color:#f92672">()</span> <span style="color:#f92672">!=</span> keyClass<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IOException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Type mismatch in key from map: expected &#34;</span>
+                              <span style="color:#f92672">+</span> keyClass<span style="color:#f92672">.</span><span style="color:#a6e22e">getName</span><span style="color:#f92672">()</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;, recieved &#34;</span>
+                              <span style="color:#f92672">+</span> key<span style="color:#f92672">.</span><span style="color:#a6e22e">getClass</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getName</span><span style="color:#f92672">());</span>
+      <span style="color:#f92672">}</span>
+      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>value<span style="color:#f92672">.</span><span style="color:#a6e22e">getClass</span><span style="color:#f92672">()</span> <span style="color:#f92672">!=</span> valClass<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IOException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Type mismatch in value from map: expected &#34;</span>
+                              <span style="color:#f92672">+</span> valClass<span style="color:#f92672">.</span><span style="color:#a6e22e">getName</span><span style="color:#f92672">()</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;, recieved &#34;</span>
+                              <span style="color:#f92672">+</span> value<span style="color:#f92672">.</span><span style="color:#a6e22e">getClass</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getName</span><span style="color:#f92672">());</span>
+      <span style="color:#f92672">}</span>
+<span style="color:#75715e">//对kvoffsets的长度取模，暗示我们这是一个环形缓存。
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> kvnext <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>kvindex <span style="color:#f92672">+</span> 1<span style="color:#f92672">)</span> <span style="color:#f92672">%</span> kvoffsets<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">;</span>
+     <span style="color:#75715e">//进入临界区 
+</span><span style="color:#75715e"></span>spillLock<span style="color:#f92672">.</span><span style="color:#a6e22e">lock</span><span style="color:#f92672">();</span>
+      <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">boolean</span> kvfull<span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">do</span> <span style="color:#f92672">{</span>
+          <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>sortSpillException <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">throw</span> <span style="color:#f92672">(</span>IOException<span style="color:#f92672">)</span><span style="color:#66d9ef">new</span> IOException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Spill failed&#34;</span>
+                <span style="color:#f92672">).</span><span style="color:#a6e22e">initCause</span><span style="color:#f92672">(</span>sortSpillException<span style="color:#f92672">);</span>
+          <span style="color:#f92672">}</span>
+          <span style="color:#75715e">// sufficient acct space
+</span><span style="color:#75715e"></span>          kvfull <span style="color:#f92672">=</span> kvnext <span style="color:#f92672">==</span> kvstart<span style="color:#f92672">;</span>
+          <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">boolean</span> kvsoftlimit <span style="color:#f92672">=</span> <span style="color:#f92672">((</span>kvnext <span style="color:#f92672">&gt;</span> kvend<span style="color:#f92672">)</span>
+              <span style="color:#f92672">?</span> kvnext <span style="color:#f92672">-</span> kvend <span style="color:#f92672">&gt;</span> softRecordLimit
+              <span style="color:#f92672">:</span> kvend <span style="color:#f92672">-</span> kvnext <span style="color:#f92672">&lt;=</span> kvoffsets<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span> <span style="color:#f92672">-</span> softRecordLimit<span style="color:#f92672">);</span>
+          <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>kvstart <span style="color:#f92672">==</span> kvend <span style="color:#f92672">&amp;&amp;</span> kvsoftlimit<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Spilling map output: record full = &#34;</span> <span style="color:#f92672">+</span> kvsoftlimit<span style="color:#f92672">);</span>
+<span style="color:#75715e">//其实是设置变量并通过spillReady.signal()，通知spillThread；并等待spill结束
+</span><span style="color:#75715e"></span>            startSpill<span style="color:#f92672">();</span>
+          <span style="color:#f92672">}</span>
+          <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>kvfull<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+              <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span>kvstart <span style="color:#f92672">!=</span> kvend<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+<span style="color:#75715e">//kvstart不等于kvend，表示系统正在spill,等待spillDone信号
+</span><span style="color:#75715e"></span>                reporter<span style="color:#f92672">.</span><span style="color:#a6e22e">progress</span><span style="color:#f92672">();</span>
+                spillDone<span style="color:#f92672">.</span><span style="color:#a6e22e">await</span><span style="color:#f92672">();</span>
+              <span style="color:#f92672">}</span>
+            <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>InterruptedException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+              <span style="color:#66d9ef">throw</span> <span style="color:#f92672">(</span>IOException<span style="color:#f92672">)</span><span style="color:#66d9ef">new</span> IOException<span style="color:#f92672">(</span>
+                  <span style="color:#e6db74">&#34;Collector interrupted while waiting for the writer&#34;</span>
+                  <span style="color:#f92672">).</span><span style="color:#a6e22e">initCause</span><span style="color:#f92672">(</span>e<span style="color:#f92672">);</span>
+            <span style="color:#f92672">}</span>
+          <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span>kvfull<span style="color:#f92672">);</span>
+      <span style="color:#f92672">}</span> <span style="color:#66d9ef">finally</span> <span style="color:#f92672">{</span>
+        spillLock<span style="color:#f92672">.</span><span style="color:#a6e22e">unlock</span><span style="color:#f92672">();</span>
+      <span style="color:#f92672">}</span>
+
+      <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+<span style="color:#75715e">//先对key串行化，然后对value做串行化，临时变量keystart，valstart和valend分别记录了key结果的开始位置，value结果的开始位置和value结果的结束位置。串行化过程中，往缓冲区写是最终调用了Buffer.write方法
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// serialize key bytes into buffer
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">int</span> keystart <span style="color:#f92672">=</span> bufindex<span style="color:#f92672">;</span>
+        keySerializer<span style="color:#f92672">.</span><span style="color:#a6e22e">serialize</span><span style="color:#f92672">(</span>key<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>bufindex <span style="color:#f92672">&lt;</span> keystart<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+          <span style="color:#75715e">//如果key串行化后出现bufindex &lt; keystart，那么会调用BlockingBuffer的reset方法。原因是在spill的过程中需要对&lt;key，value&gt;排序，这种情况下，传递给RawComparator的必须是连续的二进制缓冲区，通过BlockingBuffer.reset方法   会把bufvoid设置为bufmark，缓冲区开始部分往后挪，然后将原来位于bufmark到bufvoid出的结果，拷到缓冲区开始处，这样的话，key串行化的结果就连续存放在缓冲区的最开始处。       
+</span><span style="color:#75715e"></span>        bb<span style="color:#f92672">.</span><span style="color:#a6e22e">reset</span><span style="color:#f92672">();</span>
+          keystart <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#75715e">// serialize value bytes into buffer
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> valstart <span style="color:#f92672">=</span> bufindex<span style="color:#f92672">;</span>
+        valSerializer<span style="color:#f92672">.</span><span style="color:#a6e22e">serialize</span><span style="color:#f92672">(</span>value<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">int</span> valend <span style="color:#f92672">=</span> bb<span style="color:#f92672">.</span><span style="color:#a6e22e">markRecord</span><span style="color:#f92672">();</span>
+
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>partition <span style="color:#f92672">&lt;</span> 0 <span style="color:#f92672">||</span> partition <span style="color:#f92672">&gt;=</span> partitions<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+          <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IOException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Illegal partition for &#34;</span> <span style="color:#f92672">+</span> key <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; (&#34;</span> <span style="color:#f92672">+</span>
+              partition <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;)&#34;</span><span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+    
+        mapOutputRecordCounter<span style="color:#f92672">.</span><span style="color:#a6e22e">increment</span><span style="color:#f92672">(</span>1<span style="color:#f92672">);</span>
+        mapOutputByteCounter<span style="color:#f92672">.</span><span style="color:#a6e22e">increment</span><span style="color:#f92672">(</span>valend <span style="color:#f92672">&gt;=</span> keystart
+            <span style="color:#f92672">?</span> valend <span style="color:#f92672">-</span> keystart
+            <span style="color:#f92672">:</span> <span style="color:#f92672">(</span>bufvoid <span style="color:#f92672">-</span> keystart<span style="color:#f92672">)</span> <span style="color:#f92672">+</span> valend<span style="color:#f92672">);</span>
+    
+        <span style="color:#75715e">// update accounting info
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">int</span> ind <span style="color:#f92672">=</span> kvindex <span style="color:#f92672">*</span> ACCTSIZE<span style="color:#f92672">;</span>
+        kvoffsets<span style="color:#f92672">[</span>kvindex<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> ind<span style="color:#f92672">;</span>
+        kvindices<span style="color:#f92672">[</span>ind <span style="color:#f92672">+</span> PARTITION<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> partition<span style="color:#f92672">;</span>
+        kvindices<span style="color:#f92672">[</span>ind <span style="color:#f92672">+</span> KEYSTART<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> keystart<span style="color:#f92672">;</span>
+        kvindices<span style="color:#f92672">[</span>ind <span style="color:#f92672">+</span> VALSTART<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> valstart<span style="color:#f92672">;</span>
+        kvindex <span style="color:#f92672">=</span> kvnext<span style="color:#f92672">;</span>
+      <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>MapBufferTooSmallException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Record too large for in-memory buffer: &#34;</span> <span style="color:#f92672">+</span> e<span style="color:#f92672">.</span><span style="color:#a6e22e">getMessage</span><span style="color:#f92672">());</span>
+<span style="color:#75715e">//如果value的串行化结果太大，不能一次放入缓冲区
+</span><span style="color:#75715e"></span>        spillSingleRecord<span style="color:#f92672">(</span>key<span style="color:#f92672">,</span> value<span style="color:#f92672">,</span> partition<span style="color:#f92672">);</span>
+        mapOutputRecordCounter<span style="color:#f92672">.</span><span style="color:#a6e22e">increment</span><span style="color:#f92672">(</span>1<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">return</span><span style="color:#f92672">;</span>
+      <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><h4 id="8-mapoutputbufferblockingbuffer的reset方法">8. MapOutputBuffer.BlockingBuffer的reset()方法.</h4>
+<p>如果key串行化后出现bufindex &lt; keystart，那么会调用BlockingBuffer的reset方法。原因是在spill的过程中需要对&lt;key，value&gt;排序，这种情况下，传递给RawComparator的必须是连续的二进制缓冲区，通过BlockingBuffer.reset方法当发现key的串行化结果出现不连续的情况时，会把bufvoid设置为bufmark，缓冲区开始部分往后挪，然后将原来位于bufmark到bufvoid出的结果，拷到缓冲区开始处，这样的话，key串行化的结果就连续存放在缓冲区的最开始处。</p>
+<!-- raw HTML omitted -->
+<p>​                            <strong>BlockingBuffer.reset方法</strong></p>
+<p>bufstart前面的缓冲区如果不能放下整个key串行化的结果，，处理的方式是将bufindex置0，然后调用BlockingBuffer内部的out的write方法直接输出，这实际调用了Buffer.write方法，会启动spill过程，最终会成功写入key串行化的结果。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">synchronized</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">reset</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> IOException <span style="color:#f92672">{</span>
+
+        <span style="color:#66d9ef">int</span> headbytelen <span style="color:#f92672">=</span> bufvoid <span style="color:#f92672">-</span> bufmark<span style="color:#f92672">;</span>
+        bufvoid <span style="color:#f92672">=</span> bufmark<span style="color:#f92672">;</span>
+        <span style="color:#75715e">//当发现key的串行化结果出现不连续的情况时，会把bufvoid设置为bufmark，缓冲区开始部分往后挪，然后将原来位于bufmark到bufvoid出的结果，拷到缓冲区开始处，这样的话，key串行化的结果就连续存放在缓冲区的最开始处。
+</span><span style="color:#75715e"></span>    
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>bufindex <span style="color:#f92672">+</span> headbytelen <span style="color:#f92672">&lt;</span> bufstart<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+          System<span style="color:#f92672">.</span><span style="color:#a6e22e">arraycopy</span><span style="color:#f92672">(</span>kvbuffer<span style="color:#f92672">,</span> 0<span style="color:#f92672">,</span> kvbuffer<span style="color:#f92672">,</span> headbytelen<span style="color:#f92672">,</span> bufindex<span style="color:#f92672">);</span>
+          System<span style="color:#f92672">.</span><span style="color:#a6e22e">arraycopy</span><span style="color:#f92672">(</span>kvbuffer<span style="color:#f92672">,</span> bufvoid<span style="color:#f92672">,</span> kvbuffer<span style="color:#f92672">,</span> 0<span style="color:#f92672">,</span> headbytelen<span style="color:#f92672">);</span>
+          bufindex <span style="color:#f92672">+=</span> headbytelen<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+         <span style="color:#75715e">//bufstart前面的缓冲区如果不能够放下整个key串行化的结果，处理的方式是将bufindex置0，然后调用BlockingBuffer内部的out的write方法直接输出
+</span><span style="color:#75715e"></span>          <span style="color:#66d9ef">byte</span><span style="color:#f92672">[]</span> keytmp <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">byte</span><span style="color:#f92672">[</span>bufindex<span style="color:#f92672">];</span>
+          System<span style="color:#f92672">.</span><span style="color:#a6e22e">arraycopy</span><span style="color:#f92672">(</span>kvbuffer<span style="color:#f92672">,</span> 0<span style="color:#f92672">,</span> keytmp<span style="color:#f92672">,</span> 0<span style="color:#f92672">,</span> bufindex<span style="color:#f92672">);</span>
+          bufindex <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span>
+          out<span style="color:#f92672">.</span><span style="color:#a6e22e">write</span><span style="color:#f92672">(</span>kvbuffer<span style="color:#f92672">,</span> bufmark<span style="color:#f92672">,</span> headbytelen<span style="color:#f92672">);</span>
+          out<span style="color:#f92672">.</span><span style="color:#a6e22e">write</span><span style="color:#f92672">(</span>keytmp<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+      <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><h4 id="9-mapoutputbufferbuffer的write方法">9. MapOutputBuffer.Buffer的write方法。</h4>
+<p>在key和value序列列化的时候，被调用写到缓存中。如果spill线程正在把缓存的数据写溢出文件，则阻塞。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">synchronized</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">write</span><span style="color:#f92672">(</span><span style="color:#66d9ef">byte</span> b<span style="color:#f92672">[],</span> <span style="color:#66d9ef">int</span> off<span style="color:#f92672">,</span> <span style="color:#66d9ef">int</span> len<span style="color:#f92672">)</span>
+          <span style="color:#66d9ef">throws</span> IOException <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">boolean</span> buffull <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">boolean</span> wrap <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+        spillLock<span style="color:#f92672">.</span><span style="color:#a6e22e">lock</span><span style="color:#f92672">();</span>
+        <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+          <span style="color:#66d9ef">do</span> <span style="color:#f92672">{</span><span style="color:#75715e">//循环，直到有足够的空间可以写数据
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>sortSpillException <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+              <span style="color:#66d9ef">throw</span> <span style="color:#f92672">(</span>IOException<span style="color:#f92672">)</span><span style="color:#66d9ef">new</span> IOException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Spill failed&#34;</span>
+                  <span style="color:#f92672">).</span><span style="color:#a6e22e">initCause</span><span style="color:#f92672">(</span>sortSpillException<span style="color:#f92672">);</span>
+            <span style="color:#f92672">}</span>
+
+            <span style="color:#75715e">// sufficient buffer space?
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>bufstart <span style="color:#f92672">&lt;=</span> bufend <span style="color:#f92672">&amp;&amp;</span> bufend <span style="color:#f92672">&lt;=</span> bufindex<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+              buffull <span style="color:#f92672">=</span> bufindex <span style="color:#f92672">+</span> len <span style="color:#f92672">&gt;</span> bufvoid<span style="color:#f92672">;</span>
+              wrap <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>bufvoid <span style="color:#f92672">-</span> bufindex<span style="color:#f92672">)</span> <span style="color:#f92672">+</span> bufstart <span style="color:#f92672">&gt;</span> len<span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+              <span style="color:#75715e">// bufindex &lt;= bufstart &lt;= bufend
+</span><span style="color:#75715e"></span>              <span style="color:#75715e">// bufend &lt;= bufindex &lt;= bufstart
+</span><span style="color:#75715e"></span>              wrap <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+              buffull <span style="color:#f92672">=</span> bufindex <span style="color:#f92672">+</span> len <span style="color:#f92672">&gt;</span> bufstart<span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span>
+    
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>kvstart <span style="color:#f92672">==</span> kvend<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+              <span style="color:#75715e">// spill thread not running
+</span><span style="color:#75715e"></span>              <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>kvend <span style="color:#f92672">!=</span> kvindex<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                <span style="color:#75715e">//如果数组中有记录(kvend != kvindex)，那么，根据需要（目前输出空间不足或记录数达到spill条件）启动spill过程
+</span><span style="color:#75715e"></span>                <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">boolean</span> bufsoftlimit <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>bufindex <span style="color:#f92672">&gt;</span> bufend<span style="color:#f92672">)</span>
+                  <span style="color:#f92672">?</span> bufindex <span style="color:#f92672">-</span> bufend <span style="color:#f92672">&gt;</span> softBufferLimit
+                  <span style="color:#f92672">:</span> bufend <span style="color:#f92672">-</span> bufindex <span style="color:#f92672">&lt;</span> bufvoid <span style="color:#f92672">-</span> softBufferLimit<span style="color:#f92672">;</span>
+                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>bufsoftlimit <span style="color:#f92672">||</span> <span style="color:#f92672">(</span>buffull <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>wrap<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+                  LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Spilling map output: buffer full= &#34;</span> <span style="color:#f92672">+</span> bufsoftlimit<span style="color:#f92672">);</span>
+                  startSpill<span style="color:#f92672">();</span>
+                <span style="color:#f92672">}</span>
+              <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>buffull <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>wrap<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+               <span style="color:#75715e">// 如果空间不够（buffull &amp;&amp; !wrap），但是缓存中没有记录，表明这个记录非常大，内存缓冲区不能容下这么大的数据量，抛MapBufferTooSmallException异常，直接写文件不用写缓存
+</span><span style="color:#75715e"></span>                <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> size <span style="color:#f92672">=</span> <span style="color:#f92672">((</span>bufend <span style="color:#f92672">&lt;=</span> bufindex<span style="color:#f92672">)</span>
+                  <span style="color:#f92672">?</span> bufindex <span style="color:#f92672">-</span> bufend
+                  <span style="color:#f92672">:</span> <span style="color:#f92672">(</span>bufvoid <span style="color:#f92672">-</span> bufend<span style="color:#f92672">)</span> <span style="color:#f92672">+</span> bufindex<span style="color:#f92672">)</span> <span style="color:#f92672">+</span> len<span style="color:#f92672">;</span>
+                bufstart <span style="color:#f92672">=</span> bufend <span style="color:#f92672">=</span> bufindex <span style="color:#f92672">=</span> bufmark <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span>
+                kvstart <span style="color:#f92672">=</span> kvend <span style="color:#f92672">=</span> kvindex <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span>
+                bufvoid <span style="color:#f92672">=</span> kvbuffer<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">;</span>
+                <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> MapBufferTooSmallException<span style="color:#f92672">(</span>size <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; bytes&#34;</span><span style="color:#f92672">);</span>
+              <span style="color:#f92672">}</span>
+            <span style="color:#f92672">}</span>
+    
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>buffull <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>wrap<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+              <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+              <span style="color:#75715e">//如果空间不足但是spill在运行，等待spillDone
+</span><span style="color:#75715e"></span>                <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span>kvstart <span style="color:#f92672">!=</span> kvend<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                  reporter<span style="color:#f92672">.</span><span style="color:#a6e22e">progress</span><span style="color:#f92672">();</span>
+                  spillDone<span style="color:#f92672">.</span><span style="color:#a6e22e">await</span><span style="color:#f92672">();</span>
+                <span style="color:#f92672">}</span>
+              <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>InterruptedException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                  <span style="color:#66d9ef">throw</span> <span style="color:#f92672">(</span>IOException<span style="color:#f92672">)</span><span style="color:#66d9ef">new</span> IOException<span style="color:#f92672">(</span>
+                      <span style="color:#e6db74">&#34;Buffer interrupted while waiting for the writer&#34;</span>
+                      <span style="color:#f92672">).</span><span style="color:#a6e22e">initCause</span><span style="color:#f92672">(</span>e<span style="color:#f92672">);</span>
+              <span style="color:#f92672">}</span>
+            <span style="color:#f92672">}</span>
+          <span style="color:#f92672">}</span> <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span>buffull <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>wrap<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">finally</span> <span style="color:#f92672">{</span>
+          spillLock<span style="color:#f92672">.</span><span style="color:#a6e22e">unlock</span><span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#75715e">//真正把数据写缓存的地方！如果buffull，则写数据会不连续，则写满剩余缓冲区，然后设置bufindex=0，并从bufindex处接着写。否则，就是从bufindex处开始写。
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>buffull<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+          <span style="color:#75715e">//缓存剩余长度
+</span><span style="color:#75715e"></span>          <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> gaplen <span style="color:#f92672">=</span> bufvoid <span style="color:#f92672">-</span> bufindex<span style="color:#f92672">;</span>
+          <span style="color:#75715e">//把剩余的写满
+</span><span style="color:#75715e"></span>          System<span style="color:#f92672">.</span><span style="color:#a6e22e">arraycopy</span><span style="color:#f92672">(</span>b<span style="color:#f92672">,</span> off<span style="color:#f92672">,</span> kvbuffer<span style="color:#f92672">,</span> bufindex<span style="color:#f92672">,</span> gaplen<span style="color:#f92672">);</span>
+          <span style="color:#75715e">//剩下长度
+</span><span style="color:#75715e"></span>          len <span style="color:#f92672">-=</span> gaplen<span style="color:#f92672">;</span>
+          <span style="color:#75715e">//剩下偏移
+</span><span style="color:#75715e"></span>          off <span style="color:#f92672">+=</span> gaplen<span style="color:#f92672">;</span>
+         <span style="color:#75715e">//写指针移到开头
+</span><span style="color:#75715e"></span>          bufindex <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+        从指定的开头写
+        System<span style="color:#f92672">.</span><span style="color:#a6e22e">arraycopy</span><span style="color:#f92672">(</span>b<span style="color:#f92672">,</span> off<span style="color:#f92672">,</span> kvbuffer<span style="color:#f92672">,</span> bufindex<span style="color:#f92672">,</span> len<span style="color:#f92672">);</span>
+        bufindex <span style="color:#f92672">+=</span> len<span style="color:#f92672">;</span>
+      <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><p><img src="../wp-content/uploads/2014/02/buffulwrap.jpg" alt=""></p>
+<p>​                                    buffull和wrap条件说明</p>
+<p>如图，对bufful和wrap条件进行说明： 在上面两种情况下，即情况1和情况2，</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">buffull <span style="color:#f92672">=</span> bufindex <span style="color:#f92672">+</span> len <span style="color:#f92672">&gt;</span> bufvoid<span style="color:#f92672">;</span>
+wrap <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>bufvoid <span style="color:#f92672">-</span> bufindex<span style="color:#f92672">)</span> <span style="color:#f92672">+</span> bufstart <span style="color:#f92672">&gt;</span> len<span style="color:#f92672">;</span>
+</code></pre></div><p>buffull条件判断为从下次写指针的位置bufindex到缓存结束bufvoid的空间是否有足够的空间容纳写的内容，wrap是图中白颜色部分的空间（前后空白合在一起）是否比输入大，如果是，wrap为true； 情况3和情况4中，</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">wrap <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+buffull <span style="color:#f92672">=</span> bufindex <span style="color:#f92672">+</span> len <span style="color:#f92672">&gt;</span> bufstart<span style="color:#f92672">;</span>
+</code></pre></div><p>buffull判断bufindex到bufstart的空间是否满足条件，而wrap肯定是false。 条件（buffull &amp;&amp; !wrap）满足时，目前的空间不够一次写。</p>
+<h4 id="10-mapoutputbuffer-的spillsinglerecord方法">10. MapOutputBuffer 的<strong>spillSingleRecord</strong>方法。</h4>
+<p>如果在collect方法中处理缓存失败，则直接把这条记录些到spill文件中。对应单条记录即使设置了combiner也不用。如果记录非常大，内存缓冲区不能容下这么大的数据量，抛MapBufferTooSmallException异常，直接写文件不用写缓存。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">spillSingleRecord</span><span style="color:#f92672">(</span><span style="color:#66d9ef">final</span> K key<span style="color:#f92672">,</span> <span style="color:#66d9ef">final</span> V value<span style="color:#f92672">,</span>
+                                   <span style="color:#66d9ef">int</span> partition<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> IOException <span style="color:#f92672">{</span>
+      <span style="color:#66d9ef">long</span> size <span style="color:#f92672">=</span> kvbuffer<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span> <span style="color:#f92672">+</span> partitions <span style="color:#f92672">*</span> APPROX_HEADER_LENGTH<span style="color:#f92672">;</span>
+      FSDataOutputStream out <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+      <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+        <span style="color:#75715e">// 创建spill文件
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">final</span> SpillRecord spillRec <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> SpillRecord<span style="color:#f92672">(</span>partitions<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">final</span> Path filename <span style="color:#f92672">=</span> mapOutputFile<span style="color:#f92672">.</span><span style="color:#a6e22e">getSpillFileForWrite</span><span style="color:#f92672">(</span>getTaskID<span style="color:#f92672">(),</span>
+            numSpills<span style="color:#f92672">,</span> size<span style="color:#f92672">);</span>
+        out <span style="color:#f92672">=</span> rfs<span style="color:#f92672">.</span><span style="color:#a6e22e">create</span><span style="color:#f92672">(</span>filename<span style="color:#f92672">);</span>
+
+        IndexRecord rec <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> IndexRecord<span style="color:#f92672">();</span>
+        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;</span> partitions<span style="color:#f92672">;</span> <span style="color:#f92672">++</span>i<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+          IFile<span style="color:#f92672">.</span><span style="color:#a6e22e">Writer</span><span style="color:#f92672">&lt;</span>K<span style="color:#f92672">,</span> V<span style="color:#f92672">&gt;</span> writer <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+          <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">long</span> segmentStart <span style="color:#f92672">=</span> out<span style="color:#f92672">.</span><span style="color:#a6e22e">getPos</span><span style="color:#f92672">();</span>
+             writer <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> IFile<span style="color:#f92672">.</span><span style="color:#a6e22e">Writer</span><span style="color:#f92672">&lt;</span>K<span style="color:#f92672">,</span>V<span style="color:#f92672">&gt;(</span>job<span style="color:#f92672">,</span> out<span style="color:#f92672">,</span> keyClass<span style="color:#f92672">,</span> valClass<span style="color:#f92672">,</span> codec<span style="color:#f92672">,</span>
+                                            spilledRecordsCounter<span style="color:#f92672">);</span>
+    
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>i <span style="color:#f92672">==</span> partition<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+              <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">long</span> recordStart <span style="color:#f92672">=</span> out<span style="color:#f92672">.</span><span style="color:#a6e22e">getPos</span><span style="color:#f92672">();</span>
+              writer<span style="color:#f92672">.</span><span style="color:#a6e22e">append</span><span style="color:#f92672">(</span>key<span style="color:#f92672">,</span> value<span style="color:#f92672">);</span>
+              mapOutputByteCounter<span style="color:#f92672">.</span><span style="color:#a6e22e">increment</span><span style="color:#f92672">(</span>out<span style="color:#f92672">.</span><span style="color:#a6e22e">getPos</span><span style="color:#f92672">()</span> <span style="color:#f92672">-</span> recordStart<span style="color:#f92672">);</span>
+            <span style="color:#f92672">}</span>
+            writer<span style="color:#f92672">.</span><span style="color:#a6e22e">close</span><span style="color:#f92672">();</span>
+    
+            <span style="color:#75715e">// 把偏移记录在index中
+</span><span style="color:#75715e"></span>            rec<span style="color:#f92672">.</span><span style="color:#a6e22e">startOffset</span> <span style="color:#f92672">=</span> segmentStart<span style="color:#f92672">;</span>
+            rec<span style="color:#f92672">.</span><span style="color:#a6e22e">rawLength</span> <span style="color:#f92672">=</span> writer<span style="color:#f92672">.</span><span style="color:#a6e22e">getRawLength</span><span style="color:#f92672">();</span>
+            rec<span style="color:#f92672">.</span><span style="color:#a6e22e">partLength</span> <span style="color:#f92672">=</span> writer<span style="color:#f92672">.</span><span style="color:#a6e22e">getCompressedLength</span><span style="color:#f92672">();</span>
+            spillRec<span style="color:#f92672">.</span><span style="color:#a6e22e">putIndex</span><span style="color:#f92672">(</span>rec<span style="color:#f92672">,</span> i<span style="color:#f92672">);</span>
+    
+            writer <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+          <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>IOException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">null</span> <span style="color:#f92672">!=</span> writer<span style="color:#f92672">)</span> writer<span style="color:#f92672">.</span><span style="color:#a6e22e">close</span><span style="color:#f92672">();</span>
+            <span style="color:#66d9ef">throw</span> e<span style="color:#f92672">;</span>
+          <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+         <span style="color:#75715e">//如果index满了，则把index也写到index文件中。没满则把该条index记录加入到indexCacheList中，并更新totalIndexCacheMemory。
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>totalIndexCacheMemory <span style="color:#f92672">&gt;=</span> INDEX_CACHE_MEMORY_LIMIT<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+          <span style="color:#75715e">// create spill index file
+</span><span style="color:#75715e"></span>          Path indexFilename <span style="color:#f92672">=</span> mapOutputFile<span style="color:#f92672">.</span><span style="color:#a6e22e">getSpillIndexFileForWrite</span><span style="color:#f92672">(</span>
+              getTaskID<span style="color:#f92672">(),</span> numSpills<span style="color:#f92672">,</span>
+              partitions <span style="color:#f92672">*</span> MAP_OUTPUT_INDEX_RECORD_LENGTH<span style="color:#f92672">);</span>
+          spillRec<span style="color:#f92672">.</span><span style="color:#a6e22e">writeToFile</span><span style="color:#f92672">(</span>indexFilename<span style="color:#f92672">,</span> job<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+          indexCacheList<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>spillRec<span style="color:#f92672">);</span>
+          totalIndexCacheMemory <span style="color:#f92672">+=</span>
+            spillRec<span style="color:#f92672">.</span><span style="color:#a6e22e">size</span><span style="color:#f92672">()</span> <span style="color:#f92672">*</span> MAP_OUTPUT_INDEX_RECORD_LENGTH<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#f92672">++</span>numSpills<span style="color:#f92672">;</span>
+      <span style="color:#f92672">}</span> <span style="color:#66d9ef">finally</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>out <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> out<span style="color:#f92672">.</span><span style="color:#a6e22e">close</span><span style="color:#f92672">();</span>
+      <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><h4 id="11-mapoutputbuffer的startspill">11. MapOutputBuffer的startSpill。</h4>
+<p>唤醒等待spillReady的线程。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">synchronized</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">startSpill</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+      LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;bufstart = &#34;</span> <span style="color:#f92672">+</span> bufstart <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;; bufend = &#34;</span> <span style="color:#f92672">+</span> bufmark <span style="color:#f92672">+</span>
+               <span style="color:#e6db74">&#34;; bufvoid = &#34;</span> <span style="color:#f92672">+</span> bufvoid<span style="color:#f92672">);</span>
+      LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;kvstart = &#34;</span> <span style="color:#f92672">+</span> kvstart <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;; kvend = &#34;</span> <span style="color:#f92672">+</span> kvindex <span style="color:#f92672">+</span>
+               <span style="color:#e6db74">&#34;; length = &#34;</span> <span style="color:#f92672">+</span> kvoffsets<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">);</span>
+      kvend <span style="color:#f92672">=</span> kvindex<span style="color:#f92672">;</span>
+      bufend <span style="color:#f92672">=</span> bufmark<span style="color:#f92672">;</span>
+      spillReady<span style="color:#f92672">.</span><span style="color:#a6e22e">signal</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><h4 id="12-spillthread的run方法">12. SpillThread的run方法。</h4>
+<p>该Thread会检查内存中的输出缓存区，在满足一定条件的时候将缓冲区中的内容spill到硬盘上。这是一个标准的生产者-消费者模型，MapTask的collect方法是生产者，spillThread是消费者，它们之间同步是通过spillLock（ReentrantLock）和spillLock上的两个条件变量（spillDone和spillReady）完成的。当kvstart == kvend条件成立时，表示没有要spill的记录。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+      <span style="color:#75715e">//临界区
+</span><span style="color:#75715e"></span>        spillLock<span style="color:#f92672">.</span><span style="color:#a6e22e">lock</span><span style="color:#f92672">();</span>
+        spillThreadRunning <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+          <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">true</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            spillDone<span style="color:#f92672">.</span><span style="color:#a6e22e">signal</span><span style="color:#f92672">();</span>
+当kvstart <span style="color:#f92672">==</span> kvend条件成立时<span style="color:#960050;background-color:#1e0010">，</span>表示没有要spill的记录
+            <span style="color:#a6e22e">while</span> <span style="color:#f92672">(</span>kvstart <span style="color:#f92672">==</span> kvend<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+              spillReady<span style="color:#f92672">.</span><span style="color:#a6e22e">await</span><span style="color:#f92672">();</span>
+            <span style="color:#f92672">}</span>
+            <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+              spillLock<span style="color:#f92672">.</span><span style="color:#a6e22e">unlock</span><span style="color:#f92672">();</span>
+              <span style="color:#75715e">//执行操作
+</span><span style="color:#75715e"></span>              sortAndSpill<span style="color:#f92672">();</span>
+            <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>Exception e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+              sortSpillException <span style="color:#f92672">=</span> e<span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>Throwable t<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+              sortSpillException <span style="color:#f92672">=</span> t<span style="color:#f92672">;</span>
+              String logMsg <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Task &#34;</span> <span style="color:#f92672">+</span> getTaskID<span style="color:#f92672">()</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; failed : &#34;</span> 
+                              <span style="color:#f92672">+</span> StringUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">stringifyException</span><span style="color:#f92672">(</span>t<span style="color:#f92672">);</span>
+              reportFatalError<span style="color:#f92672">(</span>getTaskID<span style="color:#f92672">(),</span> t<span style="color:#f92672">,</span> logMsg<span style="color:#f92672">);</span>
+            <span style="color:#f92672">}</span> <span style="color:#66d9ef">finally</span> <span style="color:#f92672">{</span>
+              spillLock<span style="color:#f92672">.</span><span style="color:#a6e22e">lock</span><span style="color:#f92672">();</span>
+              <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>bufend <span style="color:#f92672">&lt;</span> bufindex <span style="color:#f92672">&amp;&amp;</span> bufindex <span style="color:#f92672">&lt;</span> bufstart<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                bufvoid <span style="color:#f92672">=</span> kvbuffer<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">;</span>
+              <span style="color:#f92672">}</span>
+              kvstart <span style="color:#f92672">=</span> kvend<span style="color:#f92672">;</span>
+              bufstart <span style="color:#f92672">=</span> bufend<span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span>
+          <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>InterruptedException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+          Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">currentThread</span><span style="color:#f92672">().</span><span style="color:#a6e22e">interrupt</span><span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">finally</span> <span style="color:#f92672">{</span>
+          spillLock<span style="color:#f92672">.</span><span style="color:#a6e22e">unlock</span><span style="color:#f92672">();</span>
+          spillThreadRunning <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+      <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><h4 id="13mapoutputbuffer的sortandspill-方法">13..MapOutputBuffer的sortAndSpill() 方法</h4>
+<p>SpillThread线程的run方法中调用sortAndSpill把缓存中的输出写到格式为+ “/spill” + spillNumber + “.out”的spill文件中。索引（kvindices）保持在spill{spill号}.out.index中，数据保存在spill{spill号}.out中</p>
+<p>创建SpillRecord记录，输出文件和IndexRecord记录，然后，需要在kvoffsets上做排序，排完序后顺序访问kvoffsets，也就是按partition顺序访问记录。按partition循环处理排完序的数组，如果没有combiner，则直接输出记录，否则，调用combineAndSpill，先做combin然后输出。循环的最后记录IndexRecord到SpillRecord。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">sortAndSpill</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> IOException<span style="color:#f92672">,</span> ClassNotFoundException<span style="color:#f92672">,</span>
+                                       InterruptedException <span style="color:#f92672">{</span>
+      <span style="color:#75715e">//approximate the length of the output file to be the length of the
+</span><span style="color:#75715e"></span>      <span style="color:#75715e">//buffer + header lengths for the partitions
+</span><span style="color:#75715e"></span>      <span style="color:#66d9ef">long</span> size <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>bufend <span style="color:#f92672">&gt;=</span> bufstart
+          <span style="color:#f92672">?</span> bufend <span style="color:#f92672">-</span> bufstart
+          <span style="color:#f92672">:</span> <span style="color:#f92672">(</span>bufvoid <span style="color:#f92672">-</span> bufend<span style="color:#f92672">)</span> <span style="color:#f92672">+</span> bufstart<span style="color:#f92672">)</span> <span style="color:#f92672">+</span>
+                  partitions <span style="color:#f92672">*</span> APPROX_HEADER_LENGTH<span style="color:#f92672">;</span>
+      FSDataOutputStream out <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+      <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+        <span style="color:#75715e">// 创建溢出文件
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">final</span> SpillRecord spillRec <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> SpillRecord<span style="color:#f92672">(</span>partitions<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">final</span> Path filename <span style="color:#f92672">=</span> mapOutputFile<span style="color:#f92672">.</span><span style="color:#a6e22e">getSpillFileForWrite</span><span style="color:#f92672">(</span>getTaskID<span style="color:#f92672">(),</span>
+            numSpills<span style="color:#f92672">,</span> size<span style="color:#f92672">);</span>
+        out <span style="color:#f92672">=</span> rfs<span style="color:#f92672">.</span><span style="color:#a6e22e">create</span><span style="color:#f92672">(</span>filename<span style="color:#f92672">);</span>
+
+        <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> endPosition <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>kvend <span style="color:#f92672">&gt;</span> kvstart<span style="color:#f92672">)</span>
+          <span style="color:#f92672">?</span> kvend
+          <span style="color:#f92672">:</span> kvoffsets<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span> <span style="color:#f92672">+</span> kvend<span style="color:#f92672">;</span>
+<span style="color:#75715e">//使用sorter进行排序, 在内存中进行，参照MapOutputBuffer的compare方法实现的这里的排序也是对序列化的字节做的排序。排序是在kvoffsets上面进行，参照MapOutputBuffer的swap方法实现。
+</span><span style="color:#75715e"></span>        sorter<span style="color:#f92672">.</span><span style="color:#a6e22e">sort</span><span style="color:#f92672">(</span>MapOutputBuffer<span style="color:#f92672">.</span><span style="color:#a6e22e">this</span><span style="color:#f92672">,</span> kvstart<span style="color:#f92672">,</span> endPosition<span style="color:#f92672">,</span> reporter<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">int</span> spindex <span style="color:#f92672">=</span> kvstart<span style="color:#f92672">;</span>
+        IndexRecord rec <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> IndexRecord<span style="color:#f92672">();</span>
+        InMemValBytes value <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> InMemValBytes<span style="color:#f92672">();</span>
+        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;</span> partitions<span style="color:#f92672">;</span> <span style="color:#f92672">++</span>i<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+          IFile<span style="color:#f92672">.</span><span style="color:#a6e22e">Writer</span><span style="color:#f92672">&lt;</span>K<span style="color:#f92672">,</span> V<span style="color:#f92672">&gt;</span> writer <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+          <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">long</span> segmentStart <span style="color:#f92672">=</span> out<span style="color:#f92672">.</span><span style="color:#a6e22e">getPos</span><span style="color:#f92672">();</span>
+            writer <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Writer<span style="color:#f92672">&lt;</span>K<span style="color:#f92672">,</span> V<span style="color:#f92672">&gt;(</span>job<span style="color:#f92672">,</span> out<span style="color:#f92672">,</span> keyClass<span style="color:#f92672">,</span> valClass<span style="color:#f92672">,</span> codec<span style="color:#f92672">,</span>
+                                      spilledRecordsCounter<span style="color:#f92672">);</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>combinerRunner <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+              <span style="color:#75715e">// 如果没有combinner则直接写键值
+</span><span style="color:#75715e"></span>              DataInputBuffer key <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> DataInputBuffer<span style="color:#f92672">();</span>
+              <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span>spindex <span style="color:#f92672">&lt;</span> endPosition <span style="color:#f92672">&amp;&amp;</span>
+                  kvindices<span style="color:#f92672">[</span>kvoffsets<span style="color:#f92672">[</span>spindex <span style="color:#f92672">%</span> kvoffsets<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">]</span>
+                            <span style="color:#f92672">+</span> PARTITION<span style="color:#f92672">]</span> <span style="color:#f92672">==</span> i<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> kvoff <span style="color:#f92672">=</span> kvoffsets<span style="color:#f92672">[</span>spindex <span style="color:#f92672">%</span> kvoffsets<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">];</span>
+                getVBytesForOffset<span style="color:#f92672">(</span>kvoff<span style="color:#f92672">,</span> value<span style="color:#f92672">);</span>
+                key<span style="color:#f92672">.</span><span style="color:#a6e22e">reset</span><span style="color:#f92672">(</span>kvbuffer<span style="color:#f92672">,</span> kvindices<span style="color:#f92672">[</span>kvoff <span style="color:#f92672">+</span> KEYSTART<span style="color:#f92672">],</span>
+                          <span style="color:#f92672">(</span>kvindices<span style="color:#f92672">[</span>kvoff <span style="color:#f92672">+</span> VALSTART<span style="color:#f92672">]</span> <span style="color:#f92672">-</span> 
+                           kvindices<span style="color:#f92672">[</span>kvoff <span style="color:#f92672">+</span> KEYSTART<span style="color:#f92672">]));</span>
+                <span style="color:#75715e">//键值写到溢出文件
+</span><span style="color:#75715e"></span>                writer<span style="color:#f92672">.</span><span style="color:#a6e22e">append</span><span style="color:#f92672">(</span>key<span style="color:#f92672">,</span> value<span style="color:#f92672">);</span>
+                <span style="color:#f92672">++</span>spindex<span style="color:#f92672">;</span>
+              <span style="color:#f92672">}</span>
+            <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+              <span style="color:#66d9ef">int</span> spstart <span style="color:#f92672">=</span> spindex<span style="color:#f92672">;</span>
+              <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span>spindex <span style="color:#f92672">&lt;</span> endPosition <span style="color:#f92672">&amp;&amp;</span>
+                  kvindices<span style="color:#f92672">[</span>kvoffsets<span style="color:#f92672">[</span>spindex <span style="color:#f92672">%</span> kvoffsets<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">]</span>
+                            <span style="color:#f92672">+</span> PARTITION<span style="color:#f92672">]</span> <span style="color:#f92672">==</span> i<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                <span style="color:#f92672">++</span>spindex<span style="color:#f92672">;</span>
+              <span style="color:#f92672">}</span>
+              <span style="color:#75715e">//如果设置了combiner，则调用了combine方法后的结果写到IFile中，writer还是先前的writer。减少溢写到磁盘的数据量。
+</span><span style="color:#75715e"></span>              <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>spstart <span style="color:#f92672">!=</span> spindex<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                combineCollector<span style="color:#f92672">.</span><span style="color:#a6e22e">setWriter</span><span style="color:#f92672">(</span>writer<span style="color:#f92672">);</span>
+                RawKeyValueIterator kvIter <span style="color:#f92672">=</span>
+                  <span style="color:#66d9ef">new</span> MRResultIterator<span style="color:#f92672">(</span>spstart<span style="color:#f92672">,</span> spindex<span style="color:#f92672">);</span>
+                combinerRunner<span style="color:#f92672">.</span><span style="color:#a6e22e">combine</span><span style="color:#f92672">(</span>kvIter<span style="color:#f92672">,</span> combineCollector<span style="color:#f92672">);</span>
+              <span style="color:#f92672">}</span>
+            <span style="color:#f92672">}</span>
+
+            <span style="color:#75715e">// close the writer
+</span><span style="color:#75715e"></span>            writer<span style="color:#f92672">.</span><span style="color:#a6e22e">close</span><span style="color:#f92672">();</span>
+    
+            <span style="color:#75715e">// record offsets
+</span><span style="color:#75715e"></span>            rec<span style="color:#f92672">.</span><span style="color:#a6e22e">startOffset</span> <span style="color:#f92672">=</span> segmentStart<span style="color:#f92672">;</span>
+            rec<span style="color:#f92672">.</span><span style="color:#a6e22e">rawLength</span> <span style="color:#f92672">=</span> writer<span style="color:#f92672">.</span><span style="color:#a6e22e">getRawLength</span><span style="color:#f92672">();</span>
+            rec<span style="color:#f92672">.</span><span style="color:#a6e22e">partLength</span> <span style="color:#f92672">=</span> writer<span style="color:#f92672">.</span><span style="color:#a6e22e">getCompressedLength</span><span style="color:#f92672">();</span>
+            spillRec<span style="color:#f92672">.</span><span style="color:#a6e22e">putIndex</span><span style="color:#f92672">(</span>rec<span style="color:#f92672">,</span> i<span style="color:#f92672">);</span>
+    
+            writer <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+          <span style="color:#f92672">}</span> <span style="color:#66d9ef">finally</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">null</span> <span style="color:#f92672">!=</span> writer<span style="color:#f92672">)</span> writer<span style="color:#f92672">.</span><span style="color:#a6e22e">close</span><span style="color:#f92672">();</span>
+          <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+    
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>totalIndexCacheMemory <span style="color:#f92672">&gt;=</span> INDEX_CACHE_MEMORY_LIMIT<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+          <span style="color:#75715e">// 写溢出索引文件，格式如+ &#34;/spill&#34; + spillNumber +  &#34;.out.index&#34;
+</span><span style="color:#75715e"></span>          Path indexFilename <span style="color:#f92672">=</span> mapOutputFile<span style="color:#f92672">.</span><span style="color:#a6e22e">getSpillIndexFileForWrite</span><span style="color:#f92672">(</span>
+              getTaskID<span style="color:#f92672">(),</span> numSpills<span style="color:#f92672">,</span>
+              partitions <span style="color:#f92672">*</span> MAP_OUTPUT_INDEX_RECORD_LENGTH<span style="color:#f92672">);</span>
+          spillRec<span style="color:#f92672">.</span><span style="color:#a6e22e">writeToFile</span><span style="color:#f92672">(</span>indexFilename<span style="color:#f92672">,</span> job<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+          indexCacheList<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>spillRec<span style="color:#f92672">);</span>
+          totalIndexCacheMemory <span style="color:#f92672">+=</span>
+            spillRec<span style="color:#f92672">.</span><span style="color:#a6e22e">size</span><span style="color:#f92672">()</span> <span style="color:#f92672">*</span> MAP_OUTPUT_INDEX_RECORD_LENGTH<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+        LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Finished spill &#34;</span> <span style="color:#f92672">+</span> numSpills<span style="color:#f92672">);</span>
+        <span style="color:#f92672">++</span>numSpills<span style="color:#f92672">;</span>
+      <span style="color:#f92672">}</span> <span style="color:#66d9ef">finally</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>out <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> out<span style="color:#f92672">.</span><span style="color:#a6e22e">close</span><span style="color:#f92672">();</span>
+      <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><h4 id="14-mapoutputbuffer的compare方法和swap方法">14. MapOutputBuffer的compare方法和swap方法</h4>
+<p>MapOutputBuffer实现了IndexedSortable接口，从接口命名上就可以猜想到，这个排序不是移动数据，而是移动数据的索引。在这里要排序的其实是kvindices对象，通过移动其记录在kvoffets上的索引来实现。</p>
+<p>如图，表示了写磁盘前Sort的效果。kvindices保持了记录所属的（Reduce）分区，key在缓冲区开始的位置和value在缓冲区开始的位置，通过kvindices，我们可以在缓冲区中找到对应的记录。kvoffets用于在缓冲区满的时候对kvindices的partition进行排序，排完序的结果将输出到输出到本地磁盘上，其中索引（kvindices）保持在spill{spill号}.out.index中，数据保存在spill{spill号}.out中。通过观察MapOutputBuffer的compare知道，先是在partition上排序，然后是在key上排序。</p>
+<p><img src="../wp-content/uploads/2014/02/kvindeces_sort.jpg" alt=""></p>
+<p>​                       <strong>kvindices在kvoffets上排序</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">compare</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i<span style="color:#f92672">,</span> <span style="color:#66d9ef">int</span> j<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+      <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> ii <span style="color:#f92672">=</span> kvoffsets<span style="color:#f92672">[</span>i <span style="color:#f92672">%</span> kvoffsets<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">];</span>
+      <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> ij <span style="color:#f92672">=</span> kvoffsets<span style="color:#f92672">[</span>j <span style="color:#f92672">%</span> kvoffsets<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">];</span>
+      <span style="color:#75715e">// 先在partition上排序
+</span><span style="color:#75715e"></span>      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>kvindices<span style="color:#f92672">[</span>ii <span style="color:#f92672">+</span> PARTITION<span style="color:#f92672">]</span> <span style="color:#f92672">!=</span> kvindices<span style="color:#f92672">[</span>ij <span style="color:#f92672">+</span> PARTITION<span style="color:#f92672">])</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> kvindices<span style="color:#f92672">[</span>ii <span style="color:#f92672">+</span> PARTITION<span style="color:#f92672">]</span> <span style="color:#f92672">-</span> kvindices<span style="color:#f92672">[</span>ij <span style="color:#f92672">+</span> PARTITION<span style="color:#f92672">];</span>
+      <span style="color:#f92672">}</span>
+      <span style="color:#75715e">// 然后在可以上排序
+</span><span style="color:#75715e"></span>      <span style="color:#66d9ef">return</span> comparator<span style="color:#f92672">.</span><span style="color:#a6e22e">compare</span><span style="color:#f92672">(</span>kvbuffer<span style="color:#f92672">,</span>
+          kvindices<span style="color:#f92672">[</span>ii <span style="color:#f92672">+</span> KEYSTART<span style="color:#f92672">],</span>
+          kvindices<span style="color:#f92672">[</span>ii <span style="color:#f92672">+</span> VALSTART<span style="color:#f92672">]</span> <span style="color:#f92672">-</span> kvindices<span style="color:#f92672">[</span>ii <span style="color:#f92672">+</span> KEYSTART<span style="color:#f92672">],</span>
+          kvbuffer<span style="color:#f92672">,</span>
+          kvindices<span style="color:#f92672">[</span>ij <span style="color:#f92672">+</span> KEYSTART<span style="color:#f92672">],</span>
+          kvindices<span style="color:#f92672">[</span>ij <span style="color:#f92672">+</span> VALSTART<span style="color:#f92672">]</span> <span style="color:#f92672">-</span> kvindices<span style="color:#f92672">[</span>ij <span style="color:#f92672">+</span> KEYSTART<span style="color:#f92672">]);</span>
+    <span style="color:#f92672">}</span>
+
+     <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">swap</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i<span style="color:#f92672">,</span> <span style="color:#66d9ef">int</span> j<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+      i <span style="color:#f92672">%=</span> kvoffsets<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">;</span>
+      j <span style="color:#f92672">%=</span> kvoffsets<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">;</span>
+      <span style="color:#75715e">//通过交互在kvoffsets上的索引达到排序效果
+</span><span style="color:#75715e"></span>      <span style="color:#66d9ef">int</span> tmp <span style="color:#f92672">=</span> kvoffsets<span style="color:#f92672">[</span>i<span style="color:#f92672">];</span>
+      kvoffsets<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> kvoffsets<span style="color:#f92672">[</span>j<span style="color:#f92672">];</span>
+      kvoffsets<span style="color:#f92672">[</span>j<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> tmp<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><h4 id="15-mapoutputbuffer的flush-方法">15. MapOutputBuffer的flush() 方法</h4>
+<p>Mapper的结果都已经collect了，需要对缓冲区做一些最后的清理，调用flush方法，合并spill{n}文件产生最后的输出。先等待可能的spill过程完成，然后判断缓冲区是否为空，如果不是，则调用sortAndSpill，做最后的spill，然后结束spill线程.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">synchronized</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">flush</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> IOException<span style="color:#f92672">,</span> ClassNotFoundException<span style="color:#f92672">,</span>
+                                            InterruptedException <span style="color:#f92672">{</span>
+      LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Starting flush of map output&#34;</span><span style="color:#f92672">);</span>
+      spillLock<span style="color:#f92672">.</span><span style="color:#a6e22e">lock</span><span style="color:#f92672">();</span>
+      <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span>kvstart <span style="color:#f92672">!=</span> kvend<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+          reporter<span style="color:#f92672">.</span><span style="color:#a6e22e">progress</span><span style="color:#f92672">();</span>
+          spillDone<span style="color:#f92672">.</span><span style="color:#a6e22e">await</span><span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>sortSpillException <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+          <span style="color:#66d9ef">throw</span> <span style="color:#f92672">(</span>IOException<span style="color:#f92672">)</span><span style="color:#66d9ef">new</span> IOException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Spill failed&#34;</span>
+              <span style="color:#f92672">).</span><span style="color:#a6e22e">initCause</span><span style="color:#f92672">(</span>sortSpillException<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>kvend <span style="color:#f92672">!=</span> kvindex<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+          kvend <span style="color:#f92672">=</span> kvindex<span style="color:#f92672">;</span>
+          bufend <span style="color:#f92672">=</span> bufmark<span style="color:#f92672">;</span>
+          sortAndSpill<span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span>
+      <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>InterruptedException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">throw</span> <span style="color:#f92672">(</span>IOException<span style="color:#f92672">)</span><span style="color:#66d9ef">new</span> IOException<span style="color:#f92672">(</span>
+            <span style="color:#e6db74">&#34;Buffer interrupted while waiting for the writer&#34;</span>
+            <span style="color:#f92672">).</span><span style="color:#a6e22e">initCause</span><span style="color:#f92672">(</span>e<span style="color:#f92672">);</span>
+      <span style="color:#f92672">}</span> <span style="color:#66d9ef">finally</span> <span style="color:#f92672">{</span>
+        spillLock<span style="color:#f92672">.</span><span style="color:#a6e22e">unlock</span><span style="color:#f92672">();</span>
+      <span style="color:#f92672">}</span>
+      <span style="color:#66d9ef">assert</span> <span style="color:#f92672">!</span>spillLock<span style="color:#f92672">.</span><span style="color:#a6e22e">isHeldByCurrentThread</span><span style="color:#f92672">();</span>
+
+      <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+        spillThread<span style="color:#f92672">.</span><span style="color:#a6e22e">interrupt</span><span style="color:#f92672">();</span>
+        spillThread<span style="color:#f92672">.</span><span style="color:#a6e22e">join</span><span style="color:#f92672">();</span>
+      <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>InterruptedException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">throw</span> <span style="color:#f92672">(</span>IOException<span style="color:#f92672">)</span><span style="color:#66d9ef">new</span> IOException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Spill failed&#34;</span>
+            <span style="color:#f92672">).</span><span style="color:#a6e22e">initCause</span><span style="color:#f92672">(</span>e<span style="color:#f92672">);</span>
+      <span style="color:#f92672">}</span>
+      <span style="color:#75715e">// release sort buffer before the merge
+</span><span style="color:#75715e"></span>      kvbuffer <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+      mergeParts<span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><h4 id="16-maptaskmapoutputbuffer的mergeparts方法">16. MapTask.MapOutputBuffer的mergeParts()方法.</h4>
+<p>从不同溢写文件中读取出来的，然后再把这些值加起来。因为merge是将多个溢写文件合并到一个文件，所以可能也有相同的key存在，在这个过程中如果配置设置过Combiner，也会使用Combiner来合并相同的key。?mapreduce让每个map只输出一个文件，并且为这个文件提供一个索引文件，以记录每个reduce对应数据的偏移量。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">mergeParts</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> IOException<span style="color:#f92672">,</span> InterruptedException<span style="color:#f92672">,</span> 
+                                     ClassNotFoundException <span style="color:#f92672">{</span>
+      <span style="color:#75715e">// get the approximate size of the final output/index files
+</span><span style="color:#75715e"></span>      <span style="color:#66d9ef">long</span> finalOutFileSize <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span>
+      <span style="color:#66d9ef">long</span> finalIndexFileSize <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span>
+      <span style="color:#66d9ef">final</span> Path<span style="color:#f92672">[]</span> filename <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Path<span style="color:#f92672">[</span>numSpills<span style="color:#f92672">];</span>
+      <span style="color:#66d9ef">final</span> TaskAttemptID mapId <span style="color:#f92672">=</span> getTaskID<span style="color:#f92672">();</span>
+
+      <span style="color:#66d9ef">for</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;</span> numSpills<span style="color:#f92672">;</span> i<span style="color:#f92672">++)</span> <span style="color:#f92672">{</span>
+        filename<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> mapOutputFile<span style="color:#f92672">.</span><span style="color:#a6e22e">getSpillFile</span><span style="color:#f92672">(</span>mapId<span style="color:#f92672">,</span> i<span style="color:#f92672">);</span>
+        finalOutFileSize <span style="color:#f92672">+=</span> rfs<span style="color:#f92672">.</span><span style="color:#a6e22e">getFileStatus</span><span style="color:#f92672">(</span>filename<span style="color:#f92672">[</span>i<span style="color:#f92672">]).</span><span style="color:#a6e22e">getLen</span><span style="color:#f92672">();</span>
+      <span style="color:#f92672">}</span>
+      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>numSpills <span style="color:#f92672">==</span> 1<span style="color:#f92672">)</span> <span style="color:#f92672">{</span> <span style="color:#75715e">//如果只有一个spill文件，则重命名为输出的最终文件
+</span><span style="color:#75715e"></span>        rfs<span style="color:#f92672">.</span><span style="color:#a6e22e">rename</span><span style="color:#f92672">(</span>filename<span style="color:#f92672">[</span>0<span style="color:#f92672">],</span>
+            <span style="color:#66d9ef">new</span> Path<span style="color:#f92672">(</span>filename<span style="color:#f92672">[</span>0<span style="color:#f92672">].</span><span style="color:#a6e22e">getParent</span><span style="color:#f92672">(),</span> <span style="color:#e6db74">&#34;file.out&#34;</span><span style="color:#f92672">));</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>indexCacheList<span style="color:#f92672">.</span><span style="color:#a6e22e">size</span><span style="color:#f92672">()</span> <span style="color:#f92672">==</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+          rfs<span style="color:#f92672">.</span><span style="color:#a6e22e">rename</span><span style="color:#f92672">(</span>mapOutputFile<span style="color:#f92672">.</span><span style="color:#a6e22e">getSpillIndexFile</span><span style="color:#f92672">(</span>mapId<span style="color:#f92672">,</span> 0<span style="color:#f92672">),</span>
+              <span style="color:#66d9ef">new</span> Path<span style="color:#f92672">(</span>filename<span style="color:#f92672">[</span>0<span style="color:#f92672">].</span><span style="color:#a6e22e">getParent</span><span style="color:#f92672">(),</span><span style="color:#e6db74">&#34;file.out.index&#34;</span><span style="color:#f92672">));</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+          indexCacheList<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>0<span style="color:#f92672">).</span><span style="color:#a6e22e">writeToFile</span><span style="color:#f92672">(</span>
+                <span style="color:#66d9ef">new</span> Path<span style="color:#f92672">(</span>filename<span style="color:#f92672">[</span>0<span style="color:#f92672">].</span><span style="color:#a6e22e">getParent</span><span style="color:#f92672">(),</span><span style="color:#e6db74">&#34;file.out.index&#34;</span><span style="color:#f92672">),</span> job<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#66d9ef">return</span><span style="color:#f92672">;</span>
+      <span style="color:#f92672">}</span>
+    
+      <span style="color:#75715e">// read in paged indices
+</span><span style="color:#75715e"></span>      <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> indexCacheList<span style="color:#f92672">.</span><span style="color:#a6e22e">size</span><span style="color:#f92672">();</span> i <span style="color:#f92672">&lt;</span> numSpills<span style="color:#f92672">;</span> <span style="color:#f92672">++</span>i<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        Path indexFileName <span style="color:#f92672">=</span> mapOutputFile<span style="color:#f92672">.</span><span style="color:#a6e22e">getSpillIndexFile</span><span style="color:#f92672">(</span>mapId<span style="color:#f92672">,</span> i<span style="color:#f92672">);</span>
+        indexCacheList<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> SpillRecord<span style="color:#f92672">(</span>indexFileName<span style="color:#f92672">,</span> job<span style="color:#f92672">));</span>
+      <span style="color:#f92672">}</span>
+    
+      <span style="color:#75715e">//make correction in the length to include the sequence file header
+</span><span style="color:#75715e"></span>      <span style="color:#75715e">//lengths for each partition
+</span><span style="color:#75715e"></span>      finalOutFileSize <span style="color:#f92672">+=</span> partitions <span style="color:#f92672">*</span> APPROX_HEADER_LENGTH<span style="color:#f92672">;</span>
+      finalIndexFileSize <span style="color:#f92672">=</span> partitions <span style="color:#f92672">*</span> MAP_OUTPUT_INDEX_RECORD_LENGTH<span style="color:#f92672">;</span>
+      Path finalOutputFile <span style="color:#f92672">=</span> mapOutputFile<span style="color:#f92672">.</span><span style="color:#a6e22e">getOutputFileForWrite</span><span style="color:#f92672">(</span>mapId<span style="color:#f92672">,</span>
+                             finalOutFileSize<span style="color:#f92672">);</span>
+      Path finalIndexFile <span style="color:#f92672">=</span> mapOutputFile<span style="color:#f92672">.</span><span style="color:#a6e22e">getOutputIndexFileForWrite</span><span style="color:#f92672">(</span>
+                            mapId<span style="color:#f92672">,</span> finalIndexFileSize<span style="color:#f92672">);</span>
+    
+      <span style="color:#75715e">//The output stream for the final single output file
+</span><span style="color:#75715e"></span>      FSDataOutputStream finalOut <span style="color:#f92672">=</span> rfs<span style="color:#f92672">.</span><span style="color:#a6e22e">create</span><span style="color:#f92672">(</span>finalOutputFile<span style="color:#f92672">,</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">,</span> 4096<span style="color:#f92672">);</span>
+    
+      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>numSpills <span style="color:#f92672">==</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#75715e">//如果没有spill文件，则创建一个 dummy files
+</span><span style="color:#75715e"></span>        IndexRecord rec <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> IndexRecord<span style="color:#f92672">();</span>
+        SpillRecord sr <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> SpillRecord<span style="color:#f92672">(</span>partitions<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+          <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;</span> partitions<span style="color:#f92672">;</span> i<span style="color:#f92672">++)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">long</span> segmentStart <span style="color:#f92672">=</span> finalOut<span style="color:#f92672">.</span><span style="color:#a6e22e">getPos</span><span style="color:#f92672">();</span>
+            Writer<span style="color:#f92672">&lt;</span>K<span style="color:#f92672">,</span> V<span style="color:#f92672">&gt;</span> writer <span style="color:#f92672">=</span>
+              <span style="color:#66d9ef">new</span> Writer<span style="color:#f92672">&lt;</span>K<span style="color:#f92672">,</span> V<span style="color:#f92672">&gt;(</span>job<span style="color:#f92672">,</span> finalOut<span style="color:#f92672">,</span> keyClass<span style="color:#f92672">,</span> valClass<span style="color:#f92672">,</span> codec<span style="color:#f92672">,</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">);</span>
+            writer<span style="color:#f92672">.</span><span style="color:#a6e22e">close</span><span style="color:#f92672">();</span>
+            rec<span style="color:#f92672">.</span><span style="color:#a6e22e">startOffset</span> <span style="color:#f92672">=</span> segmentStart<span style="color:#f92672">;</span>
+            rec<span style="color:#f92672">.</span><span style="color:#a6e22e">rawLength</span> <span style="color:#f92672">=</span> writer<span style="color:#f92672">.</span><span style="color:#a6e22e">getRawLength</span><span style="color:#f92672">();</span>
+            rec<span style="color:#f92672">.</span><span style="color:#a6e22e">partLength</span> <span style="color:#f92672">=</span> writer<span style="color:#f92672">.</span><span style="color:#a6e22e">getCompressedLength</span><span style="color:#f92672">();</span>
+            sr<span style="color:#f92672">.</span><span style="color:#a6e22e">putIndex</span><span style="color:#f92672">(</span>rec<span style="color:#f92672">,</span> i<span style="color:#f92672">);</span>
+          <span style="color:#f92672">}</span>
+          sr<span style="color:#f92672">.</span><span style="color:#a6e22e">writeToFile</span><span style="color:#f92672">(</span>finalIndexFile<span style="color:#f92672">,</span> job<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">finally</span> <span style="color:#f92672">{</span>
+          finalOut<span style="color:#f92672">.</span><span style="color:#a6e22e">close</span><span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#66d9ef">return</span><span style="color:#f92672">;</span>
+      <span style="color:#f92672">}</span>
+      <span style="color:#f92672">{</span>
+        IndexRecord rec <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> IndexRecord<span style="color:#f92672">();</span>
+        <span style="color:#66d9ef">final</span> SpillRecord spillRec <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> SpillRecord<span style="color:#f92672">(</span>partitions<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> parts <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> parts <span style="color:#f92672">&lt;</span> partitions<span style="color:#f92672">;</span> parts<span style="color:#f92672">++)</span> <span style="color:#f92672">{</span>
+          <span style="color:#75715e">//在循环内对每个分区分别创建segment然后做merge
+</span><span style="color:#75715e"></span>          List<span style="color:#f92672">&lt;</span>Segment<span style="color:#f92672">&lt;</span>K<span style="color:#f92672">,</span>V<span style="color:#f92672">&gt;&gt;</span> segmentList <span style="color:#f92672">=</span>
+            <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">&lt;</span>Segment<span style="color:#f92672">&lt;</span>K<span style="color:#f92672">,</span> V<span style="color:#f92672">&gt;&gt;(</span>numSpills<span style="color:#f92672">);</span>
+          <span style="color:#66d9ef">for</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;</span> numSpills<span style="color:#f92672">;</span> i<span style="color:#f92672">++)</span> <span style="color:#f92672">{</span>
+            IndexRecord indexRecord <span style="color:#f92672">=</span> indexCacheList<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>i<span style="color:#f92672">).</span><span style="color:#a6e22e">getIndex</span><span style="color:#f92672">(</span>parts<span style="color:#f92672">);</span>
+    
+            Segment<span style="color:#f92672">&lt;</span>K<span style="color:#f92672">,</span>V<span style="color:#f92672">&gt;</span> s <span style="color:#f92672">=</span>
+              <span style="color:#66d9ef">new</span> Segment<span style="color:#f92672">&lt;</span>K<span style="color:#f92672">,</span>V<span style="color:#f92672">&gt;(</span>job<span style="color:#f92672">,</span> rfs<span style="color:#f92672">,</span> filename<span style="color:#f92672">[</span>i<span style="color:#f92672">],</span> indexRecord<span style="color:#f92672">.</span><span style="color:#a6e22e">startOffset</span><span style="color:#f92672">,</span>
+                               indexRecord<span style="color:#f92672">.</span><span style="color:#a6e22e">partLength</span><span style="color:#f92672">,</span> codec<span style="color:#f92672">,</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">);</span>
+            segmentList<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>i<span style="color:#f92672">,</span> s<span style="color:#f92672">);</span>
+    
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">isDebugEnabled</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+              LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">debug</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;MapId=&#34;</span> <span style="color:#f92672">+</span> mapId <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; Reducer=&#34;</span> <span style="color:#f92672">+</span> parts <span style="color:#f92672">+</span>
+                  <span style="color:#e6db74">&#34;Spill =&#34;</span> <span style="color:#f92672">+</span> i <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;(&#34;</span> <span style="color:#f92672">+</span> indexRecord<span style="color:#f92672">.</span><span style="color:#a6e22e">startOffset</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;,&#34;</span> <span style="color:#f92672">+</span>
+                  indexRecord<span style="color:#f92672">.</span><span style="color:#a6e22e">rawLength</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;, &#34;</span> <span style="color:#f92672">+</span> indexRecord<span style="color:#f92672">.</span><span style="color:#a6e22e">partLength</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;)&#34;</span><span style="color:#f92672">);</span>
+            <span style="color:#f92672">}</span>
+          <span style="color:#f92672">}</span>
+    
+          <span style="color:#75715e">//merge
+</span><span style="color:#75715e"></span>          <span style="color:#a6e22e">@SuppressWarnings</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;unchecked&#34;</span><span style="color:#f92672">)</span>
+          RawKeyValueIterator kvIter <span style="color:#f92672">=</span> Merger<span style="color:#f92672">.</span><span style="color:#a6e22e">merge</span><span style="color:#f92672">(</span>job<span style="color:#f92672">,</span> rfs<span style="color:#f92672">,</span>
+                         keyClass<span style="color:#f92672">,</span> valClass<span style="color:#f92672">,</span> codec<span style="color:#f92672">,</span>
+                         segmentList<span style="color:#f92672">,</span> job<span style="color:#f92672">.</span><span style="color:#a6e22e">getInt</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;io.sort.factor&#34;</span><span style="color:#f92672">,</span> 100<span style="color:#f92672">),</span>
+                         <span style="color:#66d9ef">new</span> Path<span style="color:#f92672">(</span>mapId<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">()),</span>
+                         job<span style="color:#f92672">.</span><span style="color:#a6e22e">getOutputKeyComparator</span><span style="color:#f92672">(),</span> reporter<span style="color:#f92672">,</span>
+                         <span style="color:#66d9ef">null</span><span style="color:#f92672">,</span> spilledRecordsCounter<span style="color:#f92672">);</span>
+    
+          <span style="color:#75715e">//write merged output to disk
+</span><span style="color:#75715e"></span>         <span style="color:#75715e">//执行merge，并且把merge结果写到&#34;/file.out&#34;的最终输出中去。
+</span><span style="color:#75715e"></span>          <span style="color:#66d9ef">long</span> segmentStart <span style="color:#f92672">=</span> finalOut<span style="color:#f92672">.</span><span style="color:#a6e22e">getPos</span><span style="color:#f92672">();</span>
+          Writer<span style="color:#f92672">&lt;</span>K<span style="color:#f92672">,</span> V<span style="color:#f92672">&gt;</span> writer <span style="color:#f92672">=</span>
+              <span style="color:#66d9ef">new</span> Writer<span style="color:#f92672">&lt;</span>K<span style="color:#f92672">,</span> V<span style="color:#f92672">&gt;(</span>job<span style="color:#f92672">,</span> finalOut<span style="color:#f92672">,</span> keyClass<span style="color:#f92672">,</span> valClass<span style="color:#f92672">,</span> codec<span style="color:#f92672">,</span>
+                               spilledRecordsCounter<span style="color:#f92672">);</span>
+          <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>combinerRunner <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">||</span> numSpills <span style="color:#f92672">&lt;</span> minSpillsForCombine<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            Merger<span style="color:#f92672">.</span><span style="color:#a6e22e">writeFile</span><span style="color:#f92672">(</span>kvIter<span style="color:#f92672">,</span> writer<span style="color:#f92672">,</span> reporter<span style="color:#f92672">,</span> job<span style="color:#f92672">);</span>
+          <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+            combineCollector<span style="color:#f92672">.</span><span style="color:#a6e22e">setWriter</span><span style="color:#f92672">(</span>writer<span style="color:#f92672">);</span>
+            combinerRunner<span style="color:#f92672">.</span><span style="color:#a6e22e">combine</span><span style="color:#f92672">(</span>kvIter<span style="color:#f92672">,</span> combineCollector<span style="color:#f92672">);</span>
+          <span style="color:#f92672">}</span>
+    
+          <span style="color:#75715e">//close
+</span><span style="color:#75715e"></span>          writer<span style="color:#f92672">.</span><span style="color:#a6e22e">close</span><span style="color:#f92672">();</span>
+    
+          <span style="color:#75715e">// record offsets
+</span><span style="color:#75715e"></span>          <span style="color:#75715e">//把index写到最终的&#34;/file.out.index&#34;文件中。
+</span><span style="color:#75715e"></span>          rec<span style="color:#f92672">.</span><span style="color:#a6e22e">startOffset</span> <span style="color:#f92672">=</span> segmentStart<span style="color:#f92672">;</span>
+          rec<span style="color:#f92672">.</span><span style="color:#a6e22e">rawLength</span> <span style="color:#f92672">=</span> writer<span style="color:#f92672">.</span><span style="color:#a6e22e">getRawLength</span><span style="color:#f92672">();</span>
+          rec<span style="color:#f92672">.</span><span style="color:#a6e22e">partLength</span> <span style="color:#f92672">=</span> writer<span style="color:#f92672">.</span><span style="color:#a6e22e">getCompressedLength</span><span style="color:#f92672">();</span>
+          spillRec<span style="color:#f92672">.</span><span style="color:#a6e22e">putIndex</span><span style="color:#f92672">(</span>rec<span style="color:#f92672">,</span> parts<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+        spillRec<span style="color:#f92672">.</span><span style="color:#a6e22e">writeToFile</span><span style="color:#f92672">(</span>finalIndexFile<span style="color:#f92672">,</span> job<span style="color:#f92672">);</span>
+        finalOut<span style="color:#f92672">.</span><span style="color:#a6e22e">close</span><span style="color:#f92672">();</span>
+        <span style="color:#66d9ef">for</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;</span> numSpills<span style="color:#f92672">;</span> i<span style="color:#f92672">++)</span> <span style="color:#f92672">{</span>
+          rfs<span style="color:#f92672">.</span><span style="color:#a6e22e">delete</span><span style="color:#f92672">(</span>filename<span style="color:#f92672">[</span>i<span style="color:#f92672">],</span><span style="color:#66d9ef">true</span><span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+      <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><p><img src="../wp-content/uploads/2014/02/merge_output-1024x464.jpg" alt=""></p>
+<p>​                                  <strong>合并前后index文件和spill文件的结构图</strong></p>
+<p>从前面的分析指导，多个partition的都在一个输出文件中，但是按照partition排序的。即把maper输出按照partition分段了。一个partition对应一个reducer，因此一个reducer只要获取一段即可。</p>
+<h3 id="完">完。</h3>
+<h3 id="参考">参考：</h3>
+<p>参考并补充了http://caibinbupt.iteye.com/blog/401374文章中关于内存中索引结构的分析。谢谢。</p>
+
+  
+
+  
+
+</article> 
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 ml-auto blog-sidebar">
+  
+
+  
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+    
+
+    
+    <footer class="blog-footer">
+      <p dir="auto">
+      
+      <!-- raw HTML omitted -->浙ICP备18050493号-1<!-- raw HTML omitted --> 浙公网安备 33010802006262号
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+    
+
+  </body>
+
+</html>

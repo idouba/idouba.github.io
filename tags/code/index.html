@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<meta property="og:title" content="code" />
+<meta property="og:description" content="idouba@beta." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://idouba.net/tags/code/" />
+<meta property="og:updated_time" content="2018-07-23T14:35:50+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="code"/>
+<meta name="twitter:description" content="idouba@beta."/>
+<meta name="generator" content="Hugo 0.80.0" />
+
+
+    
+      
+    
+
+    <link rel="canonical" href="http://idouba.net/tags/code/">
+
+    <title>爱豆吧！</title>
+
+    
+    <!-- combined, minified CSS -->
+    
+    <link href="http://idouba.net/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    
+
+    <!-- minified Font Awesome for SVG icons -->
+    
+    <script defer src="http://idouba.net/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+
+    <!-- RSS 2.0 feed -->
+    <link rel="alternate" type="application/rss+xml" href="http://idouba.net/tags/code/index.xml" title="爱豆吧！" />
+    
+
+    
+
+    
+
+  </head>
+
+  <body>
+
+    
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="http://idouba.net/">Home</a>
+        </nav>
+      </div>
+    </div>
+    
+
+    
+    
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.net/" rel="home">爱豆吧！</a></h1>
+        <p class="lead blog-description" dir="auto">idouba@beta.</p>
+      </div>
+    </header>
+    
+    
+
+    
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/istio-01-code-pilot-service-discovery-upon-k8s/">Istio技术与实践02：源码解析之Istio on Kubernetes 统一服务发现</a></h2>
+    <p class="blog-post-meta"><time datetime="2018-07-23T14:35:50Z">Mon Jul 23, 2018</time> by idouba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">Istio</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/code/" rel="tag">Code</a>, <a href="/tags/istio/" rel="tag">Istio</a>
+
+</p>
+  </header>
+  【摘要】 本文基于Pilot服务发现Kubernetes部分源码重点介绍在Istio on Kubernetes环境下，如何基于Pilot的Adapter机制实现Istio管理的服务直接使用Kubernetes service来做统一服务发现，避免了其他微服务框架运行在Kubernetes环境时上下两套服务目录的局面。并以此为入口从架构、场景等方面总结下Istio和Kubernetes的结合关系。 前言 文章Istio技术与实践01： 源码解析之Pilot多云平台服务发现机制结合Pilot的代码实现介绍了Ist
+  <a href='http://idouba.net/istio-01-code-pilot-service-discovery-upon-k8s/'>Read more →</a>
+</article> 
+
+
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/istio-01-code-pilot-service-discovery-adapter/">Istio技术与实践01： 源码解析之Pilot多云平台服务发现机制</a></h2>
+    <p class="blog-post-meta"><time datetime="2018-07-21T16:12:44Z">Sat Jul 21, 2018</time> by idouba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">Istio</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/code/" rel="tag">Code</a>, <a href="/tags/istio/" rel="tag">Istio</a>
+
+</p>
+  </header>
+  前言 本文结合Pilot中的关键代码来说明下Istio的服务发现的机制、原理和流程。并以Eureka为例看下Adapter的机制如何支持多云环境下的服务发现。可以了解到： 1. Istio的服务模型; 2. Istio发现的机制和原理; 3. Istio服务发现的adpater机制。 基于以上了解可以根据需开发集成自有的服务注册表，完成服务发现的功能。 服务模型 首先，Istio作为一个（微）服务治理的平台，和其他的微服务模型一样也提供了Service，ServiceInstance这样抽象服务模型。如Service的定
+  <a href='http://idouba.net/istio-01-code-pilot-service-discovery-adapter/'>Read more →</a>
+</article> 
+
+
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/kubernetes-liveness-probe/">kubernetes liveness probe 流程</a></h2>
+    <p class="blog-post-meta"><time datetime="2017-09-01T15:39:48Z">Fri Sep 01, 2017</time> by idouba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/kubernetes/" rel="category tag">kubernetes</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/code/" rel="tag">code</a>, <a href="/tags/kubernetes/" rel="tag">kubernetes</a>
+
+</p>
+  </header>
+  1 概述 kubernetes提供了的Probe可以进行健康检查。 https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/ 对pod中的每个容器通过配置liveness或者readiness。 当liveness probe failed后，该container会杀掉，并重新创建；而readinessProbe失败，则该pod ip 会从service的endpoints列表中删除，即隔离到该后端的请求。 如liveness 配置如下： livenessProbe: httpGet: port: 10252 path: “/healthz” initialDelaySeconds: 15 timeoutSeconds: 15 文中尝试端到端的看下整个过程有哪些组件参与进来，怎么配合工作的。 2 配置 pkg/api/types.go#P
+  <a href='http://idouba.net/kubernetes-liveness-probe/'>Read more →</a>
+</article> 
+
+
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/kubernetes-federation-sync-accross-cluster/">kubernetes federation 工作机制之资源对象同步</a></h2>
+    <p class="blog-post-meta"><time datetime="2017-08-15T15:51:34Z">Tue Aug 15, 2017</time> by idouba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/kubernetes/" rel="category tag">kubernetes</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/code/" rel="tag">code</a>, <a href="/tags/federation/" rel="tag">federation</a>, <a href="/tags/go/" rel="tag">go</a>, <a href="/tags/kubernetes/" rel="tag">kubernetes</a>
+
+</p>
+  </header>
+  1 前言 希望通过本文最简单的方式向熟悉k8s的人说明白其上的federation是干什么的，如何工作的。 关于federation，比较官方的说法是：集群联邦可以让租户/企业根据需要扩展或伸缩所需要的集群；可以让租户/企业在跨地区甚至跨地域的多个集群上部署、调度、监测管理应用。通过集群联邦，租户/企业可以在指定集群上部署应用，可以拉通私有云和公有云建立混合云(hybrid cloud)。 如在design-proposal 中描述的federation提供了cross-cluster scheduling, cross-cluster service discovery, cross-cluster migration, cross-cluster**ing and auditing, cross-cluster load
+  <a href='http://idouba.net/kubernetes-federation-sync-accross-cluster/'>Read more →</a>
+</article> 
+
+
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/compare-go-and-java-style-by-sort-implement-3/">Sort源码实现比较Go&amp;Java语言风格(3)</a></h2>
+    <p class="blog-post-meta"><time datetime="2015-12-01T15:20:55Z">Tue Dec 01, 2015</time> by douba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/go/" rel="category tag">go</a>, <a href="/categories/java/" rel="category tag">java</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/go/" rel="tag">go</a>, <a href="/tags/java/" rel="tag">java</a>, <a href="/tags/sort/" rel="tag">sort</a>, <a href="/tags/code/" rel="tag">code</a>
+
+</p>
+  </header>
+  前面两部分分别描述了Go和java两种语言对sort的使用方式和源码实现。作为go初学者，最想做的是通过例子和源码来对新的语言有个理解。这部分就结合自己的理解整理下，可以看到，是非常主观。 4 语言语法比较 可以看到，两种语言的思路基本上是一样的，用户必须定义比较规则。在排序过程中都要考察集合长度，使用用户定义的比较规则，然后调整元素位置来达到排序的效果，对应go的interface要求的三个方法。但是还是有挺多不同。 首先从使用方式上看，go的规则（通过方法来体现）定义在集合上，并且定义了三个方法，分
+  <a href='http://idouba.net/compare-go-and-java-style-by-sort-implement-3/'>Read more →</a>
+</article> 
+
+
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/compare-go-and-java-style-by-sort-implement-2/">Sort源码实现比较Go&amp;Java语言风格(2)</a></h2>
+    <p class="blog-post-meta"><time datetime="2015-12-01T15:18:12Z">Tue Dec 01, 2015</time> by douba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/go/" rel="category tag">go</a>, <a href="/categories/java/" rel="category tag">java</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/go/" rel="tag">go</a>, <a href="/tags/java/" rel="tag">java</a>, <a href="/tags/sort/" rel="tag">sort</a>, <a href="/tags/code/" rel="tag">code</a>
+
+</p>
+  </header>
+  接上篇博文，工作中用到了go排序的功能，作为go新手，在参照着例子，并读了go的sort.go部分涉及的源码，了解了go中排序的细节和实现算法，这些在上篇博文中有介绍。作为一个java ZHONGDU*2的用户，不由自主的想到了java中对应实现的样子，在这里也非常简要的贴出来，描述下java中排序的用法，和java源码中对应部分的实现，比较好奇java是和go一样，也用的时候快速排序吗？ 3 Java 排序源码解析 主要代码Looks like this： 3.1 使用例子 public class Person implements Comparable&amp;lt;Person&amp;gt; { private String name; private int age; @Override public int compareTo(Person o) { return this.age - o.age; } public static void main(String
+  <a href='http://idouba.net/compare-go-and-java-style-by-sort-implement-2/'>Read more →</a>
+</article> 
+
+
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/compare-go-and-java-style-by-sort-implement-1/">Sort源码实现比较Go&amp;Java语言风格(1)</a></h2>
+    <p class="blog-post-meta"><time datetime="2015-12-01T05:11:15Z">Tue Dec 01, 2015</time> by douba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/go/" rel="category tag">go</a>, <a href="/categories/java/" rel="category tag">java</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/go/" rel="tag">go</a>, <a href="/tags/java/" rel="tag">java</a>, <a href="/tags/sort/" rel="tag">sort</a>, <a href="/tags/code/" rel="tag">code</a>
+
+</p>
+  </header>
+  1 前言 刚开始拥抱go，非常新鲜！才使用没多久，属于没有经验，有一点感受的那种。具体也说不了特别清楚，就是觉得：简单，直接，灵活，方便。作为一个 java 重度中毒（ZHANGDU*2）用户，过程中还是习惯对照着思考，至少在这个阶段。也好，发现对照着想，似乎更容易融会贯通。 对资深的go程序员来说，应该都是非常基础基本的问题，但也挡不住咱这个小白要发表下感想。 第一篇文章首先结合最近做一个小feature时用到go中元素排序的功能，顺便了解下两种语言中排序功能的使用方式，各自源码中对排序功能的实现。当然最主要的
+  <a href='http://idouba.net/compare-go-and-java-style-by-sort-implement-1/'>Read more →</a>
+</article> 
+
+
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/a-simple-example-demo-jvm-allocation-and-gc/">最简单例子图解JVM内存分配和回收</a></h2>
+    <p class="blog-post-meta"><time datetime="2014-07-15T05:49:37Z">Tue Jul 15, 2014</time> by douba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/jvm/" rel="category tag">jvm</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/code/" rel="tag">code</a>, <a href="/tags/gc/" rel="tag">gc</a>, <a href="/tags/jvm/" rel="tag">jvm</a>
+
+</p>
+  </header>
+  一、简介 JVM采用分代垃圾回收。在JVM的内存空间中把堆空间分为年老代和年轻代。将大量（据说是90%以上）创建了没多久就会消亡的对象存储在年轻代，而年老代中存放生命周期长久的实例对象。年轻代中又被分为Eden区(圣经中的伊甸园)、和两个Survivor区。新的对象分配是首先放在Eden区，Survivor区作为Eden区和Old区的缓冲，在Survivor区的对象经历若干次收集仍然存活的，就会被转移到年老区。 简单讲，就是生命期短的对象放在一起，将少数生命期长的对象放在一起，分别采用不同的回收策略
+  <a href='http://idouba.net/a-simple-example-demo-jvm-allocation-and-gc/'>Read more →</a>
+</article> 
+
+
+
+
+
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 ml-auto blog-sidebar">
+  
+
+  
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+    
+
+    
+    <footer class="blog-footer">
+      <p dir="auto">
+      
+      <!-- raw HTML omitted -->浙ICP备18050493号-1<!-- raw HTML omitted --> 浙公网安备 33010802006262号
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+    
+
+  </body>
+
+</html>

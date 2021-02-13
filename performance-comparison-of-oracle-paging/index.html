@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<meta property="og:title" content="oracle分页技术性能比较" />
+<meta property="og:description" content="一、前言 在一个有30亿条数据的大表上分页，为了对方案进行性能测试，先忽略其他条件查询的影响，单看下分页部分的性能，顺便考察说明下oracle中rownum使用中一些比较tricky的地方。实验条件： 表结构如下，内有2千万条实验数据。 二、实验 提供7种不同方式（其实是5种，二和四是一种、三和五是一种）方式的 。第一种只是为了demo一下假设的一种错误逻辑方式，第二种和第四种是一种逻辑正确，但是性能极差的方式。筛选下来看上去性能可行的方式是第五、第六、第七方式。 这里仅仅记录没中方式的执行结果和计划。 方式" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://idouba.net/performance-comparison-of-oracle-paging/" />
+<meta property="article:published_time" content="2014-10-14T08:53:14+00:00" />
+<meta property="article:modified_time" content="2014-10-14T08:53:14+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="oracle分页技术性能比较"/>
+<meta name="twitter:description" content="一、前言 在一个有30亿条数据的大表上分页，为了对方案进行性能测试，先忽略其他条件查询的影响，单看下分页部分的性能，顺便考察说明下oracle中rownum使用中一些比较tricky的地方。实验条件： 表结构如下，内有2千万条实验数据。 二、实验 提供7种不同方式（其实是5种，二和四是一种、三和五是一种）方式的 。第一种只是为了demo一下假设的一种错误逻辑方式，第二种和第四种是一种逻辑正确，但是性能极差的方式。筛选下来看上去性能可行的方式是第五、第六、第七方式。 这里仅仅记录没中方式的执行结果和计划。 方式"/>
+<meta name="generator" content="Hugo 0.80.0" />
+
+
+    
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "oracle分页技术性能比较",
+  "url": "http:\/\/idouba.net\/performance-comparison-of-oracle-paging\/",
+  "wordCount": "3420",
+  "datePublished": "2014-10-14T08:53:14+00:00",
+  "dateModified": "2014-10-14T08:53:14+00:00",
+  "author": {
+    "@type": "Person",
+    "name": "douba"
+  },
+  "keywords": "oracle, database"
+}
+</script>
+
+
+
+    <link rel="canonical" href="http://idouba.net/performance-comparison-of-oracle-paging/">
+
+    <title>oracle分页技术性能比较 | 爱豆吧！</title>
+
+    
+    <!-- combined, minified CSS -->
+    
+    <link href="http://idouba.net/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    
+
+    <!-- minified Font Awesome for SVG icons -->
+    
+    <script defer src="http://idouba.net/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+
+    <!-- RSS 2.0 feed -->
+    
+
+    
+
+    
+
+  </head>
+
+  <body>
+
+    
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="http://idouba.net/">Home</a>
+        </nav>
+      </div>
+    </div>
+    
+
+    
+    
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.net/" rel="home">爱豆吧！</a></h1>
+        <p class="lead blog-description" dir="auto">idouba@beta.</p>
+      </div>
+    </header>
+    
+    
+
+    
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/performance-comparison-of-oracle-paging/">oracle分页技术性能比较</a></h2>
+    <p class="blog-post-meta"><time datetime="2014-10-14T08:53:14Z">Tue Oct 14, 2014</time> by douba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/oracle/" rel="category tag">oracle</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/database/" rel="tag">database</a>, <a href="/tags/oracle/" rel="tag">oracle</a>
+
+</p>
+  </header>
+  <h3 id="一前言">一、前言</h3>
+<p>在一个有<!-- raw HTML omitted -->30<!-- raw HTML omitted --><!-- raw HTML omitted -->亿条数据的大表上分页，为了对方案进行性能测试，先忽略其他条件查询的影响，单看下分页部分的性能，顺便考察说明下<!-- raw HTML omitted --><!-- raw HTML omitted -->oracle<!-- raw HTML omitted --><!-- raw HTML omitted -->中<!-- raw HTML omitted --><!-- raw HTML omitted -->rownum<!-- raw HTML omitted --><!-- raw HTML omitted -->使用中一些比较<!-- raw HTML omitted --><!-- raw HTML omitted -->tricky<!-- raw HTML omitted --><!-- raw HTML omitted -->的地方。<!-- raw HTML omitted --> 实验条件： 表结构如下，内有2千万条实验数据。</p>
+<p><img src="../wp-content/uploads/2014/10/table-columns.png" alt=""></p>
+<h3 id="二实验">二、实验</h3>
+<p>提供7种不同方式（其实是5种，二和四是一种、三和五是一种）方式的 。第一种只是为了demo一下假设的一种错误逻辑方式，第二种和第四种是一种逻辑正确，但是性能极差的方式。筛选下来看上去性能可行的方式是第五、第六、第七方式。 这里仅仅记录没中方式的执行结果和计划。</p>
+<h4 id="方式1">方式1</h4>
+<p>笨笨的想想。Oracle<!-- raw HTML omitted -->里面不是有个变量叫<!-- raw HTML omitted --><strong><!-- raw HTML omitted -->rownum<!-- raw HTML omitted --></strong><!-- raw HTML omitted -->，顾名思义，就是行号的意思，我要获取第十行到第二十行的数据，<!-- raw HTML omitted --><!-- raw HTML omitted -->sql<!-- raw HTML omitted --><!-- raw HTML omitted -->写起来很精练！比<!-- raw HTML omitted --><!-- raw HTML omitted -->myslq<!-- raw HTML omitted --><!-- raw HTML omitted -->的<!-- raw HTML omitted --><!-- raw HTML omitted -->limit<!-- raw HTML omitted --><!-- raw HTML omitted -->和<!-- raw HTML omitted --><!-- raw HTML omitted -->mssql<!-- raw HTML omitted --><!-- raw HTML omitted -->的<!-- raw HTML omitted --><!-- raw HTML omitted -->top<!-- raw HTML omitted --><!-- raw HTML omitted -->折腾看着还要优雅！<!-- raw HTML omitted --></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span>  idouba.APP_CLUSTEREDAUDITLOG  <span style="color:#66d9ef">where</span> rownum <span style="color:#66d9ef">between</span> <span style="color:#ae81ff">10</span> <span style="color:#66d9ef">and</span> <span style="color:#ae81ff">20</span>
+</code></pre></div><p>喔！十条记录执行了十分钟还么有结果，一定是哪儿有问题了，shut了重试。那就来个简单的：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span>  idouba.APP_CLUSTEREDAUDITLOG  <span style="color:#66d9ef">where</span> rownum <span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>
+</code></pre></div><p>也没有记录，再尝试rownum=2都不会有记录。 分析rownum的原理就不难理解。rownum是查询到的结果集中的一个伪列，可以理解成在我们查询到的结果上加序号。按照这个逻辑，写rownum=1是能得到结果集的第一行。执行rownum=2时，先比较第一行，其rownum是1，则扔掉，考察下一行，rownum又是1，直到扫描完整个表，没有满足条件的结果集。 查询计划如下。</p>
+<p>已用时间:  00: 04: 01.81</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#960050;background-color:#1e0010">执行计划</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>Plan hash value: <span style="color:#ae81ff">2858290634</span>
+<span style="color:#75715e">--------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span> Id  <span style="color:#f92672">|</span> <span style="color:#66d9ef">Operation</span>              <span style="color:#f92672">|</span> Name  <span style="color:#f92672">|</span> <span style="color:#66d9ef">Rows</span>  <span style="color:#f92672">|</span> Bytes <span style="color:#f92672">|</span> Cost (<span style="color:#f92672">%</span>CPU)<span style="color:#f92672">|</span> Time     <span style="color:#f92672">|</span>
+<span style="color:#75715e">--------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span>   <span style="color:#ae81ff">0</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#66d9ef">STATEMENT</span>       <span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>    <span style="color:#ae81ff">20</span>M<span style="color:#f92672">|</span>   <span style="color:#ae81ff">146</span><span style="color:#66d9ef">G</span><span style="color:#f92672">|</span>   <span style="color:#ae81ff">102</span>K  (<span style="color:#ae81ff">1</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">20</span>:<span style="color:#ae81ff">29</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>  <span style="color:#66d9ef">COUNT</span>                 <span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>            <span style="color:#f92672">|</span>          <span style="color:#f92672">|</span>
+<span style="color:#f92672">|*</span>  <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span>   FILTER               <span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>            <span style="color:#f92672">|</span>          <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">3</span> <span style="color:#f92672">|</span>    <span style="color:#66d9ef">INDEX</span> FAST <span style="color:#66d9ef">FULL</span> SCAN<span style="color:#f92672">|</span> PK_ID <span style="color:#f92672">|</span>    <span style="color:#ae81ff">20</span>M<span style="color:#f92672">|</span>   <span style="color:#ae81ff">146</span><span style="color:#66d9ef">G</span><span style="color:#f92672">|</span>   <span style="color:#ae81ff">102</span>K  (<span style="color:#ae81ff">1</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">20</span>:<span style="color:#ae81ff">29</span> <span style="color:#f92672">|</span>
+<span style="color:#75715e">--------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span>Predicate Information (identified <span style="color:#66d9ef">by</span> <span style="color:#66d9ef">operation</span> id):
+<span style="color:#75715e">---------------------------------------------------
+</span><span style="color:#75715e"></span>   <span style="color:#ae81ff">2</span> <span style="color:#f92672">-</span> filter(ROWNUM<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)
+Note
+<span style="color:#75715e">-----
+</span><span style="color:#75715e"></span>   <span style="color:#f92672">-</span> <span style="color:#66d9ef">dynamic</span> sampling used <span style="color:#66d9ef">for</span> this <span style="color:#66d9ef">statement</span>
+
+<span style="color:#960050;background-color:#1e0010">统计信息</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>          <span style="color:#ae81ff">0</span>  <span style="color:#66d9ef">recursive</span> calls
+          <span style="color:#ae81ff">0</span>  db block gets
+     <span style="color:#ae81ff">461958</span>  consistent gets
+     <span style="color:#ae81ff">221499</span>  physical <span style="color:#66d9ef">reads</span>
+          <span style="color:#ae81ff">0</span>  redo <span style="color:#66d9ef">size</span>
+       <span style="color:#ae81ff">1956</span>  bytes sent via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">to</span> client
+        <span style="color:#ae81ff">374</span>  bytes received via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">from</span> client
+          <span style="color:#ae81ff">1</span>  <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net roundtrips <span style="color:#66d9ef">to</span><span style="color:#f92672">/</span><span style="color:#66d9ef">from</span> client
+          <span style="color:#ae81ff">0</span>  sorts (memory)
+          <span style="color:#ae81ff">0</span>  sorts (disk)
+          <span style="color:#ae81ff">0</span>  <span style="color:#66d9ef">rows</span> processed<span style="color:#f92672">&lt;/</span>pre<span style="color:#f92672">&gt;</span>
+</code></pre></div><p>执行了4分钟，没有得到一条记录。尝试下面的方法。</p>
+<h4 id="方法2">方法2</h4>
+<p>明白了rownum的意思，意识到解决问题的办法，是再加一层查询，即里面括号的是我们要的数据，然后从上面选择rownum，其实就是行号为10到20的数据行。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span>
+  <span style="color:#66d9ef">from</span> (<span style="color:#66d9ef">select</span> rownum <span style="color:#66d9ef">no</span>, Id,uniqueId,IP,IPNum,Mac,app_url,title,updatetime
+          <span style="color:#66d9ef">from</span> idouba.APP_CLUSTEREDAUDITLOG)
+ <span style="color:#66d9ef">where</span> <span style="color:#66d9ef">no</span> <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">10</span>
+   <span style="color:#66d9ef">and</span> <span style="color:#66d9ef">no</span> <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">20</span>;
+</code></pre></div><p><img src="../wp-content/uploads/2014/10/oracle-rownum-2-round-between1.png" alt=""></p>
+<p>看到返回的是希望的<!-- raw HTML omitted -->10<!-- raw HTML omitted --><!-- raw HTML omitted -->到<!-- raw HTML omitted --><!-- raw HTML omitted -->19<!-- raw HTML omitted --><!-- raw HTML omitted -->的记录，但是耗费的时间有点长，达到了<!-- raw HTML omitted --><!-- raw HTML omitted -->34S<!-- raw HTML omitted --><!-- raw HTML omitted -->。<!-- raw HTML omitted --> 查询计划如下</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#960050;background-color:#1e0010">已选择</span><span style="color:#ae81ff">10</span><span style="color:#960050;background-color:#1e0010">行。</span>
+<span style="color:#960050;background-color:#1e0010">已用时间</span>:  <span style="color:#ae81ff">00</span>: <span style="color:#ae81ff">00</span>: <span style="color:#ae81ff">35</span>.<span style="color:#ae81ff">43</span>
+
+<span style="color:#960050;background-color:#1e0010">执行计划</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>Plan hash value: <span style="color:#ae81ff">3666119494</span>
+
+<span style="color:#75715e">--------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span> Id  <span style="color:#f92672">|</span> <span style="color:#66d9ef">Operation</span>              <span style="color:#f92672">|</span> Name  <span style="color:#f92672">|</span> <span style="color:#66d9ef">Rows</span>  <span style="color:#f92672">|</span> Bytes <span style="color:#f92672">|</span> Cost (<span style="color:#f92672">%</span>CPU)<span style="color:#f92672">|</span> Time     <span style="color:#f92672">|</span>
+<span style="color:#75715e">--------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span>   <span style="color:#ae81ff">0</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#66d9ef">STATEMENT</span>       <span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>    <span style="color:#ae81ff">20</span>M<span style="color:#f92672">|</span>  <span style="color:#ae81ff">8965</span>M<span style="color:#f92672">|</span>   <span style="color:#ae81ff">102</span>K  (<span style="color:#ae81ff">1</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">20</span>:<span style="color:#ae81ff">29</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|*</span>  <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>  <span style="color:#66d9ef">VIEW</span>                  <span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>    <span style="color:#ae81ff">20</span>M<span style="color:#f92672">|</span>  <span style="color:#ae81ff">8965</span>M<span style="color:#f92672">|</span>   <span style="color:#ae81ff">102</span>K  (<span style="color:#ae81ff">1</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">20</span>:<span style="color:#ae81ff">29</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span>   <span style="color:#66d9ef">COUNT</span>                <span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>            <span style="color:#f92672">|</span>          <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">3</span> <span style="color:#f92672">|</span>    <span style="color:#66d9ef">INDEX</span> FAST <span style="color:#66d9ef">FULL</span> SCAN<span style="color:#f92672">|</span> PK_ID <span style="color:#f92672">|</span>    <span style="color:#ae81ff">20</span>M<span style="color:#f92672">|</span>  <span style="color:#ae81ff">8717</span>M<span style="color:#f92672">|</span>   <span style="color:#ae81ff">102</span>K  (<span style="color:#ae81ff">1</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">20</span>:<span style="color:#ae81ff">29</span> <span style="color:#f92672">|</span>
+<span style="color:#75715e">--------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span>
+Predicate Information (identified <span style="color:#66d9ef">by</span> <span style="color:#66d9ef">operation</span> id):
+<span style="color:#75715e">---------------------------------------------------
+</span><span style="color:#75715e"></span>   <span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> filter(<span style="color:#e6db74">&#34;NO&#34;</span><span style="color:#f92672">&amp;</span>lt;<span style="color:#ae81ff">20</span> <span style="color:#66d9ef">AND</span> <span style="color:#e6db74">&#34;NO&#34;</span><span style="color:#f92672">&amp;</span>gt;<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>)
+Note
+<span style="color:#75715e">-----
+</span><span style="color:#75715e"></span>   <span style="color:#f92672">-</span> <span style="color:#66d9ef">dynamic</span> sampling used <span style="color:#66d9ef">for</span> this <span style="color:#66d9ef">statement</span>
+
+<span style="color:#960050;background-color:#1e0010">统计信息</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>          <span style="color:#ae81ff">7</span>  <span style="color:#66d9ef">recursive</span> calls
+          <span style="color:#ae81ff">0</span>  db block gets
+     <span style="color:#ae81ff">462193</span>  consistent gets
+     <span style="color:#ae81ff">431581</span>  physical <span style="color:#66d9ef">reads</span>
+          <span style="color:#ae81ff">0</span>  redo <span style="color:#66d9ef">size</span>
+       <span style="color:#ae81ff">1174</span>  bytes sent via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">to</span> client
+        <span style="color:#ae81ff">385</span>  bytes received via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">from</span> client
+          <span style="color:#ae81ff">2</span>  <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net roundtrips <span style="color:#66d9ef">to</span><span style="color:#f92672">/</span><span style="color:#66d9ef">from</span> client
+          <span style="color:#ae81ff">0</span>  sorts (memory)
+          <span style="color:#ae81ff">0</span>  sorts (disk)
+         <span style="color:#ae81ff">10</span>  <span style="color:#66d9ef">rows</span> processed<span style="color:#f92672">&lt;/</span>pre<span style="color:#f92672">&gt;</span>
+</code></pre></div><h4 id="方式3">方式3</h4>
+<p>尝试另外一种写法，看起来语义好像也差不多。先取出满足条件的前20条记录，然后在中间选择行号大于10的，即10到20行的记录。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span>
+  <span style="color:#66d9ef">from</span> (<span style="color:#66d9ef">select</span> rownum <span style="color:#66d9ef">no</span>,Id, uniqueId,IP,IPNum,Mac,app_url,title,updatetime
+          <span style="color:#66d9ef">from</span> idouba.APP_CLUSTEREDAUDITLOG
+         <span style="color:#66d9ef">where</span> rownum <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">20</span>)
+ <span style="color:#66d9ef">where</span> <span style="color:#66d9ef">no</span> <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">10</span>;
+</code></pre></div><p><img src="../wp-content/uploads/2014/10/oracle-rownum-2-round-between2.png" alt=""></p>
+<p>看到结果集，和2<!-- raw HTML omitted -->相同，但是耗费时间只有，<!-- raw HTML omitted -->时间是0.078S<!-- raw HTML omitted -->。问题出在哪儿呢，观察下查询计划。<!-- raw HTML omitted --></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>Plan hash value: <span style="color:#ae81ff">2707800419</span>
+<span style="color:#75715e">--------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span> Id  <span style="color:#f92672">|</span> <span style="color:#66d9ef">Operation</span>              <span style="color:#f92672">|</span> Name  <span style="color:#f92672">|</span> <span style="color:#66d9ef">Rows</span>  <span style="color:#f92672">|</span> Bytes <span style="color:#f92672">|</span> Cost (<span style="color:#f92672">%</span>CPU)<span style="color:#f92672">|</span> Time     <span style="color:#f92672">|</span>
+<span style="color:#75715e">--------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span>   <span style="color:#ae81ff">0</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#66d9ef">STATEMENT</span>       <span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>    <span style="color:#ae81ff">19</span> <span style="color:#f92672">|</span>  <span style="color:#ae81ff">8911</span> <span style="color:#f92672">|</span>     <span style="color:#ae81ff">3</span>   (<span style="color:#ae81ff">0</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">01</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|*</span>  <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>  <span style="color:#66d9ef">VIEW</span>                  <span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>    <span style="color:#ae81ff">19</span> <span style="color:#f92672">|</span>  <span style="color:#ae81ff">8911</span> <span style="color:#f92672">|</span>     <span style="color:#ae81ff">3</span>   (<span style="color:#ae81ff">0</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">01</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|*</span>  <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span>   <span style="color:#66d9ef">COUNT</span> STOPKEY        <span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>            <span style="color:#f92672">|</span>          <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">3</span> <span style="color:#f92672">|</span>    <span style="color:#66d9ef">INDEX</span> FAST <span style="color:#66d9ef">FULL</span> SCAN<span style="color:#f92672">|</span> PK_ID <span style="color:#f92672">|</span>    <span style="color:#ae81ff">20</span>M<span style="color:#f92672">|</span>  <span style="color:#ae81ff">8717</span>M<span style="color:#f92672">|</span>     <span style="color:#ae81ff">3</span>   (<span style="color:#ae81ff">0</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">01</span> <span style="color:#f92672">|</span>
+<span style="color:#75715e">--------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span>
+
+Predicate Information (identified <span style="color:#66d9ef">by</span> <span style="color:#66d9ef">operation</span> id):
+<span style="color:#75715e">---------------------------------------------------
+</span><span style="color:#75715e"></span>
+   <span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> filter(<span style="color:#e6db74">&#34;NO&#34;</span><span style="color:#f92672">&amp;</span>gt;<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>)
+   <span style="color:#ae81ff">2</span> <span style="color:#f92672">-</span> filter(ROWNUM<span style="color:#f92672">&amp;</span>lt;<span style="color:#ae81ff">20</span>)
+
+Note
+<span style="color:#75715e">-----
+</span><span style="color:#75715e"></span>   <span style="color:#f92672">-</span> <span style="color:#66d9ef">dynamic</span> sampling used <span style="color:#66d9ef">for</span> this <span style="color:#66d9ef">statement</span>
+
+<span style="color:#960050;background-color:#1e0010">统计信息</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>          <span style="color:#ae81ff">7</span>  <span style="color:#66d9ef">recursive</span> calls
+          <span style="color:#ae81ff">0</span>  db block gets
+        <span style="color:#ae81ff">264</span>  consistent gets
+          <span style="color:#ae81ff">0</span>  physical <span style="color:#66d9ef">reads</span>
+          <span style="color:#ae81ff">0</span>  redo <span style="color:#66d9ef">size</span>
+       <span style="color:#ae81ff">1174</span>  bytes sent via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">to</span> client
+        <span style="color:#ae81ff">385</span>  bytes received via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">from</span> client
+          <span style="color:#ae81ff">2</span>  <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net roundtrips <span style="color:#66d9ef">to</span><span style="color:#f92672">/</span><span style="color:#66d9ef">from</span> client
+          <span style="color:#ae81ff">0</span>  sorts (memory)
+          <span style="color:#ae81ff">0</span>  sorts (disk)
+         <span style="color:#ae81ff">10</span>  <span style="color:#66d9ef">rows</span> processed
+</code></pre></div><p>对比2<!-- raw HTML omitted -->和<!-- raw HTML omitted --><!-- raw HTML omitted -->3<!-- raw HTML omitted --><!-- raw HTML omitted -->的查询计划。不用仔细分析，看计划步骤中间的每一步操作的涉及的行数，以及<!-- raw HTML omitted -->consistent?gets和physical?reads的不同量级即可理解的差不多。2<!-- raw HTML omitted -->是把获取所有数据，然后在上面选择<!-- raw HTML omitted --><!-- raw HTML omitted -->10<!-- raw HTML omitted --><!-- raw HTML omitted -->到<!-- raw HTML omitted --><!-- raw HTML omitted -->20<!-- raw HTML omitted --><!-- raw HTML omitted -->的行，<!-- raw HTML omitted --><!-- raw HTML omitted -->3<!-- raw HTML omitted --><!-- raw HTML omitted -->是只获取前<!-- raw HTML omitted --><!-- raw HTML omitted -->20<!-- raw HTML omitted --><!-- raw HTML omitted -->行，从中选择<!-- raw HTML omitted --><!-- raw HTML omitted -->10<!-- raw HTML omitted --><!-- raw HTML omitted -->行之后的数据行。<!-- raw HTML omitted --></p>
+<h4 id="方式4">方式4</h4>
+<p>方式2中有order by，这是最常见的一种场景了，按照某个列排序，然后去中间某几条记录，其实就是某一页。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span>
+  <span style="color:#66d9ef">from</span> (<span style="color:#66d9ef">select</span> rownum <span style="color:#66d9ef">no</span>, Id,uniqueId,IP,IPNum,Mac,app_url,title,updatetime
+          <span style="color:#66d9ef">from</span> (<span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> idouba.APP_CLUSTEREDAUDITLOG <span style="color:#66d9ef">order</span> <span style="color:#66d9ef">by</span> Id))
+ <span style="color:#66d9ef">where</span> 
+   <span style="color:#66d9ef">no</span> <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">20</span> <span style="color:#66d9ef">and</span>
+   <span style="color:#66d9ef">no</span> <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">10</span>
+</code></pre></div><p><img src="../wp-content/uploads/2014/10/oracle-rownum-2-round-between1_order_by.png" alt=""></p>
+<p>执行了<!-- raw HTML omitted -->13<!-- raw HTML omitted --><!-- raw HTML omitted -->分钟，获取<!-- raw HTML omitted --><!-- raw HTML omitted -->10<!-- raw HTML omitted --><!-- raw HTML omitted -->行数据。<!-- raw HTML omitted -->看看查询计划。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#960050;background-color:#1e0010">执行计划</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>Plan hash value: <span style="color:#ae81ff">2624114486</span>
+<span style="color:#75715e">----------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span> Id  <span style="color:#f92672">|</span> <span style="color:#66d9ef">Operation</span>          <span style="color:#f92672">|</span> Name  <span style="color:#f92672">|</span> <span style="color:#66d9ef">Rows</span>  <span style="color:#f92672">|</span> Bytes <span style="color:#f92672">|</span> Cost (<span style="color:#f92672">%</span>CPU)<span style="color:#f92672">|</span> Time     <span style="color:#f92672">|</span>
+<span style="color:#75715e">----------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span>   <span style="color:#ae81ff">0</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#66d9ef">STATEMENT</span>   <span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>    <span style="color:#ae81ff">20</span>M<span style="color:#f92672">|</span>  <span style="color:#ae81ff">8965</span>M<span style="color:#f92672">|</span>   <span style="color:#ae81ff">463</span>K  (<span style="color:#ae81ff">1</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">01</span>:<span style="color:#ae81ff">32</span>:<span style="color:#ae81ff">40</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|*</span>  <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>  <span style="color:#66d9ef">VIEW</span>              <span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>    <span style="color:#ae81ff">20</span>M<span style="color:#f92672">|</span>  <span style="color:#ae81ff">8965</span>M<span style="color:#f92672">|</span>   <span style="color:#ae81ff">463</span>K  (<span style="color:#ae81ff">1</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">01</span>:<span style="color:#ae81ff">32</span>:<span style="color:#ae81ff">40</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span>   <span style="color:#66d9ef">COUNT</span>            <span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>            <span style="color:#f92672">|</span>          <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">3</span> <span style="color:#f92672">|</span>    <span style="color:#66d9ef">VIEW</span>            <span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>    <span style="color:#ae81ff">20</span>M<span style="color:#f92672">|</span>  <span style="color:#ae81ff">8717</span>M<span style="color:#f92672">|</span>   <span style="color:#ae81ff">463</span>K  (<span style="color:#ae81ff">1</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">01</span>:<span style="color:#ae81ff">32</span>:<span style="color:#ae81ff">40</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">4</span> <span style="color:#f92672">|</span>     <span style="color:#66d9ef">INDEX</span> <span style="color:#66d9ef">FULL</span> SCAN<span style="color:#f92672">|</span> PK_ID <span style="color:#f92672">|</span>    <span style="color:#ae81ff">20</span>M<span style="color:#f92672">|</span>   <span style="color:#ae81ff">146</span><span style="color:#66d9ef">G</span><span style="color:#f92672">|</span>   <span style="color:#ae81ff">462</span>K  (<span style="color:#ae81ff">1</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">01</span>:<span style="color:#ae81ff">32</span>:<span style="color:#ae81ff">30</span> <span style="color:#f92672">|</span>
+<span style="color:#75715e">----------------------------------------------------------------------------
+</span><span style="color:#75715e"></span>
+Predicate Information (identified <span style="color:#66d9ef">by</span> <span style="color:#66d9ef">operation</span> id):
+<span style="color:#75715e">---------------------------------------------------
+</span><span style="color:#75715e"></span>
+   <span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> filter(<span style="color:#e6db74">&#34;NO&#34;</span><span style="color:#f92672">&amp;</span>gt;<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span> <span style="color:#66d9ef">AND</span> <span style="color:#e6db74">&#34;NO&#34;</span><span style="color:#f92672">&amp;</span>lt;<span style="color:#ae81ff">20</span>)
+
+Note
+<span style="color:#75715e">-----
+</span><span style="color:#75715e"></span>   <span style="color:#f92672">-</span> <span style="color:#66d9ef">dynamic</span> sampling used <span style="color:#66d9ef">for</span> this <span style="color:#66d9ef">statement</span>
+
+<span style="color:#960050;background-color:#1e0010">统计信息</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>          <span style="color:#ae81ff">7</span>  <span style="color:#66d9ef">recursive</span> calls
+          <span style="color:#ae81ff">0</span>  db block gets
+     <span style="color:#ae81ff">460837</span>  consistent gets
+     <span style="color:#ae81ff">210018</span>  physical <span style="color:#66d9ef">reads</span>
+          <span style="color:#ae81ff">0</span>  redo <span style="color:#66d9ef">size</span>
+       <span style="color:#ae81ff">1196</span>  bytes sent via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">to</span> client
+        <span style="color:#ae81ff">385</span>  bytes received via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">from</span> client
+          <span style="color:#ae81ff">2</span>  <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net roundtrips <span style="color:#66d9ef">to</span><span style="color:#f92672">/</span><span style="color:#66d9ef">from</span> client
+          <span style="color:#ae81ff">0</span>  sorts (memory)
+          <span style="color:#ae81ff">0</span>  sorts (disk)
+         <span style="color:#ae81ff">10</span>  <span style="color:#66d9ef">rows</span> processed
+</code></pre></div><h4 id="方式5">方式5</h4>
+<p><!-- raw HTML omitted -->方式<!-- raw HTML omitted --><!-- raw HTML omitted -->3<!-- raw HTML omitted --><!-- raw HTML omitted -->中加上<!-- raw HTML omitted --><!-- raw HTML omitted -->order by<!-- raw HTML omitted --><!-- raw HTML omitted -->条件。<!-- raw HTML omitted --></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span>
+  <span style="color:#66d9ef">from</span> (<span style="color:#66d9ef">select</span> rownum <span style="color:#66d9ef">no</span>,
+               Id,
+               uniqueId,
+               IP,
+               IPNum,
+               Mac,
+               app_url,
+               title,
+               updatetime
+          <span style="color:#66d9ef">from</span> (<span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> idouba.APP_CLUSTEREDAUDITLOG <span style="color:#66d9ef">order</span> <span style="color:#66d9ef">by</span> Id)
+         <span style="color:#66d9ef">where</span> rownum <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">20</span>)
+ <span style="color:#66d9ef">where</span> <span style="color:#66d9ef">no</span> <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">10</span>;
+</code></pre></div><p><img src="../wp-content/uploads/2014/10/oracle-rownum-2-round-between2_order_by.png" alt=""></p>
+<p>和方式2<!-- raw HTML omitted -->类似，花费时间也是毫秒级。<!-- raw HTML omitted --> 查询计划</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#960050;background-color:#1e0010">执行计划</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>Plan hash value: <span style="color:#ae81ff">3021574494</span>
+<span style="color:#75715e">----------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span> Id  <span style="color:#f92672">|</span> <span style="color:#66d9ef">Operation</span>          <span style="color:#f92672">|</span> Name  <span style="color:#f92672">|</span> <span style="color:#66d9ef">Rows</span>  <span style="color:#f92672">|</span> Bytes <span style="color:#f92672">|</span> Cost (<span style="color:#f92672">%</span>CPU)<span style="color:#f92672">|</span> Time     <span style="color:#f92672">|</span>
+<span style="color:#75715e">----------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span>   <span style="color:#ae81ff">0</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#66d9ef">STATEMENT</span>   <span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>    <span style="color:#ae81ff">19</span> <span style="color:#f92672">|</span>  <span style="color:#ae81ff">8911</span> <span style="color:#f92672">|</span>     <span style="color:#ae81ff">3</span>   (<span style="color:#ae81ff">0</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">01</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|*</span>  <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>  <span style="color:#66d9ef">VIEW</span>              <span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>    <span style="color:#ae81ff">19</span> <span style="color:#f92672">|</span>  <span style="color:#ae81ff">8911</span> <span style="color:#f92672">|</span>     <span style="color:#ae81ff">3</span>   (<span style="color:#ae81ff">0</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">01</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|*</span>  <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span>   <span style="color:#66d9ef">COUNT</span> STOPKEY    <span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>            <span style="color:#f92672">|</span>          <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">3</span> <span style="color:#f92672">|</span>    <span style="color:#66d9ef">VIEW</span>            <span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>    <span style="color:#ae81ff">20</span>M<span style="color:#f92672">|</span>  <span style="color:#ae81ff">8717</span>M<span style="color:#f92672">|</span>     <span style="color:#ae81ff">3</span>   (<span style="color:#ae81ff">0</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">01</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">4</span> <span style="color:#f92672">|</span>     <span style="color:#66d9ef">INDEX</span> <span style="color:#66d9ef">FULL</span> SCAN<span style="color:#f92672">|</span> PK_ID <span style="color:#f92672">|</span>    <span style="color:#ae81ff">20</span>M<span style="color:#f92672">|</span>   <span style="color:#ae81ff">146</span><span style="color:#66d9ef">G</span><span style="color:#f92672">|</span>     <span style="color:#ae81ff">2</span>   (<span style="color:#ae81ff">0</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">00</span>:<span style="color:#ae81ff">01</span> <span style="color:#f92672">|</span>
+<span style="color:#75715e">----------------------------------------------------------------------------
+</span><span style="color:#75715e"></span>Predicate Information (identified <span style="color:#66d9ef">by</span> <span style="color:#66d9ef">operation</span> id):
+<span style="color:#75715e">---------------------------------------------------
+</span><span style="color:#75715e"></span>
+   <span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> filter(<span style="color:#e6db74">&#34;NO&#34;</span><span style="color:#f92672">&amp;</span>gt;<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>)
+   <span style="color:#ae81ff">2</span> <span style="color:#f92672">-</span> filter(ROWNUM<span style="color:#f92672">&amp;</span>lt;<span style="color:#ae81ff">20</span>)
+
+Note
+<span style="color:#75715e">-----
+</span><span style="color:#75715e"></span>
+   <span style="color:#f92672">-</span> <span style="color:#66d9ef">dynamic</span> sampling used <span style="color:#66d9ef">for</span> this <span style="color:#66d9ef">statement</span>
+
+<span style="color:#960050;background-color:#1e0010">统计信息</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span> <span style="color:#ae81ff">7</span>  <span style="color:#66d9ef">recursive</span> calls
+      <span style="color:#ae81ff">0</span>  db block gets
+    <span style="color:#ae81ff">240</span>  consistent gets
+      <span style="color:#ae81ff">2</span>  physical <span style="color:#66d9ef">reads</span>
+      <span style="color:#ae81ff">0</span>  redo <span style="color:#66d9ef">size</span>
+   <span style="color:#ae81ff">1196</span>  bytes sent via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">to</span> client
+    <span style="color:#ae81ff">385</span>  bytes received via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">from</span> client
+      <span style="color:#ae81ff">2</span>  <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net roundtrips <span style="color:#66d9ef">to</span><span style="color:#f92672">/</span><span style="color:#66d9ef">from</span> client
+      <span style="color:#ae81ff">0</span>  sorts (memory)
+      <span style="color:#ae81ff">0</span>  sorts (disk)
+     <span style="color:#ae81ff">10</span>  <span style="color:#66d9ef">rows</span> processed
+</code></pre></div><h4 id="方式6">方式6</h4>
+<p>使用<!-- raw HTML omitted -->minus<!-- raw HTML omitted --></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">select</span>  rownum <span style="color:#66d9ef">no</span>, Id, uniqueId, IP, IPNum, Mac, app_url, title, updatetime <span style="color:#66d9ef">from</span> idouba.APP_CLUSTEREDAUDITLOG <span style="color:#66d9ef">where</span> rownum <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">20</span> 
+minus
+<span style="color:#66d9ef">select</span>  rownum <span style="color:#66d9ef">no</span>, Id, uniqueId, IP, IPNum, Mac, app_url, title, updatetime <span style="color:#66d9ef">from</span> idouba.APP_CLUSTEREDAUDITLOG <span style="color:#66d9ef">where</span> rownum <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">10</span>
+</code></pre></div><p><img src="../wp-content/uploads/2014/10/oracle-rownum-1-round-minus.png" alt=""></p>
+<p>对应查询计划如下</p>
+<pre><code>执行计划
+----------------------------------------------------------
+Plan hash value: 944274637
+-----------------------------------------------------------------------------------------
+| Id  | Operation               | Name  | Rows  | Bytes |TempSpc| Cost (%CPU)| Time     |
+-----------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT        |       |    19 | 12768 |       |  5463K (51)| 18:12:46 |
+|   1 |  MINUS                  |       |       |       |       |            |          |
+|   2 |   SORT UNIQUE           |       |    19 |  8664 |    17G|  2731K  (1)| 09:06:23 |
+|*  3 |    COUNT STOPKEY        |       |       |       |       |            |          |
+|   4 |     INDEX FAST FULL SCAN| PK_ID |    20M|  8717M|       |   102K  (1)| 00:20:29 |
+|   5 |   SORT UNIQUE           |       |     9 |  4104 |    17G|  2731K  (1)| 09:06:23 |
+|*  6 |    COUNT STOPKEY        |       |       |       |       |            |          |
+|   7 |     INDEX FAST FULL SCAN| PK_ID |    20M|  8717M|       |   102K  (1)| 00:20:29 |
+-----------------------------------------------------------------------------------------
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   3 - filter(ROWNUM&amp;lt;20)
+   6 - filter(ROWNUM&amp;lt;10)
+
+Note
+-----
+
+   - dynamic sampling used for this statement
+
+统计信息
+----------------------------------------------------------
+   0  recursive calls
+      0  db block gets
+     58  consistent gets
+      0  physical reads
+      0  redo size
+   1174  bytes sent via SQL*Net to client
+    385  bytes received via SQL*Net from client
+      2  SQL*Net roundtrips to/from client
+      2  sorts (memory)
+      0  sorts (disk)
+     10  rows processed
+</code></pre><h4 id="方式7">方式7：</h4>
+<p>采用row_number()解析函数</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">SELECT</span>  num, Id, uniqueId, IP, IPNum, Mac, app_url, title, updatetime <span style="color:#66d9ef">FROM</span>(
+<span style="color:#66d9ef">SELECT</span>  Id, uniqueId, IP, IPNum, Mac, app_url, title, updatetime,row_number() over(<span style="color:#66d9ef">ORDER</span> <span style="color:#66d9ef">BY</span> Id)<span style="color:#66d9ef">AS</span> num
+<span style="color:#66d9ef">FROM</span> idouba.APP_CLUSTEREDAUDITLOG t
+) <span style="color:#66d9ef">WHERE</span> num <span style="color:#66d9ef">BETWEEN</span> <span style="color:#ae81ff">10</span> <span style="color:#66d9ef">AND</span> <span style="color:#ae81ff">19</span>;
+</code></pre></div><p><img src="../wp-content/uploads/2014/10/oracle-rownum-over-2-round-between.png" alt=""></p>
+<p>执行计划如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#960050;background-color:#1e0010">执行计划</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span>Plan hash value: <span style="color:#ae81ff">1698779179</span>
+<span style="color:#75715e">--------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span> Id  <span style="color:#f92672">|</span> <span style="color:#66d9ef">Operation</span>              <span style="color:#f92672">|</span> Name  <span style="color:#f92672">|</span> <span style="color:#66d9ef">Rows</span>  <span style="color:#f92672">|</span> Bytes <span style="color:#f92672">|</span> Cost (<span style="color:#f92672">%</span>CPU)<span style="color:#f92672">|</span> Time     <span style="color:#f92672">|</span>
+<span style="color:#75715e">--------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span>   <span style="color:#ae81ff">0</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">SELECT</span> <span style="color:#66d9ef">STATEMENT</span>       <span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>    <span style="color:#ae81ff">20</span>M<span style="color:#f92672">|</span>  <span style="color:#ae81ff">8965</span>M<span style="color:#f92672">|</span>   <span style="color:#ae81ff">463</span>K  (<span style="color:#ae81ff">1</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">01</span>:<span style="color:#ae81ff">32</span>:<span style="color:#ae81ff">40</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|*</span>  <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>  <span style="color:#66d9ef">VIEW</span>                  <span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>    <span style="color:#ae81ff">20</span>M<span style="color:#f92672">|</span>  <span style="color:#ae81ff">8965</span>M<span style="color:#f92672">|</span>   <span style="color:#ae81ff">463</span>K  (<span style="color:#ae81ff">1</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">01</span>:<span style="color:#ae81ff">32</span>:<span style="color:#ae81ff">40</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|*</span>  <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span>   WINDOW NOSORT STOPKEY<span style="color:#f92672">|</span>       <span style="color:#f92672">|</span>    <span style="color:#ae81ff">20</span>M<span style="color:#f92672">|</span>  <span style="color:#ae81ff">8717</span>M<span style="color:#f92672">|</span>   <span style="color:#ae81ff">463</span>K  (<span style="color:#ae81ff">1</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">01</span>:<span style="color:#ae81ff">32</span>:<span style="color:#ae81ff">40</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>   <span style="color:#ae81ff">3</span> <span style="color:#f92672">|</span>    <span style="color:#66d9ef">INDEX</span> <span style="color:#66d9ef">FULL</span> SCAN     <span style="color:#f92672">|</span> PK_ID <span style="color:#f92672">|</span>    <span style="color:#ae81ff">20</span>M<span style="color:#f92672">|</span>  <span style="color:#ae81ff">8717</span>M<span style="color:#f92672">|</span>   <span style="color:#ae81ff">462</span>K  (<span style="color:#ae81ff">1</span>)<span style="color:#f92672">|</span> <span style="color:#ae81ff">01</span>:<span style="color:#ae81ff">32</span>:<span style="color:#ae81ff">30</span> <span style="color:#f92672">|</span>
+<span style="color:#75715e">--------------------------------------------------------------------------------
+</span><span style="color:#75715e"></span>Predicate Information (identified <span style="color:#66d9ef">by</span> <span style="color:#66d9ef">operation</span> id):
+<span style="color:#75715e">---------------------------------------------------
+</span><span style="color:#75715e"></span>
+   <span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> filter(<span style="color:#e6db74">&#34;NUM&#34;</span><span style="color:#f92672">&amp;</span>gt;<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span> <span style="color:#66d9ef">AND</span> <span style="color:#e6db74">&#34;NUM&#34;</span><span style="color:#f92672">&amp;</span>lt;<span style="color:#f92672">=</span><span style="color:#ae81ff">19</span>)
+   <span style="color:#ae81ff">2</span> <span style="color:#f92672">-</span> filter(ROW_NUMBER() OVER ( <span style="color:#66d9ef">ORDER</span> <span style="color:#66d9ef">BY</span> <span style="color:#e6db74">&#34;ID&#34;</span>)<span style="color:#f92672">&amp;</span>lt;<span style="color:#f92672">=</span><span style="color:#ae81ff">19</span>)
+
+Note
+<span style="color:#75715e">-----
+</span><span style="color:#75715e"></span>
+   <span style="color:#f92672">-</span> <span style="color:#66d9ef">dynamic</span> sampling used <span style="color:#66d9ef">for</span> this <span style="color:#66d9ef">statement</span>
+
+<span style="color:#960050;background-color:#1e0010">统计信息</span>
+<span style="color:#75715e">----------------------------------------------------------
+</span><span style="color:#75715e"></span><span style="color:#ae81ff">4</span>  <span style="color:#66d9ef">recursive</span> calls
+      <span style="color:#ae81ff">0</span>  db block gets
+    <span style="color:#ae81ff">123</span>  consistent gets
+      <span style="color:#ae81ff">0</span>  physical <span style="color:#66d9ef">reads</span>
+      <span style="color:#ae81ff">0</span>  redo <span style="color:#66d9ef">size</span>
+   <span style="color:#ae81ff">1197</span>  bytes sent via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">to</span> client
+    <span style="color:#ae81ff">385</span>  bytes received via <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net <span style="color:#66d9ef">from</span> client
+      <span style="color:#ae81ff">2</span>  <span style="color:#66d9ef">SQL</span><span style="color:#f92672">*</span>Net roundtrips <span style="color:#66d9ef">to</span><span style="color:#f92672">/</span><span style="color:#66d9ef">from</span> client
+      <span style="color:#ae81ff">0</span>  sorts (memory)
+      <span style="color:#ae81ff">0</span>  sorts (disk)
+     <span style="color:#ae81ff">10</span>  <span style="color:#66d9ef">rows</span> processed
+</code></pre></div><p>1 - filter(&ldquo;NUM&rdquo;&gt;=10 AND &ldquo;NUM&rdquo;&lt;=19)
+2 - filter(ROW_NUMBER() OVER ( ORDER BY &ldquo;ID&rdquo;)&lt;=19)</p>
+<h2 id="note">Note</h2>
+<ul>
+<li>dynamic sampling used for this statement</li>
+</ul>
+<h2 id="统计信息">统计信息</h2>
+<h3 id="三总结">三、总结</h3>
+<p>为了简单期间，只是从2<!-- raw HTML omitted -->千万条记录中查询<!-- raw HTML omitted --><!-- raw HTML omitted -->10<!-- raw HTML omitted --><!-- raw HTML omitted -->到<!-- raw HTML omitted --><!-- raw HTML omitted -->20<!-- raw HTML omitted --><!-- raw HTML omitted -->行的数据。考察发现如下三种方式性能上是可以接受的<!-- raw HTML omitted --><!-- raw HTML omitted -->3<!-- raw HTML omitted --><!-- raw HTML omitted -->、<!-- raw HTML omitted --><!-- raw HTML omitted -->5<!-- raw HTML omitted --><!-- raw HTML omitted -->、<!-- raw HTML omitted --><!-- raw HTML omitted -->6<!-- raw HTML omitted --><!-- raw HTML omitted -->、<!-- raw HTML omitted --><!-- raw HTML omitted -->7<!-- raw HTML omitted --><!-- raw HTML omitted -->写法是可以接受的（<!-- raw HTML omitted --><!-- raw HTML omitted -->3<!-- raw HTML omitted --><!-- raw HTML omitted -->和<!-- raw HTML omitted --><!-- raw HTML omitted -->5<!-- raw HTML omitted --><!-- raw HTML omitted -->其实差不多，如果如实验所示，在<!-- raw HTML omitted --><!-- raw HTML omitted -->order?by<!-- raw HTML omitted --><!-- raw HTML omitted -->列上是索引聚集的话），都是毫秒级可以出结果。<!-- raw HTML omitted --> 但是当查询后若干条记录的时候，如一千万行的前十行记录。每种也都需要几分钟的执行时间。</p>
+<ol>
+<li>使用row_number函数</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">SELECT</span>  num, Id, uniqueId, IP, IPNum, Mac, app_url, title, updatetime <span style="color:#66d9ef">FROM</span>(
+<span style="color:#66d9ef">SELECT</span> t.<span style="color:#f92672">*</span>,row_number() over(<span style="color:#66d9ef">ORDER</span> <span style="color:#66d9ef">BY</span> Id )<span style="color:#66d9ef">AS</span> num
+<span style="color:#66d9ef">FROM</span> idouba.APP_CLUSTEREDAUDITLOG t
+)
+<span style="color:#66d9ef">WHERE</span> num <span style="color:#66d9ef">BETWEEN</span> <span style="color:#ae81ff">9999990</span> <span style="color:#66d9ef">AND</span> <span style="color:#ae81ff">10000000</span>;
+</code></pre></div><ol start="2">
+<li>
+<p>三层的select</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span>
+  <span style="color:#66d9ef">from</span> (<span style="color:#66d9ef">select</span> rownum <span style="color:#66d9ef">no</span>,
+               Id,
+               uniqueId,
+               IP,
+               IPNum,
+               Mac,
+               app_url,
+               title,
+               updatetime
+          <span style="color:#66d9ef">from</span> (<span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> idouba.APP_CLUSTEREDAUDITLOG <span style="color:#66d9ef">order</span> <span style="color:#66d9ef">by</span> Id)
+         <span style="color:#66d9ef">where</span> rownum <span style="color:#f92672">&amp;</span>lt; <span style="color:#ae81ff">10000000</span>)
+ <span style="color:#66d9ef">where</span> <span style="color:#66d9ef">no</span> <span style="color:#f92672">&amp;</span>gt;<span style="color:#f92672">=</span> <span style="color:#ae81ff">9999990</span>; 
+</code></pre></div></li>
+<li>
+<p>使用minus关键字</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">select</span>  rownum <span style="color:#66d9ef">no</span>, Id, uniqueId, IP, IPNum, Mac, app_url, title, updatetime <span style="color:#66d9ef">from</span>   (<span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> idouba.APP_CLUSTEREDAUDITLOG <span style="color:#66d9ef">order</span> <span style="color:#66d9ef">by</span> Id)  <span style="color:#66d9ef">where</span> rownum <span style="color:#f92672">&amp;</span>lt; <span style="color:#ae81ff">10000000</span> 
+minus
+<span style="color:#66d9ef">select</span>  rownum <span style="color:#66d9ef">no</span>, Id, uniqueId, IP, IPNum, Mac, app_url, title, updatetime  <span style="color:#66d9ef">from</span> (<span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> idouba.APP_CLUSTEREDAUDITLOG <span style="color:#66d9ef">order</span> <span style="color:#66d9ef">by</span> Id) <span style="color:#66d9ef">where</span> rownum <span style="color:#f92672">&amp;</span>lt; <span style="color:#ae81ff">9999990</span>
+</code></pre></div></li>
+</ol>
+<p>性能比较如下：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>使用row_number函数</th>
+<th>三层的select</th>
+<th>使用minus关键字</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第1000万行前面10行</td>
+<td>766.234</td>
+<td>404.125</td>
+<td>795.562</td>
+</tr>
+<tr>
+<td>第100万行前面10行</td>
+<td>12.468</td>
+<td>12.438</td>
+<td>26.125</td>
+</tr>
+<tr>
+<td>第10万行前面10行</td>
+<td>1.265</td>
+<td>1.125</td>
+<td>1.5</td>
+</tr>
+<tr>
+<td>第1万行前面10行</td>
+<td>0.329</td>
+<td>0.312</td>
+<td>0.25</td>
+</tr>
+<tr>
+<td>第1000行前面10行</td>
+<td>0.438</td>
+<td>0.468</td>
+<td>0.203</td>
+</tr>
+<tr>
+<td>第100行前面10行</td>
+<td>0.25s</td>
+<td>0.219s</td>
+<td>0.265</td>
+</tr>
+</tbody>
+</table>
+<h3 id="五最后">五、最后</h3>
+<p>本来到这里几种对照就应该结束了。尤其是场景2和场景4，场景3和场景5只是多了个order by子句，因为本来就是以ID列为主键的索引组织表。理解就是按照ID顺序来存记录的，则是否显示的写order by子句应该没有影响，却观察到2、3的结果和4、5的结果不一样呢/sp为了主题集中期间，这个问题放在下一篇介绍。</p>
+<h3 id="附">附：</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#e6db74">&#34;idouba&#34;</span>.<span style="color:#e6db74">&#34;APP_CLUSTEREDAUDITLOG&#34;</span> 
+   (	<span style="color:#e6db74">&#34;ID&#34;</span> NUMBER <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> ENABLE, 
+	<span style="color:#e6db74">&#34;UNIQUEID&#34;</span> NUMBER, 
+	<span style="color:#e6db74">&#34;POLICYID&#34;</span> NUMBER, 
+	<span style="color:#e6db74">&#34;IP&#34;</span> VARCHAR2(<span style="color:#ae81ff">200</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> ENABLE, 
+	<span style="color:#e6db74">&#34;IPNUM&#34;</span> NUMBER <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> ENABLE, 
+	<span style="color:#e6db74">&#34;MAC&#34;</span> VARCHAR2(<span style="color:#ae81ff">200</span>), 
+	<span style="color:#e6db74">&#34;USERVISIT&#34;</span> VARCHAR2(<span style="color:#ae81ff">100</span>), 
+	<span style="color:#e6db74">&#34;PHONE&#34;</span> VARCHAR2(<span style="color:#ae81ff">200</span>), 
+	<span style="color:#e6db74">&#34;GROUPNAME&#34;</span> VARCHAR2(<span style="color:#ae81ff">100</span>), 
+	<span style="color:#e6db74">&#34;PORT&#34;</span> NUMBER, 
+	<span style="color:#e6db74">&#34;PKI&#34;</span> VARCHAR2(<span style="color:#ae81ff">200</span>), 
+	<span style="color:#e6db74">&#34;PKIUSERID&#34;</span> VARCHAR2(<span style="color:#ae81ff">200</span>), 
+	<span style="color:#e6db74">&#34;APP_URL&#34;</span> VARCHAR2(<span style="color:#ae81ff">200</span>), 
+	<span style="color:#e6db74">&#34;TITLE&#34;</span> VARCHAR2(<span style="color:#ae81ff">200</span>), 
+	<span style="color:#e6db74">&#34;REQUESTS&#34;</span> VARCHAR2(<span style="color:#ae81ff">1000</span>), 
+	<span style="color:#e6db74">&#34;REQIDENTITYCARD&#34;</span> VARCHAR2(<span style="color:#ae81ff">1000</span>), 
+	<span style="color:#e6db74">&#34;REQCARCARD&#34;</span> VARCHAR2(<span style="color:#ae81ff">1000</span>), 
+	<span style="color:#e6db74">&#34;REQPHONEKEY&#34;</span> VARCHAR2(<span style="color:#ae81ff">1000</span>), 
+	<span style="color:#e6db74">&#34;ANSIDENTITYCARD&#34;</span> VARCHAR2(<span style="color:#ae81ff">3000</span>), 
+	<span style="color:#e6db74">&#34;ANSCARCARD&#34;</span> VARCHAR2(<span style="color:#ae81ff">3000</span>), 
+	<span style="color:#e6db74">&#34;ANSPHONEKEY&#34;</span> VARCHAR2(<span style="color:#ae81ff">3000</span>), 
+	<span style="color:#e6db74">&#34;UPDATETIME&#34;</span> DATE, 
+	<span style="color:#e6db74">&#34;PIGEONHOLE&#34;</span> VARCHAR2(<span style="color:#ae81ff">200</span>), 
+	<span style="color:#e6db74">&#34;AUDITTYPE&#34;</span> NUMBER, 
+	<span style="color:#e6db74">&#34;TITLEID&#34;</span> NUMBER <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> ENABLE, 
+	<span style="color:#e6db74">&#34;SUBTITLEID&#34;</span> NUMBER, 
+	<span style="color:#e6db74">&#34;IFWARN&#34;</span> NUMBER, 
+	<span style="color:#e6db74">&#34;SERVERIP&#34;</span> VARCHAR2(<span style="color:#ae81ff">200</span>), 
+	<span style="color:#e6db74">&#34;DOMAINNAME&#34;</span> VARCHAR2(<span style="color:#ae81ff">200</span>), 
+	<span style="color:#e6db74">&#34;PKIUSERNAME&#34;</span> VARCHAR2(<span style="color:#ae81ff">200</span>), 
+	 <span style="color:#66d9ef">CONSTRAINT</span> <span style="color:#e6db74">&#34;PK_ID&#34;</span> <span style="color:#66d9ef">PRIMARY</span> <span style="color:#66d9ef">KEY</span> (<span style="color:#e6db74">&#34;ID&#34;</span>) ENABLE
+   ) ORGANIZATION <span style="color:#66d9ef">INDEX</span> NOCOMPRESS PCTFREE <span style="color:#ae81ff">10</span> INITRANS <span style="color:#ae81ff">2</span> MAXTRANS <span style="color:#ae81ff">255</span> LOGGING
+  <span style="color:#66d9ef">STORAGE</span>(INITIAL <span style="color:#ae81ff">65536</span> <span style="color:#66d9ef">NEXT</span> <span style="color:#ae81ff">1048576</span> MINEXTENTS <span style="color:#ae81ff">1</span> MAXEXTENTS <span style="color:#ae81ff">2147483645</span>
+  PCTINCREASE <span style="color:#ae81ff">0</span> FREELISTS <span style="color:#ae81ff">1</span> FREELIST GROUPS <span style="color:#ae81ff">1</span> BUFFER_POOL <span style="color:#66d9ef">DEFAULT</span>)
+  TABLESPACE <span style="color:#e6db74">&#34;USERS&#34;</span> 
+ PCTTHRESHOLD <span style="color:#ae81ff">50</span> OVERFLOW
+ PCTFREE <span style="color:#ae81ff">10</span> PCTUSED <span style="color:#ae81ff">40</span> INITRANS <span style="color:#ae81ff">1</span> MAXTRANS <span style="color:#ae81ff">255</span> LOGGING
+  <span style="color:#66d9ef">STORAGE</span>(INITIAL <span style="color:#ae81ff">16384</span> <span style="color:#66d9ef">NEXT</span> <span style="color:#ae81ff">1048576</span> MINEXTENTS <span style="color:#ae81ff">1</span> MAXEXTENTS <span style="color:#ae81ff">2147483645</span>
+  PCTINCREASE <span style="color:#ae81ff">0</span> FREELISTS <span style="color:#ae81ff">1</span> FREELIST GROUPS <span style="color:#ae81ff">1</span> BUFFER_POOL <span style="color:#66d9ef">DEFAULT</span>)
+  TABLESPACE <span style="color:#e6db74">&#34;USERS&#34;</span> ;
+   <span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">UNIQUE</span> <span style="color:#66d9ef">INDEX</span> <span style="color:#e6db74">&#34;idouba&#34;</span>.<span style="color:#e6db74">&#34;PK_ID&#34;</span> <span style="color:#66d9ef">ON</span> <span style="color:#e6db74">&#34;idouba&#34;</span>.<span style="color:#e6db74">&#34;APP_CLUSTEREDAUDITLOG&#34;</span> (<span style="color:#e6db74">&#34;ID&#34;</span>) 
+  PCTFREE <span style="color:#ae81ff">10</span> INITRANS <span style="color:#ae81ff">2</span> MAXTRANS <span style="color:#ae81ff">255</span> 
+  <span style="color:#66d9ef">STORAGE</span>(INITIAL <span style="color:#ae81ff">65536</span> <span style="color:#66d9ef">NEXT</span> <span style="color:#ae81ff">1048576</span> MINEXTENTS <span style="color:#ae81ff">1</span> MAXEXTENTS <span style="color:#ae81ff">2147483645</span>
+  PCTINCREASE <span style="color:#ae81ff">0</span> FREELISTS <span style="color:#ae81ff">1</span> FREELIST GROUPS <span style="color:#ae81ff">1</span> BUFFER_POOL <span style="color:#66d9ef">DEFAULT</span>)
+  TABLESPACE <span style="color:#e6db74">&#34;USERS&#34;</span> ;
+
+  <span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#e6db74">&#34;idouba&#34;</span>.<span style="color:#e6db74">&#34;APP_CLUSTEREDAUDITLOG&#34;</span> <span style="color:#66d9ef">ADD</span> <span style="color:#66d9ef">CONSTRAINT</span> <span style="color:#e6db74">&#34;PK_ID&#34;</span> <span style="color:#66d9ef">PRIMARY</span> <span style="color:#66d9ef">KEY</span> (<span style="color:#e6db74">&#34;ID&#34;</span>)
+  <span style="color:#66d9ef">USING</span> <span style="color:#66d9ef">INDEX</span> PCTFREE <span style="color:#ae81ff">10</span> INITRANS <span style="color:#ae81ff">2</span> MAXTRANS <span style="color:#ae81ff">255</span> 
+  <span style="color:#66d9ef">STORAGE</span>(INITIAL <span style="color:#ae81ff">65536</span> <span style="color:#66d9ef">NEXT</span> <span style="color:#ae81ff">1048576</span> MINEXTENTS <span style="color:#ae81ff">1</span> MAXEXTENTS <span style="color:#ae81ff">2147483645</span>
+  PCTINCREASE <span style="color:#ae81ff">0</span> FREELISTS <span style="color:#ae81ff">1</span> FREELIST GROUPS <span style="color:#ae81ff">1</span> BUFFER_POOL <span style="color:#66d9ef">DEFAULT</span>)
+  TABLESPACE <span style="color:#e6db74">&#34;USERS&#34;</span>  ENABLE;
+
+  <span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#e6db74">&#34;idouba&#34;</span>.<span style="color:#e6db74">&#34;APP_CLUSTEREDAUDITLOG&#34;</span> <span style="color:#66d9ef">MODIFY</span> (<span style="color:#e6db74">&#34;ID&#34;</span> <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> ENABLE);
+  <span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#e6db74">&#34;idouba&#34;</span>.<span style="color:#e6db74">&#34;APP_CLUSTEREDAUDITLOG&#34;</span> <span style="color:#66d9ef">MODIFY</span> (<span style="color:#e6db74">&#34;IP&#34;</span> <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> ENABLE);
+  <span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#e6db74">&#34;idouba&#34;</span>.<span style="color:#e6db74">&#34;APP_CLUSTEREDAUDITLOG&#34;</span> <span style="color:#66d9ef">MODIFY</span> (<span style="color:#e6db74">&#34;IPNUM&#34;</span> <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> ENABLE);
+  <span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#e6db74">&#34;idouba&#34;</span>.<span style="color:#e6db74">&#34;APP_CLUSTEREDAUDITLOG&#34;</span> <span style="color:#66d9ef">MODIFY</span> (<span style="color:#e6db74">&#34;TITLEID&#34;</span> <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> ENABLE);
+  <span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#e6db74">&#34;YUANWANG&#34;</span>.<span style="color:#e6db74">&#34;APP_CLUSTEREDAUDITLOG&#34;</span> <span style="color:#66d9ef">ADD</span> <span style="color:#66d9ef">CONSTRAINT</span> <span style="color:#e6db74">&#34;PK_ID&#34;</span> <span style="color:#66d9ef">PRIMARY</span> <span style="color:#66d9ef">KEY</span> (<span style="color:#e6db74">&#34;ID&#34;</span>)
+</code></pre></div><p>ALTER TABLE &ldquo;YUANWANG&rdquo;.&ldquo;APP_CLUSTEREDAUDITLOG&rdquo; MODIFY (&ldquo;ID&rdquo; NOT NULL ENABLE);</p>
+<p>ALTER TABLE &ldquo;YUANWANG&rdquo;.&ldquo;APP_CLUSTEREDAUDITLOG&rdquo; MODIFY (&ldquo;IP&rdquo; NOT NULL ENABLE);</p>
+<p>ALTER TABLE &ldquo;YUANWANG&rdquo;.&ldquo;APP_CLUSTEREDAUDITLOG&rdquo; MODIFY (&ldquo;IPNUM&rdquo; NOT NULL ENABLE);</p>
+<p>ALTER TABLE &ldquo;YUANWANG&rdquo;.&ldquo;APP_CLUSTEREDAUDITLOG&rdquo; MODIFY (&ldquo;TITLEID&rdquo; NOT NULL ENABLE);<!-- raw HTML omitted --></p>
+
+
+  
+
+  
+
+</article> 
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 ml-auto blog-sidebar">
+  
+
+  
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+    
+
+    
+    <footer class="blog-footer">
+      <p dir="auto">
+      
+      <!-- raw HTML omitted -->浙ICP备18050493号-1<!-- raw HTML omitted --> 浙公网安备 33010802006262号
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+    
+
+  </body>
+
+</html>

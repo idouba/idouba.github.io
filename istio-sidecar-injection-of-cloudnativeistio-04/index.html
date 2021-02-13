@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<meta property="og:title" content="Sidecar Injector自动注入的原理 –《云原生服务网格Istio》书摘04" />
+<meta property="og:description" content="本节书摘来自华为云原生技术丛书《云原生服务网格Istio:原理,实践,架构与源码解析》一书原理篇的第6章透明的Sidecar机制，6.1.1小节Sidecar Injector自动注入的原理。更多内容参照原书，或者关注容器魔方公众号。 Sidecar注入 我们都知道，Istio的流量管理、策略、遥测等功能无须应用程序做任何改动，这种无侵入式的方式全部依赖于Sidecar。应用程序发送或者接收的流量都被Sidecar拦截，并由Sidecar进行认证、鉴权、策略执行及遥测数据上报等众多治理功能。 如图6-1" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://idouba.net/istio-sidecar-injection-of-cloudnativeistio-04/" />
+<meta property="article:published_time" content="2019-08-02T15:22:57+00:00" />
+<meta property="article:modified_time" content="2019-08-02T15:22:57+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Sidecar Injector自动注入的原理 –《云原生服务网格Istio》书摘04"/>
+<meta name="twitter:description" content="本节书摘来自华为云原生技术丛书《云原生服务网格Istio:原理,实践,架构与源码解析》一书原理篇的第6章透明的Sidecar机制，6.1.1小节Sidecar Injector自动注入的原理。更多内容参照原书，或者关注容器魔方公众号。 Sidecar注入 我们都知道，Istio的流量管理、策略、遥测等功能无须应用程序做任何改动，这种无侵入式的方式全部依赖于Sidecar。应用程序发送或者接收的流量都被Sidecar拦截，并由Sidecar进行认证、鉴权、策略执行及遥测数据上报等众多治理功能。 如图6-1"/>
+<meta name="generator" content="Hugo 0.80.0" />
+
+
+    
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Sidecar Injector自动注入的原理 –《云原生服务网格Istio》书摘04",
+  "url": "http:\/\/idouba.net\/istio-sidecar-injection-of-cloudnativeistio-04\/",
+  "wordCount": "1968",
+  "datePublished": "2019-08-02T15:22:57+00:00",
+  "dateModified": "2019-08-02T15:22:57+00:00",
+  "author": {
+    "@type": "Person",
+    "name": "idouba"
+  },
+  "keywords": "istio, book"
+}
+</script>
+
+
+
+    <link rel="canonical" href="http://idouba.net/istio-sidecar-injection-of-cloudnativeistio-04/">
+
+    <title>Sidecar Injector自动注入的原理 –《云原生服务网格Istio》书摘04 | 爱豆吧！</title>
+
+    
+    <!-- combined, minified CSS -->
+    
+    <link href="http://idouba.net/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    
+
+    <!-- minified Font Awesome for SVG icons -->
+    
+    <script defer src="http://idouba.net/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+
+    <!-- RSS 2.0 feed -->
+    
+
+    
+
+    
+
+  </head>
+
+  <body>
+
+    
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="http://idouba.net/">Home</a>
+        </nav>
+      </div>
+    </div>
+    
+
+    
+    
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.net/" rel="home">爱豆吧！</a></h1>
+        <p class="lead blog-description" dir="auto">idouba@beta.</p>
+      </div>
+    </header>
+    
+    
+
+    
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/istio-sidecar-injection-of-cloudnativeistio-04/">Sidecar Injector自动注入的原理 –《云原生服务网格Istio》书摘04</a></h2>
+    <p class="blog-post-meta"><time datetime="2019-08-02T15:22:57Z">Fri Aug 02, 2019</time> by idouba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">istio</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/book/" rel="tag">book</a>, <a href="/tags/istio/" rel="tag">istio</a>
+
+</p>
+  </header>
+  <p>本节书摘来自华为云原生技术丛书<a href="https://item.jd.com/12538407.html">《云原生服务网格Istio:原理,实践,架构与源码解析》</a>一书原理篇的第6章透明的Sidecar机制，6.1.1小节Sidecar Injector自动注入的原理。更多内容参照原书，或者关注容器魔方公众号。</p>
+<h3 id="sidecar注入"><strong>Sidecar注入</strong></h3>
+<p>我们都知道，Istio的流量管理、策略、遥测等功能无须应用程序做任何改动，这种无侵入式的方式全部依赖于Sidecar。应用程序发送或者接收的流量都被Sidecar拦截，并由Sidecar进行认证、鉴权、策略执行及遥测数据上报等众多治理功能。</p>
+<p>如图6-1所示，在Kubernetes中，Sidecar容器与应用容器共存于同一个Pod中，并且共享同一个Network Namespaces，因此Sidecar容器与应用容器共享同一个网络协议栈，这也是Sidecar能够通过iptables拦截应用进出口流量的根本原因。</p>
+<p><img src="../wp-content/uploads/2019/08/istio-sidecar-injection-of-cloudnativeistio-04-01.png" alt=""></p>
+<p>图6-1  Istio的Sidecar模式</p>
+<p>在Istio中进行Sidecar注入有两种方式：<strong>一种</strong>是通过istioctl命令行工具手动注入;<strong>另一种</strong>是通Istio Sidecar Injector自动注入。</p>
+<p>这两种方式的最终目的都是在应用Pod中注入init容器及istio-proxy容器这两个Sidecar容器。如下所示，通过部署Istio的sleep应用，Sidecar是通过sidecar-injector自动注入的，查看注入的Sidecar容器：</p>
+<h4 id="1istio-proxy-容器"><strong>（1）istio-proxy 容器：</strong></h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">- <span style="color:#f92672">args</span>:                 <span style="color:#75715e"># istio-proxy 容器命令行参数</span>
+    - <span style="color:#ae81ff">proxy</span>
+- <span style="color:#ae81ff">sidecar</span>
+    - --<span style="color:#ae81ff">domain</span>
+- <span style="color:#ae81ff">$(POD_NAMESPACE).svc.cluster.local</span>
+    - --<span style="color:#ae81ff">configPath</span>
+- <span style="color:#ae81ff">/etc/istio/proxy</span>
+- --<span style="color:#ae81ff">binaryPath</span>
+    - <span style="color:#ae81ff">/usr/local/bin/envoy</span>
+    - --<span style="color:#ae81ff">serviceCluster</span>
+  - <span style="color:#ae81ff">sleep.default</span>
+    - --<span style="color:#ae81ff">drainDuration</span>
+- <span style="color:#ae81ff">45s</span>
+    - --<span style="color:#ae81ff">parentShutdownDuration</span>
+- <span style="color:#ae81ff">1m0s</span>
+    - --<span style="color:#ae81ff">discoveryAddress</span>
+    - <span style="color:#ae81ff">istio-pilot.istio-system:15011</span>
+    - --<span style="color:#ae81ff">zipkinAddress</span>
+    - <span style="color:#ae81ff">zipkin.istio-system:9411</span>
+    - --<span style="color:#ae81ff">connectTimeout</span>
+    - <span style="color:#ae81ff">10s</span>
+    - --<span style="color:#ae81ff">proxyAdminPort</span>
+- <span style="color:#e6db74">&#34;15000&#34;</span>
+    - --<span style="color:#ae81ff">controlPlaneAuthPolicy</span>
+    - <span style="color:#ae81ff">MUTUAL_TLS</span>
+    - --<span style="color:#ae81ff">statusPort</span>
+- <span style="color:#e6db74">&#34;15020&#34;</span>
+    - --<span style="color:#ae81ff">applicationPorts</span>
+    - <span style="color:#e6db74">&#34;&#34;</span>
+    <span style="color:#f92672">env</span>:                       <span style="color:#75715e"># istio-proxy 容器环境变量</span>
+  - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">POD_NAME</span>
+      <span style="color:#f92672">valueFrom</span>:
+        <span style="color:#f92672">fieldRef</span>:
+          <span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">v1</span>
+          <span style="color:#f92672">fieldPath</span>: <span style="color:#ae81ff">metadata.name</span>
+  - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">POD_NAMESPACE</span>
+      <span style="color:#f92672">valueFrom</span>:
+        <span style="color:#f92672">fieldRef</span>:
+          <span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">v1</span>
+          <span style="color:#f92672">fieldPath</span>: <span style="color:#ae81ff">metadata.namespace</span>
+  - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">INSTANCE_IP</span>
+      <span style="color:#f92672">valueFrom</span>:
+        <span style="color:#f92672">fieldRef</span>:
+          <span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">v1</span>
+          <span style="color:#f92672">fieldPath</span>: <span style="color:#ae81ff">status.podIP</span>
+    - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">ISTIO_META_POD_NAME</span>
+      <span style="color:#f92672">valueFrom</span>:
+        <span style="color:#f92672">fieldRef</span>:
+          <span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">v1</span>
+          <span style="color:#f92672">fieldPath</span>: <span style="color:#ae81ff">metadata.name</span>
+- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">ISTIO_META_CONFIG_NAMESPACE</span>
+      <span style="color:#f92672">valueFrom</span>:
+        <span style="color:#f92672">fieldRef</span>:
+          <span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">v1</span>
+          <span style="color:#f92672">fieldPath</span>: <span style="color:#ae81ff">metadata.namespace</span>
+- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">ISTIO_META_INTERCEPTION_MODE</span>
+      <span style="color:#f92672">value</span>: <span style="color:#ae81ff">REDIRECT</span>
+- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">ISTIO_METAJSON_LABELS</span>
+      <span style="color:#f92672">value</span>: |<span style="color:#e6db74">
+</span><span style="color:#e6db74">        </span>        {<span style="color:#e6db74">&#34;app&#34;</span>:<span style="color:#e6db74">&#34;sleep&#34;</span>,<span style="color:#e6db74">&#34;pod-template-hash&#34;</span>:<span style="color:#e6db74">&#34;7f59fddf5f&#34;</span>}
+    <span style="color:#f92672">image</span>: <span style="color:#ae81ff">gcr.io/istio-release/proxyv2:release-1.1-20190124-15-51</span>
+    <span style="color:#f92672">imagePullPolicy</span>: <span style="color:#ae81ff">IfNotPresent</span>
+    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">istio-proxy</span>
+    <span style="color:#ae81ff">……</span>
+    <span style="color:#f92672">volumeMounts</span>:                  <span style="color:#75715e"># istio-proxy挂载的证书及配置文件</span>
+- <span style="color:#f92672">mountPath</span>: <span style="color:#ae81ff">/etc/istio/proxy</span>
+      <span style="color:#f92672">name</span>: <span style="color:#ae81ff">istio-envoy</span>
+    - <span style="color:#f92672">mountPath</span>: <span style="color:#ae81ff">/etc/certs/</span>
+      <span style="color:#f92672">name</span>: <span style="color:#ae81ff">istio-certs</span>
+      <span style="color:#f92672">readOnly</span>: <span style="color:#66d9ef">true</span>
+- <span style="color:#f92672">mountPath</span>: <span style="color:#ae81ff">/var/run/secrets/kubernetes.io/serviceaccount</span>
+      <span style="color:#f92672">name</span>: <span style="color:#ae81ff">sleep-token-266l9</span>
+      <span style="color:#f92672">readOnly</span>: <span style="color:#66d9ef">true</span>
+</code></pre></div><h4 id="2istio-init容器"><strong>（2）istio-init容器：</strong></h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">initContainers</span>:                <span style="color:#75715e"># istio-init容器，用于初始化Pod网络</span>
+- <span style="color:#f92672">args</span>:
+  - -<span style="color:#ae81ff">p</span>
+- <span style="color:#e6db74">&#34;15001&#34;</span>
+    - -<span style="color:#ae81ff">u</span>
+- <span style="color:#e6db74">&#34;1337&#34;</span>
+    - -<span style="color:#ae81ff">m</span>
+- <span style="color:#ae81ff">REDIRECT</span>
+    - -<span style="color:#ae81ff">i</span>
+    - <span style="color:#e6db74">&#39;*&#39;</span>
+    - -<span style="color:#ae81ff">x</span>
+    - <span style="color:#e6db74">&#34;&#34;</span>
+    - -<span style="color:#ae81ff">b</span>
+    - <span style="color:#e6db74">&#34;&#34;</span>
+    - -<span style="color:#ae81ff">d</span>
+- <span style="color:#e6db74">&#34;15020&#34;</span>
+<span style="color:#f92672">image</span>: <span style="color:#ae81ff">gcr.io/istio-release/proxy_init:release-1.1-20190124-15-51</span>
+    <span style="color:#f92672">imagePullPolicy</span>: <span style="color:#ae81ff">IfNotPresent</span>
+    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">istio-init</span>
+    <span style="color:#ae81ff">……</span>
+    <span style="color:#f92672">securityContext</span>:
+      <span style="color:#f92672">capabilities</span>:
+        <span style="color:#f92672">add</span>:
+  - <span style="color:#ae81ff">NET_ADMIN</span>
+      <span style="color:#f92672">procMount</span>: <span style="color:#ae81ff">Default</span>
+</code></pre></div><h3 id="sidecar-injector自动注入的原理"><strong>Sidecar Injector自动注入的原理</strong></h3>
+<p>Sidecar Injector是Istio中实现自动注入Sidecar的组件，它是以Kubernetes准入控制器Admission Controller的形式运行的。Admission Controller的基本工作原理是拦截Kube-apiserver的请求，在对象持久化之前、认证鉴权之后进行拦截。Admission Controller有两种：一种是内置的，另一种是用户自定义的。Kubernetes允许用户以Webhook的方式自定义准入控制器，Sidecar Injector就是这样一种特殊的MutatingAdmissionWebhook。</p>
+<p>如图6-2所示，Sidecar Injector只在创建Pod时进行Sidecar容器注入，在Pod的创建请求到达Kube-apiserver后，首先进行认证鉴权，然后在准入控制阶段，Kube-apiserver以REST的方式同步调用Sidecar Injector Webhook服务进行init与istio-proxy容器的注入，最后将Pod对象持久化存储到etcd中。</p>
+<p><img src="../wp-content/uploads/2019/08/istio-sidecar-injection-of-cloudnativeistio-04-02.png" alt=""></p>
+<p>图6-2  Sidecar Injector的工作原理</p>
+<p>Sidecar Injector可以通过MutatingWebhookConfiguration API动态配置生效，Istio中的MutatingWebhook配置如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">admissionregistration.k8s.io/v1beta1</span>
+<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">MutatingWebhookConfiguration</span>
+<span style="color:#f92672">metadata</span>:
+  <span style="color:#f92672">creationTimestamp</span>: <span style="color:#e6db74">&#34;2019-02-12T06:00:51Z&#34;</span>
+  <span style="color:#f92672">generation</span>: <span style="color:#ae81ff">4</span>
+  <span style="color:#f92672">labels</span>:
+    <span style="color:#f92672">app</span>: <span style="color:#ae81ff">sidecarInjectorWebhook</span>
+    <span style="color:#f92672">chart</span>: <span style="color:#ae81ff">sidecarInjectorWebhook</span>
+    <span style="color:#f92672">heritage</span>: <span style="color:#ae81ff">Tiller</span>
+    <span style="color:#f92672">release</span>: <span style="color:#ae81ff">istio</span>
+  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">istio-sidecar-injector</span>
+<span style="color:#f92672">resourceVersion</span>: <span style="color:#e6db74">&#34;2974010&#34;</span>
+  <span style="color:#f92672">selfLink</span>: <span style="color:#ae81ff">/apis/admissionregistration.k8s.io/v1beta1/mutatingwebhookconfigurations/istio-sidecar-injector</span>
+  <span style="color:#f92672">uid</span>: <span style="color:#ae81ff">8d62addb-2e8b-11e9-b464-fa163ed0737f</span>
+<span style="color:#f92672">webhooks</span>:
+- <span style="color:#f92672">clientConfig</span>:
+    <span style="color:#f92672">caBundle</span>: <span style="color:#ae81ff">……</span>
+    <span style="color:#f92672">service</span>:
+      <span style="color:#f92672">name</span>: <span style="color:#ae81ff">istio-sidecar-injector</span>
+      <span style="color:#f92672">namespace</span>: <span style="color:#ae81ff">istio-system</span>
+      <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/inject</span>
+  <span style="color:#f92672">failurePolicy</span>: <span style="color:#ae81ff">Fail</span>
+  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">sidecar-injector.istio.io</span>
+  <span style="color:#f92672">namespaceSelector</span>:
+    <span style="color:#f92672">matchLabels</span>:
+      <span style="color:#f92672">istio-injection</span>: <span style="color:#ae81ff">enabled</span>
+  <span style="color:#f92672">rules</span>:
+  - <span style="color:#f92672">apiGroups</span>:
+    - <span style="color:#e6db74">&#34;&#34;</span>
+<span style="color:#f92672">apiVersions</span>:
+    - <span style="color:#ae81ff">v1</span>
+    <span style="color:#f92672">operations</span>:
+- <span style="color:#ae81ff">CREATE</span>
+    <span style="color:#f92672">resources</span>:
+  - <span style="color:#ae81ff">pods</span>
+  <span style="color:#f92672">sideEffects</span>: <span style="color:#ae81ff">Unknown</span>
+</code></pre></div><p>从以上配置可知，Sidecar Injector只对标签匹配“istio-injection: enabled”的命名空间下的Pod资源对象的创建生效。Webhook服务的访问路径为“/inject”，地址及访问凭证等都在clientConfig字段下进行配置。</p>
+<p>Istio Sidecar Injector组件是由sidecar-injector进程实现的，本书在之后将二者视为同一概念。Sidecar Injector的实现主要由两部分组成：</p>
+<ul>
+<li>维护MutatingWebhookConfiguration；</li>
+<li>启动Webhook Server，为应用工作负载自动注入Sidecar容器。</li>
+</ul>
+<p>MutatingWebhookConfiguration对象的维护主要指监听本地证书的变化及Kubernetes MutatingWebhookConfiguration资源的变化，以检查CA证书或者CA数据是否有更新，并且在本地CA证书与MutatingWebhookConfiguration中的CA证书不一致时，自动更新MutatingWebhookConfiguration对象。</p>
+
+
+  
+
+  
+
+</article> 
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 ml-auto blog-sidebar">
+  
+
+  
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+    
+
+    
+    <footer class="blog-footer">
+      <p dir="auto">
+      
+      <!-- raw HTML omitted -->浙ICP备18050493号-1<!-- raw HTML omitted --> 浙公网安备 33010802006262号
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+    
+
+  </body>
+
+</html>

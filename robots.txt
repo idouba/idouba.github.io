@@ -1,0 +1,3 @@
+Sitemap: http://idouba.net/sitemap.xml
+
+User-agent: *

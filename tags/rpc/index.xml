@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>RPC on 爱豆吧！</title>
+    <link>http://idouba.net/tags/rpc/</link>
+    <description>Recent content in RPC on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>&lt;a href=&#39;https://beian.miit.gov.cn/&#39; target=&#39;_blank&#39;&gt;浙ICP备18050493号-1&lt;/a&gt; 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Sat, 11 Jan 2014 12:02:36 +0000</lastBuildDate><atom:link href="http://idouba.net/tags/rpc/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【hadoop代码笔记】通过JobClient对Jobtracker的调用详细了解Hadoop RPC</title>
+      <link>http://idouba.net/haddoop_rpc_jobclient_jobtracker/</link>
+      <pubDate>Sat, 11 Jan 2014 12:02:36 +0000</pubDate>
+      
+      <guid>http://idouba.net/haddoop_rpc_jobclient_jobtracker/</guid>
+      <description>Hadoop的各个服务间，客户端和服务间的交互采用RPC方式。关于这种机制介绍的资源很多，也不难理解，这里不做背景介绍。只是尝试从Jobclient向JobTracker提交作业这个最简单的客户端服务器交互的代码中，去跟踪和了解下RPC是怎么被使用的。不同于准备发表博客时搜索的几篇博文，试图通过一种具体的场景来介绍，属于比较初级。其他DataNode和Namenode之间，Tasktracker和JobTracker之间的交互基本也都一样。为了引用的代码篇幅尽可能少，忽略了代码中写日志（包括Me</description>
+    </item>
+    
+  </channel>
+</rss>
