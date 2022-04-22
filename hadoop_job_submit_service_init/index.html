@@ -8,7 +8,7 @@
 <meta property="og:title" content="【hadoop代码笔记hadoop作业提交之JobTracker等相关功能模块初始化" />
 <meta property="og:description" content="一、概要描述 本文重点描述在JobTracker一端接收作业、调度作业等几个模块的初始化工作。想过模块的介绍会在其他文章中比较详细的描述。受理作业提交在下一篇文章中会进行描述。 为了表达的尽可能清晰一点只是摘录出影响逻辑流转的主要代码。重点强调直接的协作调用，每个内部完成的逻辑（一直可以更细的说明、有些细节可能自己也理解并不深刻:-(）在后续会描述。 主要包括JobTracker、TaskScheduler（此处以FairScheduler为例）、JobInProgressListener（以用的较多" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://idouba.net/hadoop_job_submit_service_init/" />
+<meta property="og:url" content="http://idouba.cc/hadoop_job_submit_service_init/" />
 <meta property="article:published_time" content="2014-01-17T14:36:20+00:00" />
 <meta property="article:modified_time" content="2014-01-17T14:36:20+00:00" />
 
@@ -24,7 +24,7 @@
   "@context": "http://schema.org",
   "@type": "BlogPosting",
   "headline": "【hadoop代码笔记hadoop作业提交之JobTracker等相关功能模块初始化",
-  "url": "http:\/\/idouba.net\/hadoop_job_submit_service_init\/",
+  "url": "http:\/\/idouba.cc\/hadoop_job_submit_service_init\/",
   "wordCount": "4089",
   "datePublished": "2014-01-17T14:36:20+00:00",
   "dateModified": "2014-01-17T14:36:20+00:00",
@@ -38,19 +38,19 @@
 
 
 
-    <link rel="canonical" href="http://idouba.net/hadoop_job_submit_service_init/">
+    <link rel="canonical" href="http://idouba.cc/hadoop_job_submit_service_init/">
 
     <title>【hadoop代码笔记hadoop作业提交之JobTracker等相关功能模块初始化 | 爱豆吧！</title>
 
     
     <!-- combined, minified CSS -->
     
-    <link href="http://idouba.net/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    <link href="http://idouba.cc/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
     
 
     <!-- minified Font Awesome for SVG icons -->
     
-    <script defer src="http://idouba.net/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+    <script defer src="http://idouba.cc/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
 
     <!-- RSS 2.0 feed -->
     
@@ -67,7 +67,7 @@
     <div class="blog-masthead">
       <div class="container">
         <nav class="nav blog-nav">
-          <a class="nav-link " href="http://idouba.net/">Home</a>
+          <a class="nav-link " href="http://idouba.cc/">Home</a>
         </nav>
       </div>
     </div>
@@ -77,7 +77,7 @@
     
     <header class="blog-header">
       <div class="container">
-        <h1 class="blog-title" dir="auto"><a href="http://idouba.net/" rel="home">爱豆吧！</a></h1>
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.cc/" rel="home">爱豆吧！</a></h1>
         <p class="lead blog-description" dir="auto">idouba@beta.</p>
       </div>
     </header>
@@ -94,7 +94,7 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/hadoop_job_submit_service_init/">【hadoop代码笔记hadoop作业提交之JobTracker等相关功能模块初始化</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/hadoop_job_submit_service_init/">【hadoop代码笔记hadoop作业提交之JobTracker等相关功能模块初始化</a></h2>
     <p class="blog-post-meta"><time datetime="2014-01-17T14:36:20Z">Fri Jan 17, 2014</time> by douba in 
 <span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/hadoop/" rel="category tag">hadoop</a>
 

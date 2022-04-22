@@ -1,3 +1,3 @@
-Sitemap: http://idouba.net/sitemap.xml
+Sitemap: http://idouba.cc/sitemap.xml
 
 User-agent: *

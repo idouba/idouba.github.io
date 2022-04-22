@@ -8,7 +8,7 @@
 <meta property="og:title" content="oracle分页技术性能比较" />
 <meta property="og:description" content="一、前言 在一个有30亿条数据的大表上分页，为了对方案进行性能测试，先忽略其他条件查询的影响，单看下分页部分的性能，顺便考察说明下oracle中rownum使用中一些比较tricky的地方。实验条件： 表结构如下，内有2千万条实验数据。 二、实验 提供7种不同方式（其实是5种，二和四是一种、三和五是一种）方式的 。第一种只是为了demo一下假设的一种错误逻辑方式，第二种和第四种是一种逻辑正确，但是性能极差的方式。筛选下来看上去性能可行的方式是第五、第六、第七方式。 这里仅仅记录没中方式的执行结果和计划。 方式" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://idouba.net/performance-comparison-of-oracle-paging/" />
+<meta property="og:url" content="http://idouba.cc/performance-comparison-of-oracle-paging/" />
 <meta property="article:published_time" content="2014-10-14T08:53:14+00:00" />
 <meta property="article:modified_time" content="2014-10-14T08:53:14+00:00" />
 
@@ -24,7 +24,7 @@
   "@context": "http://schema.org",
   "@type": "BlogPosting",
   "headline": "oracle分页技术性能比较",
-  "url": "http:\/\/idouba.net\/performance-comparison-of-oracle-paging\/",
+  "url": "http:\/\/idouba.cc\/performance-comparison-of-oracle-paging\/",
   "wordCount": "3420",
   "datePublished": "2014-10-14T08:53:14+00:00",
   "dateModified": "2014-10-14T08:53:14+00:00",
@@ -38,19 +38,19 @@
 
 
 
-    <link rel="canonical" href="http://idouba.net/performance-comparison-of-oracle-paging/">
+    <link rel="canonical" href="http://idouba.cc/performance-comparison-of-oracle-paging/">
 
     <title>oracle分页技术性能比较 | 爱豆吧！</title>
 
     
     <!-- combined, minified CSS -->
     
-    <link href="http://idouba.net/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    <link href="http://idouba.cc/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
     
 
     <!-- minified Font Awesome for SVG icons -->
     
-    <script defer src="http://idouba.net/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+    <script defer src="http://idouba.cc/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
 
     <!-- RSS 2.0 feed -->
     
@@ -67,7 +67,7 @@
     <div class="blog-masthead">
       <div class="container">
         <nav class="nav blog-nav">
-          <a class="nav-link " href="http://idouba.net/">Home</a>
+          <a class="nav-link " href="http://idouba.cc/">Home</a>
         </nav>
       </div>
     </div>
@@ -77,7 +77,7 @@
     
     <header class="blog-header">
       <div class="container">
-        <h1 class="blog-title" dir="auto"><a href="http://idouba.net/" rel="home">爱豆吧！</a></h1>
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.cc/" rel="home">爱豆吧！</a></h1>
         <p class="lead blog-description" dir="auto">idouba@beta.</p>
       </div>
     </header>
@@ -94,7 +94,7 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/performance-comparison-of-oracle-paging/">oracle分页技术性能比较</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/performance-comparison-of-oracle-paging/">oracle分页技术性能比较</a></h2>
     <p class="blog-post-meta"><time datetime="2014-10-14T08:53:14Z">Tue Oct 14, 2014</time> by douba in 
 <span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/oracle/" rel="category tag">oracle</a>
 

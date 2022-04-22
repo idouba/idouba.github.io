@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>cncf on 爱豆吧！</title>
-    <link>http://idouba.net/tags/cncf/</link>
+    <link>http://idouba.cc/tags/cncf/</link>
     <description>Recent content in cncf on 爱豆吧！</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>&lt;a href=&#39;https://beian.miit.gov.cn/&#39; target=&#39;_blank&#39;&gt;浙ICP备18050493号-1&lt;/a&gt; 浙公网安备 33010802006262号</copyright>
-    <lastBuildDate>Mon, 01 Jan 2018 14:17:31 +0000</lastBuildDate><atom:link href="http://idouba.net/tags/cncf/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 01 Jan 2018 14:17:31 +0000</lastBuildDate><atom:link href="http://idouba.cc/tags/cncf/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Opentracing 调用链服务端埋点</title>
-      <link>http://idouba.net/opentracing-serverside-tracing/</link>
+      <link>http://idouba.cc/opentracing-serverside-tracing/</link>
       <pubDate>Mon, 01 Jan 2018 14:17:31 +0000</pubDate>
       
-      <guid>http://idouba.net/opentracing-serverside-tracing/</guid>
+      <guid>http://idouba.cc/opentracing-serverside-tracing/</guid>
       <description>1 前言 通过一个最简单的代码例子来看使用opentracing在服务端埋点的逻辑。因为调用链的抽象模型都是来自dapper这篇论文，所以其他的方式也是类似，只是接口方法上稍有不同。 2 关于服务端埋点 主要流程看上是： 收到请求 从通信协议（如常用的HTTP header）中解出客户端传递的trace； 构造span 保存span 服务端返回请求 关闭span，将span的数据结构上传到调用链的数据存储节点。 下面结合一个例子中的额使用看下2 3 4 6四个调用链埋点步骤具体做了哪些事情。 3 主要流程 以最典型的http服务端为</description>
     </item>
     

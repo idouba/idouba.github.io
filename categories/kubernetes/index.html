@@ -8,7 +8,7 @@
 <meta property="og:title" content="kubernetes" />
 <meta property="og:description" content="idouba@beta." />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="http://idouba.net/categories/kubernetes/" />
+<meta property="og:url" content="http://idouba.cc/categories/kubernetes/" />
 <meta property="og:updated_time" content="2017-09-01T15:39:48+00:00" />
 
 <meta name="twitter:card" content="summary"/>
@@ -21,22 +21,22 @@
       
     
 
-    <link rel="canonical" href="http://idouba.net/categories/kubernetes/">
+    <link rel="canonical" href="http://idouba.cc/categories/kubernetes/">
 
     <title>爱豆吧！</title>
 
     
     <!-- combined, minified CSS -->
     
-    <link href="http://idouba.net/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    <link href="http://idouba.cc/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
     
 
     <!-- minified Font Awesome for SVG icons -->
     
-    <script defer src="http://idouba.net/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+    <script defer src="http://idouba.cc/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
 
     <!-- RSS 2.0 feed -->
-    <link rel="alternate" type="application/rss+xml" href="http://idouba.net/categories/kubernetes/index.xml" title="爱豆吧！" />
+    <link rel="alternate" type="application/rss+xml" href="http://idouba.cc/categories/kubernetes/index.xml" title="爱豆吧！" />
     
 
     
@@ -51,7 +51,7 @@
     <div class="blog-masthead">
       <div class="container">
         <nav class="nav blog-nav">
-          <a class="nav-link " href="http://idouba.net/">Home</a>
+          <a class="nav-link " href="http://idouba.cc/">Home</a>
         </nav>
       </div>
     </div>
@@ -61,7 +61,7 @@
     
     <header class="blog-header">
       <div class="container">
-        <h1 class="blog-title" dir="auto"><a href="http://idouba.net/" rel="home">爱豆吧！</a></h1>
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.cc/" rel="home">爱豆吧！</a></h1>
         <p class="lead blog-description" dir="auto">idouba@beta.</p>
       </div>
     </header>
@@ -82,7 +82,7 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/kubernetes-liveness-probe/">kubernetes liveness probe 流程</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/kubernetes-liveness-probe/">kubernetes liveness probe 流程</a></h2>
     <p class="blog-post-meta"><time datetime="2017-09-01T15:39:48Z">Fri Sep 01, 2017</time> by idouba in 
 <span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/kubernetes/" rel="category tag">kubernetes</a>
 
@@ -92,7 +92,7 @@
 </p>
   </header>
   1 概述 kubernetes提供了的Probe可以进行健康检查。 https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/ 对pod中的每个容器通过配置liveness或者readiness。 当liveness probe failed后，该container会杀掉，并重新创建；而readinessProbe失败，则该pod ip 会从service的endpoints列表中删除，即隔离到该后端的请求。 如liveness 配置如下： livenessProbe: httpGet: port: 10252 path: “/healthz” initialDelaySeconds: 15 timeoutSeconds: 15 文中尝试端到端的看下整个过程有哪些组件参与进来，怎么配合工作的。 2 配置 pkg/api/types.go#P
-  <a href='http://idouba.net/kubernetes-liveness-probe/'>Read more →</a>
+  <a href='http://idouba.cc/kubernetes-liveness-probe/'>Read more →</a>
 </article> 
 
 
@@ -102,7 +102,7 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/kubernetes-federation-sync-accross-cluster/">kubernetes federation 工作机制之资源对象同步</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/kubernetes-federation-sync-accross-cluster/">kubernetes federation 工作机制之资源对象同步</a></h2>
     <p class="blog-post-meta"><time datetime="2017-08-15T15:51:34Z">Tue Aug 15, 2017</time> by idouba in 
 <span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/kubernetes/" rel="category tag">kubernetes</a>
 
@@ -112,7 +112,7 @@
 </p>
   </header>
   1 前言 希望通过本文最简单的方式向熟悉k8s的人说明白其上的federation是干什么的，如何工作的。 关于federation，比较官方的说法是：集群联邦可以让租户/企业根据需要扩展或伸缩所需要的集群；可以让租户/企业在跨地区甚至跨地域的多个集群上部署、调度、监测管理应用。通过集群联邦，租户/企业可以在指定集群上部署应用，可以拉通私有云和公有云建立混合云(hybrid cloud)。 如在design-proposal 中描述的federation提供了cross-cluster scheduling, cross-cluster service discovery, cross-cluster migration, cross-cluster**ing and auditing, cross-cluster load
-  <a href='http://idouba.net/kubernetes-federation-sync-accross-cluster/'>Read more →</a>
+  <a href='http://idouba.cc/kubernetes-federation-sync-accross-cluster/'>Read more →</a>
 </article> 
 
 

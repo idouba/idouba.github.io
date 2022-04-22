@@ -8,7 +8,7 @@
 <meta property="og:title" content="Posts" />
 <meta property="og:description" content="idouba@beta." />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="http://idouba.net/posts/" />
+<meta property="og:url" content="http://idouba.cc/posts/" />
 <meta property="og:updated_time" content="2019-08-09T15:32:08+00:00" />
 
 <meta name="twitter:card" content="summary"/>
@@ -23,7 +23,7 @@
   "@context": "http://schema.org",
   "@type": "Blog",
   "headline": "爱豆吧！",
-  "url" : "http:\/\/idouba.net\/posts\/",
+  "url" : "http:\/\/idouba.cc\/posts\/",
   "author": {
     "@type": "Person",
     "name": "idouba"
@@ -35,22 +35,22 @@
 </script>
 
 
-    <link rel="canonical" href="http://idouba.net/posts/">
+    <link rel="canonical" href="http://idouba.cc/posts/">
 
     <title>爱豆吧！</title>
 
     
     <!-- combined, minified CSS -->
     
-    <link href="http://idouba.net/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    <link href="http://idouba.cc/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
     
 
     <!-- minified Font Awesome for SVG icons -->
     
-    <script defer src="http://idouba.net/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+    <script defer src="http://idouba.cc/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
 
     <!-- RSS 2.0 feed -->
-    <link rel="alternate" type="application/rss+xml" href="http://idouba.net/posts/index.xml" title="爱豆吧！" />
+    <link rel="alternate" type="application/rss+xml" href="http://idouba.cc/posts/index.xml" title="爱豆吧！" />
     
 
     
@@ -65,7 +65,7 @@
     <div class="blog-masthead">
       <div class="container">
         <nav class="nav blog-nav">
-          <a class="nav-link " href="http://idouba.net/">Home</a>
+          <a class="nav-link " href="http://idouba.cc/">Home</a>
         </nav>
       </div>
     </div>
@@ -75,7 +75,7 @@
     
     <header class="blog-header">
       <div class="container">
-        <h1 class="blog-title" dir="auto"><a href="http://idouba.net/" rel="home">爱豆吧！</a></h1>
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.cc/" rel="home">爱豆吧！</a></h1>
         <p class="lead blog-description" dir="auto">idouba@beta.</p>
       </div>
     </header>
@@ -97,7 +97,7 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/wikipedia_isolation/">【译】数据库事务隔离级别</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/wikipedia_isolation/">【译】数据库事务隔离级别</a></h2>
     <p class="blog-post-meta"><time datetime="2014-01-05T12:23:26Z">Sun Jan 05, 2014</time> by douba in 
 <span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/database/" rel="category tag">database</a>, <a href="/categories/database-concept/" rel="category tag">database concept</a>
 
@@ -136,7 +136,7 @@
 <p>在<a href="http://en.wikipedia.org/w/index.php?title=%E6%95%B0%E6%8D%AE%E5%BA%93&amp;action=edit&amp;redlink=1" title="数据库 (page does not exist)">数据库</a>事务的<a href="http://en.wikipedia.org/wiki/ACID" title="ACID">ACID</a>四个属性中，隔离性是一个最常放松的一个。为了获取更高的隔离等级，数据库系统的 <a href="http://en.wikipedia.org/wiki/Lock_%28database%29" title="Lock (database)">锁</a>机制或者<a href="http://en.wikipedia.org/wiki/Multiversion_concurrency_control" title="Multiversion concurrency control">多版本并发控制</a>机制都会影响<a href="http://en.wikipedia.org/wiki/Concurrency_%28computer_science%29" title="Concurrency (computer science)">并发</a>。 <a href="http://en.wikipedia.org/wiki/Software_application" title="Software application">应用软件</a>也需要额外的逻辑来使其正常工作。</p>
 <p>很多<a href="http://en.wikipedia.org/wiki/DBMS" title="DBMS">DBMS</a>定义了不同的“事务隔离等级”来控制锁的程度。在很多数据库系统中，多数的数据库事务都避免高等级的隔离等级（如可序列化）从而减少对系统的锁定开销。程序员需要小心的分析数据库访问部分的代码来保证隔离级别的降低不会造成难以发现的代码bug。相反的，更高的隔离级别会增加<a href="http://en.wikipedia.org/wiki/Deadlock" title="Deadlock">死锁</a>发生的几率，同样需要编程过程中去避免。</p>
 <p><a href="http://en.wikipedia.org/wiki/American_National_Standards_Institute" title="American National Standards Institute">ANSI</a>/<a href="http://en.wikipedia.org/wiki/International_Organization_for_Standardization" title="International Organization for Standardization">ISO</a> <a href="http://en.wikipedia.org/wiki/SQL" title="SQL">SQL</a>定义的标准隔离级别如下。</p>
-  <a href='http://idouba.net/wikipedia_isolation/'>Read more →</a>
+  <a href='http://idouba.cc/wikipedia_isolation/'>Read more →</a>
 </article> 
 
 
@@ -146,7 +146,7 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/notes-clustering-k-medoids/">Data Mining 笔记聚类k-medoids</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/notes-clustering-k-medoids/">Data Mining 笔记聚类k-medoids</a></h2>
     <p class="blog-post-meta"><time datetime="2013-09-18T13:28:36Z">Wed Sep 18, 2013</time> by douba in 
 <span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/clustering/" rel="category tag">clustering</a>
 
@@ -156,7 +156,7 @@
 </p>
   </header>
   一、概述 k-means利用簇内点的均值或加权平均值ci（质心）作为类Ci的代表点。对数值属性数据有较好的几何和统计意义。对孤立点是敏感的，如果具有极大值，就可能大幅度地扭曲数据的分布. k-medoids(k-中心点)算法是为消除这种敏感性提出的，它选择类中位置最接近类中心的对象(称为中心点)作为类的代表点，目标函数仍然可以采用平方误差准则。 PAM（Partitioning Around Medoids，围绕中心点的划分）是最早提出的k中心点算法之一。 二、算法思想： 随机选择k个对象作为初始的k个类的代表点，将其
-  <a href='http://idouba.net/notes-clustering-k-medoids/'>Read more →</a>
+  <a href='http://idouba.cc/notes-clustering-k-medoids/'>Read more →</a>
 </article> 
 
 
@@ -166,7 +166,7 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/notes-about-classification/">Data Mining 笔记之Classification</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/notes-about-classification/">Data Mining 笔记之Classification</a></h2>
     <p class="blog-post-meta"><time datetime="2013-09-18T11:12:40Z">Wed Sep 18, 2013</time> by douba in 
 <span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/classification/" rel="category tag">classification</a>
 
@@ -176,7 +176,7 @@
 </p>
   </header>
   一、概念 监督式学习VS非监督式学习 Supervised learning (classification) Supervision: The training data (observations, measurements, etc.) are accompanied by labels indicating the class of the observations New data is classified based on the training set Unsupervised learning (clustering) The class labels of training data is unknown Given a set of measurements, observations, etc. with the aim of establishing the existence of classes or clusters in the data –Jiawei Han 监督式学习：提供了训练元组的类标号，通过分析已知数据，得到一个分类模型，用来确定其它的对象属于哪个类别。 非监督式学习：不依赖有类标号的训练实例 分类Classification predicts categorical class labels (discrete or nominal) classifies data (constructs a model) based on the training set and the values (class labels) in a classifying attribute and uses it in classifying new data。 预测分类表示，通过分析训练集中数据的属性来进行构建一个模型来确定新的数据属于哪个
-  <a href='http://idouba.net/notes-about-classification/'>Read more →</a>
+  <a href='http://idouba.cc/notes-about-classification/'>Read more →</a>
 </article> 
 
 
@@ -186,7 +186,7 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/history-letter-to-someone-mentor-so-called/">给某某导师的一封邮件</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/history-letter-to-someone-mentor-so-called/">给某某导师的一封邮件</a></h2>
     <p class="blog-post-meta"><time datetime="2013-06-08T14:22:52Z">Sat Jun 08, 2013</time> by douba in 
 <span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/history-letter-archive/" rel="category tag">history letter archive</a>, <a href="/categories/%E9%9A%8F%E7%AC%94/" rel="category tag">随笔</a>
 
@@ -196,7 +196,7 @@
 </p>
   </header>
   整理之前常用的网易邮箱的时候，发现几篇比较长的邮件，感受到了当年的年轻气盛，被自己小激励了一把。当年觉得很私密的邮件，现在倒愿意在自己的空间归档下,不然可能就真的扔掉了。是研究生入学前给当年向某位知名人生导师写的邮件，并未得到回复:-(。看到邮件里描述自己的还挺可爱的，虽然使劲回忆起来有些太心酸太囧的经历没有好意思写进去。但是有的啰嗦，怪不得人家不回呢，呵呵。好像更像是自己和自己说话。有热情，有干劲，但是似乎有一点偏执。现在回头看。豆妈说一定不要让我们豆豆也这么辛苦。很感激当年的这些经历，也不太
-  <a href='http://idouba.net/history-letter-to-someone-mentor-so-called/'>Read more →</a>
+  <a href='http://idouba.cc/history-letter-to-someone-mentor-so-called/'>Read more →</a>
 </article> 
 
 
@@ -206,7 +206,7 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/doudou_history_letter_self_motivated/">一张纸勾起的回忆</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/doudou_history_letter_self_motivated/">一张纸勾起的回忆</a></h2>
     <p class="blog-post-meta"><time datetime="2013-05-24T14:08:26Z">Fri May 24, 2013</time> by douba in 
 <span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/%E9%9A%8F%E7%AC%94/" rel="category tag">随笔</a>
 
@@ -216,7 +216,7 @@
 </p>
   </header>
   收拾之前的东西，不小心看到了一张纸条，是自己写给自己的。有点小感慨，记录下。 那时候刚开始工作吧，在沈阳的辽中县修桥，好像是从东北回家的路上，在北京的西单图书大厦泡了一天，买了这样一本书。当时看了，技巧倒没有得到什么，但是好像很受激励（年轻时更容易被激励吧），就下决心，真的下决心拿张破纸记下了目标，有点狂妄，当时不知道四级六级具体是啥，只知道六级比四级难，目标就写个大的。 说实话，读的那本书里面的内容已经完全不记得了，书好像也早都不在了。只是从那里面第一次听说了VOA Special English。后来就从一个还
-  <a href='http://idouba.net/doudou_history_letter_self_motivated/'>Read more →</a>
+  <a href='http://idouba.cc/doudou_history_letter_self_motivated/'>Read more →</a>
 </article> 
 
 
@@ -226,7 +226,7 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/my-gre-index-issue-argument/">GRE作文目录</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/my-gre-index-issue-argument/">GRE作文目录</a></h2>
     <p class="blog-post-meta"><time datetime="2008-05-05T09:00:53Z">Mon May 05, 2008</time> by douba in 
 <span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/english/" rel="category tag">english</a>, <a href="/categories/history-article-archive/" rel="category tag">history article archive</a>
 
@@ -236,7 +236,7 @@
 </p>
   </header>
   [在寄托的作文练习.][1]归档下。 第二次作业：（20070727） Issue 88: http://bbs.gter.net/bbs/viewthread.php?tid=710682&amp;extra=page%3D1 Argument 26: http://bbs.gter.net/bbs/viewthread.php?tid=710693&amp;extra=page%3D1 第三次作业：（20070728） Issue 159: http://bbs.gter.net/bbs/viewthread.php?tid=711072&amp;extra=page%3D1 Argument 147: http://bbs.gter.net/bbs/viewthread.php?tid=711321&amp;extra=page%3D1 第四次作业:（20070729） Issue 177:http://bbs.gter.net/bbs/viewthread.php?tid=711906&amp;extra=page%3D1 Argument 17: http://bbs.gter.net/bbs/viewthread.php?tid=711910&amp;extra=page%3D1 第五次作业:（20070730） Issue 59 :http://bbs.gter.net/bbs/viewthread.php?tid=712537&amp;extra=page%3D2 Argument 51:http://bbs.gter.net/bbs/viewthread.php?tid=712541&amp;extra=page%3D1 第六次作业:（20070731） Issue 143 : http://bbs.gter.net/bbs/viewthread.php?tid=713063&amp;extra=page%3D1 Issue 43 :http://bbs.gter.net/bbs/viewthread.php?tid=713593&amp;extra=page%3D1 Argument 2: http://bbs.gter.net/bbs/viewthread.php?tid=713213&amp;extra=page%3D1 第七次作业:（20070801） Issue 56 : http://bbs.gter.net/bbs/thread-713667-1-1.html Argument 140: http://bbs.gter.net/bbs/thread-713668-1-1.html 第八次作业:（20070802） Issue 147 :http://bbs.gter.net/bbs/viewthread.php?tid=714625&amp;extra=page%3D1 Issue 51 : http://bbs.gter.net/bbs/viewthread.php?tid=714563&amp;extra=page%3D1 Argument 65: http://bbs.gter.net/bbs/viewthread.php?tid=714619&amp;extra=page%3D1 第九次作业:（20070803） Issue 207 :http://bbs.gter.net/bbs/viewthread.php?tid=715128&amp;extra=page%3D1 Argument 117 :http://bbs.gter.net/bbs/viewthread.php?tid=715261&amp;extra=page%3D1 第十次作业:（20070804） Issue 144:http://bbs.gter.net/bbs/viewthread.php?tid=716645&amp;extra=page%3D1 Argument 50：http://bbs.gter.net/bbs/vie
-  <a href='http://idouba.net/my-gre-index-issue-argument/'>Read more →</a>
+  <a href='http://idouba.cc/my-gre-index-issue-argument/'>Read more →</a>
 </article> 
 
 
@@ -246,7 +246,7 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/happy-birthday-inter/">HAPPY BIRTHDAY, INTER</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/happy-birthday-inter/">HAPPY BIRTHDAY, INTER</a></h2>
     <p class="blog-post-meta"><time datetime="2008-03-09T14:59:50Z">Sun Mar 09, 2008</time> by douba in 
 <span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/history-letter-archive/" rel="category tag">history letter archive</a>
 
@@ -256,7 +256,7 @@
 </p>
   </header>
   在国米百年诞辰的时候写给俱乐部的一封信。 Hi Inter, HAPPY BIRTHDAY !!! I am an Inter fan of China, a postgraduate student of a University in the Northwest of China. I have been the fan of Inter for 12 years. Football was not as popular as it is now in China 12 years ago. I have to admit that one critical reason why I have deep feeling of Inter rather than AC Milan which was highly regarded by lots of my friends is because of Ronaldo. But I find my love did not pale when he move to Real Madrid, maybe I love Inter more. I always told my friends that I can share some special feelings, some character with Inter. We are persistent, working hard, and have a dream of great success, but I have to say we are less confident in a long time. The most impressive moment in my memory is the game Inter lose to Juventus in 1998, also it is the worst moment I can remember. I felt being greatly hurt when the referee refused to give penalty when Ronaldo was obviously offended in penalty zone, which eventually lead to the losing of the champion of that season. I will never hesitate to say Zanetti if I was asked to tell my favorite plays in Inter. He is the captain of Inter, and has been and will always be a captain in
-  <a href='http://idouba.net/happy-birthday-inter/'>Read more →</a>
+  <a href='http://idouba.cc/happy-birthday-inter/'>Read more →</a>
 </article> 
 
 
@@ -266,7 +266,7 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/gre-issue-88/">GRE Issue 88</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/gre-issue-88/">GRE Issue 88</a></h2>
     <p class="blog-post-meta"><time datetime="2007-07-27T19:00:53Z">Fri Jul 27, 2007</time> by douba in 
 <span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/english/" rel="category tag">english</a>, <a href="/categories/history-article-archive/" rel="category tag">history article archive</a>
 
@@ -276,7 +276,7 @@
 </p>
   </header>
   Issue: Technologies not only influence but actually determine social customs and ethics 提纲： 1.同意技术对社会习惯和和道德规范的影响，但反对其决定作用的说法。 2.科学技术对社会习惯的影响，科技进步影响各个方面，社会习惯和道德规范也受到影 响。 影响社会习惯例子：Postcard改用email，Mobile phone short message in holidays. 生动丰富，快捷，便宜。 影响道德规范例子:human clone, internet 对传统的道德规范形成冲击，其约束力减弱,网络为人们说谎提供了方便 ,在网上没有人知道和你说话的是条狗。 3.但技术并不是决定作用。 前面的同样的技术对不同地方的道德产生了同样的挑战，但并没有形成同样的社
-  <a href='http://idouba.net/gre-issue-88/'>Read more →</a>
+  <a href='http://idouba.cc/gre-issue-88/'>Read more →</a>
 </article> 
 
 
@@ -286,7 +286,7 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/daily-japanese-speak-in-office-in-chinese/">一次日语朝礼</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/daily-japanese-speak-in-office-in-chinese/">一次日语朝礼</a></h2>
     <p class="blog-post-meta"><time datetime="2004-12-13T13:26:10Z">Mon Dec 13, 2004</time> by douba in 
 <span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/%E3%81%AB%E3%81%BB%E3%82%93%E3%81%94/" rel="category tag">にほんご</a>
 
@@ -296,7 +296,7 @@
 </p>
   </header>
   那时候每天早上都要在办公室用日语朗读一篇文章(后来我们小组要求背诵了)，对学习日语确实有很大帮助。平时也就和合作的日本team那边的人写邮件讨论功能，开始大部分句式也都是从senior的人那儿拷贝来，替换中间的词汇来表达。包括入职才一个多月就写的几十页的功能文档，都是这么干的。每天轮流一个人来朗读一篇文章倒确实对大家的口语锻炼有挺多好处的，尽管我们这些当时年龄资历都很不够的人，一般在两周多的项目总结会上，一般也就只是听，没有说的份。做多每次会前，逐个自我介绍，用日语自我介绍下，我叫什么，负责那个
-  <a href='http://idouba.net/daily-japanese-speak-in-office-in-chinese/'>Read more →</a>
+  <a href='http://idouba.cc/daily-japanese-speak-in-office-in-chinese/'>Read more →</a>
 </article> 
 
 

@@ -2,63 +2,63 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>oracle on 爱豆吧！</title>
-    <link>http://idouba.net/tags/oracle/</link>
+    <link>http://idouba.cc/tags/oracle/</link>
     <description>Recent content in oracle on 爱豆吧！</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>&lt;a href=&#39;https://beian.miit.gov.cn/&#39; target=&#39;_blank&#39;&gt;浙ICP备18050493号-1&lt;/a&gt; 浙公网安备 33010802006262号</copyright>
-    <lastBuildDate>Thu, 07 May 2015 07:11:32 +0000</lastBuildDate><atom:link href="http://idouba.net/tags/oracle/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 07 May 2015 07:11:32 +0000</lastBuildDate><atom:link href="http://idouba.cc/tags/oracle/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>从Search Sort到Join</title>
-      <link>http://idouba.net/learn_table_join_from_search_and_sort/</link>
+      <link>http://idouba.cc/learn_table_join_from_search_and_sort/</link>
       <pubDate>Thu, 07 May 2015 07:11:32 +0000</pubDate>
       
-      <guid>http://idouba.net/learn_table_join_from_search_and_sort/</guid>
+      <guid>http://idouba.cc/learn_table_join_from_search_and_sort/</guid>
       <description>发表于《程序员》2015年4月B的一篇文章，在博客归档下。根据杂志社要求，在自己博客发表该文章亦须注明：本文为CSDN编译整理，未经允许不得转载，如需转载请联系market#csdn.net(#换成@) 想通过原理来说明一些技术白皮书上“什么时候应该使用什么”这个“应该”后面的原因。通过数据结构中经典的排序查找算法来推倒解释数据库中几种经典的表连接背后的算法原理，和原理决定的在各种数据库中不同的应用和限制。以简单的算法来讲出数据库系统中看着核心强大功能的本质的算法设计。较之白皮书中不同数据库的不同</description>
     </item>
     
     <item>
       <title>oracle分页技术性能比较</title>
-      <link>http://idouba.net/performance-comparison-of-oracle-paging/</link>
+      <link>http://idouba.cc/performance-comparison-of-oracle-paging/</link>
       <pubDate>Tue, 14 Oct 2014 08:53:14 +0000</pubDate>
       
-      <guid>http://idouba.net/performance-comparison-of-oracle-paging/</guid>
+      <guid>http://idouba.cc/performance-comparison-of-oracle-paging/</guid>
       <description>一、前言 在一个有30亿条数据的大表上分页，为了对方案进行性能测试，先忽略其他条件查询的影响，单看下分页部分的性能，顺便考察说明下oracle中rownum使用中一些比较tricky的地方。实验条件： 表结构如下，内有2千万条实验数据。 二、实验 提供7种不同方式（其实是5种，二和四是一种、三和五是一种）方式的 。第一种只是为了demo一下假设的一种错误逻辑方式，第二种和第四种是一种逻辑正确，但是性能极差的方式。筛选下来看上去性能可行的方式是第五、第六、第七方式。 这里仅仅记录没中方式的执行结果和计划。 方式</description>
     </item>
     
     <item>
       <title>B树在数据库索引中的应用剖析(发表版本)</title>
-      <link>http://idouba.net/about-btrees-application-in-database-index-in-programmer/</link>
+      <link>http://idouba.cc/about-btrees-application-in-database-index-in-programmer/</link>
       <pubDate>Wed, 18 Jun 2014 09:27:23 +0000</pubDate>
       
-      <guid>http://idouba.net/about-btrees-application-in-database-index-in-programmer/</guid>
+      <guid>http://idouba.cc/about-btrees-application-in-database-index-in-programmer/</guid>
       <description>最近一篇发表于《程序员》2014年6月刊上的文章。有点遗憾发现，有些部分被编辑修改过了，读起来有点怪怪的。最典型的是习惯于对某些比较经典的定义引用wikipedia或者原始白皮书中原始的E文，在文中发现都被硬译过了，表达的意思自己都有点看不懂了！ 最终修改后提交的版本归档下： 引言 关于数据库索引，随便Google一个Oracle index，Mysql index总能得到“某某索引之n条经典建议”之类大量结果。笔者认为，较之直接借鉴，在搞清实际需求的基础上，对备选方案的原理尽可能深入全面的了解会更有利于</description>
     </item>
     
     <item>
       <title>从Count看Oracle执行计划的选择</title>
-      <link>http://idouba.net/analysis-oracle-execute-plan-from-count/</link>
+      <link>http://idouba.cc/analysis-oracle-execute-plan-from-count/</link>
       <pubDate>Mon, 24 Mar 2014 12:53:50 +0000</pubDate>
       
-      <guid>http://idouba.net/analysis-oracle-execute-plan-from-count/</guid>
+      <guid>http://idouba.cc/analysis-oracle-execute-plan-from-count/</guid>
       <description>一、 前言 在调查一个性能问题的时候，一个同事问道，为什么数据库有些时候这么不聪明，明明表上有索引，但是在执行一个简单的count的时候居然全表扫描了！难道不知道走索引更快么？ 试图从最简单的count来重新了解oracle查询计划的选择，以及最终产生的结果。虽然有些结果会让人觉得有些意外，并且可能会鄙视，这个查询计划选择真的不够聪明。但稍微用心点的去了解，做的已经足够细致了。大多数情况下，根据我们输入的信息，来自输入的SQL、表结构、索引状况、统计信息，会得出一个比较优的计划。所以和前面一直试图讲到</description>
     </item>
     
     <item>
       <title>B树在数据库索引中的应用剖析（原稿）</title>
-      <link>http://idouba.net/about-btrees-application-in-database-index/</link>
+      <link>http://idouba.cc/about-btrees-application-in-database-index/</link>
       <pubDate>Thu, 20 Mar 2014 08:18:48 +0000</pubDate>
       
-      <guid>http://idouba.net/about-btrees-application-in-database-index/</guid>
+      <guid>http://idouba.cc/about-btrees-application-in-database-index/</guid>
       <description>引言 关于数据库索引，随便Google一个Oracle index，Mysql index总有大量的结果出来，其中不乏某某索引之n条经典建议。笔者认为，较之借鉴，在搞清楚了自己的需求的基础上，对备选方案的原理有个尽可能深入全面的了解会更有利于我们的选择和决策。因为某种方案或者技术呈现出某种优势（包括可能没有被介绍到但一定存在的限制），不是定义出来的，而是因为其实现机制决定的。就像LinkedList和ArrayList分别适用于什么应用不是Document里面定义的，是由其本身的结构决定的。数据库的索</description>
     </item>
     
     <item>
       <title>Oracle索引原理精简总结</title>
-      <link>http://idouba.net/oracle-index-brief/</link>
+      <link>http://idouba.cc/oracle-index-brief/</link>
       <pubDate>Wed, 19 Feb 2014 13:48:09 +0000</pubDate>
       
-      <guid>http://idouba.net/oracle-index-brief/</guid>
+      <guid>http://idouba.cc/oracle-index-brief/</guid>
       <description>结合使用整理Oracle的索引，主要权威的来自于Oracle Database Concepts与Oracle Database Performance Tuning Guide 尝试用最少的字数介绍oracle的几种常用索引原理，主要是想简单分析其存储结构来说明其检索方式，和解释为什们某种索引使用与某种场合。（数据结构中最简单的ArrayList和LinkedList的使用场景）。阐述原因只有一个，就是因为其存储结构决定的。 B树索引(默认类型) 存储结构： B+树，不多描述。和其他几种关系数据库一样，就是根据索引列(一个或多个)来构造一个B+树来存储索引。非叶子节点两个区域：</description>
     </item>
     

@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>database concept on 爱豆吧！</title>
-    <link>http://idouba.net/categories/database-concept/</link>
+    <link>http://idouba.cc/categories/database-concept/</link>
     <description>Recent content in database concept on 爱豆吧！</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>&lt;a href=&#39;https://beian.miit.gov.cn/&#39; target=&#39;_blank&#39;&gt;浙ICP备18050493号-1&lt;/a&gt; 浙公网安备 33010802006262号</copyright>
-    <lastBuildDate>Sun, 05 Jan 2014 12:23:26 +0000</lastBuildDate><atom:link href="http://idouba.net/categories/database-concept/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 05 Jan 2014 12:23:26 +0000</lastBuildDate><atom:link href="http://idouba.cc/categories/database-concept/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>【译】数据库事务隔离级别</title>
-      <link>http://idouba.net/wikipedia_isolation/</link>
+      <link>http://idouba.cc/wikipedia_isolation/</link>
       <pubDate>Sun, 05 Jan 2014 12:23:26 +0000</pubDate>
       
-      <guid>http://idouba.net/wikipedia_isolation/</guid>
+      <guid>http://idouba.cc/wikipedia_isolation/</guid>
       <description>&lt;p&gt;看到wikipedia中文关于数据库相关的几个&lt;!-- raw HTML omitted --&gt;经典&lt;!-- raw HTML omitted --&gt;条目有点老旧，尤其和英文条目相比。确定开始翻译其中几篇，先从&lt;!-- raw HTML omitted --&gt;事务隔离等级&lt;!-- raw HTML omitted --&gt;开始。格式采用维基Sandbox发布后的格式。翻译完后自己校对过几遍，质量还可以。:-)
 已经在中文维基发布。
 翻译的中文条目地址：&lt;!-- raw HTML omitted --&gt;事务隔离等级&lt;!-- raw HTML omitted --&gt;；

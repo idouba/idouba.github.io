@@ -2,45 +2,45 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>tracing on 爱豆吧！</title>
-    <link>http://idouba.net/tags/tracing/</link>
+    <link>http://idouba.cc/tags/tracing/</link>
     <description>Recent content in tracing on 爱豆吧！</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>&lt;a href=&#39;https://beian.miit.gov.cn/&#39; target=&#39;_blank&#39;&gt;浙ICP备18050493号-1&lt;/a&gt; 浙公网安备 33010802006262号</copyright>
-    <lastBuildDate>Thu, 29 Nov 2018 15:23:04 +0000</lastBuildDate><atom:link href="http://idouba.net/tags/tracing/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 29 Nov 2018 15:23:04 +0000</lastBuildDate><atom:link href="http://idouba.cc/tags/tracing/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Istio 调用链埋点原理剖析—是否真的“零修改”？</title>
-      <link>http://idouba.net/istio-tracing-is-not-zero-code-change/</link>
+      <link>http://idouba.cc/istio-tracing-is-not-zero-code-change/</link>
       <pubDate>Thu, 29 Nov 2018 15:23:04 +0000</pubDate>
       
-      <guid>http://idouba.net/istio-tracing-is-not-zero-code-change/</guid>
+      <guid>http://idouba.cc/istio-tracing-is-not-zero-code-change/</guid>
       <description>发在Infoq上的一篇文章，答疑当前大家工作中碰到的Istio调用链的问题，最终澄清了观点，并推动社区修改了说法，避免误解。 前言 在 Istio 的实践中最近经常被问到一个问题，使用 Istio 做调用链用户的业务代码是不是完全 0 侵入，到底要不要修改业务代码？ 看官方介绍： Istio makes it easy to create a network of deployed services with load balancing, service-to-service authentication, monitoring, and more, without any changes in service code. 是不用修改任何代码即可做各种治理。实际使用中应用程序不做任何修改，使用 Istio 的调用链输出总是断开的，这到底是什么原因呢？ 对以上问题关注的人比较多，但是貌似说的都不是特别清楚，在最近的 K8S 技术社区的 Meetup 上笔者专门做</description>
     </item>
     
     <item>
       <title>Istio调用链埋点原理剖析—是否真的“零修改”分享实录（下）</title>
-      <link>http://idouba.net/istio-tracing-meetup-02/</link>
+      <link>http://idouba.cc/istio-tracing-meetup-02/</link>
       <pubDate>Sat, 10 Nov 2018 15:36:10 +0000</pubDate>
       
-      <guid>http://idouba.net/istio-tracing-meetup-02/</guid>
+      <guid>http://idouba.cc/istio-tracing-meetup-02/</guid>
       <description>接上文Istio调用链埋点原理剖析—是否真的“零修改”分享实录（上） Isito调用链** 调用链原理和场景 正如Service Mesh的诞生是为了解决大规模分布式服务访问的治理问题，调用链的出现也是为了对应于大规模的复杂的分布式系统运行中碰到的故障定位定界问题。大量的服务调用、跨进程、跨服务器，可能还会跨多个物理机房。无论是服务自身问题还是网络环境的问题导致调用上链路上出现问题都比较复杂，如何定位就比单进程的一个服务打印一个异常栈来找出某个方法要困难的多。需要有一个类似的调用链路的跟踪，经一次请求的</description>
     </item>
     
     <item>
       <title>Istio调用链埋点原理剖析—是否真的“零修改”分享实录（上）</title>
-      <link>http://idouba.net/istio-tracing-meetup-01/</link>
+      <link>http://idouba.cc/istio-tracing-meetup-01/</link>
       <pubDate>Sat, 10 Nov 2018 15:07:36 +0000</pubDate>
       
-      <guid>http://idouba.net/istio-tracing-meetup-01/</guid>
+      <guid>http://idouba.cc/istio-tracing-meetup-01/</guid>
       <description>前言 大家好，我是zhangchaomeng，来自华为Cloud BU，当前在做华为云应用服务网格。今天跟大家分享的主题是Istio调用链相关内容。通过剖析Istio的架构机制与Istio中调用链的工作原理来解答一个大家经常问道的一个问题：Istio是否像其官方文档中宣传的一样，对业务代码完全的无侵入，无需用做任何修改就可以完成所有的治理能力，包括调用链的埋点？ 关于这个问题，可以提前透漏下，答案是让人有点沮丧的，得改点。在Isito中你不用在自己的代码里使用各种埋点的SDK来做埋点的逻辑，但是必须要</description>
     </item>
     
     <item>
       <title>Opentracing 调用链服务端埋点</title>
-      <link>http://idouba.net/opentracing-serverside-tracing/</link>
+      <link>http://idouba.cc/opentracing-serverside-tracing/</link>
       <pubDate>Mon, 01 Jan 2018 14:17:31 +0000</pubDate>
       
-      <guid>http://idouba.net/opentracing-serverside-tracing/</guid>
+      <guid>http://idouba.cc/opentracing-serverside-tracing/</guid>
       <description>1 前言 通过一个最简单的代码例子来看使用opentracing在服务端埋点的逻辑。因为调用链的抽象模型都是来自dapper这篇论文，所以其他的方式也是类似，只是接口方法上稍有不同。 2 关于服务端埋点 主要流程看上是： 收到请求 从通信协议（如常用的HTTP header）中解出客户端传递的trace； 构造span 保存span 服务端返回请求 关闭span，将span的数据结构上传到调用链的数据存储节点。 下面结合一个例子中的额使用看下2 3 4 6四个调用链埋点步骤具体做了哪些事情。 3 主要流程 以最典型的http服务端为</description>
     </item>
     

@@ -2,45 +2,45 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>java on 爱豆吧！</title>
-    <link>http://idouba.net/categories/java/</link>
+    <link>http://idouba.cc/categories/java/</link>
     <description>Recent content in java on 爱豆吧！</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>&lt;a href=&#39;https://beian.miit.gov.cn/&#39; target=&#39;_blank&#39;&gt;浙ICP备18050493号-1&lt;/a&gt; 浙公网安备 33010802006262号</copyright>
-    <lastBuildDate>Tue, 01 Dec 2015 15:20:55 +0000</lastBuildDate><atom:link href="http://idouba.net/categories/java/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 01 Dec 2015 15:20:55 +0000</lastBuildDate><atom:link href="http://idouba.cc/categories/java/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Sort源码实现比较Go&amp;Java语言风格(3)</title>
-      <link>http://idouba.net/compare-go-and-java-style-by-sort-implement-3/</link>
+      <link>http://idouba.cc/compare-go-and-java-style-by-sort-implement-3/</link>
       <pubDate>Tue, 01 Dec 2015 15:20:55 +0000</pubDate>
       
-      <guid>http://idouba.net/compare-go-and-java-style-by-sort-implement-3/</guid>
+      <guid>http://idouba.cc/compare-go-and-java-style-by-sort-implement-3/</guid>
       <description>前面两部分分别描述了Go和java两种语言对sort的使用方式和源码实现。作为go初学者，最想做的是通过例子和源码来对新的语言有个理解。这部分就结合自己的理解整理下，可以看到，是非常主观。 4 语言语法比较 可以看到，两种语言的思路基本上是一样的，用户必须定义比较规则。在排序过程中都要考察集合长度，使用用户定义的比较规则，然后调整元素位置来达到排序的效果，对应go的interface要求的三个方法。但是还是有挺多不同。 首先从使用方式上看，go的规则（通过方法来体现）定义在集合上，并且定义了三个方法，分</description>
     </item>
     
     <item>
       <title>Sort源码实现比较Go&amp;Java语言风格(2)</title>
-      <link>http://idouba.net/compare-go-and-java-style-by-sort-implement-2/</link>
+      <link>http://idouba.cc/compare-go-and-java-style-by-sort-implement-2/</link>
       <pubDate>Tue, 01 Dec 2015 15:18:12 +0000</pubDate>
       
-      <guid>http://idouba.net/compare-go-and-java-style-by-sort-implement-2/</guid>
+      <guid>http://idouba.cc/compare-go-and-java-style-by-sort-implement-2/</guid>
       <description>接上篇博文，工作中用到了go排序的功能，作为go新手，在参照着例子，并读了go的sort.go部分涉及的源码，了解了go中排序的细节和实现算法，这些在上篇博文中有介绍。作为一个java ZHONGDU*2的用户，不由自主的想到了java中对应实现的样子，在这里也非常简要的贴出来，描述下java中排序的用法，和java源码中对应部分的实现，比较好奇java是和go一样，也用的时候快速排序吗？ 3 Java 排序源码解析 主要代码Looks like this： 3.1 使用例子 public class Person implements Comparable&amp;amp;lt;Person&amp;amp;gt; { private String name; private int age; @Override public int compareTo(Person o) { return this.age - o.age; } public static void main(String</description>
     </item>
     
     <item>
       <title>Sort源码实现比较Go&amp;Java语言风格(1)</title>
-      <link>http://idouba.net/compare-go-and-java-style-by-sort-implement-1/</link>
+      <link>http://idouba.cc/compare-go-and-java-style-by-sort-implement-1/</link>
       <pubDate>Tue, 01 Dec 2015 05:11:15 +0000</pubDate>
       
-      <guid>http://idouba.net/compare-go-and-java-style-by-sort-implement-1/</guid>
+      <guid>http://idouba.cc/compare-go-and-java-style-by-sort-implement-1/</guid>
       <description>1 前言 刚开始拥抱go，非常新鲜！才使用没多久，属于没有经验，有一点感受的那种。具体也说不了特别清楚，就是觉得：简单，直接，灵活，方便。作为一个 java 重度中毒（ZHANGDU*2）用户，过程中还是习惯对照着思考，至少在这个阶段。也好，发现对照着想，似乎更容易融会贯通。 对资深的go程序员来说，应该都是非常基础基本的问题，但也挡不住咱这个小白要发表下感想。 第一篇文章首先结合最近做一个小feature时用到go中元素排序的功能，顺便了解下两种语言中排序功能的使用方式，各自源码中对排序功能的实现。当然最主要的</description>
     </item>
     
     <item>
       <title>Java NIO 要点总结</title>
-      <link>http://idouba.net/java-nio-brief-intro/</link>
+      <link>http://idouba.cc/java-nio-brief-intro/</link>
       <pubDate>Wed, 21 Jan 2015 04:47:35 +0000</pubDate>
       
-      <guid>http://idouba.net/java-nio-brief-intro/</guid>
+      <guid>http://idouba.cc/java-nio-brief-intro/</guid>
       <description>来自Jenkov.com的比较完整但是足够brief的一个系列：Java NIO Tutorial，介绍了NIO的主要机制和其中几个重要对象的作用和工作。 1. 三个对象 NIO核心的三个对象： Channels Buffers Selectors 简单讲三个对象：Channel 像IO的流，Buffer就像名字一样，就是个缓存。 数据可以从Channel读到Buffer中，也可以从Buffer 写到Channel中。IO是面向流的，连接到一个源或者目标（对应于输入流或者输出流），如Java IO Overview中说明，比较典型的数据源和目标类型有：Files、Pipe</description>
     </item>
     

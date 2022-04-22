@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>join on 爱豆吧！</title>
-    <link>http://idouba.net/tags/join/</link>
+    <link>http://idouba.cc/tags/join/</link>
     <description>Recent content in join on 爱豆吧！</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>&lt;a href=&#39;https://beian.miit.gov.cn/&#39; target=&#39;_blank&#39;&gt;浙ICP备18050493号-1&lt;/a&gt; 浙公网安备 33010802006262号</copyright>
-    <lastBuildDate>Thu, 07 May 2015 07:11:32 +0000</lastBuildDate><atom:link href="http://idouba.net/tags/join/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 07 May 2015 07:11:32 +0000</lastBuildDate><atom:link href="http://idouba.cc/tags/join/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>从Search Sort到Join</title>
-      <link>http://idouba.net/learn_table_join_from_search_and_sort/</link>
+      <link>http://idouba.cc/learn_table_join_from_search_and_sort/</link>
       <pubDate>Thu, 07 May 2015 07:11:32 +0000</pubDate>
       
-      <guid>http://idouba.net/learn_table_join_from_search_and_sort/</guid>
+      <guid>http://idouba.cc/learn_table_join_from_search_and_sort/</guid>
       <description>发表于《程序员》2015年4月B的一篇文章，在博客归档下。根据杂志社要求，在自己博客发表该文章亦须注明：本文为CSDN编译整理，未经允许不得转载，如需转载请联系market#csdn.net(#换成@) 想通过原理来说明一些技术白皮书上“什么时候应该使用什么”这个“应该”后面的原因。通过数据结构中经典的排序查找算法来推倒解释数据库中几种经典的表连接背后的算法原理，和原理决定的在各种数据库中不同的应用和限制。以简单的算法来讲出数据库系统中看着核心强大功能的本质的算法设计。较之白皮书中不同数据库的不同</description>
     </item>
     

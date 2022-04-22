@@ -8,7 +8,7 @@
 <meta property="og:title" content="Pilot的设计亮点–《云原生服务网格Istio》书摘02" />
 <meta property="og:description" content="本节书摘来自华为云原生技术丛书《云原生服务网格Istio:原理,实践,架构与源码解析》一书架构篇的第14章司令官Pilot，第4节Pilot的设计亮点。更多内容参照原书，或者关注容器魔方公众号。作者：中虎 作为Istio数据面的司令官，Pilot控制中枢系统，它的性能好坏直接影响服务网格的大规模可扩展、配置时延等。如果Pilot的性能低，配置生成效率也低，那么它将难以管理大规模服务网格。比如，服务网格拥有成千上万服务及数十万服务实例，配置生成的效率很低，难以满足服务及Config更新带来的配置更新" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://idouba.net/istio-pilot-design-of-cloudnativeistio-02/" />
+<meta property="og:url" content="http://idouba.cc/istio-pilot-design-of-cloudnativeistio-02/" />
 <meta property="article:published_time" content="2019-07-19T14:44:37+00:00" />
 <meta property="article:modified_time" content="2019-07-19T14:44:37+00:00" />
 
@@ -24,7 +24,7 @@
   "@context": "http://schema.org",
   "@type": "BlogPosting",
   "headline": "Pilot的设计亮点–《云原生服务网格Istio》书摘02",
-  "url": "http:\/\/idouba.net\/istio-pilot-design-of-cloudnativeistio-02\/",
+  "url": "http:\/\/idouba.cc\/istio-pilot-design-of-cloudnativeistio-02\/",
   "wordCount": "3084",
   "datePublished": "2019-07-19T14:44:37+00:00",
   "dateModified": "2019-07-19T14:44:37+00:00",
@@ -38,19 +38,19 @@
 
 
 
-    <link rel="canonical" href="http://idouba.net/istio-pilot-design-of-cloudnativeistio-02/">
+    <link rel="canonical" href="http://idouba.cc/istio-pilot-design-of-cloudnativeistio-02/">
 
     <title>Pilot的设计亮点–《云原生服务网格Istio》书摘02 | 爱豆吧！</title>
 
     
     <!-- combined, minified CSS -->
     
-    <link href="http://idouba.net/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    <link href="http://idouba.cc/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
     
 
     <!-- minified Font Awesome for SVG icons -->
     
-    <script defer src="http://idouba.net/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+    <script defer src="http://idouba.cc/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
 
     <!-- RSS 2.0 feed -->
     
@@ -67,7 +67,7 @@
     <div class="blog-masthead">
       <div class="container">
         <nav class="nav blog-nav">
-          <a class="nav-link " href="http://idouba.net/">Home</a>
+          <a class="nav-link " href="http://idouba.cc/">Home</a>
         </nav>
       </div>
     </div>
@@ -77,7 +77,7 @@
     
     <header class="blog-header">
       <div class="container">
-        <h1 class="blog-title" dir="auto"><a href="http://idouba.net/" rel="home">爱豆吧！</a></h1>
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.cc/" rel="home">爱豆吧！</a></h1>
         <p class="lead blog-description" dir="auto">idouba@beta.</p>
       </div>
     </header>
@@ -94,7 +94,7 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.net/istio-pilot-design-of-cloudnativeistio-02/">Pilot的设计亮点–《云原生服务网格Istio》书摘02</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/istio-pilot-design-of-cloudnativeistio-02/">Pilot的设计亮点–《云原生服务网格Istio》书摘02</a></h2>
     <p class="blog-post-meta"><time datetime="2019-07-19T14:44:37Z">Fri Jul 19, 2019</time> by idouba in 
 <span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">istio</a>
 

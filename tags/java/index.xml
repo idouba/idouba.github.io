@@ -2,72 +2,72 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>java on 爱豆吧！</title>
-    <link>http://idouba.net/tags/java/</link>
+    <link>http://idouba.cc/tags/java/</link>
     <description>Recent content in java on 爱豆吧！</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>&lt;a href=&#39;https://beian.miit.gov.cn/&#39; target=&#39;_blank&#39;&gt;浙ICP备18050493号-1&lt;/a&gt; 浙公网安备 33010802006262号</copyright>
-    <lastBuildDate>Tue, 01 Dec 2015 15:20:55 +0000</lastBuildDate><atom:link href="http://idouba.net/tags/java/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 01 Dec 2015 15:20:55 +0000</lastBuildDate><atom:link href="http://idouba.cc/tags/java/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Sort源码实现比较Go&amp;Java语言风格(3)</title>
-      <link>http://idouba.net/compare-go-and-java-style-by-sort-implement-3/</link>
+      <link>http://idouba.cc/compare-go-and-java-style-by-sort-implement-3/</link>
       <pubDate>Tue, 01 Dec 2015 15:20:55 +0000</pubDate>
       
-      <guid>http://idouba.net/compare-go-and-java-style-by-sort-implement-3/</guid>
+      <guid>http://idouba.cc/compare-go-and-java-style-by-sort-implement-3/</guid>
       <description>前面两部分分别描述了Go和java两种语言对sort的使用方式和源码实现。作为go初学者，最想做的是通过例子和源码来对新的语言有个理解。这部分就结合自己的理解整理下，可以看到，是非常主观。 4 语言语法比较 可以看到，两种语言的思路基本上是一样的，用户必须定义比较规则。在排序过程中都要考察集合长度，使用用户定义的比较规则，然后调整元素位置来达到排序的效果，对应go的interface要求的三个方法。但是还是有挺多不同。 首先从使用方式上看，go的规则（通过方法来体现）定义在集合上，并且定义了三个方法，分</description>
     </item>
     
     <item>
       <title>Sort源码实现比较Go&amp;Java语言风格(2)</title>
-      <link>http://idouba.net/compare-go-and-java-style-by-sort-implement-2/</link>
+      <link>http://idouba.cc/compare-go-and-java-style-by-sort-implement-2/</link>
       <pubDate>Tue, 01 Dec 2015 15:18:12 +0000</pubDate>
       
-      <guid>http://idouba.net/compare-go-and-java-style-by-sort-implement-2/</guid>
+      <guid>http://idouba.cc/compare-go-and-java-style-by-sort-implement-2/</guid>
       <description>接上篇博文，工作中用到了go排序的功能，作为go新手，在参照着例子，并读了go的sort.go部分涉及的源码，了解了go中排序的细节和实现算法，这些在上篇博文中有介绍。作为一个java ZHONGDU*2的用户，不由自主的想到了java中对应实现的样子，在这里也非常简要的贴出来，描述下java中排序的用法，和java源码中对应部分的实现，比较好奇java是和go一样，也用的时候快速排序吗？ 3 Java 排序源码解析 主要代码Looks like this： 3.1 使用例子 public class Person implements Comparable&amp;amp;lt;Person&amp;amp;gt; { private String name; private int age; @Override public int compareTo(Person o) { return this.age - o.age; } public static void main(String</description>
     </item>
     
     <item>
       <title>Sort源码实现比较Go&amp;Java语言风格(1)</title>
-      <link>http://idouba.net/compare-go-and-java-style-by-sort-implement-1/</link>
+      <link>http://idouba.cc/compare-go-and-java-style-by-sort-implement-1/</link>
       <pubDate>Tue, 01 Dec 2015 05:11:15 +0000</pubDate>
       
-      <guid>http://idouba.net/compare-go-and-java-style-by-sort-implement-1/</guid>
+      <guid>http://idouba.cc/compare-go-and-java-style-by-sort-implement-1/</guid>
       <description>1 前言 刚开始拥抱go，非常新鲜！才使用没多久，属于没有经验，有一点感受的那种。具体也说不了特别清楚，就是觉得：简单，直接，灵活，方便。作为一个 java 重度中毒（ZHANGDU*2）用户，过程中还是习惯对照着思考，至少在这个阶段。也好，发现对照着想，似乎更容易融会贯通。 对资深的go程序员来说，应该都是非常基础基本的问题，但也挡不住咱这个小白要发表下感想。 第一篇文章首先结合最近做一个小feature时用到go中元素排序的功能，顺便了解下两种语言中排序功能的使用方式，各自源码中对排序功能的实现。当然最主要的</description>
     </item>
     
     <item>
       <title>戏（细）说Executor框架线程池任务执行全过程（下）</title>
-      <link>http://idouba.net/executor-framework-thread-pool-task-execution-part-02/</link>
+      <link>http://idouba.cc/executor-framework-thread-pool-task-execution-part-02/</link>
       <pubDate>Fri, 05 Jun 2015 16:02:43 +0000</pubDate>
       
-      <guid>http://idouba.net/executor-framework-thread-pool-task-execution-part-02/</guid>
+      <guid>http://idouba.cc/executor-framework-thread-pool-task-execution-part-02/</guid>
       <description>归档下发表于infoq.com 2015年6月的两篇文章。本来是一篇文章，经过Infoq编辑Alice Ding建议，拆分为&amp;lt;上&amp;gt;和&amp;lt;下&amp;gt;两部分。谢谢Alice对文章的细心校对，帮我发下了其中的很多问题。添加下infoq要求的声明：本文为InfoQ中文站特供稿件，首发地址为：http://www.infoq.com/cn/articles/executor-framework-thread-pool-task-execution-part-02 。如需转载，请与InfoQ中文站</description>
     </item>
     
     <item>
       <title>源码剖析AQS在几个同步工具类中的使用</title>
-      <link>http://idouba.net/sync-implementation-by-aqs/</link>
+      <link>http://idouba.cc/sync-implementation-by-aqs/</link>
       <pubDate>Mon, 06 Apr 2015 15:30:31 +0000</pubDate>
       
-      <guid>http://idouba.net/sync-implementation-by-aqs/</guid>
+      <guid>http://idouba.cc/sync-implementation-by-aqs/</guid>
       <description>1. 前言 AQS(AbstractQueuedSynchronizer)是 java.util.concurrent的基础。J.U.C中宣传的封装良好的好用的同步工具类Semaphore、CountDownLatch、ReentrantLock、ReentrantReadWriteLock、FutureTask等虽然各自都有不同特征，但是简单看一下源码，每个类内部都包含一个如下的内部类定义： 同时每个类内部都包含有这样一个属性，连属性名都一样！注释已经暗示了，该类的同步机制正是通过这个AQS的子类来完成</description>
     </item>
     
     <item>
       <title>Java NIO 要点总结</title>
-      <link>http://idouba.net/java-nio-brief-intro/</link>
+      <link>http://idouba.cc/java-nio-brief-intro/</link>
       <pubDate>Wed, 21 Jan 2015 04:47:35 +0000</pubDate>
       
-      <guid>http://idouba.net/java-nio-brief-intro/</guid>
+      <guid>http://idouba.cc/java-nio-brief-intro/</guid>
       <description>来自Jenkov.com的比较完整但是足够brief的一个系列：Java NIO Tutorial，介绍了NIO的主要机制和其中几个重要对象的作用和工作。 1. 三个对象 NIO核心的三个对象： Channels Buffers Selectors 简单讲三个对象：Channel 像IO的流，Buffer就像名字一样，就是个缓存。 数据可以从Channel读到Buffer中，也可以从Buffer 写到Channel中。IO是面向流的，连接到一个源或者目标（对应于输入流或者输出流），如Java IO Overview中说明，比较典型的数据源和目标类型有：Files、Pipe</description>
     </item>
     
     <item>
       <title>【hadoop代码笔记】Mapreduce shuffle过程之Map输出过程</title>
-      <link>http://idouba.net/hadoop_mapreduce_shuffle_map_output/</link>
+      <link>http://idouba.cc/hadoop_mapreduce_shuffle_map_output/</link>
       <pubDate>Wed, 05 Feb 2014 15:58:39 +0000</pubDate>
       
-      <guid>http://idouba.net/hadoop_mapreduce_shuffle_map_output/</guid>
+      <guid>http://idouba.cc/hadoop_mapreduce_shuffle_map_output/</guid>
       <description>&lt;h3 id=&#34;一概要描述&#34;&gt;&lt;strong&gt;一、概要描述&lt;/strong&gt;&lt;/h3&gt;
 &lt;p&gt;shuffle是MapReduce的一个核心过程，因此没有在&lt;a href=&#34;../hadoop_job_submit_conclusion/&#34; title=&#34;【hadoop代码笔记】hadoop作业提交之汇总&#34;&gt;前面的MapReduce作业提交的过程&lt;/a&gt;中描述，而是单独拿出来比较详细的描述。 根据官方的流程图示如下：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;../wp-content/uploads/2014/02/shuffle.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
@@ -86,19 +86,19 @@
     
     <item>
       <title>【hadoop代码笔记】hadoop作业提交之汇总</title>
-      <link>http://idouba.net/hadoop_job_submit_conclusion/</link>
+      <link>http://idouba.cc/hadoop_job_submit_conclusion/</link>
       <pubDate>Sat, 01 Feb 2014 13:25:44 +0000</pubDate>
       
-      <guid>http://idouba.net/hadoop_job_submit_conclusion/</guid>
+      <guid>http://idouba.cc/hadoop_job_submit_conclusion/</guid>
       <description>一、概述 在本篇博文中，试图通过代码了解hadoop job执行的整个流程。即用户提交的mapreduce的jar文件、输入提交到hadoop的集群，并在集群中运行。重点在代码的角度描述整个流程，有些细节描述的并不那么详细。 汇总的代码流程图附件:hadoop_mapreduce_jobsubmit 二、主要流程 Jobclient通过RPC方式调用到jobtracker的submitJob方法提交作业，包括作业的jar、分片和作业描述。 JobTracker的submitJob方法吧job加入到内存队列中</description>
     </item>
     
     <item>
       <title>【hadoop代码笔记】hadoop作业提交之Child启动map任务</title>
-      <link>http://idouba.net/hadoop_mapreduce_tasktracker_child_map/</link>
+      <link>http://idouba.cc/hadoop_mapreduce_tasktracker_child_map/</link>
       <pubDate>Wed, 22 Jan 2014 07:00:53 +0000</pubDate>
       
-      <guid>http://idouba.net/hadoop_mapreduce_tasktracker_child_map/</guid>
+      <guid>http://idouba.cc/hadoop_mapreduce_tasktracker_child_map/</guid>
       <description>&lt;p&gt;&lt;strong&gt;一、概要描述&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;在&lt;a href=&#34;../hadoop_mapreduce_tasktracker_launch_task&#34;&gt;上篇博文描&lt;/a&gt;述了TaskTracker启动一个独立的java进程来执行Map或Reduce任务。在本篇和&lt;a href=&#34;../hadoop_mapreduce_tasktracker_child_reduce&#34;&gt;下篇博文&lt;/a&gt;中我们会关注启动的那个入口是org.apache.hadoop.mapred.Child的这个Java进程是如何执行用户定义的map或Reduce任务的。&lt;/p&gt;
 &lt;p&gt;接&lt;a href=&#34;../hadoop_mapreduce_tasktracker_launch_task&#34;&gt;上篇文章&lt;/a&gt;，TaskRunner线程执行中，会构造一个_java –D** Child address port tasked_这 样第一个java命令，单独启动一个java进程。在Child的main函数中通过TaskUmbilicalProtocol协议，从 TaskTracker获得需要执行的Task，并调用Task的run方法来执行，而Task的run方法会通过java反射机制构造 Mapper，InputFormat，mapperContext，然后调用构造的mapper的run方法执行mapper操作。&lt;/p&gt;
@@ -125,10 +125,10 @@
     
     <item>
       <title>【hadoop代码笔记】hadoop作业提交之TaskTracker 启动task</title>
-      <link>http://idouba.net/hadoop_mapreduce_tasktracker_launch_task/</link>
+      <link>http://idouba.cc/hadoop_mapreduce_tasktracker_launch_task/</link>
       <pubDate>Tue, 21 Jan 2014 13:58:12 +0000</pubDate>
       
-      <guid>http://idouba.net/hadoop_mapreduce_tasktracker_launch_task/</guid>
+      <guid>http://idouba.cc/hadoop_mapreduce_tasktracker_launch_task/</guid>
       <description>&lt;p&gt;&lt;strong&gt;一、概要描述&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;在&lt;a href=&#34;../hadoop_mapreduce_tasktracker_retrieve_task&#34;&gt;上篇博文&lt;/a&gt;描 述了TaskTracker从Jobtracker如何从JobTracker获取到要执行的Task。在从JobTracker获取到 LaunchTaskAction后，执行addToTaskQueue方法来把要执行的Task加入到queue。在本篇博文中，我们来关注下该方法 后，TaskTracker怎么来处理这些Task。&lt;/p&gt;
 &lt;p&gt;实际上，TaskTracker初始化时，会初始化并启动两个TaskLauncher类型的线程，mapLauncher，reduceLauncher。在TaskTracker从JobTracher获取到任务后，对应的会把任务添加到两个 TaskLauncher的Queue中，其实是TaskLauncher维护的一个列表List&lt;!-- raw HTML omitted --&gt; tasksToLaunch。&lt;/p&gt;
@@ -150,55 +150,55 @@
     
     <item>
       <title>【hadoop代码笔记】hadoop作业提交之Job初始化</title>
-      <link>http://idouba.net/hadoop_mapreduce_job_init/</link>
+      <link>http://idouba.cc/hadoop_mapreduce_job_init/</link>
       <pubDate>Sun, 19 Jan 2014 14:54:46 +0000</pubDate>
       
-      <guid>http://idouba.net/hadoop_mapreduce_job_init/</guid>
+      <guid>http://idouba.cc/hadoop_mapreduce_job_init/</guid>
       <description>一、概要描述 在上一篇博文中主要描述了JobTracker和其几个服务（或功能）模块的接收到提交的job后的一些处理。其中很重要的一部分就作业的初始化。因为代码片段图的表达问题，本应该在上篇描述的内容，分开在本篇描述。 二、 流程描述 代码也接上文的最后一个方法EagerTaskInitializationListener的 jobAdded方法把JobInProgress类型的job放到List类型的 jobInitQueue中，有个单独的线程会对新加入的每个job进行初始化，其初始化调用的方法就是Job</description>
     </item>
     
     <item>
       <title>【hadoop代码笔记】hadoop作业提交之TaskTracker获取Task</title>
-      <link>http://idouba.net/hadoop_mapreduce_tasktracker_retrieve_task/</link>
+      <link>http://idouba.cc/hadoop_mapreduce_tasktracker_retrieve_task/</link>
       <pubDate>Sat, 18 Jan 2014 14:50:50 +0000</pubDate>
       
-      <guid>http://idouba.net/hadoop_mapreduce_tasktracker_retrieve_task/</guid>
+      <guid>http://idouba.cc/hadoop_mapreduce_tasktracker_retrieve_task/</guid>
       <description>一、概要描述 在上上一篇博文和上一篇博文中 分别描述了jobTracker和其服务（功能）模块初始化完成后，接收JobClient提交的作业，并进行初始化。本文着重描 述，JobTracker如何选择作业的Task分发到TaskTracker。本文只是描述一个TaskTracker如何从JobTracker获取 Task任务。Task任务在TaskTracker如何执行将在后面博文中描述。 二、 流程描述 TaskTracker在run中调用offerService()方法一直死循环的去连接Jobtracke</description>
     </item>
     
     <item>
       <title>【hadoop代码笔记hadoop作业提交之JobTracker等相关功能模块初始化</title>
-      <link>http://idouba.net/hadoop_job_submit_service_init/</link>
+      <link>http://idouba.cc/hadoop_job_submit_service_init/</link>
       <pubDate>Fri, 17 Jan 2014 14:36:20 +0000</pubDate>
       
-      <guid>http://idouba.net/hadoop_job_submit_service_init/</guid>
+      <guid>http://idouba.cc/hadoop_job_submit_service_init/</guid>
       <description>一、概要描述 本文重点描述在JobTracker一端接收作业、调度作业等几个模块的初始化工作。想过模块的介绍会在其他文章中比较详细的描述。受理作业提交在下一篇文章中会进行描述。 为了表达的尽可能清晰一点只是摘录出影响逻辑流转的主要代码。重点强调直接的协作调用，每个内部完成的逻辑（一直可以更细的说明、有些细节可能自己也理解并不深刻:-(）在后续会描述。 主要包括JobTracker、TaskScheduler（此处以FairScheduler为例）、JobInProgressListener（以用的较多</description>
     </item>
     
     <item>
       <title>【hadoop代码笔记】hadoop作业提交之JobTracker接收作业提交</title>
-      <link>http://idouba.net/hadoop_mapreduce_jobadded/</link>
+      <link>http://idouba.cc/hadoop_mapreduce_jobadded/</link>
       <pubDate>Thu, 16 Jan 2014 13:39:25 +0000</pubDate>
       
-      <guid>http://idouba.net/hadoop_mapreduce_jobadded/</guid>
+      <guid>http://idouba.cc/hadoop_mapreduce_jobadded/</guid>
       <description>一、概要描述 在上一篇博文中主要描述了JobTracker接收作业的几个服务（或功能）模块的初始化过程。本节将介绍这些服务（或功能）是如何接收到提交的job。本来作业的初始化也可以在本节内描述，但是涉及到JobInProgress的初始化过程放在一张图上太拥挤，就分开到下一篇文章中描述。 二、 流程描述 JobClient通过RPC的方式向JobTracker提交作业； 调用JobTracker的submitJob方法。该方法是JobTracker向外提供的供调用的提交作业的接口。 submit方法中调用J</description>
     </item>
     
     <item>
       <title>【hadoop代码笔记】Hadoop作业提交中EagerTaskInitializationListener的作用</title>
-      <link>http://idouba.net/eagertaskinitializationlistener/</link>
+      <link>http://idouba.cc/eagertaskinitializationlistener/</link>
       <pubDate>Wed, 15 Jan 2014 14:05:42 +0000</pubDate>
       
-      <guid>http://idouba.net/eagertaskinitializationlistener/</guid>
+      <guid>http://idouba.cc/eagertaskinitializationlistener/</guid>
       <description>一、概述 继承自JobInProgressListener，实现了jobAdded，jobRemoved，jobUpdated方法。哦，不能说实现，应该说继承，JobInProgressListener居然是个抽象类，看着怎么这样的listener也应该是个interface。 在该listener被注册后，就响应jobAdded，jobRemoved，jobUpdated动作。在EagerTaskInitializationListener中，响应这三种动作来维护内部的一个job列表（Listjo</description>
     </item>
     
     <item>
       <title>【hadoop代码笔记】通过JobClient对Jobtracker的调用详细了解Hadoop RPC</title>
-      <link>http://idouba.net/haddoop_rpc_jobclient_jobtracker/</link>
+      <link>http://idouba.cc/haddoop_rpc_jobclient_jobtracker/</link>
       <pubDate>Sat, 11 Jan 2014 12:02:36 +0000</pubDate>
       
-      <guid>http://idouba.net/haddoop_rpc_jobclient_jobtracker/</guid>
+      <guid>http://idouba.cc/haddoop_rpc_jobclient_jobtracker/</guid>
       <description>Hadoop的各个服务间，客户端和服务间的交互采用RPC方式。关于这种机制介绍的资源很多，也不难理解，这里不做背景介绍。只是尝试从Jobclient向JobTracker提交作业这个最简单的客户端服务器交互的代码中，去跟踪和了解下RPC是怎么被使用的。不同于准备发表博客时搜索的几篇博文，试图通过一种具体的场景来介绍，属于比较初级。其他DataNode和Namenode之间，Tasktracker和JobTracker之间的交互基本也都一样。为了引用的代码篇幅尽可能少，忽略了代码中写日志（包括Me</description>
     </item>
     
