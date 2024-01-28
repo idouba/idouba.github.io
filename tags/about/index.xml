@@ -2,20 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>about on 爱豆吧！</title>
-    <link>http://idouba.cc/tags/about/</link>
+    <link>http://idouba.com/tags/about/</link>
     <description>Recent content in about on 爱豆吧！</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>&lt;a href=&#39;https://beian.miit.gov.cn/&#39; target=&#39;_blank&#39;&gt;浙ICP备18050493号-1&lt;/a&gt; 浙公网安备 33010802006262号</copyright>
-    <lastBuildDate>Sat, 08 Jun 2013 14:22:52 +0000</lastBuildDate><atom:link href="http://idouba.cc/tags/about/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 08 Jun 2013 14:22:52 +0000</lastBuildDate>
+    <atom:link href="http://idouba.com/tags/about/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>给某某导师的一封邮件</title>
-      <link>http://idouba.cc/history-letter-to-someone-mentor-so-called/</link>
+      <link>http://idouba.com/history-letter-to-someone-mentor-so-called/</link>
       <pubDate>Sat, 08 Jun 2013 14:22:52 +0000</pubDate>
-      
-      <guid>http://idouba.cc/history-letter-to-someone-mentor-so-called/</guid>
+      <guid>http://idouba.com/history-letter-to-someone-mentor-so-called/</guid>
       <description>整理之前常用的网易邮箱的时候，发现几篇比较长的邮件，感受到了当年的年轻气盛，被自己小激励了一把。当年觉得很私密的邮件，现在倒愿意在自己的空间归档下,不然可能就真的扔掉了。是研究生入学前给当年向某位知名人生导师写的邮件，并未得到回复:-(。看到邮件里描述自己的还挺可爱的，虽然使劲回忆起来有些太心酸太囧的经历没有好意思写进去。但是有的啰嗦，怪不得人家不回呢，呵呵。好像更像是自己和自己说话。有热情，有干劲，但是似乎有一点偏执。现在回头看。豆妈说一定不要让我们豆豆也这么辛苦。很感激当年的这些经历，也不太</description>
     </item>
-    
   </channel>
 </rss>

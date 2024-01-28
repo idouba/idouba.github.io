@@ -8,14 +8,14 @@
 <meta property="og:title" content="详析Istio最新v1alpha3 流量管理规则" />
 <meta property="og:description" content="前言 isto提供了一种简单的语法来描述如何进行流量管理。可以给服务配置熔断、超时、重试等规则，也可以配置规则来切分流量从而实现金丝雀发布、A/B测试等发布功能。一个典型场景如官方文档中的case，将一定比例的流量或者满足一定条件的请求的流量切分到一个特定版本上。 Istio的route rule从v1alpha1到v1alpha3 变化特别大，可以看出对规则设计上完全进行了重构。看上去v1alpha3功能上更强了，可以预见未来1.0后alpha3风格的语法因为提供了更强的表达能力，将逐步取代alpha" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://idouba.cc/istio-traffic-management-v1alpha3-by-example/" />
+<meta property="og:url" content="http://idouba.com/istio-traffic-management-v1alpha3-by-example/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2018-05-05T15:53:52+00:00" />
 <meta property="article:modified_time" content="2018-05-05T15:53:52+00:00" />
 
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="详析Istio最新v1alpha3 流量管理规则"/>
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="详析Istio最新v1alpha3 流量管理规则"/>
 <meta name="twitter:description" content="前言 isto提供了一种简单的语法来描述如何进行流量管理。可以给服务配置熔断、超时、重试等规则，也可以配置规则来切分流量从而实现金丝雀发布、A/B测试等发布功能。一个典型场景如官方文档中的case，将一定比例的流量或者满足一定条件的请求的流量切分到一个特定版本上。 Istio的route rule从v1alpha1到v1alpha3 变化特别大，可以看出对规则设计上完全进行了重构。看上去v1alpha3功能上更强了，可以预见未来1.0后alpha3风格的语法因为提供了更强的表达能力，将逐步取代alpha"/>
-<meta name="generator" content="Hugo 0.80.0" />
+<meta name="generator" content="Hugo 0.121.2">
 
 
     
@@ -24,7 +24,7 @@
   "@context": "http://schema.org",
   "@type": "BlogPosting",
   "headline": "详析Istio最新v1alpha3 流量管理规则",
-  "url": "http:\/\/idouba.cc\/istio-traffic-management-v1alpha3-by-example\/",
+  "url": "http:\/\/idouba.com\/istio-traffic-management-v1alpha3-by-example\/",
   "wordCount": "3645",
   "datePublished": "2018-05-05T15:53:52+00:00",
   "dateModified": "2018-05-05T15:53:52+00:00",
@@ -38,19 +38,19 @@
 
 
 
-    <link rel="canonical" href="http://idouba.cc/istio-traffic-management-v1alpha3-by-example/">
+    <link rel="canonical" href="http://idouba.com/istio-traffic-management-v1alpha3-by-example/">
 
     <title>详析Istio最新v1alpha3 流量管理规则 | 爱豆吧！</title>
 
     
     <!-- combined, minified CSS -->
     
-    <link href="http://idouba.cc/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    <link href="http://idouba.com/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
     
 
     <!-- minified Font Awesome for SVG icons -->
     
-    <script defer src="http://idouba.cc/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+    <script defer src="http://idouba.com/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
 
     <!-- RSS 2.0 feed -->
     
@@ -67,7 +67,7 @@
     <div class="blog-masthead">
       <div class="container">
         <nav class="nav blog-nav">
-          <a class="nav-link " href="http://idouba.cc/">Home</a>
+          <a class="nav-link " href="http://idouba.com/">Home</a>
         </nav>
       </div>
     </div>
@@ -77,7 +77,7 @@
     
     <header class="blog-header">
       <div class="container">
-        <h1 class="blog-title" dir="auto"><a href="http://idouba.cc/" rel="home">爱豆吧！</a></h1>
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.com/" rel="home">爱豆吧！</a></h1>
         <p class="lead blog-description" dir="auto">idouba@beta.</p>
       </div>
     </header>
@@ -94,7 +94,7 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/istio-traffic-management-v1alpha3-by-example/">详析Istio最新v1alpha3 流量管理规则</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.com/istio-traffic-management-v1alpha3-by-example/">详析Istio最新v1alpha3 流量管理规则</a></h2>
     <p class="blog-post-meta"><time datetime="2018-05-05T15:53:52Z">Sat May 05, 2018</time> by douba in 
 <span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">Istio</a>
 
@@ -108,73 +108,73 @@
 <p>Istio的route rule从<a href="https://istio.io/docs/reference/config/istio.routing.v1alpha1.html">v1alpha1</a>到<a href="https://istio.io/docs/reference/config/istio.networking.v1alpha3.html">v1alpha3</a> 变化特别大，可以看出对规则设计上完全进行了重构。看上去v1alpha3功能上更强了，可以预见未来1.0后alpha3风格的语法因为提供了更强的表达能力，将逐步取代alpha1成为标准语法。但是初次使用或者中alpha1直接切过来一般还会有些不适应。因为较之alpha1，<a href="https://istio.io/docs/reference/config/istio.networking.v1alpha3.html">v1alpha3</a>使用上还是有点复杂。导致原来用v1alpha1配置的规则场景在v1alpha3下不是很容易的配置出来。因此本文一个典型例子来说明下v1alpha3规则的使用上的细节和注意要点。</p>
 <h3 id="例子">例子</h3>
 <p>先看下这个例子，以及基于这个例子的简单规则解释，后面再结合其中的每一个部分来了解v1alpha3规则的设计和使用方式。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-    <span style="color:#960050;background-color:#1e0010">“apiVersion”:</span> <span style="color:#960050;background-color:#1e0010">“networking.istio.io/v1alpha3”,</span>
-    <span style="color:#960050;background-color:#1e0010">“kind”:</span> <span style="color:#960050;background-color:#1e0010">“VirtualService”,</span>
-    <span style="color:#960050;background-color:#1e0010">“metadata”:</span> <span style="color:#960050;background-color:#1e0010">{</span>
-        <span style="color:#960050;background-color:#1e0010">“name”:</span> <span style="color:#960050;background-color:#1e0010">“reviews-route”</span>
-    }<span style="color:#960050;background-color:#1e0010">,</span>
-    <span style="color:#960050;background-color:#1e0010">“spec”:</span> {
-        <span style="color:#960050;background-color:#1e0010">“hosts”:</span> <span style="color:#960050;background-color:#1e0010">[</span>
-            <span style="color:#f92672">&#34;reviews&#34;</span>
-        <span style="color:#960050;background-color:#1e0010">]</span>,
-        <span style="color:#960050;background-color:#1e0010">“gateways”:</span> <span style="color:#960050;background-color:#1e0010">[</span>
-            <span style="color:#f92672">&#34;bookinfo&#34;</span>,
-            <span style="color:#f92672">&#34;mesh&#34;</span>
-        <span style="color:#960050;background-color:#1e0010">]</span>,
-        <span style="color:#960050;background-color:#1e0010">“http”:</span> <span style="color:#960050;background-color:#1e0010">[</span>
-            <span style="color:#960050;background-color:#1e0010">{</span>
-                <span style="color:#f92672">&#34;match&#34;</span>: [
-                    {
-                        <span style="color:#f92672">&#34;headers&#34;</span>: {
-                            <span style="color:#f92672">&#34;cookie&#34;</span>: {
-                                <span style="color:#f92672">&#34;regex&#34;</span>: <span style="color:#e6db74">&#34;^(.*?;)?(user=jason)(;.*)?&#34;</span>
-                            }
-                        },
-                        <span style="color:#f92672">&#34;uri&#34;</span>: {
-                            <span style="color:#f92672">&#34;prefix&#34;</span>: <span style="color:#e6db74">&#34;/catalog1&#34;</span>
-                        }
-                    },
-                    {
-                        <span style="color:#f92672">&#34;uri&#34;</span>: {
-                            <span style="color:#f92672">&#34;prefix&#34;</span>: <span style="color:#e6db74">&#34;/catalog2&#34;</span>
-                        }
-                    }
-                ],
-                <span style="color:#960050;background-color:#1e0010">“rewrite”:</span> <span style="color:#960050;background-color:#1e0010">{</span>
-                    <span style="color:#960050;background-color:#1e0010">“uri”:</span> <span style="color:#960050;background-color:#1e0010">“/newcatalog”</span>
-                }<span style="color:#960050;background-color:#1e0010">,</span>
-                <span style="color:#960050;background-color:#1e0010">“route”:</span> [
-                    {
-                        <span style="color:#f92672">&#34;destination&#34;</span>: {
-                            <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;reviews&#34;</span>,
-                            <span style="color:#f92672">&#34;subset&#34;</span>: <span style="color:#e6db74">&#34;v2&#34;</span>
-                        },
-                        <span style="color:#f92672">&#34;weight&#34;</span>: <span style="color:#ae81ff">25</span>
-                    },
-                    {
-                        <span style="color:#f92672">&#34;destination&#34;</span>: {
-                            <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;reviews&#34;</span>,
-                            <span style="color:#f92672">&#34;subset&#34;</span>: <span style="color:#e6db74">&#34;v3&#34;</span>
-                        },
-                        <span style="color:#f92672">&#34;weight&#34;</span>: <span style="color:#ae81ff">75</span>
-                    }
-                ]
-            <span style="color:#960050;background-color:#1e0010">},</span>
-            {
-                <span style="color:#960050;background-color:#1e0010">“route”:</span> <span style="color:#960050;background-color:#1e0010">[</span>
-                    <span style="color:#960050;background-color:#1e0010">{</span>
-                        <span style="color:#f92672">&#34;destination&#34;</span>: {
-                            <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;reviews&#34;</span>,
-                            <span style="color:#f92672">&#34;subset&#34;</span>: <span style="color:#e6db74">&#34;v1&#34;</span>
-                        }
-                    }
-                <span style="color:#960050;background-color:#1e0010">]</span>
-            <span style="color:#960050;background-color:#1e0010">}</span>
-        <span style="color:#960050;background-color:#1e0010">]</span>
-    <span style="color:#960050;background-color:#1e0010">}</span>
-<span style="color:#960050;background-color:#1e0010">}</span>
-</code></pre></div><p>在这个例子中通过VirtualService对reviews这个服务配置了route规则。HTTP请求满足如下条件：cookie中满足”^(.*?;)?(user=jason)(;.*)?这个表达式，并且uri以catalog1开头；或者uri以catalog2开头。这样的http请求会被route到reviews的v2和v3版本上，其中请求中75%的到v3，25%的到v2，并且uri会被重写成newcatalog。不满足以上条件的其他的请求会路由到v1版本上。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#960050;background-color:#1e0010">“apiVersion”:</span> <span style="color:#960050;background-color:#1e0010">“networking.istio.io/v1alpha3”,</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#960050;background-color:#1e0010">“kind”:</span> <span style="color:#960050;background-color:#1e0010">“VirtualService”,</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#960050;background-color:#1e0010">“metadata”:</span> <span style="color:#960050;background-color:#1e0010">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">“name”:</span> <span style="color:#960050;background-color:#1e0010">“reviews-route”</span>
+</span></span><span style="display:flex;"><span>    }<span style="color:#960050;background-color:#1e0010">,</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#960050;background-color:#1e0010">“spec”:</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">“hosts”:</span> <span style="color:#960050;background-color:#1e0010">[</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;reviews&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">]</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">“gateways”:</span> <span style="color:#960050;background-color:#1e0010">[</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;bookinfo&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;mesh&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">]</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">“http”:</span> <span style="color:#960050;background-color:#1e0010">[</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#960050;background-color:#1e0010">{</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;match&#34;</span>: [
+</span></span><span style="display:flex;"><span>                    {
+</span></span><span style="display:flex;"><span>                        <span style="color:#f92672">&#34;headers&#34;</span>: {
+</span></span><span style="display:flex;"><span>                            <span style="color:#f92672">&#34;cookie&#34;</span>: {
+</span></span><span style="display:flex;"><span>                                <span style="color:#f92672">&#34;regex&#34;</span>: <span style="color:#e6db74">&#34;^(.*?;)?(user=jason)(;.*)?&#34;</span>
+</span></span><span style="display:flex;"><span>                            }
+</span></span><span style="display:flex;"><span>                        },
+</span></span><span style="display:flex;"><span>                        <span style="color:#f92672">&#34;uri&#34;</span>: {
+</span></span><span style="display:flex;"><span>                            <span style="color:#f92672">&#34;prefix&#34;</span>: <span style="color:#e6db74">&#34;/catalog1&#34;</span>
+</span></span><span style="display:flex;"><span>                        }
+</span></span><span style="display:flex;"><span>                    },
+</span></span><span style="display:flex;"><span>                    {
+</span></span><span style="display:flex;"><span>                        <span style="color:#f92672">&#34;uri&#34;</span>: {
+</span></span><span style="display:flex;"><span>                            <span style="color:#f92672">&#34;prefix&#34;</span>: <span style="color:#e6db74">&#34;/catalog2&#34;</span>
+</span></span><span style="display:flex;"><span>                        }
+</span></span><span style="display:flex;"><span>                    }
+</span></span><span style="display:flex;"><span>                ],
+</span></span><span style="display:flex;"><span>                <span style="color:#960050;background-color:#1e0010">“rewrite”:</span> <span style="color:#960050;background-color:#1e0010">{</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#960050;background-color:#1e0010">“uri”:</span> <span style="color:#960050;background-color:#1e0010">“/newcatalog”</span>
+</span></span><span style="display:flex;"><span>                }<span style="color:#960050;background-color:#1e0010">,</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#960050;background-color:#1e0010">“route”:</span> [
+</span></span><span style="display:flex;"><span>                    {
+</span></span><span style="display:flex;"><span>                        <span style="color:#f92672">&#34;destination&#34;</span>: {
+</span></span><span style="display:flex;"><span>                            <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;reviews&#34;</span>,
+</span></span><span style="display:flex;"><span>                            <span style="color:#f92672">&#34;subset&#34;</span>: <span style="color:#e6db74">&#34;v2&#34;</span>
+</span></span><span style="display:flex;"><span>                        },
+</span></span><span style="display:flex;"><span>                        <span style="color:#f92672">&#34;weight&#34;</span>: <span style="color:#ae81ff">25</span>
+</span></span><span style="display:flex;"><span>                    },
+</span></span><span style="display:flex;"><span>                    {
+</span></span><span style="display:flex;"><span>                        <span style="color:#f92672">&#34;destination&#34;</span>: {
+</span></span><span style="display:flex;"><span>                            <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;reviews&#34;</span>,
+</span></span><span style="display:flex;"><span>                            <span style="color:#f92672">&#34;subset&#34;</span>: <span style="color:#e6db74">&#34;v3&#34;</span>
+</span></span><span style="display:flex;"><span>                        },
+</span></span><span style="display:flex;"><span>                        <span style="color:#f92672">&#34;weight&#34;</span>: <span style="color:#ae81ff">75</span>
+</span></span><span style="display:flex;"><span>                    }
+</span></span><span style="display:flex;"><span>                ]
+</span></span><span style="display:flex;"><span>            <span style="color:#960050;background-color:#1e0010">},</span>
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                <span style="color:#960050;background-color:#1e0010">“route”:</span> <span style="color:#960050;background-color:#1e0010">[</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#960050;background-color:#1e0010">{</span>
+</span></span><span style="display:flex;"><span>                        <span style="color:#f92672">&#34;destination&#34;</span>: {
+</span></span><span style="display:flex;"><span>                            <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;reviews&#34;</span>,
+</span></span><span style="display:flex;"><span>                            <span style="color:#f92672">&#34;subset&#34;</span>: <span style="color:#e6db74">&#34;v1&#34;</span>
+</span></span><span style="display:flex;"><span>                        }
+</span></span><span style="display:flex;"><span>                    }
+</span></span><span style="display:flex;"><span>                <span style="color:#960050;background-color:#1e0010">]</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#960050;background-color:#1e0010">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#960050;background-color:#1e0010">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">}</span>
+</span></span></code></pre></div><p>在这个例子中通过VirtualService对reviews这个服务配置了route规则。HTTP请求满足如下条件：cookie中满足”^(.*?;)?(user=jason)(;.*)?这个表达式，并且uri以catalog1开头；或者uri以catalog2开头。这样的http请求会被route到reviews的v2和v3版本上，其中请求中75%的到v3，25%的到v2，并且uri会被重写成newcatalog。不满足以上条件的其他的请求会路由到v1版本上。</p>
 <p>再看场景，这是一个非常典型的灰度发布的case，从生产版本上分流一部分满足特定条件的请求到一个新版本上，使用实际流量来对一个灰度版本进行评价，切分一部分流量走回v2和v3的灰度版本，其他流量还是走在原版本上。当新的版本评估满足要求时，提升这个版本未生成版本，接收生产上的流量。</p>
 <p>为了尽可能的cover到规则的主要设计，这个例子其实有点复杂。现实场景在做灰度时，要么是将满足一定请求条件的流量从生产版本上引流出来，要么是忽略条件将一定比例的流量引流出来，很少有两个叠加在一起的，满足条件流量再按照比例分配到两个不同的版本上。</p>
 <h3 id="规则说明">规则说明</h3>
@@ -226,24 +226,24 @@
 <p>部分在上面的结构中有提及，其他通过在上面配置额外的属性，或者结合其他的规则配置即可完成。理解了个规则的设计思路和一些细节，配置这里治理规则还是非常容易的。总体来说istio提供给我们了一个表达能力很强的的流量治理规则。</p>
 <h3 id="找错">找错</h3>
 <p><a href="https://istio.io/docs/reference/config/istio.networking.v1alpha3.html#HTTPMatchRequest">HTTPMatchRequest</a> 下面这个例子和文档中描述的结构貌似有不一致或者歧义的地方，通过本文中的介绍，不知是否能找出来。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">networking.istio.io/v1alpha3</span>
-<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">VirtualService</span>
-<span style="color:#f92672">metadata</span>:
-  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">ratings-route</span>
-<span style="color:#f92672">spec</span>:
-  <span style="color:#f92672">hosts</span>:
-  - <span style="color:#ae81ff">ratings</span>
-  <span style="color:#f92672">http</span>:
-  - <span style="color:#f92672">match</span>:
-    - <span style="color:#f92672">headers</span>:
-        <span style="color:#f92672">cookie</span>:
-          <span style="color:#f92672">regex</span>: <span style="color:#e6db74">&#34;^(.*?;)?(user=jason)(;.*)?&#34;</span>
-        <span style="color:#f92672">uri</span>:
-          <span style="color:#f92672">prefix</span>: <span style="color:#e6db74">&#34;/ratings/v2/&#34;</span>
-    <span style="color:#f92672">route</span>: 
-    - <span style="color:#f92672">destination</span>:
-        <span style="color:#f92672">name</span>: <span style="color:#ae81ff">ratings</span>
-</code></pre></div><p> </p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">networking.istio.io/v1alpha3</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">kind</span>: <span style="color:#ae81ff">VirtualService</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">ratings-route</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">hosts</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">ratings</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">http</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">match</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">headers</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">cookie</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">regex</span>: <span style="color:#e6db74">&#34;^(.*?;)?(user=jason)(;.*)?&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">uri</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">prefix</span>: <span style="color:#e6db74">&#34;/ratings/v2/&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">route</span>: 
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">destination</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">name</span>: <span style="color:#ae81ff">ratings</span>
+</span></span></code></pre></div><p> </p>
 
 
   

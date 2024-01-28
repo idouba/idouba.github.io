@@ -2,20 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>japanese on 爱豆吧！</title>
-    <link>http://idouba.cc/tags/japanese/</link>
+    <link>http://idouba.com/tags/japanese/</link>
     <description>Recent content in japanese on 爱豆吧！</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>&lt;a href=&#39;https://beian.miit.gov.cn/&#39; target=&#39;_blank&#39;&gt;浙ICP备18050493号-1&lt;/a&gt; 浙公网安备 33010802006262号</copyright>
-    <lastBuildDate>Mon, 13 Dec 2004 13:26:10 +0000</lastBuildDate><atom:link href="http://idouba.cc/tags/japanese/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 13 Dec 2004 13:26:10 +0000</lastBuildDate>
+    <atom:link href="http://idouba.com/tags/japanese/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>一次日语朝礼</title>
-      <link>http://idouba.cc/daily-japanese-speak-in-office-in-chinese/</link>
+      <link>http://idouba.com/daily-japanese-speak-in-office-in-chinese/</link>
       <pubDate>Mon, 13 Dec 2004 13:26:10 +0000</pubDate>
-      
-      <guid>http://idouba.cc/daily-japanese-speak-in-office-in-chinese/</guid>
+      <guid>http://idouba.com/daily-japanese-speak-in-office-in-chinese/</guid>
       <description>那时候每天早上都要在办公室用日语朗读一篇文章(后来我们小组要求背诵了)，对学习日语确实有很大帮助。平时也就和合作的日本team那边的人写邮件讨论功能，开始大部分句式也都是从senior的人那儿拷贝来，替换中间的词汇来表达。包括入职才一个多月就写的几十页的功能文档，都是这么干的。每天轮流一个人来朗读一篇文章倒确实对大家的口语锻炼有挺多好处的，尽管我们这些当时年龄资历都很不够的人，一般在两周多的项目总结会上，一般也就只是听，没有说的份。做多每次会前，逐个自我介绍，用日语自我介绍下，我叫什么，负责那个</description>
     </item>
-    
   </channel>
 </rss>

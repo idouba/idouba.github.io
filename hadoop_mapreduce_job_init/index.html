@@ -8,14 +8,14 @@
 <meta property="og:title" content="【hadoop代码笔记】hadoop作业提交之Job初始化" />
 <meta property="og:description" content="一、概要描述 在上一篇博文中主要描述了JobTracker和其几个服务（或功能）模块的接收到提交的job后的一些处理。其中很重要的一部分就作业的初始化。因为代码片段图的表达问题，本应该在上篇描述的内容，分开在本篇描述。 二、 流程描述 代码也接上文的最后一个方法EagerTaskInitializationListener的 jobAdded方法把JobInProgress类型的job放到List类型的 jobInitQueue中，有个单独的线程会对新加入的每个job进行初始化，其初始化调用的方法就是Job" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://idouba.cc/hadoop_mapreduce_job_init/" />
+<meta property="og:url" content="http://idouba.com/hadoop_mapreduce_job_init/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2014-01-19T14:54:46+00:00" />
 <meta property="article:modified_time" content="2014-01-19T14:54:46+00:00" />
 
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="【hadoop代码笔记】hadoop作业提交之Job初始化"/>
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="【hadoop代码笔记】hadoop作业提交之Job初始化"/>
 <meta name="twitter:description" content="一、概要描述 在上一篇博文中主要描述了JobTracker和其几个服务（或功能）模块的接收到提交的job后的一些处理。其中很重要的一部分就作业的初始化。因为代码片段图的表达问题，本应该在上篇描述的内容，分开在本篇描述。 二、 流程描述 代码也接上文的最后一个方法EagerTaskInitializationListener的 jobAdded方法把JobInProgress类型的job放到List类型的 jobInitQueue中，有个单独的线程会对新加入的每个job进行初始化，其初始化调用的方法就是Job"/>
-<meta name="generator" content="Hugo 0.80.0" />
+<meta name="generator" content="Hugo 0.121.2">
 
 
     
@@ -24,7 +24,7 @@
   "@context": "http://schema.org",
   "@type": "BlogPosting",
   "headline": "【hadoop代码笔记】hadoop作业提交之Job初始化",
-  "url": "http:\/\/idouba.cc\/hadoop_mapreduce_job_init\/",
+  "url": "http:\/\/idouba.com\/hadoop_mapreduce_job_init\/",
   "wordCount": "1532",
   "datePublished": "2014-01-19T14:54:46+00:00",
   "dateModified": "2014-01-19T14:54:46+00:00",
@@ -32,25 +32,25 @@
     "@type": "Person",
     "name": "douba"
   },
-  "keywords": "hadoop, java, mapreduce, source"
+  "keywords": "hadoop, java, mapreduce"
 }
 </script>
 
 
 
-    <link rel="canonical" href="http://idouba.cc/hadoop_mapreduce_job_init/">
+    <link rel="canonical" href="http://idouba.com/hadoop_mapreduce_job_init/">
 
     <title>【hadoop代码笔记】hadoop作业提交之Job初始化 | 爱豆吧！</title>
 
     
     <!-- combined, minified CSS -->
     
-    <link href="http://idouba.cc/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    <link href="http://idouba.com/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
     
 
     <!-- minified Font Awesome for SVG icons -->
     
-    <script defer src="http://idouba.cc/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+    <script defer src="http://idouba.com/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
 
     <!-- RSS 2.0 feed -->
     
@@ -67,7 +67,7 @@
     <div class="blog-masthead">
       <div class="container">
         <nav class="nav blog-nav">
-          <a class="nav-link " href="http://idouba.cc/">Home</a>
+          <a class="nav-link " href="http://idouba.com/">Home</a>
         </nav>
       </div>
     </div>
@@ -77,7 +77,7 @@
     
     <header class="blog-header">
       <div class="container">
-        <h1 class="blog-title" dir="auto"><a href="http://idouba.cc/" rel="home">爱豆吧！</a></h1>
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.com/" rel="home">爱豆吧！</a></h1>
         <p class="lead blog-description" dir="auto">idouba@beta.</p>
       </div>
     </header>
@@ -94,12 +94,12 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/hadoop_mapreduce_job_init/">【hadoop代码笔记】hadoop作业提交之Job初始化</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.com/hadoop_mapreduce_job_init/">【hadoop代码笔记】hadoop作业提交之Job初始化</a></h2>
     <p class="blog-post-meta"><time datetime="2014-01-19T14:54:46Z">Sun Jan 19, 2014</time> by douba in 
 <span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/hadoop/" rel="category tag">hadoop</a>
 
 
-<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/hadoop/" rel="tag">hadoop</a>, <a href="/tags/java/" rel="tag">java</a>, <a href="/tags/mapreduce/" rel="tag">mapreduce</a>, <a href="/tags/source/" rel="tag">source</a>
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/hadoop/" rel="tag">hadoop</a>, <a href="/tags/java/" rel="tag">java</a>, <a href="/tags/mapreduce/" rel="tag">mapreduce</a>
 
 </p>
   </header>
@@ -121,17 +121,17 @@
 <p><strong>Hadoop Job初始化</strong></p>
 <p><strong>三、代码详细</strong></p>
 <p><strong>1. <a href="../EagerTaskInitializationListener">EagerTaskInitializationListener</a>的内部InitJob线程的run方法。调用JobInProgress的初始化方法。</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">InitJob</span> <span style="color:#66d9ef">implements</span> Runnable <span style="color:#f92672">{</span>
-    <span style="color:#66d9ef">private</span> JobInProgress job<span style="color:#f92672">;</span>
-    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">InitJob</span><span style="color:#f92672">(</span>JobInProgress job<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-      <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">job</span> <span style="color:#f92672">=</span> job<span style="color:#f92672">;</span>
-    <span style="color:#f92672">}</span>
-<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span><span style="color:#f92672">()</span> 
-   <span style="color:#f92672">{</span>
-      job<span style="color:#f92672">.</span><span style="color:#a6e22e">initTasks</span><span style="color:#f92672">();</span>            
-    <span style="color:#f92672">}</span>
-  <span style="color:#f92672">}</span>
-</code></pre></div><p><strong>2. JobInProgress 类的initTasks方法。</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">InitJob</span> <span style="color:#66d9ef">implements</span> Runnable {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> JobInProgress job;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">InitJob</span>(JobInProgress job) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">job</span> <span style="color:#f92672">=</span> job;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span>() 
+</span></span><span style="display:flex;"><span>   {
+</span></span><span style="display:flex;"><span>      job.<span style="color:#a6e22e">initTasks</span>();            
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><p><strong>2. JobInProgress 类的initTasks方法。</strong></p>
 <p><strong>主要流程：</strong></p>
 <p>1）根据读入的split确定map的数量，每个split一个map</p>
 <p>2）如果Task数大于该jobTracker支持的最大task数，则抛出异常。</p>
@@ -142,114 +142,113 @@
 </ol>
 <p>6）计算并且最少剩下多少map task ，才可以开始Reduce task。默认是总的map task的5%，即大部分Map task完成后，就可以开始reduce task了。</p>
 <p>//1）    根据读入的split确定map的数量，每个split一个map</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">String jobFile <span style="color:#f92672">=</span> profile<span style="color:#f92672">.</span><span style="color:#a6e22e">getJobFile</span><span style="color:#f92672">();</span>
-            Path sysDir <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Path<span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">jobtracker</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getSystemDir</span><span style="color:#f92672">());</span>
-            FileSystem fs <span style="color:#f92672">=</span> sysDir<span style="color:#f92672">.</span><span style="color:#a6e22e">getFileSystem</span><span style="color:#f92672">(</span>conf<span style="color:#f92672">);</span>
-            DataInputStream splitFile <span style="color:#f92672">=</span>
-              fs<span style="color:#f92672">.</span><span style="color:#a6e22e">open</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Path<span style="color:#f92672">(</span>conf<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;mapred.job.split.file&#34;</span><span style="color:#f92672">)));</span>
-            JobClient<span style="color:#f92672">.</span><span style="color:#a6e22e">RawSplit</span><span style="color:#f92672">[]</span> splits<span style="color:#f92672">;</span>
-              splits <span style="color:#f92672">=</span> JobClient<span style="color:#f92672">.</span><span style="color:#a6e22e">readSplitFile</span><span style="color:#f92672">(</span>splitFile<span style="color:#f92672">);</span>         
-            numMapTasks <span style="color:#f92672">=</span> splits<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">;</span>
-</code></pre></div><p>//2）如果Task数大于该jobTracker支持的最大task数，则抛出异常。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">int</span> maxTasks <span style="color:#f92672">=</span> jobtracker<span style="color:#f92672">.</span><span style="color:#a6e22e">getMaxTasksPerJob</span><span style="color:#f92672">();</span>
-            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>maxTasks <span style="color:#f92672">&gt;</span> 0 <span style="color:#f92672">&amp;&amp;</span> numMapTasks <span style="color:#f92672">+</span> numReduceTasks <span style="color:#f92672">&gt;</span> maxTasks<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-              <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IOException<span style="color:#f92672">(</span>
-                        <span style="color:#e6db74">&#34;The number of tasks for this job &#34;</span> <span style="color:#f92672">+</span> 
-                        <span style="color:#f92672">(</span>numMapTasks <span style="color:#f92672">+</span> numReduceTasks<span style="color:#f92672">)</span> <span style="color:#f92672">+</span>
-                        <span style="color:#e6db74">&#34; exceeds the configured limit &#34;</span> <span style="color:#f92672">+</span> maxTasks<span style="color:#f92672">);</span>
-            <span style="color:#f92672">}</span>           
-</code></pre></div><p>//3）根据split的数量初始化maps</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">            maps <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> TaskInProgress<span style="color:#f92672">[</span>numMapTasks<span style="color:#f92672">];</span>
-            <span style="color:#66d9ef">for</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i<span style="color:#f92672">=</span>0<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;</span> numMapTasks<span style="color:#f92672">;</span> <span style="color:#f92672">++</span>i<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-              inputLength <span style="color:#f92672">+=</span> splits<span style="color:#f92672">[</span>i<span style="color:#f92672">].</span><span style="color:#a6e22e">getDataLength</span><span style="color:#f92672">();</span>
-              maps<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> TaskInProgress<span style="color:#f92672">(</span>jobId<span style="color:#f92672">,</span> jobFile<span style="color:#f92672">,</span> 
-                                           splits<span style="color:#f92672">[</span>i<span style="color:#f92672">],</span> 
-                                           jobtracker<span style="color:#f92672">,</span> conf<span style="color:#f92672">,</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">,</span> i<span style="color:#f92672">);</span>
-            <span style="color:#f92672">}</span>
-            LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Input size for job &#34;</span><span style="color:#f92672">+</span> jobId <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; = &#34;</span> <span style="color:#f92672">+</span> inputLength<span style="color:#f92672">);</span>
-            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>numMapTasks <span style="color:#f92672">&gt;</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span> 
-              LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Split info for job:&#34;</span> <span style="color:#f92672">+</span> jobId <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; with &#34;</span> <span style="color:#f92672">+</span> 
-                       splits<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; splits:&#34;</span><span style="color:#f92672">);</span>
-              nonRunningMapCache <span style="color:#f92672">=</span> createCache<span style="color:#f92672">(</span>splits<span style="color:#f92672">,</span> maxLevel<span style="color:#f92672">);</span>
-            <span style="color:#f92672">}</span>
-    
-            <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">launchTime</span> <span style="color:#f92672">=</span> System<span style="color:#f92672">.</span><span style="color:#a6e22e">currentTimeMillis</span><span style="color:#f92672">();</span>
-</code></pre></div><p>//4）如果没有split，表示job已经成功结束。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>numMapTasks <span style="color:#f92672">==</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-              <span style="color:#75715e">//设定作业的完成时间避免下次还会判断。
-</span><span style="color:#75715e"></span>              <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">finishTime</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">launchTime</span><span style="color:#f92672">;</span>
-              status<span style="color:#f92672">.</span><span style="color:#a6e22e">setSetupProgress</span><span style="color:#f92672">(</span>1<span style="color:#f92672">.</span><span style="color:#a6e22e">0f</span><span style="color:#f92672">);</span>
-              status<span style="color:#f92672">.</span><span style="color:#a6e22e">setMapProgress</span><span style="color:#f92672">(</span>1<span style="color:#f92672">.</span><span style="color:#a6e22e">0f</span><span style="color:#f92672">);</span>
-              status<span style="color:#f92672">.</span><span style="color:#a6e22e">setReduceProgress</span><span style="color:#f92672">(</span>1<span style="color:#f92672">.</span><span style="color:#a6e22e">0f</span><span style="color:#f92672">);</span>
-              status<span style="color:#f92672">.</span><span style="color:#a6e22e">setCleanupProgress</span><span style="color:#f92672">(</span>1<span style="color:#f92672">.</span><span style="color:#a6e22e">0f</span><span style="color:#f92672">);</span>
-              status<span style="color:#f92672">.</span><span style="color:#a6e22e">setRunState</span><span style="color:#f92672">(</span>JobStatus<span style="color:#f92672">.</span><span style="color:#a6e22e">SUCCEEDED</span><span style="color:#f92672">);</span>
-              tasksInited<span style="color:#f92672">.</span><span style="color:#a6e22e">set</span><span style="color:#f92672">(</span><span style="color:#66d9ef">true</span><span style="color:#f92672">);</span>
-              JobHistory<span style="color:#f92672">.</span><span style="color:#a6e22e">JobInfo</span><span style="color:#f92672">.</span><span style="color:#a6e22e">logInited</span><span style="color:#f92672">(</span>profile<span style="color:#f92672">.</span><span style="color:#a6e22e">getJobID</span><span style="color:#f92672">(),</span> 
-                                            <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">launchTime</span><span style="color:#f92672">,</span> 0<span style="color:#f92672">,</span> 0<span style="color:#f92672">);</span>
-              JobHistory<span style="color:#f92672">.</span><span style="color:#a6e22e">JobInfo</span><span style="color:#f92672">.</span><span style="color:#a6e22e">logFinished</span><span style="color:#f92672">(</span>profile<span style="color:#f92672">.</span><span style="color:#a6e22e">getJobID</span><span style="color:#f92672">(),</span> 
-                                             <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">finishTime</span><span style="color:#f92672">,</span> 0<span style="color:#f92672">,</span> 0<span style="color:#f92672">,</span> 0<span style="color:#f92672">,</span> 0<span style="color:#f92672">,</span>
-                                             getCounters<span style="color:#f92672">());</span>
-              <span style="color:#66d9ef">return</span><span style="color:#f92672">;</span>
-            <span style="color:#f92672">}</span>
-</code></pre></div><p>//5) 根据指定的reduce数量numReduceTasks创建reduce task</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">            <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">reduces</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> TaskInProgress<span style="color:#f92672">[</span>numReduceTasks<span style="color:#f92672">];</span>
-            <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;</span> numReduceTasks<span style="color:#f92672">;</span> i<span style="color:#f92672">++)</span> <span style="color:#f92672">{</span>
-              reduces<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> TaskInProgress<span style="color:#f92672">(</span>jobId<span style="color:#f92672">,</span> jobFile<span style="color:#f92672">,</span> 
-                                              numMapTasks<span style="color:#f92672">,</span> i<span style="color:#f92672">,</span> 
-                                              jobtracker<span style="color:#f92672">,</span> conf<span style="color:#f92672">,</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
-              nonRunningReduces<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>reduces<span style="color:#f92672">[</span>i<span style="color:#f92672">]);</span>
-            <span style="color:#f92672">}</span>
-</code></pre></div><pre><code>      // 6）计算最少剩下多少map task ，才可以开始Reduce task。默认是总的map task的5%，即大部分Map task完成后，就可以开始reduce task了。
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>String jobFile <span style="color:#f92672">=</span> profile.<span style="color:#a6e22e">getJobFile</span>();
+</span></span><span style="display:flex;"><span>            Path sysDir <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Path(<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">jobtracker</span>.<span style="color:#a6e22e">getSystemDir</span>());
+</span></span><span style="display:flex;"><span>            FileSystem fs <span style="color:#f92672">=</span> sysDir.<span style="color:#a6e22e">getFileSystem</span>(conf);
+</span></span><span style="display:flex;"><span>            DataInputStream splitFile <span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>              fs.<span style="color:#a6e22e">open</span>(<span style="color:#66d9ef">new</span> Path(conf.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;mapred.job.split.file&#34;</span>)));
+</span></span><span style="display:flex;"><span>            JobClient.<span style="color:#a6e22e">RawSplit</span><span style="color:#f92672">[]</span> splits;
+</span></span><span style="display:flex;"><span>              splits <span style="color:#f92672">=</span> JobClient.<span style="color:#a6e22e">readSplitFile</span>(splitFile);         
+</span></span><span style="display:flex;"><span>            numMapTasks <span style="color:#f92672">=</span> splits.<span style="color:#a6e22e">length</span>;
+</span></span></code></pre></div><p>//2）如果Task数大于该jobTracker支持的最大task数，则抛出异常。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">int</span> maxTasks <span style="color:#f92672">=</span> jobtracker.<span style="color:#a6e22e">getMaxTasksPerJob</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (maxTasks <span style="color:#f92672">&gt;</span> 0 <span style="color:#f92672">&amp;&amp;</span> numMapTasks <span style="color:#f92672">+</span> numReduceTasks <span style="color:#f92672">&gt;</span> maxTasks) {
+</span></span><span style="display:flex;"><span>              <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IOException(
+</span></span><span style="display:flex;"><span>                        <span style="color:#e6db74">&#34;The number of tasks for this job &#34;</span> <span style="color:#f92672">+</span> 
+</span></span><span style="display:flex;"><span>                        (numMapTasks <span style="color:#f92672">+</span> numReduceTasks) <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>                        <span style="color:#e6db74">&#34; exceeds the configured limit &#34;</span> <span style="color:#f92672">+</span> maxTasks);
+</span></span><span style="display:flex;"><span>            }           
+</span></span></code></pre></div><p>//3）根据split的数量初始化maps</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>            maps <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> TaskInProgress<span style="color:#f92672">[</span>numMapTasks<span style="color:#f92672">]</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">int</span> i<span style="color:#f92672">=</span>0; i <span style="color:#f92672">&lt;</span> numMapTasks; <span style="color:#f92672">++</span>i) {
+</span></span><span style="display:flex;"><span>              inputLength <span style="color:#f92672">+=</span> splits<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span>.<span style="color:#a6e22e">getDataLength</span>();
+</span></span><span style="display:flex;"><span>              maps<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> TaskInProgress(jobId, jobFile, 
+</span></span><span style="display:flex;"><span>                                           splits<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span>, 
+</span></span><span style="display:flex;"><span>                                           jobtracker, conf, <span style="color:#66d9ef">this</span>, i);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            LOG.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;Input size for job &#34;</span><span style="color:#f92672">+</span> jobId <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; = &#34;</span> <span style="color:#f92672">+</span> inputLength);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (numMapTasks <span style="color:#f92672">&gt;</span> 0) { 
+</span></span><span style="display:flex;"><span>              LOG.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;Split info for job:&#34;</span> <span style="color:#f92672">+</span> jobId <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; with &#34;</span> <span style="color:#f92672">+</span> 
+</span></span><span style="display:flex;"><span>                       splits.<span style="color:#a6e22e">length</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; splits:&#34;</span>);
+</span></span><span style="display:flex;"><span>              nonRunningMapCache <span style="color:#f92672">=</span> createCache(splits, maxLevel);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">launchTime</span> <span style="color:#f92672">=</span> System.<span style="color:#a6e22e">currentTimeMillis</span>();
+</span></span></code></pre></div><p>//4）如果没有split，表示job已经成功结束。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (numMapTasks <span style="color:#f92672">==</span> 0) {
+</span></span><span style="display:flex;"><span>              <span style="color:#75715e">//设定作业的完成时间避免下次还会判断。</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">finishTime</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">launchTime</span>;
+</span></span><span style="display:flex;"><span>              status.<span style="color:#a6e22e">setSetupProgress</span>(1.<span style="color:#a6e22e">0f</span>);
+</span></span><span style="display:flex;"><span>              status.<span style="color:#a6e22e">setMapProgress</span>(1.<span style="color:#a6e22e">0f</span>);
+</span></span><span style="display:flex;"><span>              status.<span style="color:#a6e22e">setReduceProgress</span>(1.<span style="color:#a6e22e">0f</span>);
+</span></span><span style="display:flex;"><span>              status.<span style="color:#a6e22e">setCleanupProgress</span>(1.<span style="color:#a6e22e">0f</span>);
+</span></span><span style="display:flex;"><span>              status.<span style="color:#a6e22e">setRunState</span>(JobStatus.<span style="color:#a6e22e">SUCCEEDED</span>);
+</span></span><span style="display:flex;"><span>              tasksInited.<span style="color:#a6e22e">set</span>(<span style="color:#66d9ef">true</span>);
+</span></span><span style="display:flex;"><span>              JobHistory.<span style="color:#a6e22e">JobInfo</span>.<span style="color:#a6e22e">logInited</span>(profile.<span style="color:#a6e22e">getJobID</span>(), 
+</span></span><span style="display:flex;"><span>                                            <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">launchTime</span>, 0, 0);
+</span></span><span style="display:flex;"><span>              JobHistory.<span style="color:#a6e22e">JobInfo</span>.<span style="color:#a6e22e">logFinished</span>(profile.<span style="color:#a6e22e">getJobID</span>(), 
+</span></span><span style="display:flex;"><span>                                             <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">finishTime</span>, 0, 0, 0, 0,
+</span></span><span style="display:flex;"><span>                                             getCounters());
+</span></span><span style="display:flex;"><span>              <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span></code></pre></div><p>//5) 根据指定的reduce数量numReduceTasks创建reduce task</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>            <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">reduces</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> TaskInProgress<span style="color:#f92672">[</span>numReduceTasks<span style="color:#f92672">]</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0; i <span style="color:#f92672">&lt;</span> numReduceTasks; i<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>              reduces<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> TaskInProgress(jobId, jobFile, 
+</span></span><span style="display:flex;"><span>                                              numMapTasks, i, 
+</span></span><span style="display:flex;"><span>                                              jobtracker, conf, <span style="color:#66d9ef">this</span>);
+</span></span><span style="display:flex;"><span>              nonRunningReduces.<span style="color:#a6e22e">add</span>(reduces<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span>);
+</span></span><span style="display:flex;"><span>            }
+</span></span></code></pre></div><pre><code>      // 6）计算最少剩下多少map task ，才可以开始Reduce task。默认是总的map task的5%，即大部分Map task完成后，就可以开始reduce task了。
 </code></pre>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">            completedMapsForReduceSlowstart <span style="color:#f92672">=</span> 
-              <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span><span style="color:#f92672">)</span>Math<span style="color:#f92672">.</span><span style="color:#a6e22e">ceil</span><span style="color:#f92672">(</span>
-                  <span style="color:#f92672">(</span>conf<span style="color:#f92672">.</span><span style="color:#a6e22e">getFloat</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;mapred.reduce.slowstart.completed.maps&#34;</span><span style="color:#f92672">,</span> 
-                                 DEFAULT_COMPLETED_MAPS_PERCENT_FOR_REDUCE_SLOWSTART<span style="color:#f92672">)</span> <span style="color:#f92672">*</span> 
-                   numMapTasks<span style="color:#f92672">));</span>
-    
-            tasksInited<span style="color:#f92672">.</span><span style="color:#a6e22e">set</span><span style="color:#f92672">(</span><span style="color:#66d9ef">true</span><span style="color:#f92672">);</span>
-        <span style="color:#f92672">}</span>
-</code></pre></div><p><strong>3. TaskInProgress的构造函数</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>            completedMapsForReduceSlowstart <span style="color:#f92672">=</span> 
+</span></span><span style="display:flex;"><span>              (<span style="color:#66d9ef">int</span>)Math.<span style="color:#a6e22e">ceil</span>(
+</span></span><span style="display:flex;"><span>                  (conf.<span style="color:#a6e22e">getFloat</span>(<span style="color:#e6db74">&#34;mapred.reduce.slowstart.completed.maps&#34;</span>, 
+</span></span><span style="display:flex;"><span>                                 DEFAULT_COMPLETED_MAPS_PERCENT_FOR_REDUCE_SLOWSTART) <span style="color:#f92672">*</span> 
+</span></span><span style="display:flex;"><span>                   numMapTasks));
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>            tasksInited.<span style="color:#a6e22e">set</span>(<span style="color:#66d9ef">true</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span></code></pre></div><p><strong>3. TaskInProgress的构造函数</strong></p>
 <p><strong>有构造MapTask的构造函数和构造ReduceTask的构造函数。分别是如下。其主要区别在于构造mapTask是要传入输入分片信息的RawSplit，而Reduce Task则不需要。两个构造函数都要调用init方法，进行其他的初始化。</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#a6e22e">TaskInProgress</span><span style="color:#f92672">(</span>JobID jobid<span style="color:#f92672">,</span> String jobFile<span style="color:#f92672">,</span> 
-                        RawSplit rawSplit<span style="color:#f92672">,</span> 
-                        JobTracker jobtracker<span style="color:#f92672">,</span> JobConf conf<span style="color:#f92672">,</span> 
-                        JobInProgress job<span style="color:#f92672">,</span> <span style="color:#66d9ef">int</span> partition<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">jobFile</span> <span style="color:#f92672">=</span> jobFile<span style="color:#f92672">;</span>
-    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">rawSplit</span> <span style="color:#f92672">=</span> rawSplit<span style="color:#f92672">;</span>
-    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">jobtracker</span> <span style="color:#f92672">=</span> jobtracker<span style="color:#f92672">;</span>
-    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">job</span> <span style="color:#f92672">=</span> job<span style="color:#f92672">;</span>
-    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">conf</span> <span style="color:#f92672">=</span> conf<span style="color:#f92672">;</span>
-    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">partition</span> <span style="color:#f92672">=</span> partition<span style="color:#f92672">;</span>
-    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">maxSkipRecords</span> <span style="color:#f92672">=</span> SkipBadRecords<span style="color:#f92672">.</span><span style="color:#a6e22e">getMapperMaxSkipRecords</span><span style="color:#f92672">(</span>conf<span style="color:#f92672">);</span>
-    setMaxTaskAttempts<span style="color:#f92672">();</span>
-    init<span style="color:#f92672">(</span>jobid<span style="color:#f92672">);</span>
-  <span style="color:#f92672">}</span>
-</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#a6e22e">TaskInProgress</span><span style="color:#f92672">(</span>JobID jobid<span style="color:#f92672">,</span> String jobFile<span style="color:#f92672">,</span> 
-                        <span style="color:#66d9ef">int</span> numMaps<span style="color:#f92672">,</span> 
-                        <span style="color:#66d9ef">int</span> partition<span style="color:#f92672">,</span> JobTracker jobtracker<span style="color:#f92672">,</span> JobConf conf<span style="color:#f92672">,</span>
-                        JobInProgress job<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">jobFile</span> <span style="color:#f92672">=</span> jobFile<span style="color:#f92672">;</span>
-    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">numMaps</span> <span style="color:#f92672">=</span> numMaps<span style="color:#f92672">;</span>
-    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">partition</span> <span style="color:#f92672">=</span> partition<span style="color:#f92672">;</span>
-    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">jobtracker</span> <span style="color:#f92672">=</span> jobtracker<span style="color:#f92672">;</span>
-    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">job</span> <span style="color:#f92672">=</span> job<span style="color:#f92672">;</span>
-    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">conf</span> <span style="color:#f92672">=</span> conf<span style="color:#f92672">;</span>
-    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">maxSkipRecords</span> <span style="color:#f92672">=</span> SkipBadRecords<span style="color:#f92672">.</span><span style="color:#a6e22e">getReducerMaxSkipGroups</span><span style="color:#f92672">(</span>conf<span style="color:#f92672">);</span>
-    setMaxTaskAttempts<span style="color:#f92672">();</span>
-    init<span style="color:#f92672">(</span>jobid<span style="color:#f92672">);</span>
-  <span style="color:#f92672">}</span>
-</code></pre></div><ol start="4">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#a6e22e">TaskInProgress</span>(JobID jobid, String jobFile, 
+</span></span><span style="display:flex;"><span>                        RawSplit rawSplit, 
+</span></span><span style="display:flex;"><span>                        JobTracker jobtracker, JobConf conf, 
+</span></span><span style="display:flex;"><span>                        JobInProgress job, <span style="color:#66d9ef">int</span> partition) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">jobFile</span> <span style="color:#f92672">=</span> jobFile;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">rawSplit</span> <span style="color:#f92672">=</span> rawSplit;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">jobtracker</span> <span style="color:#f92672">=</span> jobtracker;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">job</span> <span style="color:#f92672">=</span> job;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">conf</span> <span style="color:#f92672">=</span> conf;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">partition</span> <span style="color:#f92672">=</span> partition;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">maxSkipRecords</span> <span style="color:#f92672">=</span> SkipBadRecords.<span style="color:#a6e22e">getMapperMaxSkipRecords</span>(conf);
+</span></span><span style="display:flex;"><span>    setMaxTaskAttempts();
+</span></span><span style="display:flex;"><span>    init(jobid);
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#a6e22e">TaskInProgress</span>(JobID jobid, String jobFile, 
+</span></span><span style="display:flex;"><span>                        <span style="color:#66d9ef">int</span> numMaps, 
+</span></span><span style="display:flex;"><span>                        <span style="color:#66d9ef">int</span> partition, JobTracker jobtracker, JobConf conf,
+</span></span><span style="display:flex;"><span>                        JobInProgress job) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">jobFile</span> <span style="color:#f92672">=</span> jobFile;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">numMaps</span> <span style="color:#f92672">=</span> numMaps;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">partition</span> <span style="color:#f92672">=</span> partition;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">jobtracker</span> <span style="color:#f92672">=</span> jobtracker;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">job</span> <span style="color:#f92672">=</span> job;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">conf</span> <span style="color:#f92672">=</span> conf;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">maxSkipRecords</span> <span style="color:#f92672">=</span> SkipBadRecords.<span style="color:#a6e22e">getReducerMaxSkipGroups</span>(conf);
+</span></span><span style="display:flex;"><span>    setMaxTaskAttempts();
+</span></span><span style="display:flex;"><span>    init(jobid);
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><ol start="4">
 <li><strong>TaskInProgress的init方法。初始化写map和reduce类型task都需要的初始化信息。</strong></li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">init</span><span style="color:#f92672">(</span>JobID jobId<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">startTime</span> <span style="color:#f92672">=</span> System<span style="color:#f92672">.</span><span style="color:#a6e22e">currentTimeMillis</span><span style="color:#f92672">();</span>
-    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">id</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> TaskID<span style="color:#f92672">(</span>jobId<span style="color:#f92672">,</span> isMapTask<span style="color:#f92672">(),</span> partition<span style="color:#f92672">);</span>
-    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">skipping</span> <span style="color:#f92672">=</span> startSkipping<span style="color:#f92672">();</span>
-  <span style="color:#f92672">}</span>
-</code></pre></div><p>完。</p>
-<pre><code>
-</code></pre>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">init</span>(JobID jobId) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">startTime</span> <span style="color:#f92672">=</span> System.<span style="color:#a6e22e">currentTimeMillis</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">id</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> TaskID(jobId, isMapTask(), partition);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">skipping</span> <span style="color:#f92672">=</span> startSkipping();
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><p>完。</p>
+<pre tabindex="0"><code></code></pre>
 
   
 

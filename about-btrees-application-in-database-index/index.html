@@ -8,14 +8,14 @@
 <meta property="og:title" content="B树在数据库索引中的应用剖析（原稿）" />
 <meta property="og:description" content="引言 关于数据库索引，随便Google一个Oracle index，Mysql index总有大量的结果出来，其中不乏某某索引之n条经典建议。笔者认为，较之借鉴，在搞清楚了自己的需求的基础上，对备选方案的原理有个尽可能深入全面的了解会更有利于我们的选择和决策。因为某种方案或者技术呈现出某种优势（包括可能没有被介绍到但一定存在的限制），不是定义出来的，而是因为其实现机制决定的。就像LinkedList和ArrayList分别适用于什么应用不是Document里面定义的，是由其本身的结构决定的。数据库的索" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://idouba.cc/about-btrees-application-in-database-index/" />
+<meta property="og:url" content="http://idouba.com/about-btrees-application-in-database-index/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2014-03-20T08:18:48+00:00" />
 <meta property="article:modified_time" content="2014-03-20T08:18:48+00:00" />
 
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="B树在数据库索引中的应用剖析（原稿）"/>
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="B树在数据库索引中的应用剖析（原稿）"/>
 <meta name="twitter:description" content="引言 关于数据库索引，随便Google一个Oracle index，Mysql index总有大量的结果出来，其中不乏某某索引之n条经典建议。笔者认为，较之借鉴，在搞清楚了自己的需求的基础上，对备选方案的原理有个尽可能深入全面的了解会更有利于我们的选择和决策。因为某种方案或者技术呈现出某种优势（包括可能没有被介绍到但一定存在的限制），不是定义出来的，而是因为其实现机制决定的。就像LinkedList和ArrayList分别适用于什么应用不是Document里面定义的，是由其本身的结构决定的。数据库的索"/>
-<meta name="generator" content="Hugo 0.80.0" />
+<meta name="generator" content="Hugo 0.121.2">
 
 
     
@@ -24,33 +24,33 @@
   "@context": "http://schema.org",
   "@type": "BlogPosting",
   "headline": "B树在数据库索引中的应用剖析（原稿）",
-  "url": "http:\/\/idouba.cc\/about-btrees-application-in-database-index\/",
-  "wordCount": "8240",
+  "url": "http:\/\/idouba.com\/about-btrees-application-in-database-index\/",
+  "wordCount": "8216",
   "datePublished": "2014-03-20T08:18:48+00:00",
   "dateModified": "2014-03-20T08:18:48+00:00",
   "author": {
     "@type": "Person",
     "name": "douba"
   },
-  "keywords": "database, data structure, index, mssql, mysql, oracle, programmer, published"
+  "keywords": "数据库, 发表, 索引, 《程序员》"
 }
 </script>
 
 
 
-    <link rel="canonical" href="http://idouba.cc/about-btrees-application-in-database-index/">
+    <link rel="canonical" href="http://idouba.com/about-btrees-application-in-database-index/">
 
     <title>B树在数据库索引中的应用剖析（原稿） | 爱豆吧！</title>
 
     
     <!-- combined, minified CSS -->
     
-    <link href="http://idouba.cc/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    <link href="http://idouba.com/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
     
 
     <!-- minified Font Awesome for SVG icons -->
     
-    <script defer src="http://idouba.cc/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+    <script defer src="http://idouba.com/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
 
     <!-- RSS 2.0 feed -->
     
@@ -67,7 +67,7 @@
     <div class="blog-masthead">
       <div class="container">
         <nav class="nav blog-nav">
-          <a class="nav-link " href="http://idouba.cc/">Home</a>
+          <a class="nav-link " href="http://idouba.com/">Home</a>
         </nav>
       </div>
     </div>
@@ -77,7 +77,7 @@
     
     <header class="blog-header">
       <div class="container">
-        <h1 class="blog-title" dir="auto"><a href="http://idouba.cc/" rel="home">爱豆吧！</a></h1>
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.com/" rel="home">爱豆吧！</a></h1>
         <p class="lead blog-description" dir="auto">idouba@beta.</p>
       </div>
     </header>
@@ -94,12 +94,12 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/about-btrees-application-in-database-index/">B树在数据库索引中的应用剖析（原稿）</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.com/about-btrees-application-in-database-index/">B树在数据库索引中的应用剖析（原稿）</a></h2>
     <p class="blog-post-meta"><time datetime="2014-03-20T08:18:48Z">Thu Mar 20, 2014</time> by douba in 
-<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/database/" rel="category tag">database</a>
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="category tag">数据库</a>, <a href="/categories/%E5%8F%91%E8%A1%A8/" rel="category tag">发表</a>
 
 
-<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/data-structure/" rel="tag">data structure</a>, <a href="/tags/database/" rel="tag">database</a>, <a href="/tags/index/" rel="tag">index</a>, <a href="/tags/mssql/" rel="tag">mssql</a>, <a href="/tags/mysql/" rel="tag">mysql</a>, <a href="/tags/oracle/" rel="tag">oracle</a>, <a href="/tags/programmer/" rel="tag">programmer</a>, <a href="/tags/published/" rel="tag">published</a>
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/%E7%B4%A2%E5%BC%95/" rel="tag">索引</a>, <a href="/tags/%E7%A8%8B%E5%BA%8F%E5%91%98/" rel="tag">《程序员》</a>
 
 </p>
   </header>
@@ -121,20 +121,20 @@
 <p><img src="http://upload.wikimedia.org/wikipedia/commons/3/37/Bplustree.png" alt=""></p>
 <p>A simple B+ tree example linking the keys 1–7 to data values d1-d7. The linked list (red) allows rapid in-order traversal</p>
 <p>B树是一棵<!-- raw HTML omitted -->平衡树<!-- raw HTML omitted -->，采用树的结构是因为其<!-- raw HTML omitted -->O(logN)<!-- raw HTML omitted -->的查找复杂度，而平衡树是计算机科学中改进的二叉查找树。对一棵查找树（search tree）进行查询/新增/删除等动作,所花的时间与树的高度h成比例,并不与树的容量n成比例。在B树上不管查找成功与否，每次查找都是走了一条从根到叶子结点的路径。一个度为d的B树，设节点为数N，则其树高h的上限为logd((N+1)/2)，检索一个值，其查找节点个数的时间复杂度为O(logdN)。这样使得在B树中检索一个节点最多需要h个节点，而数据库系统中一般将一个节点的大小设定为一个页，每个节点一次IO。<!-- raw HTML omitted -->使B树的根节点常驻内存，则一次检索最多需要h-1次的I/O即可<!-- raw HTML omitted -->。关于数据结构中的树，二叉树、平衡树的结构，遍历方式、节点查找方式、节点的删除、添加等都是很典型的内容，不在此做介绍。B树检索的伪代码如下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">Function: search (k)
-  <span style="color:#66d9ef">return</span> tree_search (k, root);
-
-Function: tree_search (k, node)
-  <span style="color:#66d9ef">if</span> node <span style="color:#f92672">is</span> a leaf then
-    <span style="color:#66d9ef">return</span> node;
-  switch k do
-  case k <span style="color:#f92672">&amp;</span>lt; k_0
-    <span style="color:#66d9ef">return</span> tree_search(k, p_0);
-  case k_i <span style="color:#960050;background-color:#1e0010">≤</span> k <span style="color:#f92672">&amp;</span>lt; k_{i<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>}
-    <span style="color:#66d9ef">return</span> tree_search(k, p_{i<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>});
-  case k_d <span style="color:#960050;background-color:#1e0010">≤</span> k
-    <span style="color:#66d9ef">return</span> tree_search(k, p_{d<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>});
-</code></pre></div><p>关于B树的一个性质，在集中数据库中采用的B树结构的索引，除了上面平衡树的公共特征外，结合数据库索引使用的需要，都有如下的结构要求。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>Function: search (k)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> tree_search (k, root);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Function: tree_search (k, node)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> node <span style="color:#f92672">is</span> a leaf then
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> node;
+</span></span><span style="display:flex;"><span>  switch k do
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">case</span> k <span style="color:#f92672">&amp;</span>lt; k_0
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> tree_search(k, p_0);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">case</span> k_i <span style="color:#960050;background-color:#1e0010">≤</span> k <span style="color:#f92672">&amp;</span>lt; k_{i<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>}
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> tree_search(k, p_{i<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>});
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">case</span> k_d <span style="color:#960050;background-color:#1e0010">≤</span> k
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> tree_search(k, p_{d<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>});
+</span></span></code></pre></div><p>关于B树的一个性质，在集中数据库中采用的B树结构的索引，除了上面平衡树的公共特征外，结合数据库索引使用的需要，都有如下的结构要求。</p>
 <ul>
 <li>
 <p>内节点不存储data，只存储key和指向下级节点的指针；叶子节点不存储指针，存储真正的数据 (<!-- raw HTML omitted -->Oracle <!-- raw HTML omitted -->中分别称为branch blocks 和 leaf blocks ；<!-- raw HTML omitted -->Mssql<!-- raw HTML omitted -->中称为intermediate level nodes和leaf nodes)。即<!-- raw HTML omitted -->内节点的作用是导航，叶子节点才真正存数据data。<!-- raw HTML omitted -->不同的索引类型，叶节点这个data域存储的东西会有不同，导致查询也会不同。在后面会对此详细介绍。</p>

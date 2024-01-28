@@ -8,35 +8,34 @@
 <meta property="og:title" content="Istio" />
 <meta property="og:description" content="idouba@beta." />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="http://idouba.cc/tags/istio/" />
-<meta property="og:updated_time" content="2019-08-09T15:32:08+00:00" />
+<meta property="og:url" content="http://idouba.com/tags/istio/" />
 
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Istio"/>
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Istio"/>
 <meta name="twitter:description" content="idouba@beta."/>
-<meta name="generator" content="Hugo 0.80.0" />
+<meta name="generator" content="Hugo 0.121.2">
 
 
     
       
     
 
-    <link rel="canonical" href="http://idouba.cc/tags/istio/">
+    <link rel="canonical" href="http://idouba.com/tags/istio/">
 
     <title>爱豆吧！</title>
 
     
     <!-- combined, minified CSS -->
     
-    <link href="http://idouba.cc/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    <link href="http://idouba.com/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
     
 
     <!-- minified Font Awesome for SVG icons -->
     
-    <script defer src="http://idouba.cc/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+    <script defer src="http://idouba.com/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
 
     <!-- RSS 2.0 feed -->
-    <link rel="alternate" type="application/rss+xml" href="http://idouba.cc/tags/istio/index.xml" title="爱豆吧！" />
+    <link rel="alternate" type="application/rss+xml" href="http://idouba.com/tags/istio/index.xml" title="爱豆吧！" />
     
 
     
@@ -51,7 +50,7 @@
     <div class="blog-masthead">
       <div class="container">
         <nav class="nav blog-nav">
-          <a class="nav-link " href="http://idouba.cc/">Home</a>
+          <a class="nav-link " href="http://idouba.com/">Home</a>
         </nav>
       </div>
     </div>
@@ -61,7 +60,7 @@
     
     <header class="blog-header">
       <div class="container">
-        <h1 class="blog-title" dir="auto"><a href="http://idouba.cc/" rel="home">爱豆吧！</a></h1>
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.com/" rel="home">爱豆吧！</a></h1>
         <p class="lead blog-description" dir="auto">idouba@beta.</p>
       </div>
     </header>
@@ -82,17 +81,17 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/istio-canary-release-pratice-of-cloudnativeistio-05/">Istio灰度发布实践 –《云原生服务网格Istio》书摘05</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.com/istio-canary-release-pratice-of-cloudnativeistio-05/">Istio灰度发布实践 –《云原生服务网格Istio》书摘05</a></h2>
     <p class="blog-post-meta"><time datetime="2019-08-09T15:32:08Z">Fri Aug 09, 2019</time> by idouba in 
 <span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">Istio</a>
 
 
-<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/book/" rel="tag">book</a>, <a href="/tags/istio/" rel="tag">istio</a>
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BCistio%E5%8E%9F%E7%90%86%E5%AE%9E%E8%B7%B5%E6%9E%B6%E6%9E%84%E4%B8%8E%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" rel="tag">《云原生服务网格Istio:原理,实践,架构与源码解析》</a>, <a href="/tags/istio/" rel="tag">Istio</a>
 
 </p>
   </header>
   本节书摘来自华为云原生技术丛书《云原生服务网格Istio:原理,实践,架构与源码解析》一书实践篇的第10章灰度发布实践。更多内容参照原书，或者关注容器魔方公众号。作者：star 目前一些大型的互联网或金融行业的公司，都有自己的发布系统。但是对一些初创公司，从零开始构建这样一套系统并不简单，有一定的门槛。利用Istio提供的流量路由功能可以很方便地构建一个流量分配系统来做灰度发布和AB测试。 预先准备： 将所有流量都路由到各个服务的v1版本 在开始本章的实践前，先将frontend、advertiseme
-  <a href='http://idouba.cc/istio-canary-release-pratice-of-cloudnativeistio-05/'>Read more →</a>
+  <a href='http://idouba.com/istio-canary-release-pratice-of-cloudnativeistio-05/'>Read more →</a>
 </article> 
 
 
@@ -102,17 +101,17 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/istio-sidecar-injection-of-cloudnativeistio-04/">Sidecar Injector自动注入的原理 –《云原生服务网格Istio》书摘04</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.com/istio-sidecar-injection-of-cloudnativeistio-04/">Sidecar Injector自动注入的原理 –《云原生服务网格Istio》书摘04</a></h2>
     <p class="blog-post-meta"><time datetime="2019-08-02T15:22:57Z">Fri Aug 02, 2019</time> by idouba in 
-<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">istio</a>
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">Istio</a>
 
 
-<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/book/" rel="tag">book</a>, <a href="/tags/istio/" rel="tag">istio</a>
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BCistio%E5%8E%9F%E7%90%86%E5%AE%9E%E8%B7%B5%E6%9E%B6%E6%9E%84%E4%B8%8E%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" rel="tag">《云原生服务网格Istio:原理,实践,架构与源码解析》</a>, <a href="/tags/istio/" rel="tag">Istio</a>
 
 </p>
   </header>
   本节书摘来自华为云原生技术丛书《云原生服务网格Istio:原理,实践,架构与源码解析》一书原理篇的第6章透明的Sidecar机制，6.1.1小节Sidecar Injector自动注入的原理。更多内容参照原书，或者关注容器魔方公众号。 Sidecar注入 我们都知道，Istio的流量管理、策略、遥测等功能无须应用程序做任何改动，这种无侵入式的方式全部依赖于Sidecar。应用程序发送或者接收的流量都被Sidecar拦截，并由Sidecar进行认证、鉴权、策略执行及遥测数据上报等众多治理功能。 如图6-1
-  <a href='http://idouba.cc/istio-sidecar-injection-of-cloudnativeistio-04/'>Read more →</a>
+  <a href='http://idouba.com/istio-sidecar-injection-of-cloudnativeistio-04/'>Read more →</a>
 </article> 
 
 
@@ -122,17 +121,17 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/istio-canary-release-of-cloudnativeistio-03/">Istio灰度发布 –《云原生服务网格Istio》书摘03</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.com/istio-canary-release-of-cloudnativeistio-03/">Istio灰度发布 –《云原生服务网格Istio》书摘03</a></h2>
     <p class="blog-post-meta"><time datetime="2019-07-25T15:09:52Z">Thu Jul 25, 2019</time> by idouba in 
-<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">istio</a>
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">Istio</a>
 
 
-<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/book/" rel="tag">book</a>, <a href="/tags/istio/" rel="tag">istio</a>
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BCistio%E5%8E%9F%E7%90%86%E5%AE%9E%E8%B7%B5%E6%9E%B6%E6%9E%84%E4%B8%8E%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" rel="tag">《云原生服务网格Istio:原理,实践,架构与源码解析》</a>, <a href="/tags/istio/" rel="tag">Istio</a>
 
 </p>
   </header>
   本节书摘来自华为云原生技术丛书《云原生服务网格Istio:原理,实践,架构与源码解析》一书原理篇的第3章非侵入的流量治理，第3.1.4小节灰度发布原理。更多内容参照原书，或者关注容器魔方公众号。 3.1.4 灰度发布 在新版本上线时，不管是在技术上考虑产品的稳定性等因素，还是在商业上考虑新版本被用户接受的程度，直接将老版本全部升级是非常有风险的。所以一般的做法是，新老版本同时在线，新版本只切分少量流量出来，在确认新版本没有问题后，再逐步加大流量比例。这正是灰度发布要解决的问题。其核心是能配置一定的流量策略，将
-  <a href='http://idouba.cc/istio-canary-release-of-cloudnativeistio-03/'>Read more →</a>
+  <a href='http://idouba.com/istio-canary-release-of-cloudnativeistio-03/'>Read more →</a>
 </article> 
 
 
@@ -142,17 +141,17 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/stio-prometheus-cloudnative-istio-06/">Istio通过Prometheus收集遥测数据&ndash;《云原生服务网格Istio》书摘06</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.com/stio-prometheus-cloudnative-istio-06/">Istio通过Prometheus收集遥测数据&ndash;《云原生服务网格Istio》书摘06</a></h2>
     <p class="blog-post-meta"><time datetime="2019-07-21T14:44:37Z">Sun Jul 21, 2019</time> by idouba in 
-<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">istio</a>
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">Istio</a>
 
 
-<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/book/" rel="tag">book</a>, <a href="/tags/istio/" rel="tag">istio</a>
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BCistio%E5%8E%9F%E7%90%86%E5%AE%9E%E8%B7%B5%E6%9E%B6%E6%9E%84%E4%B8%8E%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" rel="tag">《云原生服务网格Istio:原理,实践,架构与源码解析》</a>, <a href="/tags/istio/" rel="tag">Istio</a>
 
 </p>
   </header>
   本节书摘来自华为云原生技术丛书《云原生服务网格Istio:原理,实践,架构与源码解析》一书原理篇的第4章可扩展的策略和遥测中1.4.1小节Prometheus适配器。更多内容参照原书，或者关注容器魔方公众号。 Prometheus适配器 Prometheus应该是当前应用最广的开源系统监控和报警平台了，随着以Kubernetes为核心的容器技术的发展，Prometheus强大的多维度数据模型、高效的数据采集能力、灵活的查询语法，以及可扩展性、方便集成的特点，尤其是和云原生生态的结合，使其获得了越来越
-  <a href='http://idouba.cc/stio-prometheus-cloudnative-istio-06/'>Read more →</a>
+  <a href='http://idouba.com/stio-prometheus-cloudnative-istio-06/'>Read more →</a>
 </article> 
 
 
@@ -162,17 +161,17 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/istio-pilot-design-of-cloudnativeistio-02/">Pilot的设计亮点–《云原生服务网格Istio》书摘02</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.com/istio-pilot-design-of-cloudnativeistio-02/">Pilot的设计亮点–《云原生服务网格Istio》书摘02</a></h2>
     <p class="blog-post-meta"><time datetime="2019-07-19T14:44:37Z">Fri Jul 19, 2019</time> by idouba in 
-<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">istio</a>
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">Istio</a>
 
 
-<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/book/" rel="tag">book</a>, <a href="/tags/istio/" rel="tag">istio</a>
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BCistio%E5%8E%9F%E7%90%86%E5%AE%9E%E8%B7%B5%E6%9E%B6%E6%9E%84%E4%B8%8E%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" rel="tag">《云原生服务网格Istio:原理,实践,架构与源码解析》</a>, <a href="/tags/istio/" rel="tag">Istio</a>
 
 </p>
   </header>
   本节书摘来自华为云原生技术丛书《云原生服务网格Istio:原理,实践,架构与源码解析》一书架构篇的第14章司令官Pilot，第4节Pilot的设计亮点。更多内容参照原书，或者关注容器魔方公众号。作者：中虎 作为Istio数据面的司令官，Pilot控制中枢系统，它的性能好坏直接影响服务网格的大规模可扩展、配置时延等。如果Pilot的性能低，配置生成效率也低，那么它将难以管理大规模服务网格。比如，服务网格拥有成千上万服务及数十万服务实例，配置生成的效率很低，难以满足服务及Config更新带来的配置更新
-  <a href='http://idouba.cc/istio-pilot-design-of-cloudnativeistio-02/'>Read more →</a>
+  <a href='http://idouba.com/istio-pilot-design-of-cloudnativeistio-02/'>Read more →</a>
 </article> 
 
 
@@ -182,17 +181,17 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/istio-curcuit-break-of-cloudnativeistio/">Istio服务熔断 –《云原生服务网格Istio》书摘01</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.com/istio-curcuit-break-of-cloudnativeistio/">Istio服务熔断 –《云原生服务网格Istio》书摘01</a></h2>
     <p class="blog-post-meta"><time datetime="2019-07-11T10:17:31Z">Thu Jul 11, 2019</time> by idouba in 
-<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">istio</a>
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">Istio</a>
 
 
-<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/book/" rel="tag">book</a>, <a href="/tags/istio/" rel="tag">istio</a>
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BCistio%E5%8E%9F%E7%90%86%E5%AE%9E%E8%B7%B5%E6%9E%B6%E6%9E%84%E4%B8%8E%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" rel="tag">《云原生服务网格Istio:原理,实践,架构与源码解析》</a>, <a href="/tags/istio/" rel="tag">Istio</a>
 
 </p>
   </header>
   本节书摘来自华为云原生技术丛书《云原生服务网格Istio:原理,实践,架构与源码解析》一书中的第3章非侵入的流量治理，第3节Istio流量治理的原理3.1.2小节服务熔断。更多内容参照原书，或者关注容器魔方公众号。 熔断器在生活中一般指可以自动操作的电气开关，用来保护电路不会因为电流过载或者短路而受损，典型的动作是在检测到故障后马上中断电流。“熔断器”这个概念延伸到计算机世界中指的是故障检测和处理逻辑，防止临时故障或意外导致系统整体不可用，最典型的应用场景是防止网络和服务调用故障级联发生，限制故障
-  <a href='http://idouba.cc/istio-curcuit-break-of-cloudnativeistio/'>Read more →</a>
+  <a href='http://idouba.com/istio-curcuit-break-of-cloudnativeistio/'>Read more →</a>
 </article> 
 
 
@@ -202,17 +201,17 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/istio-tracing-is-not-zero-code-change/">Istio 调用链埋点原理剖析—是否真的“零修改”？</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.com/istio-tracing-is-not-zero-code-change/">Istio 调用链埋点原理剖析—是否真的“零修改”？</a></h2>
     <p class="blog-post-meta"><time datetime="2018-11-29T15:23:04Z">Thu Nov 29, 2018</time> by idouba in 
-<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">Istio</a>, <a href="/categories/tracing/" rel="category tag">Tracing</a>
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">Istio</a>
 
 
-<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/istio/" rel="tag">istio</a>, <a href="/tags/published/" rel="tag">published</a>, <a href="/tags/mesh/" rel="tag">mesh</a>, <a href="/tags/tracing/" rel="tag">tracing</a>
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/istio/" rel="tag">Istio</a>, <a href="/tags/%E5%8F%91%E8%A1%A8/" rel="tag">发表</a>, <a href="/tags/infoq/" rel="tag">Infoq</a>
 
 </p>
   </header>
   发在Infoq上的一篇文章，答疑当前大家工作中碰到的Istio调用链的问题，最终澄清了观点，并推动社区修改了说法，避免误解。 前言 在 Istio 的实践中最近经常被问到一个问题，使用 Istio 做调用链用户的业务代码是不是完全 0 侵入，到底要不要修改业务代码？ 看官方介绍： Istio makes it easy to create a network of deployed services with load balancing, service-to-service authentication, monitoring, and more, without any changes in service code. 是不用修改任何代码即可做各种治理。实际使用中应用程序不做任何修改，使用 Istio 的调用链输出总是断开的，这到底是什么原因呢？ 对以上问题关注的人比较多，但是貌似说的都不是特别清楚，在最近的 K8S 技术社区的 Meetup 上笔者专门做
-  <a href='http://idouba.cc/istio-tracing-is-not-zero-code-change/'>Read more →</a>
+  <a href='http://idouba.com/istio-tracing-is-not-zero-code-change/'>Read more →</a>
 </article> 
 
 
@@ -222,17 +221,17 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/istio-tracing-meetup-02/">Istio调用链埋点原理剖析—是否真的“零修改”分享实录（下）</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.com/istio-tracing-meetup-02/">Istio调用链埋点原理剖析—是否真的“零修改”分享实录（下）</a></h2>
     <p class="blog-post-meta"><time datetime="2018-11-10T15:36:10Z">Sat Nov 10, 2018</time> by idouba in 
-<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">Istio</a>, <a href="/categories/tracing/" rel="category tag">Tracing</a>
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">Istio</a>
 
 
-<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/istio/" rel="tag">istio</a>, <a href="/tags/speak/" rel="tag">speak</a>, <a href="/tags/tracing/" rel="tag">tracing</a>
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/%E8%B0%83%E7%94%A8%E9%93%BE/" rel="tag">调用链</a>, <a href="/tags/%E6%BC%94%E8%AE%B2/" rel="tag">演讲</a>, <a href="/tags/istio/" rel="tag">Istio</a>
 
 </p>
   </header>
   接上文Istio调用链埋点原理剖析—是否真的“零修改”分享实录（上） Isito调用链** 调用链原理和场景 正如Service Mesh的诞生是为了解决大规模分布式服务访问的治理问题，调用链的出现也是为了对应于大规模的复杂的分布式系统运行中碰到的故障定位定界问题。大量的服务调用、跨进程、跨服务器，可能还会跨多个物理机房。无论是服务自身问题还是网络环境的问题导致调用上链路上出现问题都比较复杂，如何定位就比单进程的一个服务打印一个异常栈来找出某个方法要困难的多。需要有一个类似的调用链路的跟踪，经一次请求的
-  <a href='http://idouba.cc/istio-tracing-meetup-02/'>Read more →</a>
+  <a href='http://idouba.com/istio-tracing-meetup-02/'>Read more →</a>
 </article> 
 
 
@@ -242,17 +241,17 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/istio-tracing-meetup-01/">Istio调用链埋点原理剖析—是否真的“零修改”分享实录（上）</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.com/istio-tracing-meetup-01/">Istio调用链埋点原理剖析—是否真的“零修改”分享实录（上）</a></h2>
     <p class="blog-post-meta"><time datetime="2018-11-10T15:07:36Z">Sat Nov 10, 2018</time> by idouba in 
-<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">Istio</a>, <a href="/categories/tracing/" rel="category tag">tracing</a>
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">Istio</a>
 
 
-<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/istio/" rel="tag">istio</a>, <a href="/tags/speak/" rel="tag">speak</a>, <a href="/tags/tracing/" rel="tag">tracing</a>
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/%E8%B0%83%E7%94%A8%E9%93%BE/" rel="tag">调用链</a>, <a href="/tags/%E6%BC%94%E8%AE%B2/" rel="tag">演讲</a>, <a href="/tags/istio/" rel="tag">Istio</a>
 
 </p>
   </header>
   前言 大家好，我是zhangchaomeng，来自华为Cloud BU，当前在做华为云应用服务网格。今天跟大家分享的主题是Istio调用链相关内容。通过剖析Istio的架构机制与Istio中调用链的工作原理来解答一个大家经常问道的一个问题：Istio是否像其官方文档中宣传的一样，对业务代码完全的无侵入，无需用做任何修改就可以完成所有的治理能力，包括调用链的埋点？ 关于这个问题，可以提前透漏下，答案是让人有点沮丧的，得改点。在Isito中你不用在自己的代码里使用各种埋点的SDK来做埋点的逻辑，但是必须要
-  <a href='http://idouba.cc/istio-tracing-meetup-01/'>Read more →</a>
+  <a href='http://idouba.com/istio-tracing-meetup-01/'>Read more →</a>
 </article> 
 
 
@@ -262,17 +261,17 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/istio-01-code-pilot-service-discovery-upon-k8s/">Istio技术与实践02：源码解析之Istio on Kubernetes 统一服务发现</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.com/istio-01-code-pilot-service-discovery-upon-k8s/">Istio技术与实践02：源码解析之Istio on Kubernetes 统一服务发现</a></h2>
     <p class="blog-post-meta"><time datetime="2018-07-23T14:35:50Z">Mon Jul 23, 2018</time> by idouba in 
 <span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">Istio</a>
 
 
-<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/code/" rel="tag">Code</a>, <a href="/tags/istio/" rel="tag">Istio</a>
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/pilot/" rel="tag">Pilot</a>, <a href="/tags/istio/" rel="tag">Istio</a>
 
 </p>
   </header>
   【摘要】 本文基于Pilot服务发现Kubernetes部分源码重点介绍在Istio on Kubernetes环境下，如何基于Pilot的Adapter机制实现Istio管理的服务直接使用Kubernetes service来做统一服务发现，避免了其他微服务框架运行在Kubernetes环境时上下两套服务目录的局面。并以此为入口从架构、场景等方面总结下Istio和Kubernetes的结合关系。 前言 文章Istio技术与实践01： 源码解析之Pilot多云平台服务发现机制结合Pilot的代码实现介绍了Ist
-  <a href='http://idouba.cc/istio-01-code-pilot-service-discovery-upon-k8s/'>Read more →</a>
+  <a href='http://idouba.com/istio-01-code-pilot-service-discovery-upon-k8s/'>Read more →</a>
 </article> 
 
 

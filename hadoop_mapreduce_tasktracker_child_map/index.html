@@ -29,12 +29,12 @@ mapper的map方法是真正用户定义的处理数据的类。也是用户唯�
 
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://idouba.cc/hadoop_mapreduce_tasktracker_child_map/" />
+<meta property="og:url" content="http://idouba.com/hadoop_mapreduce_tasktracker_child_map/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2014-01-22T07:00:53+00:00" />
 <meta property="article:modified_time" content="2014-01-22T07:00:53+00:00" />
 
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="【hadoop代码笔记】hadoop作业提交之Child启动map任务"/>
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="【hadoop代码笔记】hadoop作业提交之Child启动map任务"/>
 <meta name="twitter:description" content="一、概要描述
 在上篇博文描述了TaskTracker启动一个独立的java进程来执行Map或Reduce任务。在本篇和下篇博文中我们会关注启动的那个入口是org.apache.hadoop.mapred.Child的这个Java进程是如何执行用户定义的map或Reduce任务的。
 接上篇文章，TaskRunner线程执行中，会构造一个_java –D** Child address port tasked_这 样第一个java命令，单独启动一个java进程。在Child的main函数中通过TaskUmbilicalProtocol协议，从 TaskTracker获得需要执行的Task，并调用Task的run方法来执行，而Task的run方法会通过java反射机制构造 Mapper，InputFormat，mapperContext，然后调用构造的mapper的run方法执行mapper操作。
@@ -57,7 +57,7 @@ mapper的run方法中，从输入数据中逐一取出调用map方法来处理�
 mapper的map方法是真正用户定义的处理数据的类。也是用户唯一需要定义的方法。
 
 "/>
-<meta name="generator" content="Hugo 0.80.0" />
+<meta name="generator" content="Hugo 0.121.2">
 
 
     
@@ -66,7 +66,7 @@ mapper的map方法是真正用户定义的处理数据的类。也是用户唯�
   "@context": "http://schema.org",
   "@type": "BlogPosting",
   "headline": "【hadoop代码笔记】hadoop作业提交之Child启动map任务",
-  "url": "http:\/\/idouba.cc\/hadoop_mapreduce_tasktracker_child_map\/",
+  "url": "http:\/\/idouba.com\/hadoop_mapreduce_tasktracker_child_map\/",
   "wordCount": "4064",
   "datePublished": "2014-01-22T07:00:53+00:00",
   "dateModified": "2014-01-22T07:00:53+00:00",
@@ -74,25 +74,25 @@ mapper的map方法是真正用户定义的处理数据的类。也是用户唯�
     "@type": "Person",
     "name": "douba"
   },
-  "keywords": "hadoop, java, mapreduce, source"
+  "keywords": "hadoop, java, mapreduce"
 }
 </script>
 
 
 
-    <link rel="canonical" href="http://idouba.cc/hadoop_mapreduce_tasktracker_child_map/">
+    <link rel="canonical" href="http://idouba.com/hadoop_mapreduce_tasktracker_child_map/">
 
     <title>【hadoop代码笔记】hadoop作业提交之Child启动map任务 | 爱豆吧！</title>
 
     
     <!-- combined, minified CSS -->
     
-    <link href="http://idouba.cc/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    <link href="http://idouba.com/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
     
 
     <!-- minified Font Awesome for SVG icons -->
     
-    <script defer src="http://idouba.cc/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+    <script defer src="http://idouba.com/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
 
     <!-- RSS 2.0 feed -->
     
@@ -109,7 +109,7 @@ mapper的map方法是真正用户定义的处理数据的类。也是用户唯�
     <div class="blog-masthead">
       <div class="container">
         <nav class="nav blog-nav">
-          <a class="nav-link " href="http://idouba.cc/">Home</a>
+          <a class="nav-link " href="http://idouba.com/">Home</a>
         </nav>
       </div>
     </div>
@@ -119,7 +119,7 @@ mapper的map方法是真正用户定义的处理数据的类。也是用户唯�
     
     <header class="blog-header">
       <div class="container">
-        <h1 class="blog-title" dir="auto"><a href="http://idouba.cc/" rel="home">爱豆吧！</a></h1>
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.com/" rel="home">爱豆吧！</a></h1>
         <p class="lead blog-description" dir="auto">idouba@beta.</p>
       </div>
     </header>
@@ -136,12 +136,12 @@ mapper的map方法是真正用户定义的处理数据的类。也是用户唯�
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/hadoop_mapreduce_tasktracker_child_map/">【hadoop代码笔记】hadoop作业提交之Child启动map任务</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.com/hadoop_mapreduce_tasktracker_child_map/">【hadoop代码笔记】hadoop作业提交之Child启动map任务</a></h2>
     <p class="blog-post-meta"><time datetime="2014-01-22T07:00:53Z">Wed Jan 22, 2014</time> by douba in 
 <span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/hadoop/" rel="category tag">hadoop</a>
 
 
-<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/hadoop/" rel="tag">hadoop</a>, <a href="/tags/java/" rel="tag">java</a>, <a href="/tags/mapreduce/" rel="tag">mapreduce</a>, <a href="/tags/source/" rel="tag">source</a>
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/hadoop/" rel="tag">hadoop</a>, <a href="/tags/java/" rel="tag">java</a>, <a href="/tags/mapreduce/" rel="tag">mapreduce</a>
 
 </p>
   </header>
@@ -185,287 +185,287 @@ mapper的map方法是真正用户定义的处理数据的类。也是用户唯�
 <p>执行任务</p>
 </li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[]</span> args<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> Throwable <span style="color:#f92672">{</span>
-    LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">debug</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Child starting&#34;</span><span style="color:#f92672">);</span>
-JobConf defaultConf <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> JobConf<span style="color:#f92672">();</span>
-
-<span style="color:#75715e">//从传入的参数中获得taskTracker的地址
-</span><span style="color:#75715e"></span>String host <span style="color:#f92672">=</span> args<span style="color:#f92672">[</span>0<span style="color:#f92672">];</span>
-<span style="color:#75715e">//从传入的参数中获得taskTracker的响应请求的端口。
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> port <span style="color:#f92672">=</span> Integer<span style="color:#f92672">.</span><span style="color:#a6e22e">parseInt</span><span style="color:#f92672">(</span>args<span style="color:#f92672">[</span>1<span style="color:#f92672">]);</span>
-    InetSocketAddress address <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> InetSocketAddress<span style="color:#f92672">(</span>host<span style="color:#f92672">,</span> port<span style="color:#f92672">);</span>
-    <span style="color:#66d9ef">final</span> TaskAttemptID firstTaskid <span style="color:#f92672">=</span> TaskAttemptID<span style="color:#f92672">.</span><span style="color:#a6e22e">forName</span><span style="color:#f92672">(</span>args<span style="color:#f92672">[</span>2<span style="color:#f92672">]);</span>
-    <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> SLEEP_LONGER_COUNT <span style="color:#f92672">=</span> 5<span style="color:#f92672">;</span>
-    <span style="color:#66d9ef">int</span> jvmIdInt <span style="color:#f92672">=</span> Integer<span style="color:#f92672">.</span><span style="color:#a6e22e">parseInt</span><span style="color:#f92672">(</span>args<span style="color:#f92672">[</span>3<span style="color:#f92672">]);</span>
-    JVMId jvmId <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> JVMId<span style="color:#f92672">(</span>firstTaskid<span style="color:#f92672">.</span><span style="color:#a6e22e">getJobID</span><span style="color:#f92672">(),</span>firstTaskid<span style="color:#f92672">.</span><span style="color:#a6e22e">isMap</span><span style="color:#f92672">(),</span>jvmIdInt<span style="color:#f92672">);</span>
-</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//通过RPC方式和tasktracker通信，umbilical是作为tasktracker的代理来执行操作。
-</span><span style="color:#75715e"></span>TaskUmbilicalProtocol umbilical <span style="color:#f92672">=</span>
-  <span style="color:#f92672">(</span>TaskUmbilicalProtocol<span style="color:#f92672">)</span>RPC<span style="color:#f92672">.</span><span style="color:#a6e22e">getProxy</span><span style="color:#f92672">(</span>TaskUmbilicalProtocol<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">,</span>
-      TaskUmbilicalProtocol<span style="color:#f92672">.</span><span style="color:#a6e22e">versionID</span><span style="color:#f92672">,</span>
-      address<span style="color:#f92672">,</span>
-      defaultConf<span style="color:#f92672">);</span>
-<span style="color:#66d9ef">int</span> numTasksToExecute <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>1<span style="color:#f92672">;</span> <span style="color:#75715e">//-1 signifies &#34;no limit&#34;
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> numTasksExecuted <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span>
-<span style="color:#75715e">//for the memory management, a PID file is written and the PID file
-</span><span style="color:#75715e">//is written once per JVM. We simply symlink the file on a per task
-</span><span style="color:#75715e">//basis later (see below). Long term, we should change the Memory
-</span><span style="color:#75715e">//manager to use JVMId instead of TaskAttemptId
-</span><span style="color:#75715e"></span>Path srcPidPath <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
-Path dstPidPath <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
-<span style="color:#66d9ef">int</span> idleLoopCount <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span>
-Task task <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
-<span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
-  <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">true</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-    taskid <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
-    <span style="color:#75715e">//根据JvmId从taskTracker查询获取到JvmTask
-</span><span style="color:#75715e"></span>    JvmTask myTask <span style="color:#f92672">=</span> umbilical<span style="color:#f92672">.</span><span style="color:#a6e22e">getTask</span><span style="color:#f92672">(</span>jvmId<span style="color:#f92672">);</span>
-    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>myTask<span style="color:#f92672">.</span><span style="color:#a6e22e">shouldDie</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
-      <span style="color:#66d9ef">break</span><span style="color:#f92672">;</span>
-    <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
-      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>myTask<span style="color:#f92672">.</span><span style="color:#a6e22e">getTask</span><span style="color:#f92672">()</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        taskid <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
-        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(++</span>idleLoopCount <span style="color:#f92672">&gt;=</span> SLEEP_LONGER_COUNT<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-          <span style="color:#75715e">//we sleep for a bigger interval when we don&#39;t receive
-</span><span style="color:#75715e"></span>          <span style="color:#75715e">//tasks for a while
-</span><span style="color:#75715e"></span>          Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">sleep</span><span style="color:#f92672">(</span>1500<span style="color:#f92672">);</span>
-        <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
-          Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">sleep</span><span style="color:#f92672">(</span>500<span style="color:#f92672">);</span>
-        <span style="color:#f92672">}</span>
-        <span style="color:#66d9ef">continue</span><span style="color:#f92672">;</span>
-      <span style="color:#f92672">}</span>
-    <span style="color:#f92672">}</span>
-    idleLoopCount <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span>
-    task <span style="color:#f92672">=</span> myTask<span style="color:#f92672">.</span><span style="color:#a6e22e">getTask</span><span style="color:#f92672">();</span>
-    taskid <span style="color:#f92672">=</span> task<span style="color:#f92672">.</span><span style="color:#a6e22e">getTaskID</span><span style="color:#f92672">();</span>
-    isCleanup <span style="color:#f92672">=</span> task<span style="color:#f92672">.</span><span style="color:#a6e22e">isTaskCleanupTask</span><span style="color:#f92672">();</span>
-    <span style="color:#75715e">// reset the statistics for the task
-</span><span style="color:#75715e"></span>    FileSystem<span style="color:#f92672">.</span><span style="color:#a6e22e">clearStatistics</span><span style="color:#f92672">();</span>       
-    TaskLog<span style="color:#f92672">.</span><span style="color:#a6e22e">syncLogs</span><span style="color:#f92672">(</span>firstTaskid<span style="color:#f92672">,</span> taskid<span style="color:#f92672">,</span> isCleanup<span style="color:#f92672">);</span>
-    JobConf job <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> JobConf<span style="color:#f92672">(</span>task<span style="color:#f92672">.</span><span style="color:#a6e22e">getJobFile</span><span style="color:#f92672">());</span>
-    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>job<span style="color:#f92672">.</span><span style="color:#a6e22e">getBoolean</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;task.memory.mgmt.enabled&#34;</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
-      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>srcPidPath <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        srcPidPath <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Path<span style="color:#f92672">(</span>task<span style="color:#f92672">.</span><span style="color:#a6e22e">getPidFile</span><span style="color:#f92672">());</span>
-      <span style="color:#f92672">}</span>
-      <span style="color:#75715e">//since the JVM is running multiple tasks potentially, we need
-</span><span style="color:#75715e"></span>      <span style="color:#75715e">//to do symlink stuff only for the subsequent tasks
-</span><span style="color:#75715e"></span>      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>taskid<span style="color:#f92672">.</span><span style="color:#a6e22e">equals</span><span style="color:#f92672">(</span>firstTaskid<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
-        dstPidPath <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Path<span style="color:#f92672">(</span>task<span style="color:#f92672">.</span><span style="color:#a6e22e">getPidFile</span><span style="color:#f92672">());</span>
-        FileUtil<span style="color:#f92672">.</span><span style="color:#a6e22e">symLink</span><span style="color:#f92672">(</span>srcPidPath<span style="color:#f92672">.</span><span style="color:#a6e22e">toUri</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getPath</span><span style="color:#f92672">(),</span> 
-            dstPidPath<span style="color:#f92672">.</span><span style="color:#a6e22e">toUri</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getPath</span><span style="color:#f92672">());</span>
-      <span style="color:#f92672">}</span>
-    <span style="color:#f92672">}</span>
-    <span style="color:#75715e">//setupWorkDir actually sets up the symlinks for the distributed
-</span><span style="color:#75715e"></span>    <span style="color:#75715e">//cache. After a task exits we wipe the workdir clean, and hence
-</span><span style="color:#75715e"></span>    <span style="color:#75715e">//the symlinks have to be rebuilt.
-</span><span style="color:#75715e"></span>    TaskRunner<span style="color:#f92672">.</span><span style="color:#a6e22e">setupWorkDir</span><span style="color:#f92672">(</span>job<span style="color:#f92672">);</span>
-
-    numTasksToExecute <span style="color:#f92672">=</span> job<span style="color:#f92672">.</span><span style="color:#a6e22e">getNumTasksToExecutePerJvm</span><span style="color:#f92672">();</span>
-    <span style="color:#66d9ef">assert</span><span style="color:#f92672">(</span>numTasksToExecute <span style="color:#f92672">!=</span> 0<span style="color:#f92672">);</span>
-    TaskLog<span style="color:#f92672">.</span><span style="color:#a6e22e">cleanup</span><span style="color:#f92672">(</span>job<span style="color:#f92672">.</span><span style="color:#a6e22e">getInt</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;mapred.userlog.retain.hours&#34;</span><span style="color:#f92672">,</span> 24<span style="color:#f92672">));</span>
-    task<span style="color:#f92672">.</span><span style="color:#a6e22e">setConf</span><span style="color:#f92672">(</span>job<span style="color:#f92672">);</span>
-    defaultConf<span style="color:#f92672">.</span><span style="color:#a6e22e">addResource</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Path<span style="color:#f92672">(</span>task<span style="color:#f92672">.</span><span style="color:#a6e22e">getJobFile</span><span style="color:#f92672">()));</span>      
-    <span style="color:#75715e">// use job-specified working directory
-</span><span style="color:#75715e"></span>    FileSystem<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>job<span style="color:#f92672">).</span><span style="color:#a6e22e">setWorkingDirectory</span><span style="color:#f92672">(</span>job<span style="color:#f92672">.</span><span style="color:#a6e22e">getWorkingDirectory</span><span style="color:#f92672">());</span>
-    <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
-      <span style="color:#75715e">//执行任务
-</span><span style="color:#75715e"></span>      task<span style="color:#f92672">.</span><span style="color:#a6e22e">run</span><span style="color:#f92672">(</span>job<span style="color:#f92672">,</span> umbilical<span style="color:#f92672">);</span>             <span style="color:#75715e">// run the task
-</span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span> <span style="color:#66d9ef">finally</span> <span style="color:#f92672">{</span>
-      TaskLog<span style="color:#f92672">.</span><span style="color:#a6e22e">syncLogs</span><span style="color:#f92672">(</span>firstTaskid<span style="color:#f92672">,</span> taskid<span style="color:#f92672">,</span> isCleanup<span style="color:#f92672">);</span>
-      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>taskid<span style="color:#f92672">.</span><span style="color:#a6e22e">equals</span><span style="color:#f92672">(</span>firstTaskid<span style="color:#f92672">)</span> <span style="color:#f92672">&amp;&amp;</span> 
-          job<span style="color:#f92672">.</span><span style="color:#a6e22e">getBoolean</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;task.memory.mgmt.enabled&#34;</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
-        <span style="color:#75715e">// delete the pid-file&#39;s symlink
-</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">new</span> File<span style="color:#f92672">(</span>dstPidPath<span style="color:#f92672">.</span><span style="color:#a6e22e">toUri</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getPath</span><span style="color:#f92672">()).</span><span style="color:#a6e22e">delete</span><span style="color:#f92672">();</span>
-      <span style="color:#f92672">}</span>
-    <span style="color:#f92672">}</span>
-    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>numTasksToExecute <span style="color:#f92672">&gt;</span> 0 <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">++</span>numTasksExecuted <span style="color:#f92672">==</span> numTasksToExecute<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-      <span style="color:#66d9ef">break</span><span style="color:#f92672">;</span>
-    <span style="color:#f92672">}</span>
-  <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>FSError e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-  LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">fatal</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;FSError from child&#34;</span><span style="color:#f92672">,</span> e<span style="color:#f92672">);</span>
-  umbilical<span style="color:#f92672">.</span><span style="color:#a6e22e">fsError</span><span style="color:#f92672">(</span>taskid<span style="color:#f92672">,</span> e<span style="color:#f92672">.</span><span style="color:#a6e22e">getMessage</span><span style="color:#f92672">());</span>
-<span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>Throwable throwable<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-  LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">warn</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Error running child&#34;</span><span style="color:#f92672">,</span> throwable<span style="color:#f92672">);</span>
-  <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
-    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>task <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-      <span style="color:#75715e">// do cleanup for the task
-</span><span style="color:#75715e"></span>      task<span style="color:#f92672">.</span><span style="color:#a6e22e">taskCleanup</span><span style="color:#f92672">(</span>umbilical<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span>
-  <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>Throwable th<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-    LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Error cleaning up&#34;</span> <span style="color:#f92672">+</span> th<span style="color:#f92672">);</span>
-  <span style="color:#f92672">}</span>
-  <span style="color:#75715e">// Report back any failures, for diagnostic purposes
-</span><span style="color:#75715e"></span>  ByteArrayOutputStream baos <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ByteArrayOutputStream<span style="color:#f92672">();</span>
-  throwable<span style="color:#f92672">.</span><span style="color:#a6e22e">printStackTrace</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> PrintStream<span style="color:#f92672">(</span>baos<span style="color:#f92672">));</span>
-  <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>taskid <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-    umbilical<span style="color:#f92672">.</span><span style="color:#a6e22e">reportDiagnosticInfo</span><span style="color:#f92672">(</span>taskid<span style="color:#f92672">,</span> baos<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">());</span>
-  <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span> <span style="color:#66d9ef">finally</span> <span style="color:#f92672">{</span>
-  RPC<span style="color:#f92672">.</span><span style="color:#a6e22e">stopProxy</span><span style="color:#f92672">(</span>umbilical<span style="color:#f92672">);</span>
-
-<span style="color:#f92672">}</span>
- <span style="color:#f92672">}</span>
-</code></pre></div><ol start="2">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span>(String<span style="color:#f92672">[]</span> args) <span style="color:#66d9ef">throws</span> Throwable {
+</span></span><span style="display:flex;"><span>    LOG.<span style="color:#a6e22e">debug</span>(<span style="color:#e6db74">&#34;Child starting&#34;</span>);
+</span></span><span style="display:flex;"><span>JobConf defaultConf <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> JobConf();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//从传入的参数中获得taskTracker的地址</span>
+</span></span><span style="display:flex;"><span>String host <span style="color:#f92672">=</span> args<span style="color:#f92672">[</span>0<span style="color:#f92672">]</span>;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//从传入的参数中获得taskTracker的响应请求的端口。</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> port <span style="color:#f92672">=</span> Integer.<span style="color:#a6e22e">parseInt</span>(args<span style="color:#f92672">[</span>1<span style="color:#f92672">]</span>);
+</span></span><span style="display:flex;"><span>    InetSocketAddress address <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> InetSocketAddress(host, port);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">final</span> TaskAttemptID firstTaskid <span style="color:#f92672">=</span> TaskAttemptID.<span style="color:#a6e22e">forName</span>(args<span style="color:#f92672">[</span>2<span style="color:#f92672">]</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> SLEEP_LONGER_COUNT <span style="color:#f92672">=</span> 5;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> jvmIdInt <span style="color:#f92672">=</span> Integer.<span style="color:#a6e22e">parseInt</span>(args<span style="color:#f92672">[</span>3<span style="color:#f92672">]</span>);
+</span></span><span style="display:flex;"><span>    JVMId jvmId <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> JVMId(firstTaskid.<span style="color:#a6e22e">getJobID</span>(),firstTaskid.<span style="color:#a6e22e">isMap</span>(),jvmIdInt);
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">//通过RPC方式和tasktracker通信，umbilical是作为tasktracker的代理来执行操作。</span>
+</span></span><span style="display:flex;"><span>TaskUmbilicalProtocol umbilical <span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>  (TaskUmbilicalProtocol)RPC.<span style="color:#a6e22e">getProxy</span>(TaskUmbilicalProtocol.<span style="color:#a6e22e">class</span>,
+</span></span><span style="display:flex;"><span>      TaskUmbilicalProtocol.<span style="color:#a6e22e">versionID</span>,
+</span></span><span style="display:flex;"><span>      address,
+</span></span><span style="display:flex;"><span>      defaultConf);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> numTasksToExecute <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>1; <span style="color:#75715e">//-1 signifies &#34;no limit&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> numTasksExecuted <span style="color:#f92672">=</span> 0;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//for the memory management, a PID file is written and the PID file</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//is written once per JVM. We simply symlink the file on a per task</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//basis later (see below). Long term, we should change the Memory</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//manager to use JVMId instead of TaskAttemptId</span>
+</span></span><span style="display:flex;"><span>Path srcPidPath <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>Path dstPidPath <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> idleLoopCount <span style="color:#f92672">=</span> 0;
+</span></span><span style="display:flex;"><span>Task task <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">while</span> (<span style="color:#66d9ef">true</span>) {
+</span></span><span style="display:flex;"><span>    taskid <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//根据JvmId从taskTracker查询获取到JvmTask</span>
+</span></span><span style="display:flex;"><span>    JvmTask myTask <span style="color:#f92672">=</span> umbilical.<span style="color:#a6e22e">getTask</span>(jvmId);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (myTask.<span style="color:#a6e22e">shouldDie</span>()) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (myTask.<span style="color:#a6e22e">getTask</span>() <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>        taskid <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">++</span>idleLoopCount <span style="color:#f92672">&gt;=</span> SLEEP_LONGER_COUNT) {
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e">//we sleep for a bigger interval when we don&#39;t receive</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e">//tasks for a while</span>
+</span></span><span style="display:flex;"><span>          Thread.<span style="color:#a6e22e">sleep</span>(1500);
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>          Thread.<span style="color:#a6e22e">sleep</span>(500);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">continue</span>;
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    idleLoopCount <span style="color:#f92672">=</span> 0;
+</span></span><span style="display:flex;"><span>    task <span style="color:#f92672">=</span> myTask.<span style="color:#a6e22e">getTask</span>();
+</span></span><span style="display:flex;"><span>    taskid <span style="color:#f92672">=</span> task.<span style="color:#a6e22e">getTaskID</span>();
+</span></span><span style="display:flex;"><span>    isCleanup <span style="color:#f92672">=</span> task.<span style="color:#a6e22e">isTaskCleanupTask</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// reset the statistics for the task</span>
+</span></span><span style="display:flex;"><span>    FileSystem.<span style="color:#a6e22e">clearStatistics</span>();       
+</span></span><span style="display:flex;"><span>    TaskLog.<span style="color:#a6e22e">syncLogs</span>(firstTaskid, taskid, isCleanup);
+</span></span><span style="display:flex;"><span>    JobConf job <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> JobConf(task.<span style="color:#a6e22e">getJobFile</span>());
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (job.<span style="color:#a6e22e">getBoolean</span>(<span style="color:#e6db74">&#34;task.memory.mgmt.enabled&#34;</span>, <span style="color:#66d9ef">false</span>)) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (srcPidPath <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>        srcPidPath <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Path(task.<span style="color:#a6e22e">getPidFile</span>());
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">//since the JVM is running multiple tasks potentially, we need</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">//to do symlink stuff only for the subsequent tasks</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>taskid.<span style="color:#a6e22e">equals</span>(firstTaskid)) {
+</span></span><span style="display:flex;"><span>        dstPidPath <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Path(task.<span style="color:#a6e22e">getPidFile</span>());
+</span></span><span style="display:flex;"><span>        FileUtil.<span style="color:#a6e22e">symLink</span>(srcPidPath.<span style="color:#a6e22e">toUri</span>().<span style="color:#a6e22e">getPath</span>(), 
+</span></span><span style="display:flex;"><span>            dstPidPath.<span style="color:#a6e22e">toUri</span>().<span style="color:#a6e22e">getPath</span>());
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//setupWorkDir actually sets up the symlinks for the distributed</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//cache. After a task exits we wipe the workdir clean, and hence</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//the symlinks have to be rebuilt.</span>
+</span></span><span style="display:flex;"><span>    TaskRunner.<span style="color:#a6e22e">setupWorkDir</span>(job);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    numTasksToExecute <span style="color:#f92672">=</span> job.<span style="color:#a6e22e">getNumTasksToExecutePerJvm</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">assert</span>(numTasksToExecute <span style="color:#f92672">!=</span> 0);
+</span></span><span style="display:flex;"><span>    TaskLog.<span style="color:#a6e22e">cleanup</span>(job.<span style="color:#a6e22e">getInt</span>(<span style="color:#e6db74">&#34;mapred.userlog.retain.hours&#34;</span>, 24));
+</span></span><span style="display:flex;"><span>    task.<span style="color:#a6e22e">setConf</span>(job);
+</span></span><span style="display:flex;"><span>    defaultConf.<span style="color:#a6e22e">addResource</span>(<span style="color:#66d9ef">new</span> Path(task.<span style="color:#a6e22e">getJobFile</span>()));      
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// use job-specified working directory</span>
+</span></span><span style="display:flex;"><span>    FileSystem.<span style="color:#a6e22e">get</span>(job).<span style="color:#a6e22e">setWorkingDirectory</span>(job.<span style="color:#a6e22e">getWorkingDirectory</span>());
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">//执行任务</span>
+</span></span><span style="display:flex;"><span>      task.<span style="color:#a6e22e">run</span>(job, umbilical);             <span style="color:#75715e">// run the task</span>
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">finally</span> {
+</span></span><span style="display:flex;"><span>      TaskLog.<span style="color:#a6e22e">syncLogs</span>(firstTaskid, taskid, isCleanup);
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>taskid.<span style="color:#a6e22e">equals</span>(firstTaskid) <span style="color:#f92672">&amp;&amp;</span> 
+</span></span><span style="display:flex;"><span>          job.<span style="color:#a6e22e">getBoolean</span>(<span style="color:#e6db74">&#34;task.memory.mgmt.enabled&#34;</span>, <span style="color:#66d9ef">false</span>)) {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// delete the pid-file&#39;s symlink</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">new</span> File(dstPidPath.<span style="color:#a6e22e">toUri</span>().<span style="color:#a6e22e">getPath</span>()).<span style="color:#a6e22e">delete</span>();
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (numTasksToExecute <span style="color:#f92672">&gt;</span> 0 <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">++</span>numTasksExecuted <span style="color:#f92672">==</span> numTasksToExecute) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">catch</span> (FSError e) {
+</span></span><span style="display:flex;"><span>  LOG.<span style="color:#a6e22e">fatal</span>(<span style="color:#e6db74">&#34;FSError from child&#34;</span>, e);
+</span></span><span style="display:flex;"><span>  umbilical.<span style="color:#a6e22e">fsError</span>(taskid, e.<span style="color:#a6e22e">getMessage</span>());
+</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">catch</span> (Throwable throwable) {
+</span></span><span style="display:flex;"><span>  LOG.<span style="color:#a6e22e">warn</span>(<span style="color:#e6db74">&#34;Error running child&#34;</span>, throwable);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (task <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">// do cleanup for the task</span>
+</span></span><span style="display:flex;"><span>      task.<span style="color:#a6e22e">taskCleanup</span>(umbilical);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  } <span style="color:#66d9ef">catch</span> (Throwable th) {
+</span></span><span style="display:flex;"><span>    LOG.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;Error cleaning up&#34;</span> <span style="color:#f92672">+</span> th);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Report back any failures, for diagnostic purposes</span>
+</span></span><span style="display:flex;"><span>  ByteArrayOutputStream baos <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ByteArrayOutputStream();
+</span></span><span style="display:flex;"><span>  throwable.<span style="color:#a6e22e">printStackTrace</span>(<span style="color:#66d9ef">new</span> PrintStream(baos));
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (taskid <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>    umbilical.<span style="color:#a6e22e">reportDiagnosticInfo</span>(taskid, baos.<span style="color:#a6e22e">toString</span>());
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">finally</span> {
+</span></span><span style="display:flex;"><span>  RPC.<span style="color:#a6e22e">stopProxy</span>(umbilical);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span> }
+</span></span></code></pre></div><ol start="2">
 <li>TaskTracker 的getTask方法。TaskTracker实现了TaskUmbilicalProtocol接扣。getTask是该接口定义的一个方法。是子进程Child调用的根据jvmId获取task。</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">synchronized</span> JvmTask <span style="color:#a6e22e">getTask</span><span style="color:#f92672">(</span>JVMId jvmId<span style="color:#f92672">)</span> 
-  <span style="color:#66d9ef">throws</span> IOException <span style="color:#f92672">{</span>
-  TaskInProgress tip <span style="color:#f92672">=</span> jvmManager<span style="color:#f92672">.</span><span style="color:#a6e22e">getTaskForJvm</span><span style="color:#f92672">(</span>jvmId<span style="color:#f92672">);</span>
-    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>tip <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-      <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> JvmTask<span style="color:#f92672">(</span><span style="color:#66d9ef">null</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span>
-    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>tasks<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>tip<span style="color:#f92672">.</span><span style="color:#a6e22e">getTask</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getTaskID</span><span style="color:#f92672">())</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span> <span style="color:#75715e">//is task still present
-</span><span style="color:#75715e"></span>      LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;JVM with ID: &#34;</span> <span style="color:#f92672">+</span> jvmId <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; given task: &#34;</span> <span style="color:#f92672">+</span> 
-          tip<span style="color:#f92672">.</span><span style="color:#a6e22e">getTask</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getTaskID</span><span style="color:#f92672">());</span>
-      <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> JvmTask<span style="color:#f92672">(</span>tip<span style="color:#f92672">.</span><span style="color:#a6e22e">getTask</span><span style="color:#f92672">(),</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
-      LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Killing JVM with ID: &#34;</span> <span style="color:#f92672">+</span> jvmId <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; since scheduled task: &#34;</span> <span style="color:#f92672">+</span> 
-          tip<span style="color:#f92672">.</span><span style="color:#a6e22e">getTask</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getTaskID</span><span style="color:#f92672">()</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; is &#34;</span> <span style="color:#f92672">+</span> tip<span style="color:#f92672">.</span><span style="color:#a6e22e">taskStatus</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getRunState</span><span style="color:#f92672">());</span>
-      <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> JvmTask<span style="color:#f92672">(</span><span style="color:#66d9ef">null</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">);</span>
-<span style="color:#f92672">}</span>
-</code></pre></div><p>3.Task 的run方法。因为map和reduce的执行逻辑大不相同，先看下MapTask中该方法的实现。是真正执行用户定义的map或者reduce任务的入 口，通过TaskUmbilicalProtocol向tasktracker上报执行进度。开启线程向TaskTracker上报进度，根据task的 不同动作要求执行不同的方法，如jobClean，jobsetup，taskCleanup。对于部分的了解可以产看<a href="../hadoop_mapreduce_tasktracker_retrieve_task">taskTracker获取Task</a>文章中的JobTracker的 heartbeat方法处的详细解释。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span><span style="color:#f92672">(</span><span style="color:#66d9ef">final</span> JobConf job<span style="color:#f92672">,</span> <span style="color:#66d9ef">final</span> TaskUmbilicalProtocol umbilical<span style="color:#f92672">)</span>
-    <span style="color:#66d9ef">throws</span> IOException<span style="color:#f92672">,</span> ClassNotFoundException<span style="color:#f92672">,</span> InterruptedException <span style="color:#f92672">{</span>
-
-    <span style="color:#75715e">// 开启线程向TaskTracker上报进度
-</span><span style="color:#75715e"></span>    TaskReporter reporter <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> TaskReporter<span style="color:#f92672">(</span>getProgress<span style="color:#f92672">(),</span> umbilical<span style="color:#f92672">);</span>
-    reporter<span style="color:#f92672">.</span><span style="color:#a6e22e">startCommunicationThread</span><span style="color:#f92672">();</span>
-    <span style="color:#66d9ef">boolean</span> useNewApi <span style="color:#f92672">=</span> job<span style="color:#f92672">.</span><span style="color:#a6e22e">getUseNewMapper</span><span style="color:#f92672">();</span>
-    initialize<span style="color:#f92672">(</span>job<span style="color:#f92672">,</span> getJobID<span style="color:#f92672">(),</span> reporter<span style="color:#f92672">,</span> useNewApi<span style="color:#f92672">);</span>
-    
-    <span style="color:#75715e">// 根据task的不同动作要求执行不同的方法，如jobClean，jobsetup，taskCleanup
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>jobCleanup<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-      runJobCleanupTask<span style="color:#f92672">(</span>umbilical<span style="color:#f92672">,</span> reporter<span style="color:#f92672">);</span>
-      <span style="color:#66d9ef">return</span><span style="color:#f92672">;</span>
-    <span style="color:#f92672">}</span>
-    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>jobSetup<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-      runJobSetupTask<span style="color:#f92672">(</span>umbilical<span style="color:#f92672">,</span> reporter<span style="color:#f92672">);</span>
-      <span style="color:#66d9ef">return</span><span style="color:#f92672">;</span>
-    <span style="color:#f92672">}</span>
-    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>taskCleanup<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-      runTaskCleanupTask<span style="color:#f92672">(</span>umbilical<span style="color:#f92672">,</span> reporter<span style="color:#f92672">);</span>
-      <span style="color:#66d9ef">return</span><span style="color:#f92672">;</span>
-    <span style="color:#f92672">}</span>
-    
-    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>useNewApi<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-      runNewMapper<span style="color:#f92672">(</span>job<span style="color:#f92672">,</span> split<span style="color:#f92672">,</span> umbilical<span style="color:#f92672">,</span> reporter<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
-      runOldMapper<span style="color:#f92672">(</span>job<span style="color:#f92672">,</span> split<span style="color:#f92672">,</span> umbilical<span style="color:#f92672">,</span> reporter<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span>
-    done<span style="color:#f92672">(</span>umbilical<span style="color:#f92672">,</span> reporter<span style="color:#f92672">);</span>
-  <span style="color:#f92672">}</span>
-</code></pre></div><ol start="4">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">synchronized</span> JvmTask <span style="color:#a6e22e">getTask</span>(JVMId jvmId) 
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">throws</span> IOException {
+</span></span><span style="display:flex;"><span>  TaskInProgress tip <span style="color:#f92672">=</span> jvmManager.<span style="color:#a6e22e">getTaskForJvm</span>(jvmId);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (tip <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> JvmTask(<span style="color:#66d9ef">null</span>, <span style="color:#66d9ef">false</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (tasks.<span style="color:#a6e22e">get</span>(tip.<span style="color:#a6e22e">getTask</span>().<span style="color:#a6e22e">getTaskID</span>()) <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) { <span style="color:#75715e">//is task still present</span>
+</span></span><span style="display:flex;"><span>      LOG.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;JVM with ID: &#34;</span> <span style="color:#f92672">+</span> jvmId <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; given task: &#34;</span> <span style="color:#f92672">+</span> 
+</span></span><span style="display:flex;"><span>          tip.<span style="color:#a6e22e">getTask</span>().<span style="color:#a6e22e">getTaskID</span>());
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> JvmTask(tip.<span style="color:#a6e22e">getTask</span>(), <span style="color:#66d9ef">false</span>);
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>      LOG.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;Killing JVM with ID: &#34;</span> <span style="color:#f92672">+</span> jvmId <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; since scheduled task: &#34;</span> <span style="color:#f92672">+</span> 
+</span></span><span style="display:flex;"><span>          tip.<span style="color:#a6e22e">getTask</span>().<span style="color:#a6e22e">getTaskID</span>() <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; is &#34;</span> <span style="color:#f92672">+</span> tip.<span style="color:#a6e22e">taskStatus</span>.<span style="color:#a6e22e">getRunState</span>());
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> JvmTask(<span style="color:#66d9ef">null</span>, <span style="color:#66d9ef">true</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>3.Task 的run方法。因为map和reduce的执行逻辑大不相同，先看下MapTask中该方法的实现。是真正执行用户定义的map或者reduce任务的入 口，通过TaskUmbilicalProtocol向tasktracker上报执行进度。开启线程向TaskTracker上报进度，根据task的 不同动作要求执行不同的方法，如jobClean，jobsetup，taskCleanup。对于部分的了解可以产看<a href="../hadoop_mapreduce_tasktracker_retrieve_task">taskTracker获取Task</a>文章中的JobTracker的 heartbeat方法处的详细解释。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span>(<span style="color:#66d9ef">final</span> JobConf job, <span style="color:#66d9ef">final</span> TaskUmbilicalProtocol umbilical)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">throws</span> IOException, ClassNotFoundException, InterruptedException {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 开启线程向TaskTracker上报进度</span>
+</span></span><span style="display:flex;"><span>    TaskReporter reporter <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> TaskReporter(getProgress(), umbilical);
+</span></span><span style="display:flex;"><span>    reporter.<span style="color:#a6e22e">startCommunicationThread</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">boolean</span> useNewApi <span style="color:#f92672">=</span> job.<span style="color:#a6e22e">getUseNewMapper</span>();
+</span></span><span style="display:flex;"><span>    initialize(job, getJobID(), reporter, useNewApi);
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 根据task的不同动作要求执行不同的方法，如jobClean，jobsetup，taskCleanup</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (jobCleanup) {
+</span></span><span style="display:flex;"><span>      runJobCleanupTask(umbilical, reporter);
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (jobSetup) {
+</span></span><span style="display:flex;"><span>      runJobSetupTask(umbilical, reporter);
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (taskCleanup) {
+</span></span><span style="display:flex;"><span>      runTaskCleanupTask(umbilical, reporter);
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (useNewApi) {
+</span></span><span style="display:flex;"><span>      runNewMapper(job, split, umbilical, reporter);
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>      runOldMapper(job, split, umbilical, reporter);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    done(umbilical, reporter);
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><ol start="4">
 <li>TaskReporter的run方法。定时向父进程TaskTracker上报状态和进度。</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-      <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> MAX_RETRIES <span style="color:#f92672">=</span> 3<span style="color:#f92672">;</span>
-      <span style="color:#66d9ef">int</span> remainingRetries <span style="color:#f92672">=</span> MAX_RETRIES<span style="color:#f92672">;</span>
-      <span style="color:#75715e">// get current flag value and reset it as well
-</span><span style="color:#75715e"></span>      <span style="color:#66d9ef">boolean</span> sendProgress <span style="color:#f92672">=</span> resetProgressFlag<span style="color:#f92672">();</span>
-      <span style="color:#66d9ef">while</span> <span style="color:#f92672">(!</span>taskDone<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
-        <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
-          <span style="color:#66d9ef">boolean</span> taskFound <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span> <span style="color:#75715e">// whether TT knows about this task
-</span><span style="color:#75715e"></span>          <span style="color:#75715e">// sleep for a bit
-</span><span style="color:#75715e"></span>          <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
-            Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">sleep</span><span style="color:#f92672">(</span>PROGRESS_INTERVAL<span style="color:#f92672">);</span>
-          <span style="color:#f92672">}</span> 
-                    <span style="color:#66d9ef">break</span><span style="color:#f92672">;</span>
-          <span style="color:#f92672">}</span>
-
-          <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>sendProgress<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-            <span style="color:#75715e">// we need to send progress update
-</span><span style="color:#75715e"></span>            updateCounters<span style="color:#f92672">();</span>
-            taskStatus<span style="color:#f92672">.</span><span style="color:#a6e22e">statusUpdate</span><span style="color:#f92672">(</span>taskProgress<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(),</span>
-                                    taskProgress<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">(),</span> 
-                                    counters<span style="color:#f92672">);</span>
-            taskFound <span style="color:#f92672">=</span> umbilical<span style="color:#f92672">.</span><span style="color:#a6e22e">statusUpdate</span><span style="color:#f92672">(</span>taskId<span style="color:#f92672">,</span> taskStatus<span style="color:#f92672">);</span>
-            taskStatus<span style="color:#f92672">.</span><span style="color:#a6e22e">clearStatus</span><span style="color:#f92672">();</span>
-          <span style="color:#f92672">}</span>
-          <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
-            <span style="color:#75715e">// send ping 
-</span><span style="color:#75715e"></span>            taskFound <span style="color:#f92672">=</span> umbilical<span style="color:#f92672">.</span><span style="color:#a6e22e">ping</span><span style="color:#f92672">(</span>taskId<span style="color:#f92672">);</span>
-          <span style="color:#f92672">}</span>
-    
-          <span style="color:#75715e">// if Task Tracker is not aware of our task ID (probably because it died and 
-</span><span style="color:#75715e"></span>          <span style="color:#75715e">// came back up), kill ourselves
-</span><span style="color:#75715e"></span>          <span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>taskFound<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-            LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">warn</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Parent died.  Exiting &#34;</span><span style="color:#f92672">+</span>taskId<span style="color:#f92672">);</span>
-            System<span style="color:#f92672">.</span><span style="color:#a6e22e">exit</span><span style="color:#f92672">(</span>66<span style="color:#f92672">);</span>
-          <span style="color:#f92672">}</span>
-    
-          sendProgress <span style="color:#f92672">=</span> resetProgressFlag<span style="color:#f92672">();</span> 
-          remainingRetries <span style="color:#f92672">=</span> MAX_RETRIES<span style="color:#f92672">;</span>
-        <span style="color:#f92672">}</span> 
-        <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>Throwable t<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-                 <span style="color:#f92672">}</span>
-        <span style="color:#f92672">}</span>
-      <span style="color:#f92672">}</span>
-    <span style="color:#f92672">}</span>
-</code></pre></div><ol start="5">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span>() {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">int</span> MAX_RETRIES <span style="color:#f92672">=</span> 3;
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">int</span> remainingRetries <span style="color:#f92672">=</span> MAX_RETRIES;
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">// get current flag value and reset it as well</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">boolean</span> sendProgress <span style="color:#f92672">=</span> resetProgressFlag();
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>taskDone.<span style="color:#a6e22e">get</span>()) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">boolean</span> taskFound <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>; <span style="color:#75715e">// whether TT knows about this task</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e">// sleep for a bit</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>            Thread.<span style="color:#a6e22e">sleep</span>(PROGRESS_INTERVAL);
+</span></span><span style="display:flex;"><span>          } 
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">if</span> (sendProgress) {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// we need to send progress update</span>
+</span></span><span style="display:flex;"><span>            updateCounters();
+</span></span><span style="display:flex;"><span>            taskStatus.<span style="color:#a6e22e">statusUpdate</span>(taskProgress.<span style="color:#a6e22e">get</span>(),
+</span></span><span style="display:flex;"><span>                                    taskProgress.<span style="color:#a6e22e">toString</span>(), 
+</span></span><span style="display:flex;"><span>                                    counters);
+</span></span><span style="display:flex;"><span>            taskFound <span style="color:#f92672">=</span> umbilical.<span style="color:#a6e22e">statusUpdate</span>(taskId, taskStatus);
+</span></span><span style="display:flex;"><span>            taskStatus.<span style="color:#a6e22e">clearStatus</span>();
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// send ping </span>
+</span></span><span style="display:flex;"><span>            taskFound <span style="color:#f92672">=</span> umbilical.<span style="color:#a6e22e">ping</span>(taskId);
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e">// if Task Tracker is not aware of our task ID (probably because it died and </span>
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e">// came back up), kill ourselves</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>taskFound) {
+</span></span><span style="display:flex;"><span>            LOG.<span style="color:#a6e22e">warn</span>(<span style="color:#e6db74">&#34;Parent died.  Exiting &#34;</span><span style="color:#f92672">+</span>taskId);
+</span></span><span style="display:flex;"><span>            System.<span style="color:#a6e22e">exit</span>(66);
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>          sendProgress <span style="color:#f92672">=</span> resetProgressFlag(); 
+</span></span><span style="display:flex;"><span>          remainingRetries <span style="color:#f92672">=</span> MAX_RETRIES;
+</span></span><span style="display:flex;"><span>        } 
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">catch</span> (Throwable t) {
+</span></span><span style="display:flex;"><span>                 }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div><ol start="5">
 <li>Task 的Initialize方法初始化后续要执行的几个重要变量。包括JobContext OutputFormat OutputCommitter等，这些都是后续执行中要用到的属性实例。</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">initialize</span><span style="color:#f92672">(</span>JobConf job<span style="color:#f92672">,</span> JobID id<span style="color:#f92672">,</span> 
-                         Reporter reporter<span style="color:#f92672">,</span>
-                         <span style="color:#66d9ef">boolean</span> useNewApi<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> IOException<span style="color:#f92672">,</span> 
-                                                   ClassNotFoundException<span style="color:#f92672">,</span>
-                                                   InterruptedException <span style="color:#f92672">{</span>
-    jobContext <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> JobContext<span style="color:#f92672">(</span>job<span style="color:#f92672">,</span> id<span style="color:#f92672">,</span> reporter<span style="color:#f92672">);</span>
-    taskContext <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> TaskAttemptContext<span style="color:#f92672">(</span>job<span style="color:#f92672">,</span> taskId<span style="color:#f92672">,</span> reporter<span style="color:#f92672">);</span>
-    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>getState<span style="color:#f92672">()</span> <span style="color:#f92672">==</span> TaskStatus<span style="color:#f92672">.</span><span style="color:#a6e22e">State</span><span style="color:#f92672">.</span><span style="color:#a6e22e">UNASSIGNED</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-      setState<span style="color:#f92672">(</span>TaskStatus<span style="color:#f92672">.</span><span style="color:#a6e22e">State</span><span style="color:#f92672">.</span><span style="color:#a6e22e">RUNNING</span><span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span>
-    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>useNewApi<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-      LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">debug</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;using new api for output committer&#34;</span><span style="color:#f92672">);</span>
-      outputFormat <span style="color:#f92672">=</span>
-        ReflectionUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">newInstance</span><span style="color:#f92672">(</span>taskContext<span style="color:#f92672">.</span><span style="color:#a6e22e">getOutputFormatClass</span><span style="color:#f92672">(),</span> job<span style="color:#f92672">);</span>
-      committer <span style="color:#f92672">=</span> outputFormat<span style="color:#f92672">.</span><span style="color:#a6e22e">getOutputCommitter</span><span style="color:#f92672">(</span>taskContext<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
-      committer <span style="color:#f92672">=</span> conf<span style="color:#f92672">.</span><span style="color:#a6e22e">getOutputCommitter</span><span style="color:#f92672">();</span>
-    <span style="color:#f92672">}</span>
-    Path outputPath <span style="color:#f92672">=</span> FileOutputFormat<span style="color:#f92672">.</span><span style="color:#a6e22e">getOutputPath</span><span style="color:#f92672">(</span>conf<span style="color:#f92672">);</span>
-    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>outputPath <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-      <span style="color:#66d9ef">if</span> <span style="color:#f92672">((</span>committer <span style="color:#66d9ef">instanceof</span> FileOutputCommitter<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
-        FileOutputFormat<span style="color:#f92672">.</span><span style="color:#a6e22e">setWorkOutputPath</span><span style="color:#f92672">(</span>conf<span style="color:#f92672">,</span> 
-          <span style="color:#f92672">((</span>FileOutputCommitter<span style="color:#f92672">)</span>committer<span style="color:#f92672">).</span><span style="color:#a6e22e">getTempTaskOutputPath</span><span style="color:#f92672">(</span>taskContext<span style="color:#f92672">));</span>
-      <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
-        FileOutputFormat<span style="color:#f92672">.</span><span style="color:#a6e22e">setWorkOutputPath</span><span style="color:#f92672">(</span>conf<span style="color:#f92672">,</span> outputPath<span style="color:#f92672">);</span>
-      <span style="color:#f92672">}</span>
-    <span style="color:#f92672">}</span>
-    committer<span style="color:#f92672">.</span><span style="color:#a6e22e">setupTask</span><span style="color:#f92672">(</span>taskContext<span style="color:#f92672">);</span>
-  <span style="color:#f92672">}</span>
-</code></pre></div><ol start="6">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">initialize</span>(JobConf job, JobID id, 
+</span></span><span style="display:flex;"><span>                         Reporter reporter,
+</span></span><span style="display:flex;"><span>                         <span style="color:#66d9ef">boolean</span> useNewApi) <span style="color:#66d9ef">throws</span> IOException, 
+</span></span><span style="display:flex;"><span>                                                   ClassNotFoundException,
+</span></span><span style="display:flex;"><span>                                                   InterruptedException {
+</span></span><span style="display:flex;"><span>    jobContext <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> JobContext(job, id, reporter);
+</span></span><span style="display:flex;"><span>    taskContext <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> TaskAttemptContext(job, taskId, reporter);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (getState() <span style="color:#f92672">==</span> TaskStatus.<span style="color:#a6e22e">State</span>.<span style="color:#a6e22e">UNASSIGNED</span>) {
+</span></span><span style="display:flex;"><span>      setState(TaskStatus.<span style="color:#a6e22e">State</span>.<span style="color:#a6e22e">RUNNING</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (useNewApi) {
+</span></span><span style="display:flex;"><span>      LOG.<span style="color:#a6e22e">debug</span>(<span style="color:#e6db74">&#34;using new api for output committer&#34;</span>);
+</span></span><span style="display:flex;"><span>      outputFormat <span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>        ReflectionUtils.<span style="color:#a6e22e">newInstance</span>(taskContext.<span style="color:#a6e22e">getOutputFormatClass</span>(), job);
+</span></span><span style="display:flex;"><span>      committer <span style="color:#f92672">=</span> outputFormat.<span style="color:#a6e22e">getOutputCommitter</span>(taskContext);
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>      committer <span style="color:#f92672">=</span> conf.<span style="color:#a6e22e">getOutputCommitter</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    Path outputPath <span style="color:#f92672">=</span> FileOutputFormat.<span style="color:#a6e22e">getOutputPath</span>(conf);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (outputPath <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> ((committer <span style="color:#66d9ef">instanceof</span> FileOutputCommitter)) {
+</span></span><span style="display:flex;"><span>        FileOutputFormat.<span style="color:#a6e22e">setWorkOutputPath</span>(conf, 
+</span></span><span style="display:flex;"><span>          ((FileOutputCommitter)committer).<span style="color:#a6e22e">getTempTaskOutputPath</span>(taskContext));
+</span></span><span style="display:flex;"><span>      } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>        FileOutputFormat.<span style="color:#a6e22e">setWorkOutputPath</span>(conf, outputPath);
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    committer.<span style="color:#a6e22e">setupTask</span>(taskContext);
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><ol start="6">
 <li>Task的 runJobCleanupTask方法。即如果在Task是jobCleanup，则调用OutputCommitter删除输出文件</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">runJobCleanupTask</span><span style="color:#f92672">(</span>TaskUmbilicalProtocol umbilical<span style="color:#f92672">,</span>
-                               TaskReporter reporter
-                              <span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> IOException<span style="color:#f92672">,</span> InterruptedException <span style="color:#f92672">{</span>
-    <span style="color:#75715e">// set phase for this task
-</span><span style="color:#75715e"></span>    setPhase<span style="color:#f92672">(</span>TaskStatus<span style="color:#f92672">.</span><span style="color:#a6e22e">Phase</span><span style="color:#f92672">.</span><span style="color:#a6e22e">CLEANUP</span><span style="color:#f92672">);</span>
-    getProgress<span style="color:#f92672">().</span><span style="color:#a6e22e">setStatus</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;cleanup&#34;</span><span style="color:#f92672">);</span>
-    statusUpdate<span style="color:#f92672">(</span>umbilical<span style="color:#f92672">);</span>
-    <span style="color:#75715e">// do the cleanup
-</span><span style="color:#75715e"></span>    committer<span style="color:#f92672">.</span><span style="color:#a6e22e">cleanupJob</span><span style="color:#f92672">(</span>jobContext<span style="color:#f92672">);</span>
-    done<span style="color:#f92672">(</span>umbilical<span style="color:#f92672">,</span> reporter<span style="color:#f92672">);</span>
-  <span style="color:#f92672">}</span>
-</code></pre></div><p>7.Task的runJobSetupTask。如果Task是setupTask，则调用OutputCommitter，如创建Task要执行的根目录。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">runJobSetupTask</span><span style="color:#f92672">(</span>TaskUmbilicalProtocol umbilical<span style="color:#f92672">,</span>
-                             TaskReporter reporter
-                             <span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> IOException<span style="color:#f92672">,</span> InterruptedException <span style="color:#f92672">{</span>
-    <span style="color:#75715e">// do the setup
-</span><span style="color:#75715e"></span>    getProgress<span style="color:#f92672">().</span><span style="color:#a6e22e">setStatus</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;setup&#34;</span><span style="color:#f92672">);</span>
-    committer<span style="color:#f92672">.</span><span style="color:#a6e22e">setupJob</span><span style="color:#f92672">(</span>jobContext<span style="color:#f92672">);</span>
-    done<span style="color:#f92672">(</span>umbilical<span style="color:#f92672">,</span> reporter<span style="color:#f92672">);</span>
-  <span style="color:#f92672">}</span>
-</code></pre></div><ol start="8">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">runJobCleanupTask</span>(TaskUmbilicalProtocol umbilical,
+</span></span><span style="display:flex;"><span>                               TaskReporter reporter
+</span></span><span style="display:flex;"><span>                              ) <span style="color:#66d9ef">throws</span> IOException, InterruptedException {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// set phase for this task</span>
+</span></span><span style="display:flex;"><span>    setPhase(TaskStatus.<span style="color:#a6e22e">Phase</span>.<span style="color:#a6e22e">CLEANUP</span>);
+</span></span><span style="display:flex;"><span>    getProgress().<span style="color:#a6e22e">setStatus</span>(<span style="color:#e6db74">&#34;cleanup&#34;</span>);
+</span></span><span style="display:flex;"><span>    statusUpdate(umbilical);
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// do the cleanup</span>
+</span></span><span style="display:flex;"><span>    committer.<span style="color:#a6e22e">cleanupJob</span>(jobContext);
+</span></span><span style="display:flex;"><span>    done(umbilical, reporter);
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><p>7.Task的runJobSetupTask。如果Task是setupTask，则调用OutputCommitter，如创建Task要执行的根目录。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">runJobSetupTask</span>(TaskUmbilicalProtocol umbilical,
+</span></span><span style="display:flex;"><span>                             TaskReporter reporter
+</span></span><span style="display:flex;"><span>                             ) <span style="color:#66d9ef">throws</span> IOException, InterruptedException {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// do the setup</span>
+</span></span><span style="display:flex;"><span>    getProgress().<span style="color:#a6e22e">setStatus</span>(<span style="color:#e6db74">&#34;setup&#34;</span>);
+</span></span><span style="display:flex;"><span>    committer.<span style="color:#a6e22e">setupJob</span>(jobContext);
+</span></span><span style="display:flex;"><span>    done(umbilical, reporter);
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><ol start="8">
 <li>Task的runTaskCleanupTask。如果Task是taskCleanup，则调用taskCleanup 方法。最终OutputCommitter方法删除task的工作目录。</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">runTaskCleanupTask</span><span style="color:#f92672">(</span>TaskUmbilicalProtocol umbilical<span style="color:#f92672">,</span>
-                                TaskReporter reporter<span style="color:#f92672">)</span> 
-  <span style="color:#66d9ef">throws</span> IOException<span style="color:#f92672">,</span> InterruptedException <span style="color:#f92672">{</span>
-    taskCleanup<span style="color:#f92672">(</span>umbilical<span style="color:#f92672">);</span>
-    done<span style="color:#f92672">(</span>umbilical<span style="color:#f92672">,</span> reporter<span style="color:#f92672">);</span>
-  <span style="color:#f92672">}</span>
-</code></pre></div><p>9.MapTask的runNewMapper方法是我们要重点关注的方法，是真正执行用户定义的map的方法。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">runTaskCleanupTask</span>(TaskUmbilicalProtocol umbilical,
+</span></span><span style="display:flex;"><span>                                TaskReporter reporter) 
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">throws</span> IOException, InterruptedException {
+</span></span><span style="display:flex;"><span>    taskCleanup(umbilical);
+</span></span><span style="display:flex;"><span>    done(umbilical, reporter);
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><p>9.MapTask的runNewMapper方法是我们要重点关注的方法，是真正执行用户定义的map的方法。</p>
 <p>1)根据传入的jobconf构造一个context，包含了job相关的所有配置信息，如后面用到的mapper、inputformat等。</p>
 <p>2)根据配置的mapper类创建一个Mapper实例</p>
 <p>3)根据配置的inputformat创建一个InputFormat实例。</p>
@@ -474,100 +474,100 @@ Task task <span style="color:#f92672">=</span> <span style="color:#66d9ef">null<
 <p>6)构造输出RecordWriter。当没有Reducer时，output是配置的outputFormat的RecordWriter，即直接写输出。如果ruducer数量不为0，则构造一个NewOutputCollector</p>
 <p>7)构造Mapper.Context，封装了刚才配置的所有信息，在map执行时候时候使用。</p>
 <p>8)调用mapper的run方法来执行map动作。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@SuppressWarnings</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;unchecked&#34;</span><span style="color:#f92672">)</span>
-  <span style="color:#66d9ef">private</span> <span style="color:#f92672">&lt;</span>INKEY<span style="color:#f92672">,</span>INVALUE<span style="color:#f92672">,</span>OUTKEY<span style="color:#f92672">,</span>OUTVALUE<span style="color:#f92672">&gt;</span>
-  <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">runNewMapper</span><span style="color:#f92672">(</span><span style="color:#66d9ef">final</span> JobConf job<span style="color:#f92672">,</span>
-                    <span style="color:#66d9ef">final</span> BytesWritable rawSplit<span style="color:#f92672">,</span>
-                    <span style="color:#66d9ef">final</span> TaskUmbilicalProtocol umbilical<span style="color:#f92672">,</span>
-                    TaskReporter reporter
-                    <span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> IOException<span style="color:#f92672">,</span> ClassNotFoundException<span style="color:#f92672">,</span>
-                             InterruptedException <span style="color:#f92672">{</span>
-    <span style="color:#75715e">// 1. 根据传入的jobconf构造一个context，包含了job相关的所有配置信息，如后面用到的mapper、inputformat等。
-</span><span style="color:#75715e"></span>    org<span style="color:#f92672">.</span><span style="color:#a6e22e">apache</span><span style="color:#f92672">.</span><span style="color:#a6e22e">hadoop</span><span style="color:#f92672">.</span><span style="color:#a6e22e">mapreduce</span><span style="color:#f92672">.</span><span style="color:#a6e22e">TaskAttemptContext</span> taskContext <span style="color:#f92672">=</span>
-      <span style="color:#66d9ef">new</span> org<span style="color:#f92672">.</span><span style="color:#a6e22e">apache</span><span style="color:#f92672">.</span><span style="color:#a6e22e">hadoop</span><span style="color:#f92672">.</span><span style="color:#a6e22e">mapreduce</span><span style="color:#f92672">.</span><span style="color:#a6e22e">TaskAttemptContext</span><span style="color:#f92672">(</span>job<span style="color:#f92672">,</span> getTaskID<span style="color:#f92672">());</span>
-    <span style="color:#75715e">// 2. 根据配置的mapper类创建一个Mapper实例
-</span><span style="color:#75715e"></span>    org<span style="color:#f92672">.</span><span style="color:#a6e22e">apache</span><span style="color:#f92672">.</span><span style="color:#a6e22e">hadoop</span><span style="color:#f92672">.</span><span style="color:#a6e22e">mapreduce</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Mapper</span><span style="color:#f92672">&lt;</span>INKEY<span style="color:#f92672">,</span>INVALUE<span style="color:#f92672">,</span>OUTKEY<span style="color:#f92672">,</span>OUTVALUE<span style="color:#f92672">&gt;</span> mapper <span style="color:#f92672">=</span>
-      <span style="color:#f92672">(</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">apache</span><span style="color:#f92672">.</span><span style="color:#a6e22e">hadoop</span><span style="color:#f92672">.</span><span style="color:#a6e22e">mapreduce</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Mapper</span><span style="color:#f92672">&lt;</span>INKEY<span style="color:#f92672">,</span>INVALUE<span style="color:#f92672">,</span>OUTKEY<span style="color:#f92672">,</span>OUTVALUE<span style="color:#f92672">&gt;)</span>
-        ReflectionUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">newInstance</span><span style="color:#f92672">(</span>taskContext<span style="color:#f92672">.</span><span style="color:#a6e22e">getMapperClass</span><span style="color:#f92672">(),</span> job<span style="color:#f92672">);</span>
-    <span style="color:#75715e">// 根据配置的input format创建一个InputFormat实例。
-</span><span style="color:#75715e"></span>    org<span style="color:#f92672">.</span><span style="color:#a6e22e">apache</span><span style="color:#f92672">.</span><span style="color:#a6e22e">hadoop</span><span style="color:#f92672">.</span><span style="color:#a6e22e">mapreduce</span><span style="color:#f92672">.</span><span style="color:#a6e22e">InputFormat</span><span style="color:#f92672">&lt;</span>INKEY<span style="color:#f92672">,</span>INVALUE<span style="color:#f92672">&gt;</span> inputFormat <span style="color:#f92672">=</span>
-      <span style="color:#f92672">(</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">apache</span><span style="color:#f92672">.</span><span style="color:#a6e22e">hadoop</span><span style="color:#f92672">.</span><span style="color:#a6e22e">mapreduce</span><span style="color:#f92672">.</span><span style="color:#a6e22e">InputFormat</span><span style="color:#f92672">&lt;</span>INKEY<span style="color:#f92672">,</span>INVALUE<span style="color:#f92672">&gt;)</span>
-        ReflectionUtils<span style="color:#f92672">.</span><span style="color:#a6e22e">newInstance</span><span style="color:#f92672">(</span>taskContext<span style="color:#f92672">.</span><span style="color:#a6e22e">getInputFormatClass</span><span style="color:#f92672">(),</span> job<span style="color:#f92672">);</span>
-    <span style="color:#75715e">// 4.重新够构建InputSplit
-</span><span style="color:#75715e"></span>    org<span style="color:#f92672">.</span><span style="color:#a6e22e">apache</span><span style="color:#f92672">.</span><span style="color:#a6e22e">hadoop</span><span style="color:#f92672">.</span><span style="color:#a6e22e">mapreduce</span><span style="color:#f92672">.</span><span style="color:#a6e22e">InputSplit</span> split <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
-    DataInputBuffer splitBuffer <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> DataInputBuffer<span style="color:#f92672">();</span>
-    splitBuffer<span style="color:#f92672">.</span><span style="color:#a6e22e">reset</span><span style="color:#f92672">(</span>rawSplit<span style="color:#f92672">.</span><span style="color:#a6e22e">getBytes</span><span style="color:#f92672">(),</span> 0<span style="color:#f92672">,</span> rawSplit<span style="color:#f92672">.</span><span style="color:#a6e22e">getLength</span><span style="color:#f92672">());</span>
-    SerializationFactory factory <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> SerializationFactory<span style="color:#f92672">(</span>job<span style="color:#f92672">);</span>
-    Deserializer<span style="color:#f92672">&lt;</span> <span style="color:#66d9ef">extends</span> org<span style="color:#f92672">.</span><span style="color:#a6e22e">apache</span><span style="color:#f92672">.</span><span style="color:#a6e22e">hadoop</span><span style="color:#f92672">.</span><span style="color:#a6e22e">mapreduce</span><span style="color:#f92672">.</span><span style="color:#a6e22e">InputSplit</span><span style="color:#f92672">&gt;</span>
-      deserializer <span style="color:#f92672">=</span> 
-        <span style="color:#f92672">(</span>Deserializer<span style="color:#f92672">&lt;</span> <span style="color:#66d9ef">extends</span> org<span style="color:#f92672">.</span><span style="color:#a6e22e">apache</span><span style="color:#f92672">.</span><span style="color:#a6e22e">hadoop</span><span style="color:#f92672">.</span><span style="color:#a6e22e">mapreduce</span><span style="color:#f92672">.</span><span style="color:#a6e22e">InputSplit</span><span style="color:#f92672">&gt;)</span> 
-        factory<span style="color:#f92672">.</span><span style="color:#a6e22e">getDeserializer</span><span style="color:#f92672">(</span>job<span style="color:#f92672">.</span><span style="color:#a6e22e">getClassByName</span><span style="color:#f92672">(</span>splitClass<span style="color:#f92672">));</span>
-    deserializer<span style="color:#f92672">.</span><span style="color:#a6e22e">open</span><span style="color:#f92672">(</span>splitBuffer<span style="color:#f92672">);</span>
-    split <span style="color:#f92672">=</span> deserializer<span style="color:#f92672">.</span><span style="color:#a6e22e">deserialize</span><span style="color:#f92672">(</span><span style="color:#66d9ef">null</span><span style="color:#f92672">);</span>
-
-    <span style="color:#75715e">//5. 创建RecordReader，其实使用的是适配器模式适配了inputFormat的Reader。
-</span><span style="color:#75715e"></span>    org<span style="color:#f92672">.</span><span style="color:#a6e22e">apache</span><span style="color:#f92672">.</span><span style="color:#a6e22e">hadoop</span><span style="color:#f92672">.</span><span style="color:#a6e22e">mapreduce</span><span style="color:#f92672">.</span><span style="color:#a6e22e">RecordReader</span><span style="color:#f92672">&lt;</span>INKEY<span style="color:#f92672">,</span>INVALUE<span style="color:#f92672">&gt;</span> input <span style="color:#f92672">=</span>
-      <span style="color:#66d9ef">new</span> NewTrackingRecordReader<span style="color:#f92672">&lt;</span>INKEY<span style="color:#f92672">,</span>INVALUE<span style="color:#f92672">&gt;</span>
-          <span style="color:#f92672">(</span>inputFormat<span style="color:#f92672">.</span><span style="color:#a6e22e">createRecordReader</span><span style="color:#f92672">(</span>split<span style="color:#f92672">,</span> taskContext<span style="color:#f92672">),</span> reporter<span style="color:#f92672">);</span>
-    
-    job<span style="color:#f92672">.</span><span style="color:#a6e22e">setBoolean</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;mapred.skip.on&#34;</span><span style="color:#f92672">,</span> isSkipping<span style="color:#f92672">());</span>
-    org<span style="color:#f92672">.</span><span style="color:#a6e22e">apache</span><span style="color:#f92672">.</span><span style="color:#a6e22e">hadoop</span><span style="color:#f92672">.</span><span style="color:#a6e22e">mapreduce</span><span style="color:#f92672">.</span><span style="color:#a6e22e">RecordWriter</span> output <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
-    org<span style="color:#f92672">.</span><span style="color:#a6e22e">apache</span><span style="color:#f92672">.</span><span style="color:#a6e22e">hadoop</span><span style="color:#f92672">.</span><span style="color:#a6e22e">mapreduce</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Mapper</span><span style="color:#f92672">&lt;</span>INKEY<span style="color:#f92672">,</span>INVALUE<span style="color:#f92672">,</span>OUTKEY<span style="color:#f92672">,</span>OUTVALUE<span style="color:#f92672">&gt;.</span><span style="color:#a6e22e">Context</span> 
-         mapperContext <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
-    <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
-      Constructor<span style="color:#f92672">&lt;</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">apache</span><span style="color:#f92672">.</span><span style="color:#a6e22e">hadoop</span><span style="color:#f92672">.</span><span style="color:#a6e22e">mapreduce</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Mapper</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Context</span><span style="color:#f92672">&gt;</span> contextConstructor <span style="color:#f92672">=</span>
-        org<span style="color:#f92672">.</span><span style="color:#a6e22e">apache</span><span style="color:#f92672">.</span><span style="color:#a6e22e">hadoop</span><span style="color:#f92672">.</span><span style="color:#a6e22e">mapreduce</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Mapper</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Context</span><span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getConstructor</span>
-        <span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> Class<span style="color:#f92672">[]{</span>org<span style="color:#f92672">.</span><span style="color:#a6e22e">apache</span><span style="color:#f92672">.</span><span style="color:#a6e22e">hadoop</span><span style="color:#f92672">.</span><span style="color:#a6e22e">mapreduce</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Mapper</span><span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">,</span>
-                     Configuration<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">,</span>
-                     org<span style="color:#f92672">.</span><span style="color:#a6e22e">apache</span><span style="color:#f92672">.</span><span style="color:#a6e22e">hadoop</span><span style="color:#f92672">.</span><span style="color:#a6e22e">mapreduce</span><span style="color:#f92672">.</span><span style="color:#a6e22e">TaskAttemptID</span><span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">,</span>
-                     org<span style="color:#f92672">.</span><span style="color:#a6e22e">apache</span><span style="color:#f92672">.</span><span style="color:#a6e22e">hadoop</span><span style="color:#f92672">.</span><span style="color:#a6e22e">mapreduce</span><span style="color:#f92672">.</span><span style="color:#a6e22e">RecordReader</span><span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">,</span>
-                     org<span style="color:#f92672">.</span><span style="color:#a6e22e">apache</span><span style="color:#f92672">.</span><span style="color:#a6e22e">hadoop</span><span style="color:#f92672">.</span><span style="color:#a6e22e">mapreduce</span><span style="color:#f92672">.</span><span style="color:#a6e22e">RecordWriter</span><span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">,</span>
-                     org<span style="color:#f92672">.</span><span style="color:#a6e22e">apache</span><span style="color:#f92672">.</span><span style="color:#a6e22e">hadoop</span><span style="color:#f92672">.</span><span style="color:#a6e22e">mapreduce</span><span style="color:#f92672">.</span><span style="color:#a6e22e">OutputCommitter</span><span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">,</span>
-                     org<span style="color:#f92672">.</span><span style="color:#a6e22e">apache</span><span style="color:#f92672">.</span><span style="color:#a6e22e">hadoop</span><span style="color:#f92672">.</span><span style="color:#a6e22e">mapreduce</span><span style="color:#f92672">.</span><span style="color:#a6e22e">StatusReporter</span><span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">,</span>
-                     org<span style="color:#f92672">.</span><span style="color:#a6e22e">apache</span><span style="color:#f92672">.</span><span style="color:#a6e22e">hadoop</span><span style="color:#f92672">.</span><span style="color:#a6e22e">mapreduce</span><span style="color:#f92672">.</span><span style="color:#a6e22e">InputSplit</span><span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">});</span>
-    
-      <span style="color:#75715e">//6. 构造输出RecordWriter。当没有Reducer时，output是配置的outputFormat的RecordWriter，即直接写输出。如果ruducer数量不为0，则构造一个NewOutputCollector
-</span><span style="color:#75715e"></span>      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>job<span style="color:#f92672">.</span><span style="color:#a6e22e">getNumReduceTasks</span><span style="color:#f92672">()</span> <span style="color:#f92672">==</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        output <span style="color:#f92672">=</span> outputFormat<span style="color:#f92672">.</span><span style="color:#a6e22e">getRecordWriter</span><span style="color:#f92672">(</span>taskContext<span style="color:#f92672">);</span>
-      <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
-        output <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> NewOutputCollector<span style="color:#f92672">(</span>job<span style="color:#f92672">,</span> umbilical<span style="color:#f92672">,</span> reporter<span style="color:#f92672">);</span>
-      <span style="color:#f92672">}</span>
-    
-      <span style="color:#75715e">//7.构造Mapper.Context，封装了刚才配置的所有信息，在map执行时候时候使用。
-</span><span style="color:#75715e"></span>      mapperContext <span style="color:#f92672">=</span> contextConstructor<span style="color:#f92672">.</span><span style="color:#a6e22e">newInstance</span><span style="color:#f92672">(</span>mapper<span style="color:#f92672">,</span> job<span style="color:#f92672">,</span> getTaskID<span style="color:#f92672">(),</span>
-                                                     input<span style="color:#f92672">,</span> output<span style="color:#f92672">,</span> committer<span style="color:#f92672">,</span>
-                                                     reporter<span style="color:#f92672">,</span> split<span style="color:#f92672">);</span>
-    
-      input<span style="color:#f92672">.</span><span style="color:#a6e22e">initialize</span><span style="color:#f92672">(</span>split<span style="color:#f92672">,</span> mapperContext<span style="color:#f92672">);</span>
-      <span style="color:#75715e">//8. 调用mapper的run方法来执行map动作。
-</span><span style="color:#75715e"></span>      mapper<span style="color:#f92672">.</span><span style="color:#a6e22e">run</span><span style="color:#f92672">(</span>mapperContext<span style="color:#f92672">);</span>
-      input<span style="color:#f92672">.</span><span style="color:#a6e22e">close</span><span style="color:#f92672">();</span>
-      output<span style="color:#f92672">.</span><span style="color:#a6e22e">close</span><span style="color:#f92672">(</span>mapperContext<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>NoSuchMethodException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-      <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IOException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Can&#39;t find Context constructor&#34;</span><span style="color:#f92672">,</span> e<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>InstantiationException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-      <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IOException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Can&#39;t create Context&#34;</span><span style="color:#f92672">,</span> e<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>InvocationTargetException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-      <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IOException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Can&#39;t invoke Context constructor&#34;</span><span style="color:#f92672">,</span> e<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>IllegalAccessException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-      <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IOException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Can&#39;t invoke Context constructor&#34;</span><span style="color:#f92672">,</span> e<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span>
-  <span style="color:#f92672">}</span>
-</code></pre></div><p>10.Mapper的run方法。即对每一个输入的记录执行map方法。一般不会改变，就是拿出输入记录逐条执行map方法。除非要改变记录的执行方式，（如MultithreadedMapper需要多线程来执行），一般该方法不用override。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span><span style="color:#f92672">(</span>Context context<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> IOException<span style="color:#f92672">,</span> InterruptedException <span style="color:#f92672">{</span>
-    setup<span style="color:#f92672">(</span>context<span style="color:#f92672">);</span>
-    <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span>context<span style="color:#f92672">.</span><span style="color:#a6e22e">nextKeyValue</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
-      map<span style="color:#f92672">(</span>context<span style="color:#f92672">.</span><span style="color:#a6e22e">getCurrentKey</span><span style="color:#f92672">(),</span> context<span style="color:#f92672">.</span><span style="color:#a6e22e">getCurrentValue</span><span style="color:#f92672">(),</span> context<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span>
-    cleanup<span style="color:#f92672">(</span>context<span style="color:#f92672">);</span>
-  <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span>
-</code></pre></div><p>11.Mapper的map方法。即对每一个输入的记录执行map方法。这个只是默然的map执行方法，把输入不变的输出即可。用户定义的mapper就是override这个方法来按照自己定义的逻辑来处理数据。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">map</span><span style="color:#f92672">(</span>KEYIN key<span style="color:#f92672">,</span> VALUEIN value<span style="color:#f92672">,</span> 
-                     Context context<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> IOException<span style="color:#f92672">,</span> InterruptedException <span style="color:#f92672">{</span>
-    context<span style="color:#f92672">.</span><span style="color:#a6e22e">write</span><span style="color:#f92672">((</span>KEYOUT<span style="color:#f92672">)</span> key<span style="color:#f92672">,</span> <span style="color:#f92672">(</span>VALUEOUT<span style="color:#f92672">)</span> value<span style="color:#f92672">);</span>
-  <span style="color:#f92672">}</span>
-</code></pre></div><p>完。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@SuppressWarnings</span>(<span style="color:#e6db74">&#34;unchecked&#34;</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">private</span> <span style="color:#f92672">&lt;</span>INKEY,INVALUE,OUTKEY,OUTVALUE<span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">runNewMapper</span>(<span style="color:#66d9ef">final</span> JobConf job,
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">final</span> BytesWritable rawSplit,
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">final</span> TaskUmbilicalProtocol umbilical,
+</span></span><span style="display:flex;"><span>                    TaskReporter reporter
+</span></span><span style="display:flex;"><span>                    ) <span style="color:#66d9ef">throws</span> IOException, ClassNotFoundException,
+</span></span><span style="display:flex;"><span>                             InterruptedException {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 1. 根据传入的jobconf构造一个context，包含了job相关的所有配置信息，如后面用到的mapper、inputformat等。</span>
+</span></span><span style="display:flex;"><span>    org.<span style="color:#a6e22e">apache</span>.<span style="color:#a6e22e">hadoop</span>.<span style="color:#a6e22e">mapreduce</span>.<span style="color:#a6e22e">TaskAttemptContext</span> taskContext <span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">new</span> org.<span style="color:#a6e22e">apache</span>.<span style="color:#a6e22e">hadoop</span>.<span style="color:#a6e22e">mapreduce</span>.<span style="color:#a6e22e">TaskAttemptContext</span>(job, getTaskID());
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 2. 根据配置的mapper类创建一个Mapper实例</span>
+</span></span><span style="display:flex;"><span>    org.<span style="color:#a6e22e">apache</span>.<span style="color:#a6e22e">hadoop</span>.<span style="color:#a6e22e">mapreduce</span>.<span style="color:#a6e22e">Mapper</span><span style="color:#f92672">&lt;</span>INKEY,INVALUE,OUTKEY,OUTVALUE<span style="color:#f92672">&gt;</span> mapper <span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>      (org.<span style="color:#a6e22e">apache</span>.<span style="color:#a6e22e">hadoop</span>.<span style="color:#a6e22e">mapreduce</span>.<span style="color:#a6e22e">Mapper</span><span style="color:#f92672">&lt;</span>INKEY,INVALUE,OUTKEY,OUTVALUE<span style="color:#f92672">&gt;</span>)
+</span></span><span style="display:flex;"><span>        ReflectionUtils.<span style="color:#a6e22e">newInstance</span>(taskContext.<span style="color:#a6e22e">getMapperClass</span>(), job);
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 根据配置的input format创建一个InputFormat实例。</span>
+</span></span><span style="display:flex;"><span>    org.<span style="color:#a6e22e">apache</span>.<span style="color:#a6e22e">hadoop</span>.<span style="color:#a6e22e">mapreduce</span>.<span style="color:#a6e22e">InputFormat</span><span style="color:#f92672">&lt;</span>INKEY,INVALUE<span style="color:#f92672">&gt;</span> inputFormat <span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>      (org.<span style="color:#a6e22e">apache</span>.<span style="color:#a6e22e">hadoop</span>.<span style="color:#a6e22e">mapreduce</span>.<span style="color:#a6e22e">InputFormat</span><span style="color:#f92672">&lt;</span>INKEY,INVALUE<span style="color:#f92672">&gt;</span>)
+</span></span><span style="display:flex;"><span>        ReflectionUtils.<span style="color:#a6e22e">newInstance</span>(taskContext.<span style="color:#a6e22e">getInputFormatClass</span>(), job);
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 4.重新够构建InputSplit</span>
+</span></span><span style="display:flex;"><span>    org.<span style="color:#a6e22e">apache</span>.<span style="color:#a6e22e">hadoop</span>.<span style="color:#a6e22e">mapreduce</span>.<span style="color:#a6e22e">InputSplit</span> split <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>    DataInputBuffer splitBuffer <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> DataInputBuffer();
+</span></span><span style="display:flex;"><span>    splitBuffer.<span style="color:#a6e22e">reset</span>(rawSplit.<span style="color:#a6e22e">getBytes</span>(), 0, rawSplit.<span style="color:#a6e22e">getLength</span>());
+</span></span><span style="display:flex;"><span>    SerializationFactory factory <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> SerializationFactory(job);
+</span></span><span style="display:flex;"><span>    Deserializer<span style="color:#f92672">&lt;</span> <span style="color:#66d9ef">extends</span> org.<span style="color:#a6e22e">apache</span>.<span style="color:#a6e22e">hadoop</span>.<span style="color:#a6e22e">mapreduce</span>.<span style="color:#a6e22e">InputSplit</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>      deserializer <span style="color:#f92672">=</span> 
+</span></span><span style="display:flex;"><span>        (Deserializer<span style="color:#f92672">&lt;</span> <span style="color:#66d9ef">extends</span> org.<span style="color:#a6e22e">apache</span>.<span style="color:#a6e22e">hadoop</span>.<span style="color:#a6e22e">mapreduce</span>.<span style="color:#a6e22e">InputSplit</span><span style="color:#f92672">&gt;</span>) 
+</span></span><span style="display:flex;"><span>        factory.<span style="color:#a6e22e">getDeserializer</span>(job.<span style="color:#a6e22e">getClassByName</span>(splitClass));
+</span></span><span style="display:flex;"><span>    deserializer.<span style="color:#a6e22e">open</span>(splitBuffer);
+</span></span><span style="display:flex;"><span>    split <span style="color:#f92672">=</span> deserializer.<span style="color:#a6e22e">deserialize</span>(<span style="color:#66d9ef">null</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//5. 创建RecordReader，其实使用的是适配器模式适配了inputFormat的Reader。</span>
+</span></span><span style="display:flex;"><span>    org.<span style="color:#a6e22e">apache</span>.<span style="color:#a6e22e">hadoop</span>.<span style="color:#a6e22e">mapreduce</span>.<span style="color:#a6e22e">RecordReader</span><span style="color:#f92672">&lt;</span>INKEY,INVALUE<span style="color:#f92672">&gt;</span> input <span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">new</span> NewTrackingRecordReader<span style="color:#f92672">&lt;</span>INKEY,INVALUE<span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>          (inputFormat.<span style="color:#a6e22e">createRecordReader</span>(split, taskContext), reporter);
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    job.<span style="color:#a6e22e">setBoolean</span>(<span style="color:#e6db74">&#34;mapred.skip.on&#34;</span>, isSkipping());
+</span></span><span style="display:flex;"><span>    org.<span style="color:#a6e22e">apache</span>.<span style="color:#a6e22e">hadoop</span>.<span style="color:#a6e22e">mapreduce</span>.<span style="color:#a6e22e">RecordWriter</span> output <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>    org.<span style="color:#a6e22e">apache</span>.<span style="color:#a6e22e">hadoop</span>.<span style="color:#a6e22e">mapreduce</span>.<span style="color:#a6e22e">Mapper</span><span style="color:#f92672">&lt;</span>INKEY,INVALUE,OUTKEY,OUTVALUE<span style="color:#f92672">&gt;</span>.<span style="color:#a6e22e">Context</span> 
+</span></span><span style="display:flex;"><span>         mapperContext <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>      Constructor<span style="color:#f92672">&lt;</span>org.<span style="color:#a6e22e">apache</span>.<span style="color:#a6e22e">hadoop</span>.<span style="color:#a6e22e">mapreduce</span>.<span style="color:#a6e22e">Mapper</span>.<span style="color:#a6e22e">Context</span><span style="color:#f92672">&gt;</span> contextConstructor <span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>        org.<span style="color:#a6e22e">apache</span>.<span style="color:#a6e22e">hadoop</span>.<span style="color:#a6e22e">mapreduce</span>.<span style="color:#a6e22e">Mapper</span>.<span style="color:#a6e22e">Context</span>.<span style="color:#a6e22e">class</span>.<span style="color:#a6e22e">getConstructor</span>
+</span></span><span style="display:flex;"><span>        (<span style="color:#66d9ef">new</span> Class<span style="color:#f92672">[]</span>{org.<span style="color:#a6e22e">apache</span>.<span style="color:#a6e22e">hadoop</span>.<span style="color:#a6e22e">mapreduce</span>.<span style="color:#a6e22e">Mapper</span>.<span style="color:#a6e22e">class</span>,
+</span></span><span style="display:flex;"><span>                     Configuration.<span style="color:#a6e22e">class</span>,
+</span></span><span style="display:flex;"><span>                     org.<span style="color:#a6e22e">apache</span>.<span style="color:#a6e22e">hadoop</span>.<span style="color:#a6e22e">mapreduce</span>.<span style="color:#a6e22e">TaskAttemptID</span>.<span style="color:#a6e22e">class</span>,
+</span></span><span style="display:flex;"><span>                     org.<span style="color:#a6e22e">apache</span>.<span style="color:#a6e22e">hadoop</span>.<span style="color:#a6e22e">mapreduce</span>.<span style="color:#a6e22e">RecordReader</span>.<span style="color:#a6e22e">class</span>,
+</span></span><span style="display:flex;"><span>                     org.<span style="color:#a6e22e">apache</span>.<span style="color:#a6e22e">hadoop</span>.<span style="color:#a6e22e">mapreduce</span>.<span style="color:#a6e22e">RecordWriter</span>.<span style="color:#a6e22e">class</span>,
+</span></span><span style="display:flex;"><span>                     org.<span style="color:#a6e22e">apache</span>.<span style="color:#a6e22e">hadoop</span>.<span style="color:#a6e22e">mapreduce</span>.<span style="color:#a6e22e">OutputCommitter</span>.<span style="color:#a6e22e">class</span>,
+</span></span><span style="display:flex;"><span>                     org.<span style="color:#a6e22e">apache</span>.<span style="color:#a6e22e">hadoop</span>.<span style="color:#a6e22e">mapreduce</span>.<span style="color:#a6e22e">StatusReporter</span>.<span style="color:#a6e22e">class</span>,
+</span></span><span style="display:flex;"><span>                     org.<span style="color:#a6e22e">apache</span>.<span style="color:#a6e22e">hadoop</span>.<span style="color:#a6e22e">mapreduce</span>.<span style="color:#a6e22e">InputSplit</span>.<span style="color:#a6e22e">class</span>});
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">//6. 构造输出RecordWriter。当没有Reducer时，output是配置的outputFormat的RecordWriter，即直接写输出。如果ruducer数量不为0，则构造一个NewOutputCollector</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (job.<span style="color:#a6e22e">getNumReduceTasks</span>() <span style="color:#f92672">==</span> 0) {
+</span></span><span style="display:flex;"><span>        output <span style="color:#f92672">=</span> outputFormat.<span style="color:#a6e22e">getRecordWriter</span>(taskContext);
+</span></span><span style="display:flex;"><span>      } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>        output <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> NewOutputCollector(job, umbilical, reporter);
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">//7.构造Mapper.Context，封装了刚才配置的所有信息，在map执行时候时候使用。</span>
+</span></span><span style="display:flex;"><span>      mapperContext <span style="color:#f92672">=</span> contextConstructor.<span style="color:#a6e22e">newInstance</span>(mapper, job, getTaskID(),
+</span></span><span style="display:flex;"><span>                                                     input, output, committer,
+</span></span><span style="display:flex;"><span>                                                     reporter, split);
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>      input.<span style="color:#a6e22e">initialize</span>(split, mapperContext);
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">//8. 调用mapper的run方法来执行map动作。</span>
+</span></span><span style="display:flex;"><span>      mapper.<span style="color:#a6e22e">run</span>(mapperContext);
+</span></span><span style="display:flex;"><span>      input.<span style="color:#a6e22e">close</span>();
+</span></span><span style="display:flex;"><span>      output.<span style="color:#a6e22e">close</span>(mapperContext);
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">catch</span> (NoSuchMethodException e) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IOException(<span style="color:#e6db74">&#34;Can&#39;t find Context constructor&#34;</span>, e);
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">catch</span> (InstantiationException e) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IOException(<span style="color:#e6db74">&#34;Can&#39;t create Context&#34;</span>, e);
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">catch</span> (InvocationTargetException e) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IOException(<span style="color:#e6db74">&#34;Can&#39;t invoke Context constructor&#34;</span>, e);
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">catch</span> (IllegalAccessException e) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IOException(<span style="color:#e6db74">&#34;Can&#39;t invoke Context constructor&#34;</span>, e);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><p>10.Mapper的run方法。即对每一个输入的记录执行map方法。一般不会改变，就是拿出输入记录逐条执行map方法。除非要改变记录的执行方式，（如MultithreadedMapper需要多线程来执行），一般该方法不用override。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span>(Context context) <span style="color:#66d9ef">throws</span> IOException, InterruptedException {
+</span></span><span style="display:flex;"><span>    setup(context);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> (context.<span style="color:#a6e22e">nextKeyValue</span>()) {
+</span></span><span style="display:flex;"><span>      map(context.<span style="color:#a6e22e">getCurrentKey</span>(), context.<span style="color:#a6e22e">getCurrentValue</span>(), context);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    cleanup(context);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>11.Mapper的map方法。即对每一个输入的记录执行map方法。这个只是默然的map执行方法，把输入不变的输出即可。用户定义的mapper就是override这个方法来按照自己定义的逻辑来处理数据。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">map</span>(KEYIN key, VALUEIN value, 
+</span></span><span style="display:flex;"><span>                     Context context) <span style="color:#66d9ef">throws</span> IOException, InterruptedException {
+</span></span><span style="display:flex;"><span>    context.<span style="color:#a6e22e">write</span>((KEYOUT) key, (VALUEOUT) value);
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><p>完。</p>
 
   
 

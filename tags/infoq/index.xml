@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Infoq on 爱豆吧！</title>
+    <link>http://idouba.com/tags/infoq/</link>
+    <description>Recent content in Infoq on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>&lt;a href=&#39;https://beian.miit.gov.cn/&#39; target=&#39;_blank&#39;&gt;浙ICP备18050493号-1&lt;/a&gt; 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Thu, 29 Nov 2018 15:23:04 +0000</lastBuildDate>
+    <atom:link href="http://idouba.com/tags/infoq/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Istio 调用链埋点原理剖析—是否真的“零修改”？</title>
+      <link>http://idouba.com/istio-tracing-is-not-zero-code-change/</link>
+      <pubDate>Thu, 29 Nov 2018 15:23:04 +0000</pubDate>
+      <guid>http://idouba.com/istio-tracing-is-not-zero-code-change/</guid>
+      <description>发在Infoq上的一篇文章，答疑当前大家工作中碰到的Istio调用链的问题，最终澄清了观点，并推动社区修改了说法，避免误解。 前言 在 Istio 的实践中最近经常被问到一个问题，使用 Istio 做调用链用户的业务代码是不是完全 0 侵入，到底要不要修改业务代码？ 看官方介绍： Istio makes it easy to create a network of deployed services with load balancing, service-to-service authentication, monitoring, and more, without any changes in service code. 是不用修改任何代码即可做各种治理。实际使用中应用程序不做任何修改，使用 Istio 的调用链输出总是断开的，这到底是什么原因呢？ 对以上问题关注的人比较多，但是貌似说的都不是特别清楚，在最近的 K8S 技术社区的 Meetup 上笔者专门做</description>
+    </item>
+    <item>
+      <title>戏（细）说Executor框架线程池任务执行全过程（下）</title>
+      <link>http://idouba.com/executor-framework-thread-pool-task-execution-part-02/</link>
+      <pubDate>Fri, 05 Jun 2015 16:02:43 +0000</pubDate>
+      <guid>http://idouba.com/executor-framework-thread-pool-task-execution-part-02/</guid>
+      <description>归档下发表于infoq.com 2015年6月的两篇文章。本来是一篇文章，经过Infoq编辑Alice Ding建议，拆分为&amp;lt;上&amp;gt;和&amp;lt;下&amp;gt;两部分。谢谢Alice对文章的细心校对，帮我发下了其中的很多问题。添加下infoq要求的声明：本文为InfoQ中文站特供稿件，首发地址为：http://www.infoq.com/cn/articles/executor-framework-thread-pool-task-execution-part-02 。如需转载，请与InfoQ中文站</description>
+    </item>
+    <item>
+      <title>戏（细）说Executor框架线程池任务执行全过程（上）</title>
+      <link>http://idouba.com/executor-framework-thread-pool-task-execution-part-01/</link>
+      <pubDate>Fri, 05 Jun 2015 15:41:44 +0000</pubDate>
+      <guid>http://idouba.com/executor-framework-thread-pool-task-execution-part-01/</guid>
+      <description>归档下发表于infoq.com 2015年6月的两篇文章。本来是一篇文章，经过Infoq编辑Alice Ding建议，拆分为&amp;lt;上&amp;gt;和&amp;lt;下&amp;gt;两部分。谢谢Alice对文章的细心校对，帮我发下了其中的很多问题。添加下infoq要求的声明：本文为InfoQ中文站特供稿件，首发地址为：http://www.infoq.com/cn/articles/executor-framework-thread-pool-task-execution-part-01。如需转载，请与InfoQ中文站</description>
+    </item>
+  </channel>
+</rss>

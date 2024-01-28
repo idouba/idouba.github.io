@@ -2,20 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>federation on 爱豆吧！</title>
-    <link>http://idouba.cc/tags/federation/</link>
+    <link>http://idouba.com/tags/federation/</link>
     <description>Recent content in federation on 爱豆吧！</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>&lt;a href=&#39;https://beian.miit.gov.cn/&#39; target=&#39;_blank&#39;&gt;浙ICP备18050493号-1&lt;/a&gt; 浙公网安备 33010802006262号</copyright>
-    <lastBuildDate>Tue, 15 Aug 2017 15:51:34 +0000</lastBuildDate><atom:link href="http://idouba.cc/tags/federation/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 15 Aug 2017 15:51:34 +0000</lastBuildDate>
+    <atom:link href="http://idouba.com/tags/federation/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>kubernetes federation 工作机制之资源对象同步</title>
-      <link>http://idouba.cc/kubernetes-federation-sync-accross-cluster/</link>
+      <link>http://idouba.com/kubernetes-federation-sync-accross-cluster/</link>
       <pubDate>Tue, 15 Aug 2017 15:51:34 +0000</pubDate>
-      
-      <guid>http://idouba.cc/kubernetes-federation-sync-accross-cluster/</guid>
+      <guid>http://idouba.com/kubernetes-federation-sync-accross-cluster/</guid>
       <description>1 前言 希望通过本文最简单的方式向熟悉k8s的人说明白其上的federation是干什么的，如何工作的。 关于federation，比较官方的说法是：集群联邦可以让租户/企业根据需要扩展或伸缩所需要的集群；可以让租户/企业在跨地区甚至跨地域的多个集群上部署、调度、监测管理应用。通过集群联邦，租户/企业可以在指定集群上部署应用，可以拉通私有云和公有云建立混合云(hybrid cloud)。 如在design-proposal 中描述的federation提供了cross-cluster scheduling, cross-cluster service discovery, cross-cluster migration, cross-cluster**ing and auditing, cross-cluster load</description>
     </item>
-    
   </channel>
 </rss>

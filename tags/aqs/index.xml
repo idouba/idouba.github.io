@@ -2,20 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>AQS on 爱豆吧！</title>
-    <link>http://idouba.cc/tags/aqs/</link>
+    <link>http://idouba.com/tags/aqs/</link>
     <description>Recent content in AQS on 爱豆吧！</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>&lt;a href=&#39;https://beian.miit.gov.cn/&#39; target=&#39;_blank&#39;&gt;浙ICP备18050493号-1&lt;/a&gt; 浙公网安备 33010802006262号</copyright>
-    <lastBuildDate>Mon, 06 Apr 2015 15:30:31 +0000</lastBuildDate><atom:link href="http://idouba.cc/tags/aqs/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 06 Apr 2015 15:30:31 +0000</lastBuildDate>
+    <atom:link href="http://idouba.com/tags/aqs/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>源码剖析AQS在几个同步工具类中的使用</title>
-      <link>http://idouba.cc/sync-implementation-by-aqs/</link>
+      <link>http://idouba.com/sync-implementation-by-aqs/</link>
       <pubDate>Mon, 06 Apr 2015 15:30:31 +0000</pubDate>
-      
-      <guid>http://idouba.cc/sync-implementation-by-aqs/</guid>
+      <guid>http://idouba.com/sync-implementation-by-aqs/</guid>
       <description>1. 前言 AQS(AbstractQueuedSynchronizer)是 java.util.concurrent的基础。J.U.C中宣传的封装良好的好用的同步工具类Semaphore、CountDownLatch、ReentrantLock、ReentrantReadWriteLock、FutureTask等虽然各自都有不同特征，但是简单看一下源码，每个类内部都包含一个如下的内部类定义： 同时每个类内部都包含有这样一个属性，连属性名都一样！注释已经暗示了，该类的同步机制正是通过这个AQS的子类来完成</description>
     </item>
-    
   </channel>
 </rss>

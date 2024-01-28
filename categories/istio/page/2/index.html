@@ -8,35 +8,34 @@
 <meta property="og:title" content="Istio" />
 <meta property="og:description" content="idouba@beta." />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="http://idouba.cc/categories/istio/" />
-<meta property="og:updated_time" content="2019-08-09T15:32:08+00:00" />
+<meta property="og:url" content="http://idouba.com/categories/istio/" />
 
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Istio"/>
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Istio"/>
 <meta name="twitter:description" content="idouba@beta."/>
-<meta name="generator" content="Hugo 0.80.0" />
+<meta name="generator" content="Hugo 0.121.2">
 
 
     
       
     
 
-    <link rel="canonical" href="http://idouba.cc/categories/istio/">
+    <link rel="canonical" href="http://idouba.com/categories/istio/">
 
     <title>爱豆吧！</title>
 
     
     <!-- combined, minified CSS -->
     
-    <link href="http://idouba.cc/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    <link href="http://idouba.com/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
     
 
     <!-- minified Font Awesome for SVG icons -->
     
-    <script defer src="http://idouba.cc/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+    <script defer src="http://idouba.com/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
 
     <!-- RSS 2.0 feed -->
-    <link rel="alternate" type="application/rss+xml" href="http://idouba.cc/categories/istio/index.xml" title="爱豆吧！" />
+    <link rel="alternate" type="application/rss+xml" href="http://idouba.com/categories/istio/index.xml" title="爱豆吧！" />
     
 
     
@@ -51,7 +50,7 @@
     <div class="blog-masthead">
       <div class="container">
         <nav class="nav blog-nav">
-          <a class="nav-link " href="http://idouba.cc/">Home</a>
+          <a class="nav-link " href="http://idouba.com/">Home</a>
         </nav>
       </div>
     </div>
@@ -61,7 +60,7 @@
     
     <header class="blog-header">
       <div class="container">
-        <h1 class="blog-title" dir="auto"><a href="http://idouba.cc/" rel="home">爱豆吧！</a></h1>
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.com/" rel="home">爱豆吧！</a></h1>
         <p class="lead blog-description" dir="auto">idouba@beta.</p>
       </div>
     </header>
@@ -82,37 +81,17 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/istio-01-code-pilot-service-discovery-adapter/">Istio技术与实践01： 源码解析之Pilot多云平台服务发现机制</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.com/istio-01-code-pilot-service-discovery-adapter/">Istio技术与实践01： 源码解析之Pilot多云平台服务发现机制</a></h2>
     <p class="blog-post-meta"><time datetime="2018-07-21T16:12:44Z">Sat Jul 21, 2018</time> by idouba in 
 <span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">Istio</a>
 
 
-<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/code/" rel="tag">Code</a>, <a href="/tags/istio/" rel="tag">Istio</a>
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/pilot/" rel="tag">Pilot</a>, <a href="/tags/istio/" rel="tag">Istio</a>
 
 </p>
   </header>
   前言 本文结合Pilot中的关键代码来说明下Istio的服务发现的机制、原理和流程。并以Eureka为例看下Adapter的机制如何支持多云环境下的服务发现。可以了解到： 1. Istio的服务模型; 2. Istio发现的机制和原理; 3. Istio服务发现的adpater机制。 基于以上了解可以根据需开发集成自有的服务注册表，完成服务发现的功能。 服务模型 首先，Istio作为一个（微）服务治理的平台，和其他的微服务模型一样也提供了Service，ServiceInstance这样抽象服务模型。如Service的定
-  <a href='http://idouba.cc/istio-01-code-pilot-service-discovery-adapter/'>Read more →</a>
-</article> 
-
-
-
-
-
-
-<article class="blog-post">
-  <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/istio-traffic-management-v1alpha3-by-example/">详析Istio最新v1alpha3 流量管理规则</a></h2>
-    <p class="blog-post-meta"><time datetime="2018-05-05T15:53:52Z">Sat May 05, 2018</time> by douba in 
-<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">Istio</a>
-
-
-<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/mesh/" rel="tag">Mesh</a>, <a href="/tags/api/" rel="tag">API</a>
-
-</p>
-  </header>
-  前言 isto提供了一种简单的语法来描述如何进行流量管理。可以给服务配置熔断、超时、重试等规则，也可以配置规则来切分流量从而实现金丝雀发布、A/B测试等发布功能。一个典型场景如官方文档中的case，将一定比例的流量或者满足一定条件的请求的流量切分到一个特定版本上。 Istio的route rule从v1alpha1到v1alpha3 变化特别大，可以看出对规则设计上完全进行了重构。看上去v1alpha3功能上更强了，可以预见未来1.0后alpha3风格的语法因为提供了更强的表达能力，将逐步取代alpha
-  <a href='http://idouba.cc/istio-traffic-management-v1alpha3-by-example/'>Read more →</a>
+  <a href='http://idouba.com/istio-01-code-pilot-service-discovery-adapter/'>Read more →</a>
 </article> 
 
 

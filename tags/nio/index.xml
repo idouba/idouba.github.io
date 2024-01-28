@@ -2,20 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>nio on 爱豆吧！</title>
-    <link>http://idouba.cc/tags/nio/</link>
+    <link>http://idouba.com/tags/nio/</link>
     <description>Recent content in nio on 爱豆吧！</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>&lt;a href=&#39;https://beian.miit.gov.cn/&#39; target=&#39;_blank&#39;&gt;浙ICP备18050493号-1&lt;/a&gt; 浙公网安备 33010802006262号</copyright>
-    <lastBuildDate>Wed, 21 Jan 2015 04:47:35 +0000</lastBuildDate><atom:link href="http://idouba.cc/tags/nio/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 21 Jan 2015 04:47:35 +0000</lastBuildDate>
+    <atom:link href="http://idouba.com/tags/nio/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Java NIO 要点总结</title>
-      <link>http://idouba.cc/java-nio-brief-intro/</link>
+      <link>http://idouba.com/java-nio-brief-intro/</link>
       <pubDate>Wed, 21 Jan 2015 04:47:35 +0000</pubDate>
-      
-      <guid>http://idouba.cc/java-nio-brief-intro/</guid>
+      <guid>http://idouba.com/java-nio-brief-intro/</guid>
       <description>来自Jenkov.com的比较完整但是足够brief的一个系列：Java NIO Tutorial，介绍了NIO的主要机制和其中几个重要对象的作用和工作。 1. 三个对象 NIO核心的三个对象： Channels Buffers Selectors 简单讲三个对象：Channel 像IO的流，Buffer就像名字一样，就是个缓存。 数据可以从Channel读到Buffer中，也可以从Buffer 写到Channel中。IO是面向流的，连接到一个源或者目标（对应于输入流或者输出流），如Java IO Overview中说明，比较典型的数据源和目标类型有：Files、Pipe</description>
     </item>
-    
   </channel>
 </rss>

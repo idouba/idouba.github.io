@@ -8,35 +8,34 @@
 <meta property="og:title" content="jvm" />
 <meta property="og:description" content="idouba@beta." />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="http://idouba.cc/categories/jvm/" />
-<meta property="og:updated_time" content="2014-07-15T05:49:37+00:00" />
+<meta property="og:url" content="http://idouba.com/categories/jvm/" />
 
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="jvm"/>
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="jvm"/>
 <meta name="twitter:description" content="idouba@beta."/>
-<meta name="generator" content="Hugo 0.80.0" />
+<meta name="generator" content="Hugo 0.121.2">
 
 
     
       
     
 
-    <link rel="canonical" href="http://idouba.cc/categories/jvm/">
+    <link rel="canonical" href="http://idouba.com/categories/jvm/">
 
     <title>爱豆吧！</title>
 
     
     <!-- combined, minified CSS -->
     
-    <link href="http://idouba.cc/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    <link href="http://idouba.com/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
     
 
     <!-- minified Font Awesome for SVG icons -->
     
-    <script defer src="http://idouba.cc/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+    <script defer src="http://idouba.com/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
 
     <!-- RSS 2.0 feed -->
-    <link rel="alternate" type="application/rss+xml" href="http://idouba.cc/categories/jvm/index.xml" title="爱豆吧！" />
+    <link rel="alternate" type="application/rss+xml" href="http://idouba.com/categories/jvm/index.xml" title="爱豆吧！" />
     
 
     
@@ -51,7 +50,7 @@
     <div class="blog-masthead">
       <div class="container">
         <nav class="nav blog-nav">
-          <a class="nav-link " href="http://idouba.cc/">Home</a>
+          <a class="nav-link " href="http://idouba.com/">Home</a>
         </nav>
       </div>
     </div>
@@ -61,7 +60,7 @@
     
     <header class="blog-header">
       <div class="container">
-        <h1 class="blog-title" dir="auto"><a href="http://idouba.cc/" rel="home">爱豆吧！</a></h1>
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.com/" rel="home">爱豆吧！</a></h1>
         <p class="lead blog-description" dir="auto">idouba@beta.</p>
       </div>
     </header>
@@ -82,17 +81,17 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/a-simple-example-demo-jvm-allocation-and-gc/">最简单例子图解JVM内存分配和回收</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.com/a-simple-example-demo-jvm-allocation-and-gc/">最简单例子图解JVM内存分配和回收</a></h2>
     <p class="blog-post-meta"><time datetime="2014-07-15T05:49:37Z">Tue Jul 15, 2014</time> by douba in 
 <span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/jvm/" rel="category tag">jvm</a>
 
 
-<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/code/" rel="tag">code</a>, <a href="/tags/gc/" rel="tag">gc</a>, <a href="/tags/jvm/" rel="tag">jvm</a>
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" rel="tag">垃圾回收</a>, <a href="/tags/jvm/" rel="tag">JVM</a>
 
 </p>
   </header>
   一、简介 JVM采用分代垃圾回收。在JVM的内存空间中把堆空间分为年老代和年轻代。将大量（据说是90%以上）创建了没多久就会消亡的对象存储在年轻代，而年老代中存放生命周期长久的实例对象。年轻代中又被分为Eden区(圣经中的伊甸园)、和两个Survivor区。新的对象分配是首先放在Eden区，Survivor区作为Eden区和Old区的缓冲，在Survivor区的对象经历若干次收集仍然存活的，就会被转移到年老区。 简单讲，就是生命期短的对象放在一起，将少数生命期长的对象放在一起，分别采用不同的回收策略
-  <a href='http://idouba.cc/a-simple-example-demo-jvm-allocation-and-gc/'>Read more →</a>
+  <a href='http://idouba.com/a-simple-example-demo-jvm-allocation-and-gc/'>Read more →</a>
 </article> 
 
 

@@ -8,14 +8,14 @@
 <meta property="og:title" content="Sort源码实现比较Go&amp;Java语言风格(1)" />
 <meta property="og:description" content="1 前言 刚开始拥抱go，非常新鲜！才使用没多久，属于没有经验，有一点感受的那种。具体也说不了特别清楚，就是觉得：简单，直接，灵活，方便。作为一个 java 重度中毒（ZHANGDU*2）用户，过程中还是习惯对照着思考，至少在这个阶段。也好，发现对照着想，似乎更容易融会贯通。 对资深的go程序员来说，应该都是非常基础基本的问题，但也挡不住咱这个小白要发表下感想。 第一篇文章首先结合最近做一个小feature时用到go中元素排序的功能，顺便了解下两种语言中排序功能的使用方式，各自源码中对排序功能的实现。当然最主要的" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://idouba.cc/compare-go-and-java-style-by-sort-implement-1/" />
+<meta property="og:url" content="http://idouba.com/compare-go-and-java-style-by-sort-implement-1/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2015-12-01T05:11:15+00:00" />
 <meta property="article:modified_time" content="2015-12-01T05:11:15+00:00" />
 
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Sort源码实现比较Go&amp;Java语言风格(1)"/>
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Sort源码实现比较Go&amp;Java语言风格(1)"/>
 <meta name="twitter:description" content="1 前言 刚开始拥抱go，非常新鲜！才使用没多久，属于没有经验，有一点感受的那种。具体也说不了特别清楚，就是觉得：简单，直接，灵活，方便。作为一个 java 重度中毒（ZHANGDU*2）用户，过程中还是习惯对照着思考，至少在这个阶段。也好，发现对照着想，似乎更容易融会贯通。 对资深的go程序员来说，应该都是非常基础基本的问题，但也挡不住咱这个小白要发表下感想。 第一篇文章首先结合最近做一个小feature时用到go中元素排序的功能，顺便了解下两种语言中排序功能的使用方式，各自源码中对排序功能的实现。当然最主要的"/>
-<meta name="generator" content="Hugo 0.80.0" />
+<meta name="generator" content="Hugo 0.121.2">
 
 
     
@@ -24,7 +24,7 @@
   "@context": "http://schema.org",
   "@type": "BlogPosting",
   "headline": "Sort源码实现比较Go\u0026Java语言风格(1)",
-  "url": "http:\/\/idouba.cc\/compare-go-and-java-style-by-sort-implement-1\/",
+  "url": "http:\/\/idouba.com\/compare-go-and-java-style-by-sort-implement-1\/",
   "wordCount": "2444",
   "datePublished": "2015-12-01T05:11:15+00:00",
   "dateModified": "2015-12-01T05:11:15+00:00",
@@ -32,25 +32,25 @@
     "@type": "Person",
     "name": "douba"
   },
-  "keywords": "go, java, sort, code"
+  "keywords": "Golang, Java"
 }
 </script>
 
 
 
-    <link rel="canonical" href="http://idouba.cc/compare-go-and-java-style-by-sort-implement-1/">
+    <link rel="canonical" href="http://idouba.com/compare-go-and-java-style-by-sort-implement-1/">
 
     <title>Sort源码实现比较Go&amp;Java语言风格(1) | 爱豆吧！</title>
 
     
     <!-- combined, minified CSS -->
     
-    <link href="http://idouba.cc/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    <link href="http://idouba.com/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
     
 
     <!-- minified Font Awesome for SVG icons -->
     
-    <script defer src="http://idouba.cc/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+    <script defer src="http://idouba.com/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
 
     <!-- RSS 2.0 feed -->
     
@@ -67,7 +67,7 @@
     <div class="blog-masthead">
       <div class="container">
         <nav class="nav blog-nav">
-          <a class="nav-link " href="http://idouba.cc/">Home</a>
+          <a class="nav-link " href="http://idouba.com/">Home</a>
         </nav>
       </div>
     </div>
@@ -77,7 +77,7 @@
     
     <header class="blog-header">
       <div class="container">
-        <h1 class="blog-title" dir="auto"><a href="http://idouba.cc/" rel="home">爱豆吧！</a></h1>
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.com/" rel="home">爱豆吧！</a></h1>
         <p class="lead blog-description" dir="auto">idouba@beta.</p>
       </div>
     </header>
@@ -94,12 +94,12 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/compare-go-and-java-style-by-sort-implement-1/">Sort源码实现比较Go&amp;Java语言风格(1)</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.com/compare-go-and-java-style-by-sort-implement-1/">Sort源码实现比较Go&amp;Java语言风格(1)</a></h2>
     <p class="blog-post-meta"><time datetime="2015-12-01T05:11:15Z">Tue Dec 01, 2015</time> by douba in 
-<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/go/" rel="category tag">go</a>, <a href="/categories/java/" rel="category tag">java</a>
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/golang/" rel="category tag">Golang</a>
 
 
-<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/go/" rel="tag">go</a>, <a href="/tags/java/" rel="tag">java</a>, <a href="/tags/sort/" rel="tag">sort</a>, <a href="/tags/code/" rel="tag">code</a>
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/golang/" rel="tag">Golang</a>, <a href="/tags/java/" rel="tag">Java</a>
 
 </p>
   </header>
@@ -110,98 +110,98 @@
 <p>现在一般不太会自己写排序算法的实现了，就去搜<a href="https://golang.org/pkg/">go的package</a>， 如愿找到了<a href="https://golang.org/pkg/sort">package sort</a>?，和猜想的接口差不多，有一个<a href="https://golang.org/pkg/sort/#Interface">func Sort(data Interface)</a> 。只要把待排序的对象传到一个sort方法中就可以了。</p>
 <p>只是对这个<a href="https://golang.org/pkg/sort/#Interface">Interface?</a>对象还有点疑惑，这个Interface是个啥东西呀？带着这个疑问，瞄见了package前面这个这个<a href="https://golang.org/pkg/sort/#example">example</a>（裁剪了部分非关键代码）。</p>
 <h4 id="21-go排序例子">2.1 go排序例子</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Person</span> <span style="color:#66d9ef">struct</span> {
-<span style="color:#a6e22e">Name</span> <span style="color:#66d9ef">string</span>
-<span style="color:#a6e22e">Age</span> <span style="color:#66d9ef">int</span>
-}
-<span style="color:#75715e">// ByAge implements sort.Interface for []Person based on the Age field.
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">ByAge</span> []<span style="color:#a6e22e">Person</span>
-<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">a</span> <span style="color:#a6e22e">ByAge</span>) <span style="color:#a6e22e">Len</span>() <span style="color:#66d9ef">int</span> { <span style="color:#66d9ef">return</span> len(<span style="color:#a6e22e">a</span>) }
-<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">a</span> <span style="color:#a6e22e">ByAge</span>) <span style="color:#a6e22e">Swap</span>(<span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">j</span> <span style="color:#66d9ef">int</span>) { <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span>], <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">j</span>] = <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">j</span>], <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span>] }
-<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">a</span> <span style="color:#a6e22e">ByAge</span>) <span style="color:#a6e22e">Less</span>(<span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">j</span> <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">bool</span> { <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span>].<span style="color:#a6e22e">Age</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">lt</span>; <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">j</span>].<span style="color:#a6e22e">Age</span> }
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-<span style="color:#a6e22e">sort</span>.<span style="color:#a6e22e">Sort</span>(<span style="color:#a6e22e">ByAge</span>(<span style="color:#a6e22e">people</span>))
-}<span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Person</span> <span style="color:#66d9ef">struct</span> {
-<span style="color:#a6e22e">Name</span> <span style="color:#66d9ef">string</span>
-<span style="color:#a6e22e">Age</span> <span style="color:#66d9ef">int</span>
-}
-<span style="color:#75715e">// ByAge implements sort.Interface for []Person based on the Age field.
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">ByAge</span> []<span style="color:#a6e22e">Person</span>
-<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">a</span> <span style="color:#a6e22e">ByAge</span>) <span style="color:#a6e22e">Len</span>() <span style="color:#66d9ef">int</span> { <span style="color:#66d9ef">return</span> len(<span style="color:#a6e22e">a</span>) }
-<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">a</span> <span style="color:#a6e22e">ByAge</span>) <span style="color:#a6e22e">Swap</span>(<span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">j</span> <span style="color:#66d9ef">int</span>) { <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span>], <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">j</span>] = <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">j</span>], <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span>] }
-<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">a</span> <span style="color:#a6e22e">ByAge</span>) <span style="color:#a6e22e">Less</span>(<span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">j</span> <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">bool</span> { <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span>].<span style="color:#a6e22e">Age</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">lt</span>; <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">j</span>].<span style="color:#a6e22e">Age</span> }
-<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-<span style="color:#a6e22e">sort</span>.<span style="color:#a6e22e">Sort</span>(<span style="color:#a6e22e">ByAge</span>(<span style="color:#a6e22e">people</span>))
-}
-</code></pre></div><p>这个例子看上去挺简单，对一个Person的对象数组ByAge，调用sort.Sort(ByAge(people))按照Age属性进行排序。在关注sort方法之前，首先留意到集合上定义了三个方法：Len、Swap、Less。为什么要在数组上要定义这三个方法，字面意思有一点点暗示我们这三个子操作是与排序有关，尤其是Less方法，与java中熟知的<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Comparable.html#compareTo">compareTo(T)</a>从字面上理解是何其相似。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Person</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Name</span> <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Age</span> <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// ByAge implements sort.Interface for []Person based on the Age field.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">ByAge</span> []<span style="color:#a6e22e">Person</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">a</span> <span style="color:#a6e22e">ByAge</span>) <span style="color:#a6e22e">Len</span>() <span style="color:#66d9ef">int</span> { <span style="color:#66d9ef">return</span> len(<span style="color:#a6e22e">a</span>) }
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">a</span> <span style="color:#a6e22e">ByAge</span>) <span style="color:#a6e22e">Swap</span>(<span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">j</span> <span style="color:#66d9ef">int</span>) { <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span>], <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">j</span>] = <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">j</span>], <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span>] }
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">a</span> <span style="color:#a6e22e">ByAge</span>) <span style="color:#a6e22e">Less</span>(<span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">j</span> <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">bool</span> { <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span>].<span style="color:#a6e22e">Age</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">lt</span>; <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">j</span>].<span style="color:#a6e22e">Age</span> }
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">sort</span>.<span style="color:#a6e22e">Sort</span>(<span style="color:#a6e22e">ByAge</span>(<span style="color:#a6e22e">people</span>))
+</span></span><span style="display:flex;"><span>}<span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Person</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Name</span> <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Age</span> <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// ByAge implements sort.Interface for []Person based on the Age field.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">ByAge</span> []<span style="color:#a6e22e">Person</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">a</span> <span style="color:#a6e22e">ByAge</span>) <span style="color:#a6e22e">Len</span>() <span style="color:#66d9ef">int</span> { <span style="color:#66d9ef">return</span> len(<span style="color:#a6e22e">a</span>) }
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">a</span> <span style="color:#a6e22e">ByAge</span>) <span style="color:#a6e22e">Swap</span>(<span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">j</span> <span style="color:#66d9ef">int</span>) { <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span>], <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">j</span>] = <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">j</span>], <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span>] }
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">a</span> <span style="color:#a6e22e">ByAge</span>) <span style="color:#a6e22e">Less</span>(<span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">j</span> <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">bool</span> { <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span>].<span style="color:#a6e22e">Age</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">lt</span>; <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">j</span>].<span style="color:#a6e22e">Age</span> }
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">sort</span>.<span style="color:#a6e22e">Sort</span>(<span style="color:#a6e22e">ByAge</span>(<span style="color:#a6e22e">people</span>))
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>这个例子看上去挺简单，对一个Person的对象数组ByAge，调用sort.Sort(ByAge(people))按照Age属性进行排序。在关注sort方法之前，首先留意到集合上定义了三个方法：Len、Swap、Less。为什么要在数组上要定义这三个方法，字面意思有一点点暗示我们这三个子操作是与排序有关，尤其是Less方法，与java中熟知的<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Comparable.html#compareTo">compareTo(T)</a>从字面上理解是何其相似。</p>
 <h4 id="22-go排序源码解析">2.2 go排序源码解析</h4>
 <p>Interface是何物，和这三个方法之间有什么关系，带着疑问去看下<a href="https://golang.org/src/sort/sort.go">sort.go的源码</a>。果然在文件的顶头就定义了这样一个interface（只是interface的名字叫做Interface着实刚才有点误导人了）：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">/</span> <span style="color:#a6e22e">A</span> <span style="color:#66d9ef">type</span>, <span style="color:#a6e22e">typically</span> <span style="color:#a6e22e">a</span> <span style="color:#a6e22e">collection</span>, <span style="color:#a6e22e">that</span> <span style="color:#a6e22e">satisfies</span> <span style="color:#a6e22e">sort</span>.<span style="color:#a6e22e">Interface</span> <span style="color:#a6e22e">can</span> <span style="color:#a6e22e">be</span>
-<span style="color:#75715e">// sorted by the routines in this package. The methods require that the
-</span><span style="color:#75715e">// elements of the collection be enumerated by an integer index.
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Interface</span> <span style="color:#66d9ef">interface</span> {
-<span style="color:#75715e">// Len is the number of elements in the collection.
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">Len</span>() <span style="color:#66d9ef">int</span>
-<span style="color:#75715e">// Less reports whether the element with
-</span><span style="color:#75715e">// index i should sort before the element with index j.
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">Less</span>(<span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">j</span> <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">bool</span>
-<span style="color:#75715e">// Swap swaps the elements with indexes i and j.
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">Swap</span>(<span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">j</span> <span style="color:#66d9ef">int</span>)
-}
-</code></pre></div><p>注释也明确的告诉我们，只有实现了这个interface的集合才可以被排序。哦，说错了，人家注释中说的不是implements，而是satisfy。似乎感觉到了的go的Interface和java的Interface的一丝丝淡淡的不同。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">/</span> <span style="color:#a6e22e">A</span> <span style="color:#66d9ef">type</span>, <span style="color:#a6e22e">typically</span> <span style="color:#a6e22e">a</span> <span style="color:#a6e22e">collection</span>, <span style="color:#a6e22e">that</span> <span style="color:#a6e22e">satisfies</span> <span style="color:#a6e22e">sort</span>.<span style="color:#a6e22e">Interface</span> <span style="color:#a6e22e">can</span> <span style="color:#a6e22e">be</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// sorted by the routines in this package. The methods require that the
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// elements of the collection be enumerated by an integer index.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Interface</span> <span style="color:#66d9ef">interface</span> {
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Len is the number of elements in the collection.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">Len</span>() <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Less reports whether the element with
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// index i should sort before the element with index j.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">Less</span>(<span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">j</span> <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">bool</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Swap swaps the elements with indexes i and j.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">Swap</span>(<span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">j</span> <span style="color:#66d9ef">int</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>注释也明确的告诉我们，只有实现了这个interface的集合才可以被排序。哦，说错了，人家注释中说的不是implements，而是satisfy。似乎感觉到了的go的Interface和java的Interface的一丝丝淡淡的不同。</p>
 <p>但是在example的ByAge定义中，只看到了对三个方法的定义，没有对这个接口实现的声明。难道实现了这三个方法方法就自然而然的实现了这个Interface！这也也忒高级了吧！只要定义了这三个方法ByAge对象就满足了sort定义可排序的的集合要求，可以被作为sort.Sort方法的参数被使用的， sort.Sort(ByAge(people))这样被排序了。</p>
 <p>那看下一个对象具备一个定义了上面有三种能力，如何进行排序。也就是sort(Interface)方法中，如何使用Interface的这三个方法来完成排序的功能。</p>
 <p>首先看<a href="https://golang.org/src/sort/sort.go?s=4480:4505#L181">sort方法</a>的实现。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// Sort sorts data.
-</span><span style="color:#75715e">// It makes one call to data.Len to determine n, and O(n*log(n)) calls to
-</span><span style="color:#75715e">// data.Less and data.Swap. The sort is not guaranteed to be stable.
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Sort</span>(<span style="color:#a6e22e">data</span> <span style="color:#a6e22e">Interface</span>) {
-<span style="color:#75715e">// Switch to heapsort if depth of 2*ceil(lg(n+1)) is reached.
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">n</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">data</span>.<span style="color:#a6e22e">Len</span>()
-<span style="color:#a6e22e">maxDepth</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>
-<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">n</span>; <span style="color:#a6e22e">i</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">gt</span>; <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">gt</span>;<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">gt</span>;= <span style="color:#ae81ff">1</span> {
-<span style="color:#a6e22e">maxDepth</span><span style="color:#f92672">++</span>
-}
-<span style="color:#a6e22e">maxDepth</span> <span style="color:#f92672">*=</span> <span style="color:#ae81ff">2</span>
-<span style="color:#a6e22e">quickSort</span>(<span style="color:#a6e22e">data</span>, <span style="color:#ae81ff">0</span>, <span style="color:#a6e22e">n</span>, <span style="color:#a6e22e">maxDepth</span>)
-}
-</code></pre></div><p>这个方法里，只是用到了取接口定义的Len的方法，来获取集合元素个数，根据元素个数估算下如果是被平衡分布的树的深度。该深度作为一个参数传给quikSort方法用，进行真正的排序。看到到这里知道go的sort用的是快排！然后看下这个快排到底是怎么做的，虽然大致都知道快排的算法是怎么回事，还是非常想知道go里面是怎么实现的。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">quickSort</span>(<span style="color:#a6e22e">data</span> <span style="color:#a6e22e">Interface</span>, <span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span>, <span style="color:#a6e22e">maxDepth</span> <span style="color:#66d9ef">int</span>) {
-<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">b</span><span style="color:#f92672">-</span><span style="color:#a6e22e">a</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">gt</span>; <span style="color:#ae81ff">7</span> {
-<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">maxDepth</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> {
-<span style="color:#a6e22e">heapSort</span>(<span style="color:#a6e22e">data</span>, <span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span>)
-<span style="color:#66d9ef">return</span>
-}
-<span style="color:#a6e22e">maxDepth</span><span style="color:#f92672">--</span>
-<span style="color:#a6e22e">mlo</span>, <span style="color:#a6e22e">mhi</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">doPivot</span>(<span style="color:#a6e22e">data</span>, <span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span>)
-<span style="color:#75715e">// Avoiding recursion on the larger subproblem guarantees
-</span><span style="color:#75715e">// a stack depth of at most lg(b-a).
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">mlo</span><span style="color:#f92672">-</span><span style="color:#a6e22e">a</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">lt</span>; <span style="color:#a6e22e">b</span><span style="color:#f92672">-</span><span style="color:#a6e22e">mhi</span> {
-<span style="color:#a6e22e">quickSort</span>(<span style="color:#a6e22e">data</span>, <span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">mlo</span>, <span style="color:#a6e22e">maxDepth</span>)
-<span style="color:#a6e22e">a</span> = <span style="color:#a6e22e">mhi</span> <span style="color:#75715e">// i.e., quickSort(data, mhi, b)
-</span><span style="color:#75715e"></span>} <span style="color:#66d9ef">else</span> {
-<span style="color:#a6e22e">quickSort</span>(<span style="color:#a6e22e">data</span>, <span style="color:#a6e22e">mhi</span>, <span style="color:#a6e22e">b</span>, <span style="color:#a6e22e">maxDepth</span>)
-<span style="color:#a6e22e">b</span> = <span style="color:#a6e22e">mlo</span> <span style="color:#75715e">// i.e., quickSort(data, a, mlo)
-</span><span style="color:#75715e"></span>}
-}
-<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">b</span><span style="color:#f92672">-</span><span style="color:#a6e22e">a</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">gt</span>; <span style="color:#ae81ff">1</span> {
-<span style="color:#a6e22e">insertionSort</span>(<span style="color:#a6e22e">data</span>, <span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span>)
-}
-}
-</code></pre></div><p>先找好中心点，然后两边递归调用分别作快排，熟悉的思路（熟悉的配方，熟悉的味道！JDB）。但显然这个quickSort是一个改良的快排，在每次执行快排时，如果发现depth已经递减为0，而元素还很多，说明待排序的数据分布不均衡，则使用堆排序，如果子集元素少于7个，则直接进行插入排序。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// Sort sorts data.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// It makes one call to data.Len to determine n, and O(n*log(n)) calls to
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// data.Less and data.Swap. The sort is not guaranteed to be stable.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Sort</span>(<span style="color:#a6e22e">data</span> <span style="color:#a6e22e">Interface</span>) {
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Switch to heapsort if depth of 2*ceil(lg(n+1)) is reached.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">n</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">data</span>.<span style="color:#a6e22e">Len</span>()
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">maxDepth</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">n</span>; <span style="color:#a6e22e">i</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">gt</span>; <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">gt</span>;<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">gt</span>;= <span style="color:#ae81ff">1</span> {
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">maxDepth</span><span style="color:#f92672">++</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">maxDepth</span> <span style="color:#f92672">*=</span> <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">quickSort</span>(<span style="color:#a6e22e">data</span>, <span style="color:#ae81ff">0</span>, <span style="color:#a6e22e">n</span>, <span style="color:#a6e22e">maxDepth</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>这个方法里，只是用到了取接口定义的Len的方法，来获取集合元素个数，根据元素个数估算下如果是被平衡分布的树的深度。该深度作为一个参数传给quikSort方法用，进行真正的排序。看到到这里知道go的sort用的是快排！然后看下这个快排到底是怎么做的，虽然大致都知道快排的算法是怎么回事，还是非常想知道go里面是怎么实现的。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">quickSort</span>(<span style="color:#a6e22e">data</span> <span style="color:#a6e22e">Interface</span>, <span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span>, <span style="color:#a6e22e">maxDepth</span> <span style="color:#66d9ef">int</span>) {
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">b</span><span style="color:#f92672">-</span><span style="color:#a6e22e">a</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">gt</span>; <span style="color:#ae81ff">7</span> {
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">maxDepth</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">heapSort</span>(<span style="color:#a6e22e">data</span>, <span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">maxDepth</span><span style="color:#f92672">--</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">mlo</span>, <span style="color:#a6e22e">mhi</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">doPivot</span>(<span style="color:#a6e22e">data</span>, <span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span>)
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Avoiding recursion on the larger subproblem guarantees
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// a stack depth of at most lg(b-a).
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">mlo</span><span style="color:#f92672">-</span><span style="color:#a6e22e">a</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">lt</span>; <span style="color:#a6e22e">b</span><span style="color:#f92672">-</span><span style="color:#a6e22e">mhi</span> {
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">quickSort</span>(<span style="color:#a6e22e">data</span>, <span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">mlo</span>, <span style="color:#a6e22e">maxDepth</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">a</span> = <span style="color:#a6e22e">mhi</span> <span style="color:#75715e">// i.e., quickSort(data, mhi, b)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>} <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">quickSort</span>(<span style="color:#a6e22e">data</span>, <span style="color:#a6e22e">mhi</span>, <span style="color:#a6e22e">b</span>, <span style="color:#a6e22e">maxDepth</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">b</span> = <span style="color:#a6e22e">mlo</span> <span style="color:#75715e">// i.e., quickSort(data, a, mlo)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">b</span><span style="color:#f92672">-</span><span style="color:#a6e22e">a</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">gt</span>; <span style="color:#ae81ff">1</span> {
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">insertionSort</span>(<span style="color:#a6e22e">data</span>, <span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>先找好中心点，然后两边递归调用分别作快排，熟悉的思路（熟悉的配方，熟悉的味道！JDB）。但显然这个quickSort是一个改良的快排，在每次执行快排时，如果发现depth已经递减为0，而元素还很多，说明待排序的数据分布不均衡，则使用堆排序，如果子集元素少于7个，则直接进行插入排序。</p>
 <p>这个所谓的quickSort并不是我们数据结构中熟悉的<a href="https://en.wikipedia.org/wiki/Quicksort">经典快排</a>，看上去只是一个递归的代码框架，找了中间点，然后两边递归调。并没有涉及的具体的元素操作，没有我们期待中的两边元素比较，交换位置，检查点移动这样的操作。当然也就看不到我们期望的元素比较Less方法，也没有看到元素位置调整的Swap。为了了解下实际排序的操作怎么做的，需要再往下看一点。</p>
 <p>堆排序方法heapSort 和插入排序方法insertionSort才是真正执行元素排序的方法，选择考察其中比较简单的insertionSort方法。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// Insertion sort
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">insertionSort</span>(<span style="color:#a6e22e">data</span> <span style="color:#a6e22e">Interface</span>, <span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span> <span style="color:#66d9ef">int</span>) {
-<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>; <span style="color:#a6e22e">i</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">lt</span>; <span style="color:#a6e22e">b</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
-<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">j</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">i</span>; <span style="color:#a6e22e">j</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">gt</span>; <span style="color:#a6e22e">a</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">data</span>.<span style="color:#a6e22e">Less</span>(<span style="color:#a6e22e">j</span>, <span style="color:#a6e22e">j</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>); <span style="color:#a6e22e">j</span><span style="color:#f92672">--</span> {
-<span style="color:#a6e22e">data</span>.<span style="color:#a6e22e">Swap</span>(<span style="color:#a6e22e">j</span>, <span style="color:#a6e22e">j</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
-}
-}
-}
-</code></pre></div><p>终于，我们期待的三个重要方法都看到了。Len方法负责获取集合状态（除了常规的集合长度外，这里还有根据集合长度算出的一个深度），这个集合即可以是我们原始传给Sort方法的那个集合，其实也是中间每次递归的那个小集合。Less()是负责比较元素大小的规则。而Swap方法负责实现元素位置的置换，即执行排序的动作。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// Insertion sort
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">insertionSort</span>(<span style="color:#a6e22e">data</span> <span style="color:#a6e22e">Interface</span>, <span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span> <span style="color:#66d9ef">int</span>) {
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>; <span style="color:#a6e22e">i</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">lt</span>; <span style="color:#a6e22e">b</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">j</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">i</span>; <span style="color:#a6e22e">j</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">gt</span>; <span style="color:#a6e22e">a</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">data</span>.<span style="color:#a6e22e">Less</span>(<span style="color:#a6e22e">j</span>, <span style="color:#a6e22e">j</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>); <span style="color:#a6e22e">j</span><span style="color:#f92672">--</span> {
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">data</span>.<span style="color:#a6e22e">Swap</span>(<span style="color:#a6e22e">j</span>, <span style="color:#a6e22e">j</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>终于，我们期待的三个重要方法都看到了。Len方法负责获取集合状态（除了常规的集合长度外，这里还有根据集合长度算出的一个深度），这个集合即可以是我们原始传给Sort方法的那个集合，其实也是中间每次递归的那个小集合。Less()是负责比较元素大小的规则。而Swap方法负责实现元素位置的置换，即执行排序的动作。</p>
 <p>至此，结合这个例子，和一点源码理解了go中排序的使用方法。写自己的代码让待排序的集合实现以上三个方法Len、Less、Swap，调用sort.go的Sort方法，完成排序功能，顺利完成手里的feature开发。</p>
-<p>故事到这里本该结束了，非常不受控制的，脑子里半秒钟就闪过这个例子在java中的样子，于是就有了<a href="http://www.idouba.net/compare-go-and-java-style-by-sort-implement-2/">后面的故事</a>。。。</p>
+<p>故事到这里本该结束了，非常不受控制的，脑子里半秒钟就闪过这个例子在java中的样子，于是就有了<a href="../compare-go-and-java-style-by-sort-implement-2/">后面的故事</a>。。。</p>
 
 
   

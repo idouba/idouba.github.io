@@ -2,20 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>data structure on 爱豆吧！</title>
-    <link>http://idouba.cc/tags/data-structure/</link>
+    <link>http://idouba.com/tags/data-structure/</link>
     <description>Recent content in data structure on 爱豆吧！</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>&lt;a href=&#39;https://beian.miit.gov.cn/&#39; target=&#39;_blank&#39;&gt;浙ICP备18050493号-1&lt;/a&gt; 浙公网安备 33010802006262号</copyright>
-    <lastBuildDate>Thu, 20 Mar 2014 08:18:48 +0000</lastBuildDate><atom:link href="http://idouba.cc/tags/data-structure/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 20 Mar 2014 08:18:48 +0000</lastBuildDate>
+    <atom:link href="http://idouba.com/tags/data-structure/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>B树在数据库索引中的应用剖析（原稿）</title>
-      <link>http://idouba.cc/about-btrees-application-in-database-index/</link>
+      <link>http://idouba.com/about-btrees-application-in-database-index/</link>
       <pubDate>Thu, 20 Mar 2014 08:18:48 +0000</pubDate>
-      
-      <guid>http://idouba.cc/about-btrees-application-in-database-index/</guid>
+      <guid>http://idouba.com/about-btrees-application-in-database-index/</guid>
       <description>引言 关于数据库索引，随便Google一个Oracle index，Mysql index总有大量的结果出来，其中不乏某某索引之n条经典建议。笔者认为，较之借鉴，在搞清楚了自己的需求的基础上，对备选方案的原理有个尽可能深入全面的了解会更有利于我们的选择和决策。因为某种方案或者技术呈现出某种优势（包括可能没有被介绍到但一定存在的限制），不是定义出来的，而是因为其实现机制决定的。就像LinkedList和ArrayList分别适用于什么应用不是Document里面定义的，是由其本身的结构决定的。数据库的索</description>
     </item>
-    
   </channel>
 </rss>

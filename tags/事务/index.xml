@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>事务 on 爱豆吧！</title>
+    <link>http://idouba.com/tags/%E4%BA%8B%E5%8A%A1/</link>
+    <description>Recent content in 事务 on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>&lt;a href=&#39;https://beian.miit.gov.cn/&#39; target=&#39;_blank&#39;&gt;浙ICP备18050493号-1&lt;/a&gt; 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Sun, 05 Jan 2014 12:23:26 +0000</lastBuildDate>
+    <atom:link href="http://idouba.com/tags/%E4%BA%8B%E5%8A%A1/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【译】数据库事务隔离级别</title>
+      <link>http://idouba.com/wikipedia_isolation/</link>
+      <pubDate>Sun, 05 Jan 2014 12:23:26 +0000</pubDate>
+      <guid>http://idouba.com/wikipedia_isolation/</guid>
+      <description>看到wikipedia中文关于数据库相关的几个经典条目有点老旧，尤其和英文条目相比。确定开始翻译其中几篇，先从事务隔离等级开始。格式采用维基Sandbox发布后的格式。翻译完后自己校对过几遍，质量还可以。:-) 已经在中文维基发布。 翻译的中文条目地址：事务隔离等级； 对应的英文条目地址：Isolation (database systems) 欢迎大家指正，可以直接在维基上对应条目更新的！。 事务隔离（isolation）定义了数据库系统中一个操作产生的影响什么时候以哪种方式可以对其他并发操作可见。隔离是事务ACID (原子性、一致性性、</description>
+    </item>
+  </channel>
+</rss>

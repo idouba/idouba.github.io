@@ -2,20 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>k-medoids on 爱豆吧！</title>
-    <link>http://idouba.cc/tags/k-medoids/</link>
+    <link>http://idouba.com/tags/k-medoids/</link>
     <description>Recent content in k-medoids on 爱豆吧！</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>&lt;a href=&#39;https://beian.miit.gov.cn/&#39; target=&#39;_blank&#39;&gt;浙ICP备18050493号-1&lt;/a&gt; 浙公网安备 33010802006262号</copyright>
-    <lastBuildDate>Wed, 18 Sep 2013 13:28:36 +0000</lastBuildDate><atom:link href="http://idouba.cc/tags/k-medoids/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 18 Sep 2013 13:28:36 +0000</lastBuildDate>
+    <atom:link href="http://idouba.com/tags/k-medoids/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Data Mining 笔记聚类k-medoids</title>
-      <link>http://idouba.cc/notes-clustering-k-medoids/</link>
+      <link>http://idouba.com/notes-clustering-k-medoids/</link>
       <pubDate>Wed, 18 Sep 2013 13:28:36 +0000</pubDate>
-      
-      <guid>http://idouba.cc/notes-clustering-k-medoids/</guid>
+      <guid>http://idouba.com/notes-clustering-k-medoids/</guid>
       <description>一、概述 k-means利用簇内点的均值或加权平均值ci（质心）作为类Ci的代表点。对数值属性数据有较好的几何和统计意义。对孤立点是敏感的，如果具有极大值，就可能大幅度地扭曲数据的分布. k-medoids(k-中心点)算法是为消除这种敏感性提出的，它选择类中位置最接近类中心的对象(称为中心点)作为类的代表点，目标函数仍然可以采用平方误差准则。 PAM（Partitioning Around Medoids，围绕中心点的划分）是最早提出的k中心点算法之一。 二、算法思想： 随机选择k个对象作为初始的k个类的代表点，将其</description>
     </item>
-    
   </channel>
 </rss>

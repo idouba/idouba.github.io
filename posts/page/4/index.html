@@ -8,13 +8,12 @@
 <meta property="og:title" content="Posts" />
 <meta property="og:description" content="idouba@beta." />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="http://idouba.cc/posts/" />
-<meta property="og:updated_time" content="2019-08-09T15:32:08+00:00" />
+<meta property="og:url" content="http://idouba.com/posts/" />
 
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Posts"/>
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Posts"/>
 <meta name="twitter:description" content="idouba@beta."/>
-<meta name="generator" content="Hugo 0.80.0" />
+<meta name="generator" content="Hugo 0.121.2">
 
 
     
@@ -23,34 +22,34 @@
   "@context": "http://schema.org",
   "@type": "Blog",
   "headline": "爱豆吧！",
-  "url" : "http:\/\/idouba.cc\/posts\/",
+  "url" : "http:\/\/idouba.com\/posts\/",
   "author": {
     "@type": "Person",
     "name": "idouba"
   },
   "dateModified": "2019-08-09T15:32:08+00:00",
-  "keywords": "archive,classification,clustering,concurrency,database,database-concept,english,go,hadoop,history-article-archive,history-letter-archive,istio,java,jvm,kubernetes,oracle,tracing,にほんご,随笔,12306,about,api,aqs,b-tree,book,classification,clustering,cncf,code,concurrency,data-mining,data-structure,database,douba,doudou,english,excute-plan,executor,federation,football,g20,gc,go,hadoop,index,inter,istio,japanese,java,join,jvm,k-medoids,kubernetes,letter,life,mapreduce,mesh,mssql,mysql,nio,oracle,others,programmer,published,reference,rpc,sort,source,speak,theory,thread,tracing,祖母,随笔,",
+  "keywords": "golang,hadoop,istio,jvm,kubernetes,发表,并发,数据库,机器学习,随笔,12306,aqs,doudou,english,executor,g20,golang,gre,hadoop,infoq,istio,japanese,java,jvm,k-medoids,kubernetes,mapreduce,oracle,pilot,rpc,source,にほんご,事务,云原生服务网格istio原理实践架构与源码解析,信,关于,分类,发表,国际米兰,垃圾回收,并发,执行计划,数据库,机器学习,演讲,祖母,程序员,索引,聚类,表连接,西安,调用链,足球,随笔,",
   "description": "idouba@beta."
 }
 </script>
 
 
-    <link rel="canonical" href="http://idouba.cc/posts/">
+    <link rel="canonical" href="http://idouba.com/posts/">
 
     <title>爱豆吧！</title>
 
     
     <!-- combined, minified CSS -->
     
-    <link href="http://idouba.cc/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    <link href="http://idouba.com/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
     
 
     <!-- minified Font Awesome for SVG icons -->
     
-    <script defer src="http://idouba.cc/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+    <script defer src="http://idouba.com/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
 
     <!-- RSS 2.0 feed -->
-    <link rel="alternate" type="application/rss+xml" href="http://idouba.cc/posts/index.xml" title="爱豆吧！" />
+    <link rel="alternate" type="application/rss+xml" href="http://idouba.com/posts/index.xml" title="爱豆吧！" />
     
 
     
@@ -65,7 +64,7 @@
     <div class="blog-masthead">
       <div class="container">
         <nav class="nav blog-nav">
-          <a class="nav-link " href="http://idouba.cc/">Home</a>
+          <a class="nav-link " href="http://idouba.com/">Home</a>
         </nav>
       </div>
     </div>
@@ -75,7 +74,7 @@
     
     <header class="blog-header">
       <div class="container">
-        <h1 class="blog-title" dir="auto"><a href="http://idouba.cc/" rel="home">爱豆吧！</a></h1>
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.com/" rel="home">爱豆吧！</a></h1>
         <p class="lead blog-description" dir="auto">idouba@beta.</p>
       </div>
     </header>
@@ -97,87 +96,7 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/performance-comparison-of-oracle-paging/">oracle分页技术性能比较</a></h2>
-    <p class="blog-post-meta"><time datetime="2014-10-14T08:53:14Z">Tue Oct 14, 2014</time> by douba in 
-<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/oracle/" rel="category tag">oracle</a>
-
-
-<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/database/" rel="tag">database</a>, <a href="/tags/oracle/" rel="tag">oracle</a>
-
-</p>
-  </header>
-  一、前言 在一个有30亿条数据的大表上分页，为了对方案进行性能测试，先忽略其他条件查询的影响，单看下分页部分的性能，顺便考察说明下oracle中rownum使用中一些比较tricky的地方。实验条件： 表结构如下，内有2千万条实验数据。 二、实验 提供7种不同方式（其实是5种，二和四是一种、三和五是一种）方式的 。第一种只是为了demo一下假设的一种错误逻辑方式，第二种和第四种是一种逻辑正确，但是性能极差的方式。筛选下来看上去性能可行的方式是第五、第六、第七方式。 这里仅仅记录没中方式的执行结果和计划。 方式
-  <a href='http://idouba.cc/performance-comparison-of-oracle-paging/'>Read more →</a>
-</article> 
-
-
-
-
-
-
-<article class="blog-post">
-  <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/a-simple-example-demo-jvm-allocation-and-gc/">最简单例子图解JVM内存分配和回收</a></h2>
-    <p class="blog-post-meta"><time datetime="2014-07-15T05:49:37Z">Tue Jul 15, 2014</time> by douba in 
-<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/jvm/" rel="category tag">jvm</a>
-
-
-<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/code/" rel="tag">code</a>, <a href="/tags/gc/" rel="tag">gc</a>, <a href="/tags/jvm/" rel="tag">jvm</a>
-
-</p>
-  </header>
-  一、简介 JVM采用分代垃圾回收。在JVM的内存空间中把堆空间分为年老代和年轻代。将大量（据说是90%以上）创建了没多久就会消亡的对象存储在年轻代，而年老代中存放生命周期长久的实例对象。年轻代中又被分为Eden区(圣经中的伊甸园)、和两个Survivor区。新的对象分配是首先放在Eden区，Survivor区作为Eden区和Old区的缓冲，在Survivor区的对象经历若干次收集仍然存活的，就会被转移到年老区。 简单讲，就是生命期短的对象放在一起，将少数生命期长的对象放在一起，分别采用不同的回收策略
-  <a href='http://idouba.cc/a-simple-example-demo-jvm-allocation-and-gc/'>Read more →</a>
-</article> 
-
-
-
-
-
-
-<article class="blog-post">
-  <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/about-btrees-application-in-database-index-in-programmer/">B树在数据库索引中的应用剖析(发表版本)</a></h2>
-    <p class="blog-post-meta"><time datetime="2014-06-18T09:27:23Z">Wed Jun 18, 2014</time> by douba in 
-<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/database/" rel="category tag">database</a>
-
-
-<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/b-tree/" rel="tag">B tree</a>, <a href="/tags/database/" rel="tag">database</a>, <a href="/tags/index/" rel="tag">index</a>, <a href="/tags/published/" rel="tag">published</a>, <a href="/tags/mssql/" rel="tag">mssql</a>, <a href="/tags/mysql/" rel="tag">mysql</a>, <a href="/tags/oracle/" rel="tag">oracle</a>
-
-</p>
-  </header>
-  最近一篇发表于《程序员》2014年6月刊上的文章。有点遗憾发现，有些部分被编辑修改过了，读起来有点怪怪的。最典型的是习惯于对某些比较经典的定义引用wikipedia或者原始白皮书中原始的E文，在文中发现都被硬译过了，表达的意思自己都有点看不懂了！ 最终修改后提交的版本归档下： 引言 关于数据库索引，随便Google一个Oracle index，Mysql index总能得到“某某索引之n条经典建议”之类大量结果。笔者认为，较之直接借鉴，在搞清实际需求的基础上，对备选方案的原理尽可能深入全面的了解会更有利于
-  <a href='http://idouba.cc/about-btrees-application-in-database-index-in-programmer/'>Read more →</a>
-</article> 
-
-
-
-
-
-
-<article class="blog-post">
-  <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/randy-pausch-s-last-lecture/">兰迪·波许教授的最后一课</a></h2>
-    <p class="blog-post-meta"><time datetime="2014-05-10T14:58:05Z">Sat May 10, 2014</time> by douba in 
-<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/archive/" rel="category tag">archive</a>
-
-
-<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/english/" rel="tag">english</a>, <a href="/tags/others/" rel="tag">others</a>, <a href="/tags/reference/" rel="tag">reference</a>
-
-</p>
-  </header>
-  偶尔整理硬盘时候发现的《兰迪·波许教授的最后一课》相关资料，包括视频，是08年的时候下下来看的，非常感人。 视频地址：兰迪·波许教授的最后一课 文 档：[兰迪·波许教授的最后一课].Randy.Pausch’s.Last.Lecture.Transcript 附Randy 语录： Brick walls are there for a reason: they let us prove how badly we want things. 人生路上有阻挡你梦想的砖墙，那是有原因的。这些砖墙让我们来证明我们究竟有多么想要得到我们所需要的。 Experience is what you get when you didn’t get what you wanted. 当你得不到你想的到的东西时，你会得到经验。 Never lose the child-like wonder. 永远不要失去孩
-  <a href='http://idouba.cc/randy-pausch-s-last-lecture/'>Read more →</a>
-</article> 
-
-
-
-
-
-
-<article class="blog-post">
-  <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/doudou-baseball/">豆豆棒球记</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.com/doudou-baseball/">豆豆棒球记</a></h2>
     <p class="blog-post-meta"><time datetime="2014-04-02T14:00:11Z">Wed Apr 02, 2014</time> by douba in 
 <span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/%E9%9A%8F%E7%AC%94/" rel="category tag">随笔</a>
 
@@ -187,7 +106,7 @@
 </p>
   </header>
   豆豆小朋友真的长大了！会调皮了。 今天晚上，doudou指挥着和豆爸配合了一把棒球的游戏。doudou用的是乒乓球，douba用的是笤帚做球杆（棒球是不是叫球棒？）。工具都是 doudou提供和设计。总共进行了六轮，以姥姥指挥douba耍赖藏球结束比赛。哦，忘了补充一句，整个过程，doudou是在尿湿了裤子，外面裤子被 扒下来在膝盖位置，湿漉漉的秋裤贴着屁股的艰难环境下完成的。 这个家伙怎么这么没有出息呀，就喜欢笤帚，在家里面扫地可起劲了。 for i in 0..6 doudou: step1: 高高的撅着屁股往床下扔乒乓球 step2：结实的趴在地
-  <a href='http://idouba.cc/doudou-baseball/'>Read more →</a>
+  <a href='http://idouba.com/doudou-baseball/'>Read more →</a>
 </article> 
 
 
@@ -197,17 +116,17 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/analysis-oracle-execute-plan-from-count/">从Count看Oracle执行计划的选择</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.com/analysis-oracle-execute-plan-from-count/">从Count看Oracle执行计划的选择</a></h2>
     <p class="blog-post-meta"><time datetime="2014-03-24T12:53:50Z">Mon Mar 24, 2014</time> by idouba in 
-<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/database/" rel="category tag">database</a>
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="category tag">数据库</a>
 
 
-<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/excute-plan/" rel="tag">excute plan</a>, <a href="/tags/oracle/" rel="tag">oracle</a>
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92/" rel="tag">执行计划</a>, <a href="/tags/oracle/" rel="tag">Oracle</a>
 
 </p>
   </header>
   一、 前言 在调查一个性能问题的时候，一个同事问道，为什么数据库有些时候这么不聪明，明明表上有索引，但是在执行一个简单的count的时候居然全表扫描了！难道不知道走索引更快么？ 试图从最简单的count来重新了解oracle查询计划的选择，以及最终产生的结果。虽然有些结果会让人觉得有些意外，并且可能会鄙视，这个查询计划选择真的不够聪明。但稍微用心点的去了解，做的已经足够细致了。大多数情况下，根据我们输入的信息，来自输入的SQL、表结构、索引状况、统计信息，会得出一个比较优的计划。所以和前面一直试图讲到
-  <a href='http://idouba.cc/analysis-oracle-execute-plan-from-count/'>Read more →</a>
+  <a href='http://idouba.com/analysis-oracle-execute-plan-from-count/'>Read more →</a>
 </article> 
 
 
@@ -217,17 +136,17 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/about-btrees-application-in-database-index/">B树在数据库索引中的应用剖析（原稿）</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.com/about-btrees-application-in-database-index/">B树在数据库索引中的应用剖析（原稿）</a></h2>
     <p class="blog-post-meta"><time datetime="2014-03-20T08:18:48Z">Thu Mar 20, 2014</time> by douba in 
-<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/database/" rel="category tag">database</a>
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="category tag">数据库</a>, <a href="/categories/%E5%8F%91%E8%A1%A8/" rel="category tag">发表</a>
 
 
-<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/data-structure/" rel="tag">data structure</a>, <a href="/tags/database/" rel="tag">database</a>, <a href="/tags/index/" rel="tag">index</a>, <a href="/tags/mssql/" rel="tag">mssql</a>, <a href="/tags/mysql/" rel="tag">mysql</a>, <a href="/tags/oracle/" rel="tag">oracle</a>, <a href="/tags/programmer/" rel="tag">programmer</a>, <a href="/tags/published/" rel="tag">published</a>
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/%E7%B4%A2%E5%BC%95/" rel="tag">索引</a>, <a href="/tags/%E7%A8%8B%E5%BA%8F%E5%91%98/" rel="tag">《程序员》</a>
 
 </p>
   </header>
   引言 关于数据库索引，随便Google一个Oracle index，Mysql index总有大量的结果出来，其中不乏某某索引之n条经典建议。笔者认为，较之借鉴，在搞清楚了自己的需求的基础上，对备选方案的原理有个尽可能深入全面的了解会更有利于我们的选择和决策。因为某种方案或者技术呈现出某种优势（包括可能没有被介绍到但一定存在的限制），不是定义出来的，而是因为其实现机制决定的。就像LinkedList和ArrayList分别适用于什么应用不是Document里面定义的，是由其本身的结构决定的。数据库的索
-  <a href='http://idouba.cc/about-btrees-application-in-database-index/'>Read more →</a>
+  <a href='http://idouba.com/about-btrees-application-in-database-index/'>Read more →</a>
 </article> 
 
 
@@ -237,17 +156,17 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/learn-and-walk-with-doudou/">牵一只蜗牛去散步</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.com/learn-and-walk-with-doudou/">牵一只蜗牛去散步</a></h2>
     <p class="blog-post-meta"><time datetime="2014-02-25T06:47:43Z">Tue Feb 25, 2014</time> by douba in 
 <span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/%E9%9A%8F%E7%AC%94/" rel="category tag">随笔</a>
 
 
-<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/doudou/" rel="tag">doudou</a>, <a href="/tags/reference/" rel="tag">reference</a>
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/doudou/" rel="tag">doudou</a>
 
 </p>
   </header>
   douma发给我的一篇文章，让douba好好阅读。 上帝给我一个任务 叫我牵一只蜗牛去散步。 我不能走太快， 蜗牛已经尽力爬，为何每次总是那么一点点？ 我催它，我唬它，我责备它， 蜗牛用抱歉的眼光看着我， 彷佛说：「人家已经尽力了嘛！」 我拉它，我扯它，甚至想踢它， 蜗牛受了伤，它流着汗，喘着气，往前爬… 真奇怪，为什么上帝叫我牵一只蜗牛去散步？ 「上帝啊！为什么？」 天上一片安静。 「唉！也许上帝抓蜗牛去了！」 好吧！松手了！ 反正上帝不管了，我还管什么？ 让蜗牛往前爬，我在后面生闷气。 咦？我闻到花香，原来这边还有个花园， 我
-  <a href='http://idouba.cc/learn-and-walk-with-doudou/'>Read more →</a>
+  <a href='http://idouba.com/learn-and-walk-with-doudou/'>Read more →</a>
 </article> 
 
 
@@ -257,37 +176,167 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/go-home/">要回家了，要离家了</a></h2>
-    <p class="blog-post-meta"><time datetime="2014-02-21T09:19:06Z">Fri Feb 21, 2014</time> by douba in 
-<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/%E9%9A%8F%E7%AC%94/" rel="category tag">随笔</a>
-
-
-<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/douba/" rel="tag">douba</a>
-
-</p>
-  </header>
-  要回到老家了，看老妈了。老妈摔伤躺着床上已经二十多天了，一直拖到现在才回家，很惭愧，很心疼。再有两个小时的飞机行程就到家了，看看父母，看看奶奶。晚上就可以躺在奶奶的大炕上了。 要离开小家了，想着小家。豆豆和以前每天一样在电话那头嗷嗷的喊叫，把douba的心都勾引到二十六七分钟自行车车程的小家。惦记着豆豆，惦记着douma。 机场大巴可真快呀！感觉比平时打车还快。二十分钟就到了机场了。 刚才打电话豆豆一直在喊叫，听douma说我们豆豆在吃饭的时候，和妈妈姥姥围在餐桌边上，眼睛一直还望门口看，豆豆是在等爸
-  <a href='http://idouba.cc/go-home/'>Read more →</a>
-</article> 
-
-
-
-
-
-
-<article class="blog-post">
-  <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/oracle-index-brief/">Oracle索引原理精简总结</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.com/oracle-index-brief/">Oracle索引原理精简总结</a></h2>
     <p class="blog-post-meta"><time datetime="2014-02-19T13:48:09Z">Wed Feb 19, 2014</time> by idouba in 
-<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/database/" rel="category tag">database</a>
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="category tag">数据库</a>
 
 
-<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/index/" rel="tag">index</a>, <a href="/tags/oracle/" rel="tag">oracle</a>
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/%E7%B4%A2%E5%BC%95/" rel="tag">索引</a>, <a href="/tags/oracle/" rel="tag">Oracle</a>
 
 </p>
   </header>
   结合使用整理Oracle的索引，主要权威的来自于Oracle Database Concepts与Oracle Database Performance Tuning Guide 尝试用最少的字数介绍oracle的几种常用索引原理，主要是想简单分析其存储结构来说明其检索方式，和解释为什们某种索引使用与某种场合。（数据结构中最简单的ArrayList和LinkedList的使用场景）。阐述原因只有一个，就是因为其存储结构决定的。 B树索引(默认类型) 存储结构： B+树，不多描述。和其他几种关系数据库一样，就是根据索引列(一个或多个)来构造一个B+树来存储索引。非叶子节点两个区域：
-  <a href='http://idouba.cc/oracle-index-brief/'>Read more →</a>
+  <a href='http://idouba.com/oracle-index-brief/'>Read more →</a>
+</article> 
+
+
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.com/hadoop_mapreduce_shuffle_map_output/">【hadoop代码笔记】Mapreduce shuffle过程之Map输出过程</a></h2>
+    <p class="blog-post-meta"><time datetime="2014-02-05T15:58:39Z">Wed Feb 05, 2014</time> by douba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/hadoop/" rel="category tag">hadoop</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/hadoop/" rel="tag">hadoop</a>, <a href="/tags/java/" rel="tag">java</a>, <a href="/tags/mapreduce/" rel="tag">mapreduce</a>
+
+</p>
+  </header>
+  <h3 id="一概要描述"><strong>一、概要描述</strong></h3>
+<p>shuffle是MapReduce的一个核心过程，因此没有在<a href="../hadoop_job_submit_conclusion/" title="【hadoop代码笔记】hadoop作业提交之汇总">前面的MapReduce作业提交的过程</a>中描述，而是单独拿出来比较详细的描述。 根据官方的流程图示如下：</p>
+<p><img src="../wp-content/uploads/2014/02/shuffle.png" alt=""></p>
+<p><strong>本篇文章中只是想尝试从代码分析来说明在map端是如何将map的输出保存下来等待reduce来取</strong>。 在执行每个map task时，无论map方法中执行什么逻辑，最终都是要把输出写到磁盘上。如果没有reduce阶段，则直接输出到hdfs上，如果有有reduce作业，则每个map方法的输出在写磁盘前线在内存中缓存。每个map task都有一个环状的内存缓冲区，存储着map的输出结果，默认100m，在每次当缓冲区快满的时候由一个独立的线程将缓冲区的数据以一个溢出文件的方式存放到磁盘，当整个map task结束后再对磁盘中这个map task产生的所有溢出文件做合并，被合并成已分区且已排序的输出文件。然后等待reduce task来拉数据。</p>
+<h3 id="二-流程描述"><strong>二、 流程描述</strong></h3>
+<ol>
+<li>在child进程调用到runNewMapper时，会设置output为NewOutputCollector，来负责map的输出。</li>
+<li>在map方法的最后，不管经过什么逻辑的map处理，最终一般都要调用到TaskInputOutputContext的write方法，进而调用到设置的output即NewOutputCollector的write方法</li>
+<li>NewOutputCollector其实只是对MapOutputBuffer的一个封装，其write方法调用的是MapOutputBuffer的collect方法。</li>
+<li>MapOutputBuffer的collect方法中把key和value序列化后存储在一个环形缓存中，如果缓存满了则会调用startspill方法设置信号量，使得一个独立的线程SpillThread可以对缓存中的数据进行处理。</li>
+<li>SpillThread线程的run方法中调用sortAndSpill方法对缓存中的数据进行排序后写溢出文件。</li>
+<li>当map输出完成后，会调用output的close方法。</li>
+<li>在close方法中调用flush方法，对剩余的缓存进行处理，最后调用mergeParts方法，将前面过程的多个溢出文件合并为一个。</li>
+</ol>
+  <a href='http://idouba.com/hadoop_mapreduce_shuffle_map_output/'>Read more →</a>
+</article> 
+
+
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.com/hadoop_job_submit_conclusion/">【hadoop代码笔记】hadoop作业提交之汇总</a></h2>
+    <p class="blog-post-meta"><time datetime="2014-02-01T13:25:44Z">Sat Feb 01, 2014</time> by douba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/hadoop/" rel="category tag">hadoop</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/hadoop/" rel="tag">hadoop</a>, <a href="/tags/java/" rel="tag">java</a>, <a href="/tags/mapreduce/" rel="tag">mapreduce</a>
+
+</p>
+  </header>
+  一、概述 在本篇博文中，试图通过代码了解hadoop job执行的整个流程。即用户提交的mapreduce的jar文件、输入提交到hadoop的集群，并在集群中运行。重点在代码的角度描述整个流程，有些细节描述的并不那么详细。 汇总的代码流程图附件:hadoop_mapreduce_jobsubmit 二、主要流程 Jobclient通过RPC方式调用到jobtracker的submitJob方法提交作业，包括作业的jar、分片和作业描述。 JobTracker的submitJob方法吧job加入到内存队列中
+  <a href='http://idouba.com/hadoop_job_submit_conclusion/'>Read more →</a>
+</article> 
+
+
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.com/hadoop_mapreduce_tasktracker_child_map/">【hadoop代码笔记】hadoop作业提交之Child启动map任务</a></h2>
+    <p class="blog-post-meta"><time datetime="2014-01-22T07:00:53Z">Wed Jan 22, 2014</time> by douba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/hadoop/" rel="category tag">hadoop</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/hadoop/" rel="tag">hadoop</a>, <a href="/tags/java/" rel="tag">java</a>, <a href="/tags/mapreduce/" rel="tag">mapreduce</a>
+
+</p>
+  </header>
+  <p><strong>一、概要描述</strong></p>
+<p>在<a href="../hadoop_mapreduce_tasktracker_launch_task">上篇博文描</a>述了TaskTracker启动一个独立的java进程来执行Map或Reduce任务。在本篇和<a href="../hadoop_mapreduce_tasktracker_child_reduce">下篇博文</a>中我们会关注启动的那个入口是org.apache.hadoop.mapred.Child的这个Java进程是如何执行用户定义的map或Reduce任务的。</p>
+<p>接<a href="../hadoop_mapreduce_tasktracker_launch_task">上篇文章</a>，TaskRunner线程执行中，会构造一个_java –D** Child address port tasked_这 样第一个java命令，单独启动一个java进程。在Child的main函数中通过TaskUmbilicalProtocol协议，从 TaskTracker获得需要执行的Task，并调用Task的run方法来执行，而Task的run方法会通过java反射机制构造 Mapper，InputFormat，mapperContext，然后调用构造的mapper的run方法执行mapper操作。</p>
+<p><strong>二、 流程描述</strong></p>
+<p>1.Child类根据前面输入的三个参数，即tasktracher的地址、端口、taskid。通过TaskUmbilicalProtocol协议，从TaskTracker获得需要执行的Task，在Child的main函数中调用执行。</p>
+<ol start="2">
+<li>
+<p>在Chilld中，执行Task的run方法。Task 的run方法。是真正执行用户定义的map或者reduce任务的入口，通过TaskUmbilicalProtocol向tasktracker上报执行进度。</p>
+</li>
+<li>
+<p>在MapTask的run中执行runMapper方法来调用mapper定义的方法。</p>
+</li>
+<li>
+<p>在runNewMapper方法中构造mapper实例和mapper执行的配置信息。并执行mapper.run方法来调用到用户定义的mapper的方法。</p>
+</li>
+<li>
+<p>mapper的run方法中，从输入数据中逐一取出调用map方法来处理每一条数据</p>
+</li>
+<li>
+<p>mapper的map方法是真正用户定义的处理数据的类。也是用户唯一需要定义的方法。</p>
+</li>
+</ol>
+  <a href='http://idouba.com/hadoop_mapreduce_tasktracker_child_map/'>Read more →</a>
+</article> 
+
+
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.com/hadoop_mapreduce_tasktracker_launch_task/">【hadoop代码笔记】hadoop作业提交之TaskTracker 启动task</a></h2>
+    <p class="blog-post-meta"><time datetime="2014-01-21T13:58:12Z">Tue Jan 21, 2014</time> by douba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/hadoop/" rel="category tag">hadoop</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/hadoop/" rel="tag">hadoop</a>, <a href="/tags/java/" rel="tag">java</a>, <a href="/tags/mapreduce/" rel="tag">mapreduce</a>
+
+</p>
+  </header>
+  <p><strong>一、概要描述</strong></p>
+<p>在<a href="../hadoop_mapreduce_tasktracker_retrieve_task">上篇博文</a>描 述了TaskTracker从Jobtracker如何从JobTracker获取到要执行的Task。在从JobTracker获取到 LaunchTaskAction后，执行addToTaskQueue方法来把要执行的Task加入到queue。在本篇博文中，我们来关注下该方法 后，TaskTracker怎么来处理这些Task。</p>
+<p>实际上，TaskTracker初始化时，会初始化并启动两个TaskLauncher类型的线程，mapLauncher，reduceLauncher。在TaskTracker从JobTracher获取到任务后，对应的会把任务添加到两个 TaskLauncher的Queue中，其实是TaskLauncher维护的一个列表List<!-- raw HTML omitted --> tasksToLaunch。</p>
+<p>TaskLauncher线程一直会定时检查TaskTracher上面有slot开业运行新的Task，则启动 Task。在这个过程中，先把task运行需要的文件解压到本地，并创建根据Task类型（Map或者Reduce）创建一个TaskRunner线程， 在TaskRunner中JvmManager调用JvmManagerForType、JvmRunner来启动一个<strong>java进程</strong>来执行Map或Reduce任务。</p>
+<p>本文只是介绍到启动一个java进程，至于是什么样的java进程，对于maptask和reducetask分别是怎么执行的，在后面的<a href="../hadoop_mapreduce_tasktracker_child_map">child启动maptask</a>，和<a href="../hadoop_mapreduce_tasktracker_child_reduce">child启动reducetask</a> 会比较详细的介绍。</p>
+<p><strong>二、 流程描述</strong></p>
+<ol>
+<li>tasktracker的offerService方法获取到要执行的task后调用addToTaskQueue方法，其实是调用taskrunner的addToTaskQueue方法</li>
+<li>TaskLauncher内部维护了一个List<!-- raw HTML omitted --> tasksToLaunch，只是把task加入到该</li>
+<li>taskLauncher是一个线程，在其run方法中从tasksToLaunch集合中取出task来执行，调用Tasktracker的startNewTask方法启动task。</li>
+<li>startNewtask方法中调用localizeJob方法把job相关的配置信息和要运行的jar拷贝到tasktracker本地，然后调用taskInProgress的launchTask方法来启动task。</li>
+<li>TaskInProgress的launchTask方法先调用localizeTask(task把task相关的配置信息获取到本地。然后创建一个TaskRunner线程来启动task。</li>
+<li>在TaskRunner的run方法中构建一个java命令的执行的条件，包括引用类，执行目录等，入口类是Child。然后调用JvmManager 的launchJvm方法来调用。</li>
+<li>JvmManager 进而调用 JvmManagerForType的reapJvm，和spawnNewJvm 方法，发起调用.</li>
+<li>在JvmManagerForType的spawnNewJvm 方法中创建了一个JvmRunner线程类执行调用.</li>
+<li>JvmRunner线程的run反复调用runChild方法来执行 一个命令行的调用。</li>
+</ol>
+  <a href='http://idouba.com/hadoop_mapreduce_tasktracker_launch_task/'>Read more →</a>
+</article> 
+
+
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.com/hadoop_mapreduce_job_init/">【hadoop代码笔记】hadoop作业提交之Job初始化</a></h2>
+    <p class="blog-post-meta"><time datetime="2014-01-19T14:54:46Z">Sun Jan 19, 2014</time> by douba in 
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/hadoop/" rel="category tag">hadoop</a>
+
+
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/hadoop/" rel="tag">hadoop</a>, <a href="/tags/java/" rel="tag">java</a>, <a href="/tags/mapreduce/" rel="tag">mapreduce</a>
+
+</p>
+  </header>
+  一、概要描述 在上一篇博文中主要描述了JobTracker和其几个服务（或功能）模块的接收到提交的job后的一些处理。其中很重要的一部分就作业的初始化。因为代码片段图的表达问题，本应该在上篇描述的内容，分开在本篇描述。 二、 流程描述 代码也接上文的最后一个方法EagerTaskInitializationListener的 jobAdded方法把JobInProgress类型的job放到List类型的 jobInitQueue中，有个单独的线程会对新加入的每个job进行初始化，其初始化调用的方法就是Job
+  <a href='http://idouba.com/hadoop_mapreduce_job_init/'>Read more →</a>
 </article> 
 
 

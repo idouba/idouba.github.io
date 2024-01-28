@@ -24,12 +24,12 @@ JvmManager 进而调用 JvmManagerForType的reapJvm，和spawnNewJvm 方法，�
 JvmRunner线程的run反复调用runChild方法来执行 一个命令行的调用。
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://idouba.cc/hadoop_mapreduce_tasktracker_launch_task/" />
+<meta property="og:url" content="http://idouba.com/hadoop_mapreduce_tasktracker_launch_task/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2014-01-21T13:58:12+00:00" />
 <meta property="article:modified_time" content="2014-01-21T13:58:12+00:00" />
 
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="【hadoop代码笔记】hadoop作业提交之TaskTracker 启动task"/>
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="【hadoop代码笔记】hadoop作业提交之TaskTracker 启动task"/>
 <meta name="twitter:description" content="一、概要描述
 在上篇博文描 述了TaskTracker从Jobtracker如何从JobTracker获取到要执行的Task。在从JobTracker获取到 LaunchTaskAction后，执行addToTaskQueue方法来把要执行的Task加入到queue。在本篇博文中，我们来关注下该方法 后，TaskTracker怎么来处理这些Task。
 实际上，TaskTracker初始化时，会初始化并启动两个TaskLauncher类型的线程，mapLauncher，reduceLauncher。在TaskTracker从JobTracher获取到任务后，对应的会把任务添加到两个 TaskLauncher的Queue中，其实是TaskLauncher维护的一个列表List tasksToLaunch。
@@ -47,7 +47,7 @@ JvmManager 进而调用 JvmManagerForType的reapJvm，和spawnNewJvm 方法，�
 在JvmManagerForType的spawnNewJvm 方法中创建了一个JvmRunner线程类执行调用.
 JvmRunner线程的run反复调用runChild方法来执行 一个命令行的调用。
 "/>
-<meta name="generator" content="Hugo 0.80.0" />
+<meta name="generator" content="Hugo 0.121.2">
 
 
     
@@ -56,7 +56,7 @@ JvmRunner线程的run反复调用runChild方法来执行 一个命令行的调�
   "@context": "http://schema.org",
   "@type": "BlogPosting",
   "headline": "【hadoop代码笔记】hadoop作业提交之TaskTracker 启动task",
-  "url": "http:\/\/idouba.cc\/hadoop_mapreduce_tasktracker_launch_task\/",
+  "url": "http:\/\/idouba.com\/hadoop_mapreduce_tasktracker_launch_task\/",
   "wordCount": "3287",
   "datePublished": "2014-01-21T13:58:12+00:00",
   "dateModified": "2014-01-21T13:58:12+00:00",
@@ -64,25 +64,25 @@ JvmRunner线程的run反复调用runChild方法来执行 一个命令行的调�
     "@type": "Person",
     "name": "douba"
   },
-  "keywords": "hadoop, java, mapreduce, source"
+  "keywords": "hadoop, java, mapreduce"
 }
 </script>
 
 
 
-    <link rel="canonical" href="http://idouba.cc/hadoop_mapreduce_tasktracker_launch_task/">
+    <link rel="canonical" href="http://idouba.com/hadoop_mapreduce_tasktracker_launch_task/">
 
     <title>【hadoop代码笔记】hadoop作业提交之TaskTracker 启动task | 爱豆吧！</title>
 
     
     <!-- combined, minified CSS -->
     
-    <link href="http://idouba.cc/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    <link href="http://idouba.com/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
     
 
     <!-- minified Font Awesome for SVG icons -->
     
-    <script defer src="http://idouba.cc/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+    <script defer src="http://idouba.com/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
 
     <!-- RSS 2.0 feed -->
     
@@ -99,7 +99,7 @@ JvmRunner线程的run反复调用runChild方法来执行 一个命令行的调�
     <div class="blog-masthead">
       <div class="container">
         <nav class="nav blog-nav">
-          <a class="nav-link " href="http://idouba.cc/">Home</a>
+          <a class="nav-link " href="http://idouba.com/">Home</a>
         </nav>
       </div>
     </div>
@@ -109,7 +109,7 @@ JvmRunner线程的run反复调用runChild方法来执行 一个命令行的调�
     
     <header class="blog-header">
       <div class="container">
-        <h1 class="blog-title" dir="auto"><a href="http://idouba.cc/" rel="home">爱豆吧！</a></h1>
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.com/" rel="home">爱豆吧！</a></h1>
         <p class="lead blog-description" dir="auto">idouba@beta.</p>
       </div>
     </header>
@@ -126,12 +126,12 @@ JvmRunner线程的run反复调用runChild方法来执行 一个命令行的调�
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/hadoop_mapreduce_tasktracker_launch_task/">【hadoop代码笔记】hadoop作业提交之TaskTracker 启动task</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.com/hadoop_mapreduce_tasktracker_launch_task/">【hadoop代码笔记】hadoop作业提交之TaskTracker 启动task</a></h2>
     <p class="blog-post-meta"><time datetime="2014-01-21T13:58:12Z">Tue Jan 21, 2014</time> by douba in 
 <span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/hadoop/" rel="category tag">hadoop</a>
 
 
-<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/hadoop/" rel="tag">hadoop</a>, <a href="/tags/java/" rel="tag">java</a>, <a href="/tags/mapreduce/" rel="tag">mapreduce</a>, <a href="/tags/source/" rel="tag">source</a>
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/hadoop/" rel="tag">hadoop</a>, <a href="/tags/java/" rel="tag">java</a>, <a href="/tags/mapreduce/" rel="tag">mapreduce</a>
 
 </p>
   </header>
@@ -159,305 +159,305 @@ JvmRunner线程的run反复调用runChild方法来执行 一个命令行的调�
 <li>TaskTracker的 addToTaskQueue方法。</li>
 </ol>
 <p><a href="../hadoop_mapreduce_tasktracker_retrieve_task">接上文</a>的最后一个方法的在heartbeat中把根据jobtracker的指令把需要launch的task调用addToTaskQueue方法加入task queue。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//根据task的类型不同加入到不同的launcher中。
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">addToTaskQueue</span><span style="color:#f92672">(</span>LaunchTaskAction action<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-<span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>action<span style="color:#f92672">.</span><span style="color:#a6e22e">getTask</span><span style="color:#f92672">().</span><span style="color:#a6e22e">isMapTask</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
-mapLauncher<span style="color:#f92672">.</span><span style="color:#a6e22e">addToTaskQueue</span><span style="color:#f92672">(</span>action<span style="color:#f92672">);</span>
-<span style="color:#f92672">}</span><span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
-reduceLauncher<span style="color:#f92672">.</span><span style="color:#a6e22e">addToTaskQueue</span><span style="color:#f92672">(</span>action<span style="color:#f92672">);</span>
-<span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span>
-</code></pre></div><ol start="2">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">//根据task的类型不同加入到不同的launcher中。</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">addToTaskQueue</span>(LaunchTaskAction action) {
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (action.<span style="color:#a6e22e">getTask</span>().<span style="color:#a6e22e">isMapTask</span>()) {
+</span></span><span style="display:flex;"><span>mapLauncher.<span style="color:#a6e22e">addToTaskQueue</span>(action);
+</span></span><span style="display:flex;"><span>}<span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>reduceLauncher.<span style="color:#a6e22e">addToTaskQueue</span>(action);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ol start="2">
 <li>TaskLauncher 的addToTaskQueue方法，即把要launch的task加入到TaskLauncher内维护的一个列表List<!-- raw HTML omitted --> tasksToLaunch;中。</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">addToTaskQueue</span><span style="color:#f92672">(</span>LaunchTaskAction action<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-      <span style="color:#66d9ef">synchronized</span> <span style="color:#f92672">(</span>tasksToLaunch<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        TaskInProgress tip <span style="color:#f92672">=</span> registerTask<span style="color:#f92672">(</span>action<span style="color:#f92672">,</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
-        tasksToLaunch<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>tip<span style="color:#f92672">);</span>
-        tasksToLaunch<span style="color:#f92672">.</span><span style="color:#a6e22e">notifyAll</span><span style="color:#f92672">();</span>
-      <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span>
-</code></pre></div><ol start="3">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">addToTaskQueue</span>(LaunchTaskAction action) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">synchronized</span> (tasksToLaunch) {
+</span></span><span style="display:flex;"><span>        TaskInProgress tip <span style="color:#f92672">=</span> registerTask(action, <span style="color:#66d9ef">this</span>);
+</span></span><span style="display:flex;"><span>        tasksToLaunch.<span style="color:#a6e22e">add</span>(tip);
+</span></span><span style="display:flex;"><span>        tasksToLaunch.<span style="color:#a6e22e">notifyAll</span>();
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ol start="3">
 <li>TaskLauncher线程的run方法。TaskLauncher是一个线程。一直检查task列表中有数据，取出一个来执行。</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>    
-          TaskInProgress tip<span style="color:#f92672">;</span>
-          <span style="color:#66d9ef">synchronized</span> <span style="color:#f92672">(</span>tasksToLaunch<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-            <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span>tasksToLaunch<span style="color:#f92672">.</span><span style="color:#a6e22e">isEmpty</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
-              tasksToLaunch<span style="color:#f92672">.</span><span style="color:#a6e22e">wait</span><span style="color:#f92672">();</span>
-            <span style="color:#f92672">}</span>
-            <span style="color:#75715e">//get the TIP
-</span><span style="color:#75715e"></span>            tip <span style="color:#f92672">=</span> tasksToLaunch<span style="color:#f92672">.</span><span style="color:#a6e22e">remove</span><span style="color:#f92672">(</span>0<span style="color:#f92672">);</span>
-           <span style="color:#75715e">//wait for a slot to run
-</span><span style="color:#75715e"></span>          <span style="color:#66d9ef">synchronized</span> <span style="color:#f92672">(</span>numFreeSlots<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-            <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span>numFreeSlots<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">()</span> <span style="color:#f92672">==</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-              numFreeSlots<span style="color:#f92672">.</span><span style="color:#a6e22e">wait</span><span style="color:#f92672">();</span>
-            <span style="color:#f92672">}</span>
-            LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;In TaskLauncher, current free slots : &#34;</span> <span style="color:#f92672">+</span> numFreeSlots<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">()+</span>
-                <span style="color:#e6db74">&#34; and trying to launch &#34;</span><span style="color:#f92672">+</span>tip<span style="color:#f92672">.</span><span style="color:#a6e22e">getTask</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getTaskID</span><span style="color:#f92672">());</span>
-            numFreeSlots<span style="color:#f92672">.</span><span style="color:#a6e22e">set</span><span style="color:#f92672">(</span>numFreeSlots<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">()</span> <span style="color:#f92672">-</span> 1<span style="color:#f92672">);</span>
-            <span style="color:#66d9ef">assert</span> <span style="color:#f92672">(</span>numFreeSlots<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">()</span> <span style="color:#f92672">&gt;=</span> 0<span style="color:#f92672">);</span>
-          <span style="color:#f92672">}</span>
-
-          <span style="color:#75715e">//got a free slot. launch the task
-</span><span style="color:#75715e"></span>          startNewTask<span style="color:#f92672">(</span>tip<span style="color:#f92672">);</span>
-              <span style="color:#66d9ef">return</span><span style="color:#f92672">;</span> <span style="color:#75715e">// ALL DONE
-</span><span style="color:#75715e"></span>             <span style="color:#f92672">}</span>
-    <span style="color:#f92672">}</span>
-  <span style="color:#f92672">}</span>
-</code></pre></div><ol start="4">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span>() {    
+</span></span><span style="display:flex;"><span>          TaskInProgress tip;
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">synchronized</span> (tasksToLaunch) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">while</span> (tasksToLaunch.<span style="color:#a6e22e">isEmpty</span>()) {
+</span></span><span style="display:flex;"><span>              tasksToLaunch.<span style="color:#a6e22e">wait</span>();
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">//get the TIP</span>
+</span></span><span style="display:flex;"><span>            tip <span style="color:#f92672">=</span> tasksToLaunch.<span style="color:#a6e22e">remove</span>(0);
+</span></span><span style="display:flex;"><span>           <span style="color:#75715e">//wait for a slot to run</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">synchronized</span> (numFreeSlots) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">while</span> (numFreeSlots.<span style="color:#a6e22e">get</span>() <span style="color:#f92672">==</span> 0) {
+</span></span><span style="display:flex;"><span>              numFreeSlots.<span style="color:#a6e22e">wait</span>();
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            LOG.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;In TaskLauncher, current free slots : &#34;</span> <span style="color:#f92672">+</span> numFreeSlots.<span style="color:#a6e22e">get</span>()<span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34; and trying to launch &#34;</span><span style="color:#f92672">+</span>tip.<span style="color:#a6e22e">getTask</span>().<span style="color:#a6e22e">getTaskID</span>());
+</span></span><span style="display:flex;"><span>            numFreeSlots.<span style="color:#a6e22e">set</span>(numFreeSlots.<span style="color:#a6e22e">get</span>() <span style="color:#f92672">-</span> 1);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">assert</span> (numFreeSlots.<span style="color:#a6e22e">get</span>() <span style="color:#f92672">&gt;=</span> 0);
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e">//got a free slot. launch the task</span>
+</span></span><span style="display:flex;"><span>          startNewTask(tip);
+</span></span><span style="display:flex;"><span>              <span style="color:#66d9ef">return</span>; <span style="color:#75715e">// ALL DONE</span>
+</span></span><span style="display:flex;"><span>             }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><ol start="4">
 <li>TaskTracker的startNewTask 启动一个新task。该方法的主要代码就一句。</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">localizeJob<span style="color:#f92672">(</span>tip<span style="color:#f92672">);</span>
-</code></pre></div><ol start="5">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>localizeJob(tip);
+</span></span></code></pre></div><ol start="5">
 <li>TaskTracker的localizeJob方法。 初始化job的目录</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">localizeJob</span><span style="color:#f92672">(</span>TaskInProgress tip<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> IOException <span style="color:#f92672">{</span>
-        Path localJarFile <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
-        Task t <span style="color:#f92672">=</span> tip<span style="color:#f92672">.</span><span style="color:#a6e22e">getTask</span><span style="color:#f92672">();</span>
-        JobID jobId <span style="color:#f92672">=</span> t<span style="color:#f92672">.</span><span style="color:#a6e22e">getJobID</span><span style="color:#f92672">();</span>
-        Path jobFile <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Path<span style="color:#f92672">(</span>t<span style="color:#f92672">.</span><span style="color:#a6e22e">getJobFile</span><span style="color:#f92672">());</span>
-        FileStatus status <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
-        <span style="color:#66d9ef">long</span> jobFileSize <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>1<span style="color:#f92672">;</span>
-        status <span style="color:#f92672">=</span> systemFS<span style="color:#f92672">.</span><span style="color:#a6e22e">getFileStatus</span><span style="color:#f92672">(</span>jobFile<span style="color:#f92672">);</span>
-        jobFileSize <span style="color:#f92672">=</span> status<span style="color:#f92672">.</span><span style="color:#a6e22e">getLen</span><span style="color:#f92672">();</span>
-
-        Path localJobFile <span style="color:#f92672">=</span> lDirAlloc<span style="color:#f92672">.</span><span style="color:#a6e22e">getLocalPathForWrite</span><span style="color:#f92672">(</span>
-                getLocalJobDir<span style="color:#f92672">(</span>jobId<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">())</span>
-                <span style="color:#f92672">+</span> Path<span style="color:#f92672">.</span><span style="color:#a6e22e">SEPARATOR</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;job.xml&#34;</span><span style="color:#f92672">,</span>
-                jobFileSize<span style="color:#f92672">,</span> fConf<span style="color:#f92672">);</span>
-        RunningJob rjob <span style="color:#f92672">=</span> addTaskToJob<span style="color:#f92672">(</span>jobId<span style="color:#f92672">,</span> tip<span style="color:#f92672">);</span>
-        <span style="color:#66d9ef">synchronized</span> <span style="color:#f92672">(</span>rjob<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>rjob<span style="color:#f92672">.</span><span style="color:#a6e22e">localized</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-    
-                FileSystem localFs <span style="color:#f92672">=</span> FileSystem<span style="color:#f92672">.</span><span style="color:#a6e22e">getLocal</span><span style="color:#f92672">(</span>fConf<span style="color:#f92672">);</span>
-    
-                systemFS<span style="color:#f92672">.</span><span style="color:#a6e22e">copyToLocalFile</span><span style="color:#f92672">(</span>jobFile<span style="color:#f92672">,</span> localJobFile<span style="color:#f92672">);</span>
-                JobConf localJobConf <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> JobConf<span style="color:#f92672">(</span>localJobFile<span style="color:#f92672">);</span>
-                Path workDir <span style="color:#f92672">=</span> lDirAlloc<span style="color:#f92672">.</span><span style="color:#a6e22e">getLocalPathForWrite</span><span style="color:#f92672">(</span>
-                        <span style="color:#f92672">(</span>getLocalJobDir<span style="color:#f92672">(</span>jobId<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">())</span>
-                                <span style="color:#f92672">+</span> Path<span style="color:#f92672">.</span><span style="color:#a6e22e">SEPARATOR</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;work&#34;</span><span style="color:#f92672">),</span> fConf<span style="color:#f92672">);</span>
-    
-                System<span style="color:#f92672">.</span><span style="color:#a6e22e">setProperty</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;job.local.dir&#34;</span><span style="color:#f92672">,</span> workDir<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">());</span>
-                localJobConf<span style="color:#f92672">.</span><span style="color:#a6e22e">set</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;job.local.dir&#34;</span><span style="color:#f92672">,</span> workDir<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">());</span>
-    
-                <span style="color:#75715e">//把job的jar文件拷贝到本地文件系统并且解压。
-</span><span style="color:#75715e"></span>                String jarFile <span style="color:#f92672">=</span> localJobConf<span style="color:#f92672">.</span><span style="color:#a6e22e">getJar</span><span style="color:#f92672">();</span>
-    
-                Path jarFilePath <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Path<span style="color:#f92672">(</span>jarFile<span style="color:#f92672">);</span>
-                status <span style="color:#f92672">=</span> systemFS<span style="color:#f92672">.</span><span style="color:#a6e22e">getFileStatus</span><span style="color:#f92672">(</span>jarFilePath<span style="color:#f92672">);</span>
-                jarFileSize <span style="color:#f92672">=</span> status<span style="color:#f92672">.</span><span style="color:#a6e22e">getLen</span><span style="color:#f92672">();</span>
-    
-                <span style="color:#75715e">//保证释放的目录容量有5倍的jar文件大小
-</span><span style="color:#75715e"></span>                localJarFile <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Path<span style="color:#f92672">(</span>lDirAlloc<span style="color:#f92672">.</span><span style="color:#a6e22e">getLocalPathForWrite</span><span style="color:#f92672">(</span>
-                        getLocalJobDir<span style="color:#f92672">(</span>jobId<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">())</span>
-                        <span style="color:#f92672">+</span> Path<span style="color:#f92672">.</span><span style="color:#a6e22e">SEPARATOR</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;jars&#34;</span><span style="color:#f92672">,</span>
-                        5 <span style="color:#f92672">*</span> jarFileSize<span style="color:#f92672">,</span> fConf<span style="color:#f92672">),</span> <span style="color:#e6db74">&#34;job.jar&#34;</span><span style="color:#f92672">);</span>
-    
-                <span style="color:#75715e">//把jar文件拷贝到本地
-</span><span style="color:#75715e"></span>                systemFS<span style="color:#f92672">.</span><span style="color:#a6e22e">copyToLocalFile</span><span style="color:#f92672">(</span>jarFilePath<span style="color:#f92672">,</span> localJarFile<span style="color:#f92672">);</span>
-                localJobConf<span style="color:#f92672">.</span><span style="color:#a6e22e">setJar</span><span style="color:#f92672">(</span>localJarFile<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">());</span>
-                OutputStream out <span style="color:#f92672">=</span> localFs<span style="color:#f92672">.</span><span style="color:#a6e22e">create</span><span style="color:#f92672">(</span>localJobFile<span style="color:#f92672">);</span>
-                localJobConf<span style="color:#f92672">.</span><span style="color:#a6e22e">writeXml</span><span style="color:#f92672">(</span>out<span style="color:#f92672">);</span>
-    
-                <span style="color:#75715e">// also unjar the job.jar files 
-</span><span style="color:#75715e"></span>                RunJar<span style="color:#f92672">.</span><span style="color:#a6e22e">unJar</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> File<span style="color:#f92672">(</span>localJarFile<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">()),</span>
-                        <span style="color:#66d9ef">new</span> File<span style="color:#f92672">(</span>localJarFile<span style="color:#f92672">.</span><span style="color:#a6e22e">getParent</span><span style="color:#f92672">().</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">()));</span>
-            <span style="color:#f92672">}</span>
-            rjob<span style="color:#f92672">.</span><span style="color:#a6e22e">keepJobFiles</span> <span style="color:#f92672">=</span> <span style="color:#f92672">((</span>localJobConf<span style="color:#f92672">.</span><span style="color:#a6e22e">getKeepTaskFilesPattern</span><span style="color:#f92672">()</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">||</span>
-                    localJobConf<span style="color:#f92672">.</span><span style="color:#a6e22e">getKeepFailedTaskFiles</span><span style="color:#f92672">());</span>
-            rjob<span style="color:#f92672">.</span><span style="color:#a6e22e">localized</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
-            rjob<span style="color:#f92672">.</span><span style="color:#a6e22e">jobConf</span> <span style="color:#f92672">=</span> localJobConf<span style="color:#f92672">;</span>
-        <span style="color:#f92672">}</span>
-    <span style="color:#f92672">}</span>
-    launchTaskForJob<span style="color:#f92672">(</span>tip<span style="color:#f92672">,</span> <span style="color:#66d9ef">new</span> JobConf<span style="color:#f92672">(</span>rjob<span style="color:#f92672">.</span><span style="color:#a6e22e">jobConf</span><span style="color:#f92672">));</span> 
-<span style="color:#f92672">}</span>
-</code></pre></div><ol start="6">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">localizeJob</span>(TaskInProgress tip) <span style="color:#66d9ef">throws</span> IOException {
+</span></span><span style="display:flex;"><span>        Path localJarFile <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>        Task t <span style="color:#f92672">=</span> tip.<span style="color:#a6e22e">getTask</span>();
+</span></span><span style="display:flex;"><span>        JobID jobId <span style="color:#f92672">=</span> t.<span style="color:#a6e22e">getJobID</span>();
+</span></span><span style="display:flex;"><span>        Path jobFile <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Path(t.<span style="color:#a6e22e">getJobFile</span>());
+</span></span><span style="display:flex;"><span>        FileStatus status <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">long</span> jobFileSize <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>1;
+</span></span><span style="display:flex;"><span>        status <span style="color:#f92672">=</span> systemFS.<span style="color:#a6e22e">getFileStatus</span>(jobFile);
+</span></span><span style="display:flex;"><span>        jobFileSize <span style="color:#f92672">=</span> status.<span style="color:#a6e22e">getLen</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        Path localJobFile <span style="color:#f92672">=</span> lDirAlloc.<span style="color:#a6e22e">getLocalPathForWrite</span>(
+</span></span><span style="display:flex;"><span>                getLocalJobDir(jobId.<span style="color:#a6e22e">toString</span>())
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">+</span> Path.<span style="color:#a6e22e">SEPARATOR</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;job.xml&#34;</span>,
+</span></span><span style="display:flex;"><span>                jobFileSize, fConf);
+</span></span><span style="display:flex;"><span>        RunningJob rjob <span style="color:#f92672">=</span> addTaskToJob(jobId, tip);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">synchronized</span> (rjob) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>rjob.<span style="color:#a6e22e">localized</span>) {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>                FileSystem localFs <span style="color:#f92672">=</span> FileSystem.<span style="color:#a6e22e">getLocal</span>(fConf);
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>                systemFS.<span style="color:#a6e22e">copyToLocalFile</span>(jobFile, localJobFile);
+</span></span><span style="display:flex;"><span>                JobConf localJobConf <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> JobConf(localJobFile);
+</span></span><span style="display:flex;"><span>                Path workDir <span style="color:#f92672">=</span> lDirAlloc.<span style="color:#a6e22e">getLocalPathForWrite</span>(
+</span></span><span style="display:flex;"><span>                        (getLocalJobDir(jobId.<span style="color:#a6e22e">toString</span>())
+</span></span><span style="display:flex;"><span>                                <span style="color:#f92672">+</span> Path.<span style="color:#a6e22e">SEPARATOR</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;work&#34;</span>), fConf);
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>                System.<span style="color:#a6e22e">setProperty</span>(<span style="color:#e6db74">&#34;job.local.dir&#34;</span>, workDir.<span style="color:#a6e22e">toString</span>());
+</span></span><span style="display:flex;"><span>                localJobConf.<span style="color:#a6e22e">set</span>(<span style="color:#e6db74">&#34;job.local.dir&#34;</span>, workDir.<span style="color:#a6e22e">toString</span>());
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e">//把job的jar文件拷贝到本地文件系统并且解压。</span>
+</span></span><span style="display:flex;"><span>                String jarFile <span style="color:#f92672">=</span> localJobConf.<span style="color:#a6e22e">getJar</span>();
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>                Path jarFilePath <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Path(jarFile);
+</span></span><span style="display:flex;"><span>                status <span style="color:#f92672">=</span> systemFS.<span style="color:#a6e22e">getFileStatus</span>(jarFilePath);
+</span></span><span style="display:flex;"><span>                jarFileSize <span style="color:#f92672">=</span> status.<span style="color:#a6e22e">getLen</span>();
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e">//保证释放的目录容量有5倍的jar文件大小</span>
+</span></span><span style="display:flex;"><span>                localJarFile <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Path(lDirAlloc.<span style="color:#a6e22e">getLocalPathForWrite</span>(
+</span></span><span style="display:flex;"><span>                        getLocalJobDir(jobId.<span style="color:#a6e22e">toString</span>())
+</span></span><span style="display:flex;"><span>                        <span style="color:#f92672">+</span> Path.<span style="color:#a6e22e">SEPARATOR</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;jars&#34;</span>,
+</span></span><span style="display:flex;"><span>                        5 <span style="color:#f92672">*</span> jarFileSize, fConf), <span style="color:#e6db74">&#34;job.jar&#34;</span>);
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e">//把jar文件拷贝到本地</span>
+</span></span><span style="display:flex;"><span>                systemFS.<span style="color:#a6e22e">copyToLocalFile</span>(jarFilePath, localJarFile);
+</span></span><span style="display:flex;"><span>                localJobConf.<span style="color:#a6e22e">setJar</span>(localJarFile.<span style="color:#a6e22e">toString</span>());
+</span></span><span style="display:flex;"><span>                OutputStream out <span style="color:#f92672">=</span> localFs.<span style="color:#a6e22e">create</span>(localJobFile);
+</span></span><span style="display:flex;"><span>                localJobConf.<span style="color:#a6e22e">writeXml</span>(out);
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e">// also unjar the job.jar files </span>
+</span></span><span style="display:flex;"><span>                RunJar.<span style="color:#a6e22e">unJar</span>(<span style="color:#66d9ef">new</span> File(localJarFile.<span style="color:#a6e22e">toString</span>()),
+</span></span><span style="display:flex;"><span>                        <span style="color:#66d9ef">new</span> File(localJarFile.<span style="color:#a6e22e">getParent</span>().<span style="color:#a6e22e">toString</span>()));
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            rjob.<span style="color:#a6e22e">keepJobFiles</span> <span style="color:#f92672">=</span> ((localJobConf.<span style="color:#a6e22e">getKeepTaskFilesPattern</span>() <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) <span style="color:#f92672">||</span>
+</span></span><span style="display:flex;"><span>                    localJobConf.<span style="color:#a6e22e">getKeepFailedTaskFiles</span>());
+</span></span><span style="display:flex;"><span>            rjob.<span style="color:#a6e22e">localized</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
+</span></span><span style="display:flex;"><span>            rjob.<span style="color:#a6e22e">jobConf</span> <span style="color:#f92672">=</span> localJobConf;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    launchTaskForJob(tip, <span style="color:#66d9ef">new</span> JobConf(rjob.<span style="color:#a6e22e">jobConf</span>)); 
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ol start="6">
 <li>TaskTracker的addTaskToJob方法。只是把job和task的关系加入到runningJobs中。</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">private</span> RunningJob <span style="color:#a6e22e">addTaskToJob</span><span style="color:#f92672">(</span>JobID jobId<span style="color:#f92672">,</span> 
-                                  TaskInProgress tip<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-    <span style="color:#66d9ef">synchronized</span> <span style="color:#f92672">(</span>runningJobs<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-      RunningJob rJob <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
-      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>runningJobs<span style="color:#f92672">.</span><span style="color:#a6e22e">containsKey</span><span style="color:#f92672">(</span>jobId<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
-        rJob <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> RunningJob<span style="color:#f92672">(</span>jobId<span style="color:#f92672">);</span>
-        rJob<span style="color:#f92672">.</span><span style="color:#a6e22e">localized</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
-        rJob<span style="color:#f92672">.</span><span style="color:#a6e22e">tasks</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HashSet<span style="color:#f92672">&lt;</span>TaskInProgress<span style="color:#f92672">&gt;();</span>
-        runningJobs<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>jobId<span style="color:#f92672">,</span> rJob<span style="color:#f92672">);</span>
-      <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
-        rJob <span style="color:#f92672">=</span> runningJobs<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>jobId<span style="color:#f92672">);</span>
-      <span style="color:#f92672">}</span>
-      <span style="color:#66d9ef">synchronized</span> <span style="color:#f92672">(</span>rJob<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        rJob<span style="color:#f92672">.</span><span style="color:#a6e22e">tasks</span><span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>tip<span style="color:#f92672">);</span>
-      <span style="color:#f92672">}</span>
-      runningJobs<span style="color:#f92672">.</span><span style="color:#a6e22e">notify</span><span style="color:#f92672">();</span> <span style="color:#75715e">//notify the fetcher thread
-</span><span style="color:#75715e"></span>      <span style="color:#66d9ef">return</span> rJob<span style="color:#f92672">;</span>
-    <span style="color:#f92672">}</span>
-  <span style="color:#f92672">}</span>
-</code></pre></div><ol start="7">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">private</span> RunningJob <span style="color:#a6e22e">addTaskToJob</span>(JobID jobId, 
+</span></span><span style="display:flex;"><span>                                  TaskInProgress tip) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">synchronized</span> (runningJobs) {
+</span></span><span style="display:flex;"><span>      RunningJob rJob <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>runningJobs.<span style="color:#a6e22e">containsKey</span>(jobId)) {
+</span></span><span style="display:flex;"><span>        rJob <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> RunningJob(jobId);
+</span></span><span style="display:flex;"><span>        rJob.<span style="color:#a6e22e">localized</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>;
+</span></span><span style="display:flex;"><span>        rJob.<span style="color:#a6e22e">tasks</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HashSet<span style="color:#f92672">&lt;</span>TaskInProgress<span style="color:#f92672">&gt;</span>();
+</span></span><span style="display:flex;"><span>        runningJobs.<span style="color:#a6e22e">put</span>(jobId, rJob);
+</span></span><span style="display:flex;"><span>      } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>        rJob <span style="color:#f92672">=</span> runningJobs.<span style="color:#a6e22e">get</span>(jobId);
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">synchronized</span> (rJob) {
+</span></span><span style="display:flex;"><span>        rJob.<span style="color:#a6e22e">tasks</span>.<span style="color:#a6e22e">add</span>(tip);
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>      runningJobs.<span style="color:#a6e22e">notify</span>(); <span style="color:#75715e">//notify the fetcher thread</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> rJob;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><ol start="7">
 <li>TaskTracker的launchTaskForJob方法。调用TaskInprogress的launchTask方法。</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">launchTaskForJob</span><span style="color:#f92672">(</span>TaskInProgress tip<span style="color:#f92672">,</span> JobConf jobConf<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-    <span style="color:#66d9ef">synchronized</span> <span style="color:#f92672">(</span>tip<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-      tip<span style="color:#f92672">.</span><span style="color:#a6e22e">setJobConf</span><span style="color:#f92672">(</span>jobConf<span style="color:#f92672">);</span>
-      tip<span style="color:#f92672">.</span><span style="color:#a6e22e">launchTask</span><span style="color:#f92672">();</span>
-    <span style="color:#f92672">}</span>
-  <span style="color:#f92672">}</span>
-</code></pre></div><ol start="8">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">launchTaskForJob</span>(TaskInProgress tip, JobConf jobConf) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">synchronized</span> (tip) {
+</span></span><span style="display:flex;"><span>      tip.<span style="color:#a6e22e">setJobConf</span>(jobConf);
+</span></span><span style="display:flex;"><span>      tip.<span style="color:#a6e22e">launchTask</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><ol start="8">
 <li>TaskIProgress的 launchTask方法。</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">synchronized</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">launchTask</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> IOException <span style="color:#f92672">{</span>
-        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">taskStatus</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getRunState</span><span style="color:#f92672">()</span> <span style="color:#f92672">==</span> TaskStatus<span style="color:#f92672">.</span><span style="color:#a6e22e">State</span><span style="color:#f92672">.</span><span style="color:#a6e22e">UNASSIGNED</span> <span style="color:#f92672">||</span>
-                <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">taskStatus</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getRunState</span><span style="color:#f92672">()</span> <span style="color:#f92672">==</span> TaskStatus<span style="color:#f92672">.</span><span style="color:#a6e22e">State</span><span style="color:#f92672">.</span><span style="color:#a6e22e">FAILED_UNCLEAN</span> <span style="color:#f92672">||</span>
-                <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">taskStatus</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getRunState</span><span style="color:#f92672">()</span> <span style="color:#f92672">==</span> TaskStatus<span style="color:#f92672">.</span><span style="color:#a6e22e">State</span><span style="color:#f92672">.</span><span style="color:#a6e22e">KILLED_UNCLEAN</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-            localizeTask<span style="color:#f92672">(</span>task<span style="color:#f92672">);</span>
-            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">taskStatus</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getRunState</span><span style="color:#f92672">()</span> <span style="color:#f92672">==</span> TaskStatus<span style="color:#f92672">.</span><span style="color:#a6e22e">State</span><span style="color:#f92672">.</span><span style="color:#a6e22e">UNASSIGNED</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-                <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">taskStatus</span><span style="color:#f92672">.</span><span style="color:#a6e22e">setRunState</span><span style="color:#f92672">(</span>TaskStatus<span style="color:#f92672">.</span><span style="color:#a6e22e">State</span><span style="color:#f92672">.</span><span style="color:#a6e22e">RUNNING</span><span style="color:#f92672">);</span>
-            <span style="color:#f92672">}</span>
-            <span style="color:#75715e">//创建一个Runner来运行。
-</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">runner</span> <span style="color:#f92672">=</span> task<span style="color:#f92672">.</span><span style="color:#a6e22e">createRunner</span><span style="color:#f92672">(</span>TaskTracker<span style="color:#f92672">.</span><span style="color:#a6e22e">this</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
-            <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">runner</span><span style="color:#f92672">.</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
-            <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">taskStatus</span><span style="color:#f92672">.</span><span style="color:#a6e22e">setStartTime</span><span style="color:#f92672">(</span>System<span style="color:#f92672">.</span><span style="color:#a6e22e">currentTimeMillis</span><span style="color:#f92672">());</span>
-        <span style="color:#f92672">}</span>
-</code></pre></div><p>9.TaskinProgress的localizeTask方法。把Task相关的文件拷贝到本地。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">localizeTask</span><span style="color:#f92672">(</span>Task task<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> IOException<span style="color:#f92672">{</span>
-
-      Path localTaskDir <span style="color:#f92672">=</span> 
-        lDirAlloc<span style="color:#f92672">.</span><span style="color:#a6e22e">getLocalPathForWrite</span><span style="color:#f92672">(</span>
-          TaskTracker<span style="color:#f92672">.</span><span style="color:#a6e22e">getLocalTaskDir</span><span style="color:#f92672">(</span>task<span style="color:#f92672">.</span><span style="color:#a6e22e">getJobID</span><span style="color:#f92672">().</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">(),</span> 
-            task<span style="color:#f92672">.</span><span style="color:#a6e22e">getTaskID</span><span style="color:#f92672">().</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">(),</span> task<span style="color:#f92672">.</span><span style="color:#a6e22e">isTaskCleanupTask</span><span style="color:#f92672">()),</span> 
-          defaultJobConf <span style="color:#f92672">);</span>
-    
-      FileSystem localFs <span style="color:#f92672">=</span> FileSystem<span style="color:#f92672">.</span><span style="color:#a6e22e">getLocal</span><span style="color:#f92672">(</span>fConf<span style="color:#f92672">);</span>
-      <span style="color:#75715e">// create symlink for ../work if it already doesnt exist
-</span><span style="color:#75715e"></span>      String workDir <span style="color:#f92672">=</span> lDirAlloc<span style="color:#f92672">.</span><span style="color:#a6e22e">getLocalPathToRead</span><span style="color:#f92672">(</span>
-                         TaskTracker<span style="color:#f92672">.</span><span style="color:#a6e22e">getLocalJobDir</span><span style="color:#f92672">(</span>task<span style="color:#f92672">.</span><span style="color:#a6e22e">getJobID</span><span style="color:#f92672">().</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">())</span>
-                         <span style="color:#f92672">+</span> Path<span style="color:#f92672">.</span><span style="color:#a6e22e">SEPARATOR</span>  
-                         <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;work&#34;</span><span style="color:#f92672">,</span> defaultJobConf<span style="color:#f92672">).</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">();</span>
-      String link <span style="color:#f92672">=</span> localTaskDir<span style="color:#f92672">.</span><span style="color:#a6e22e">getParent</span><span style="color:#f92672">().</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">()</span> 
-                      <span style="color:#f92672">+</span> Path<span style="color:#f92672">.</span><span style="color:#a6e22e">SEPARATOR</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;work&#34;</span><span style="color:#f92672">;</span>
-      File flink <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> File<span style="color:#f92672">(</span>link<span style="color:#f92672">);</span>
-      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>flink<span style="color:#f92672">.</span><span style="color:#a6e22e">exists</span><span style="color:#f92672">())</span>
-        FileUtil<span style="color:#f92672">.</span><span style="color:#a6e22e">symLink</span><span style="color:#f92672">(</span>workDir<span style="color:#f92672">,</span> link<span style="color:#f92672">);</span>
-    
-      <span style="color:#75715e">// 创建task的工作目录
-</span><span style="color:#75715e"></span>      Path cwd <span style="color:#f92672">=</span> lDirAlloc<span style="color:#f92672">.</span><span style="color:#a6e22e">getLocalPathForWrite</span><span style="color:#f92672">(</span>
-                   getLocalTaskDir<span style="color:#f92672">(</span>task<span style="color:#f92672">.</span><span style="color:#a6e22e">getJobID</span><span style="color:#f92672">().</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">(),</span> 
-                      task<span style="color:#f92672">.</span><span style="color:#a6e22e">getTaskID</span><span style="color:#f92672">().</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">(),</span> task<span style="color:#f92672">.</span><span style="color:#a6e22e">isTaskCleanupTask</span><span style="color:#f92672">())</span> 
-                   <span style="color:#f92672">+</span> Path<span style="color:#f92672">.</span><span style="color:#a6e22e">SEPARATOR</span> <span style="color:#f92672">+</span> MRConstants<span style="color:#f92672">.</span><span style="color:#a6e22e">WORKDIR</span><span style="color:#f92672">,</span>
-                   defaultJobConf<span style="color:#f92672">);</span>
-    
-      Path localTaskFile <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Path<span style="color:#f92672">(</span>localTaskDir<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;job.xml&#34;</span><span style="color:#f92672">);</span>
-      task<span style="color:#f92672">.</span><span style="color:#a6e22e">setJobFile</span><span style="color:#f92672">(</span>localTaskFile<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">());</span>
-      localJobConf<span style="color:#f92672">.</span><span style="color:#a6e22e">set</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;mapred.local.dir&#34;</span><span style="color:#f92672">,</span>
-                       fConf<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;mapred.local.dir&#34;</span><span style="color:#f92672">));</span> 
-    
-      localJobConf<span style="color:#f92672">.</span><span style="color:#a6e22e">set</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;mapred.task.id&#34;</span><span style="color:#f92672">,</span> task<span style="color:#f92672">.</span><span style="color:#a6e22e">getTaskID</span><span style="color:#f92672">().</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">());</span>     
-      <span style="color:#f92672">}</span>
-            OutputStream out <span style="color:#f92672">=</span> localFs<span style="color:#f92672">.</span><span style="color:#a6e22e">create</span><span style="color:#f92672">(</span>localTaskFile<span style="color:#f92672">);</span>
-             localJobConf<span style="color:#f92672">.</span><span style="color:#a6e22e">writeXml</span><span style="color:#f92672">(</span>out<span style="color:#f92672">);</span>
-    
-      task<span style="color:#f92672">.</span><span style="color:#a6e22e">setConf</span><span style="color:#f92672">(</span>localJobConf<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span>
-</code></pre></div><p>10.Task是个抽象类，两个子类分别是MapTask和ReduceTask。先关注Map的TaskRunner。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> TaskRunner <span style="color:#a6e22e">createRunner</span><span style="color:#f92672">(</span>TaskTracker tracker<span style="color:#f92672">,</span> 
-      TaskTracker<span style="color:#f92672">.</span><span style="color:#a6e22e">TaskInProgress</span> tip<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> MapTaskRunner<span style="color:#f92672">(</span>tip<span style="color:#f92672">,</span> tracker<span style="color:#f92672">,</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">conf</span><span style="color:#f92672">);</span>
-  <span style="color:#f92672">}</span>
-</code></pre></div><ol start="11">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">synchronized</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">launchTask</span>() <span style="color:#66d9ef">throws</span> IOException {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">taskStatus</span>.<span style="color:#a6e22e">getRunState</span>() <span style="color:#f92672">==</span> TaskStatus.<span style="color:#a6e22e">State</span>.<span style="color:#a6e22e">UNASSIGNED</span> <span style="color:#f92672">||</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">taskStatus</span>.<span style="color:#a6e22e">getRunState</span>() <span style="color:#f92672">==</span> TaskStatus.<span style="color:#a6e22e">State</span>.<span style="color:#a6e22e">FAILED_UNCLEAN</span> <span style="color:#f92672">||</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">taskStatus</span>.<span style="color:#a6e22e">getRunState</span>() <span style="color:#f92672">==</span> TaskStatus.<span style="color:#a6e22e">State</span>.<span style="color:#a6e22e">KILLED_UNCLEAN</span>) {
+</span></span><span style="display:flex;"><span>            localizeTask(task);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">taskStatus</span>.<span style="color:#a6e22e">getRunState</span>() <span style="color:#f92672">==</span> TaskStatus.<span style="color:#a6e22e">State</span>.<span style="color:#a6e22e">UNASSIGNED</span>) {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">taskStatus</span>.<span style="color:#a6e22e">setRunState</span>(TaskStatus.<span style="color:#a6e22e">State</span>.<span style="color:#a6e22e">RUNNING</span>);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">//创建一个Runner来运行。</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">runner</span> <span style="color:#f92672">=</span> task.<span style="color:#a6e22e">createRunner</span>(TaskTracker.<span style="color:#a6e22e">this</span>, <span style="color:#66d9ef">this</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">runner</span>.<span style="color:#a6e22e">start</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">taskStatus</span>.<span style="color:#a6e22e">setStartTime</span>(System.<span style="color:#a6e22e">currentTimeMillis</span>());
+</span></span><span style="display:flex;"><span>        }
+</span></span></code></pre></div><p>9.TaskinProgress的localizeTask方法。把Task相关的文件拷贝到本地。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">localizeTask</span>(Task task) <span style="color:#66d9ef">throws</span> IOException{
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      Path localTaskDir <span style="color:#f92672">=</span> 
+</span></span><span style="display:flex;"><span>        lDirAlloc.<span style="color:#a6e22e">getLocalPathForWrite</span>(
+</span></span><span style="display:flex;"><span>          TaskTracker.<span style="color:#a6e22e">getLocalTaskDir</span>(task.<span style="color:#a6e22e">getJobID</span>().<span style="color:#a6e22e">toString</span>(), 
+</span></span><span style="display:flex;"><span>            task.<span style="color:#a6e22e">getTaskID</span>().<span style="color:#a6e22e">toString</span>(), task.<span style="color:#a6e22e">isTaskCleanupTask</span>()), 
+</span></span><span style="display:flex;"><span>          defaultJobConf );
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>      FileSystem localFs <span style="color:#f92672">=</span> FileSystem.<span style="color:#a6e22e">getLocal</span>(fConf);
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">// create symlink for ../work if it already doesnt exist</span>
+</span></span><span style="display:flex;"><span>      String workDir <span style="color:#f92672">=</span> lDirAlloc.<span style="color:#a6e22e">getLocalPathToRead</span>(
+</span></span><span style="display:flex;"><span>                         TaskTracker.<span style="color:#a6e22e">getLocalJobDir</span>(task.<span style="color:#a6e22e">getJobID</span>().<span style="color:#a6e22e">toString</span>())
+</span></span><span style="display:flex;"><span>                         <span style="color:#f92672">+</span> Path.<span style="color:#a6e22e">SEPARATOR</span>  
+</span></span><span style="display:flex;"><span>                         <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;work&#34;</span>, defaultJobConf).<span style="color:#a6e22e">toString</span>();
+</span></span><span style="display:flex;"><span>      String link <span style="color:#f92672">=</span> localTaskDir.<span style="color:#a6e22e">getParent</span>().<span style="color:#a6e22e">toString</span>() 
+</span></span><span style="display:flex;"><span>                      <span style="color:#f92672">+</span> Path.<span style="color:#a6e22e">SEPARATOR</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;work&#34;</span>;
+</span></span><span style="display:flex;"><span>      File flink <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> File(link);
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>flink.<span style="color:#a6e22e">exists</span>())
+</span></span><span style="display:flex;"><span>        FileUtil.<span style="color:#a6e22e">symLink</span>(workDir, link);
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">// 创建task的工作目录</span>
+</span></span><span style="display:flex;"><span>      Path cwd <span style="color:#f92672">=</span> lDirAlloc.<span style="color:#a6e22e">getLocalPathForWrite</span>(
+</span></span><span style="display:flex;"><span>                   getLocalTaskDir(task.<span style="color:#a6e22e">getJobID</span>().<span style="color:#a6e22e">toString</span>(), 
+</span></span><span style="display:flex;"><span>                      task.<span style="color:#a6e22e">getTaskID</span>().<span style="color:#a6e22e">toString</span>(), task.<span style="color:#a6e22e">isTaskCleanupTask</span>()) 
+</span></span><span style="display:flex;"><span>                   <span style="color:#f92672">+</span> Path.<span style="color:#a6e22e">SEPARATOR</span> <span style="color:#f92672">+</span> MRConstants.<span style="color:#a6e22e">WORKDIR</span>,
+</span></span><span style="display:flex;"><span>                   defaultJobConf);
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>      Path localTaskFile <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Path(localTaskDir, <span style="color:#e6db74">&#34;job.xml&#34;</span>);
+</span></span><span style="display:flex;"><span>      task.<span style="color:#a6e22e">setJobFile</span>(localTaskFile.<span style="color:#a6e22e">toString</span>());
+</span></span><span style="display:flex;"><span>      localJobConf.<span style="color:#a6e22e">set</span>(<span style="color:#e6db74">&#34;mapred.local.dir&#34;</span>,
+</span></span><span style="display:flex;"><span>                       fConf.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;mapred.local.dir&#34;</span>)); 
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>      localJobConf.<span style="color:#a6e22e">set</span>(<span style="color:#e6db74">&#34;mapred.task.id&#34;</span>, task.<span style="color:#a6e22e">getTaskID</span>().<span style="color:#a6e22e">toString</span>());     
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>            OutputStream out <span style="color:#f92672">=</span> localFs.<span style="color:#a6e22e">create</span>(localTaskFile);
+</span></span><span style="display:flex;"><span>             localJobConf.<span style="color:#a6e22e">writeXml</span>(out);
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>      task.<span style="color:#a6e22e">setConf</span>(localJobConf);
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div><p>10.Task是个抽象类，两个子类分别是MapTask和ReduceTask。先关注Map的TaskRunner。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> TaskRunner <span style="color:#a6e22e">createRunner</span>(TaskTracker tracker, 
+</span></span><span style="display:flex;"><span>      TaskTracker.<span style="color:#a6e22e">TaskInProgress</span> tip) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> MapTaskRunner(tip, tracker, <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">conf</span>);
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><ol start="11">
 <li>TaskRunner线程的Run方法，有420行代码！主要作用是根据配置信息，构造java命令，启动一个java进程。</li>
 </ol>
 <p>拼接一个java指令，启动一个单独的java进程来执行每一个map或者reduce任务。这个java命令的class是Child。即这个java进程最终调用的是Child类的main函数。</p>
 <p>12.JvmManager的 launchJvm方法。在TaskRunner的run方法，是构造一个java命令的参数，调用JvmManager的launchJvm方法执行。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">launchJvm</span><span style="color:#f92672">(</span>TaskRunner t<span style="color:#f92672">,</span> JvmEnv env<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>t<span style="color:#f92672">.</span><span style="color:#a6e22e">getTask</span><span style="color:#f92672">().</span><span style="color:#a6e22e">isMapTask</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
-      mapJvmManager<span style="color:#f92672">.</span><span style="color:#a6e22e">reapJvm</span><span style="color:#f92672">(</span>t<span style="color:#f92672">,</span> env<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
-      reduceJvmManager<span style="color:#f92672">.</span><span style="color:#a6e22e">reapJvm</span><span style="color:#f92672">(</span>t<span style="color:#f92672">,</span> env<span style="color:#f92672">);</span>
-    <span style="color:#f92672">}</span>
-  <span style="color:#f92672">}</span>
-</code></pre></div><ol start="13">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">launchJvm</span>(TaskRunner t, JvmEnv env) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (t.<span style="color:#a6e22e">getTask</span>().<span style="color:#a6e22e">isMapTask</span>()) {
+</span></span><span style="display:flex;"><span>      mapJvmManager.<span style="color:#a6e22e">reapJvm</span>(t, env);
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>      reduceJvmManager.<span style="color:#a6e22e">reapJvm</span>(t, env);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><ol start="13">
 <li>JvmManagerForType的reapJvm方法</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">synchronized</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">reapJvm</span><span style="color:#f92672">(</span> 
-        TaskRunner t<span style="color:#f92672">,</span> JvmEnv env<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>t<span style="color:#f92672">.</span><span style="color:#a6e22e">getTaskInProgress</span><span style="color:#f92672">().</span><span style="color:#a6e22e">wasKilled</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
-       <span style="color:#75715e">//如果task被杀死则直接返回
-</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">return</span><span style="color:#f92672">;</span>
-      <span style="color:#f92672">}</span>
-      <span style="color:#66d9ef">boolean</span> spawnNewJvm <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
-      JobID jobId <span style="color:#f92672">=</span> t<span style="color:#f92672">.</span><span style="color:#a6e22e">getTask</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getJobID</span><span style="color:#f92672">();</span>
-      <span style="color:#75715e">//检查是否有空闲的槽，如果小于最大jvm数，则重新开启一个jvm，不让你从现有job的空闲jvm中选择一个，或者杀死另外job的空闲jvm
-</span><span style="color:#75715e"></span>      <span style="color:#66d9ef">int</span> numJvmsSpawned <span style="color:#f92672">=</span> jvmIdToRunner<span style="color:#f92672">.</span><span style="color:#a6e22e">size</span><span style="color:#f92672">();</span>
-      JvmRunner runnerToKill <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
-      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>numJvmsSpawned <span style="color:#f92672">&gt;=</span> maxJvms<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        <span style="color:#75715e">//go through the list of JVMs for all jobs.
-</span><span style="color:#75715e"></span>        Iterator<span style="color:#f92672">&lt;</span>Map<span style="color:#f92672">.</span><span style="color:#a6e22e">Entry</span><span style="color:#f92672">&lt;</span>JVMId<span style="color:#f92672">,</span> JvmRunner<span style="color:#f92672">&gt;&gt;</span> jvmIter <span style="color:#f92672">=</span> 
-          jvmIdToRunner<span style="color:#f92672">.</span><span style="color:#a6e22e">entrySet</span><span style="color:#f92672">().</span><span style="color:#a6e22e">iterator</span><span style="color:#f92672">();</span>
-
-        <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span>jvmIter<span style="color:#f92672">.</span><span style="color:#a6e22e">hasNext</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
-          JvmRunner jvmRunner <span style="color:#f92672">=</span> jvmIter<span style="color:#f92672">.</span><span style="color:#a6e22e">next</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getValue</span><span style="color:#f92672">();</span>
-          JobID jId <span style="color:#f92672">=</span> jvmRunner<span style="color:#f92672">.</span><span style="color:#a6e22e">jvmId</span><span style="color:#f92672">.</span><span style="color:#a6e22e">getJobId</span><span style="color:#f92672">();</span>
-          <span style="color:#75715e">//look for a free JVM for this job; if one exists then just break
-</span><span style="color:#75715e"></span>          <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>jId<span style="color:#f92672">.</span><span style="color:#a6e22e">equals</span><span style="color:#f92672">(</span>jobId<span style="color:#f92672">)</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>jvmRunner<span style="color:#f92672">.</span><span style="color:#a6e22e">isBusy</span><span style="color:#f92672">()</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>jvmRunner<span style="color:#f92672">.</span><span style="color:#a6e22e">ranAll</span><span style="color:#f92672">()){</span>
-            setRunningTaskForJvm<span style="color:#f92672">(</span>jvmRunner<span style="color:#f92672">.</span><span style="color:#a6e22e">jvmId</span><span style="color:#f92672">,</span> t<span style="color:#f92672">);</span> <span style="color:#75715e">//reserve the JVM
-</span><span style="color:#75715e"></span>            LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;No new JVM spawned for jobId/taskid: &#34;</span> <span style="color:#f92672">+</span> 
-                     jobId<span style="color:#f92672">+</span><span style="color:#e6db74">&#34;/&#34;</span><span style="color:#f92672">+</span>t<span style="color:#f92672">.</span><span style="color:#a6e22e">getTask</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getTaskID</span><span style="color:#f92672">()</span> <span style="color:#f92672">+</span>
-                     <span style="color:#e6db74">&#34;. Attempting to reuse: &#34;</span> <span style="color:#f92672">+</span> jvmRunner<span style="color:#f92672">.</span><span style="color:#a6e22e">jvmId</span><span style="color:#f92672">);</span>
-            <span style="color:#66d9ef">return</span><span style="color:#f92672">;</span>
-          <span style="color:#f92672">}</span>
-    
-          <span style="color:#66d9ef">if</span> <span style="color:#f92672">((</span>jId<span style="color:#f92672">.</span><span style="color:#a6e22e">equals</span><span style="color:#f92672">(</span>jobId<span style="color:#f92672">)</span> <span style="color:#f92672">&amp;&amp;</span> jvmRunner<span style="color:#f92672">.</span><span style="color:#a6e22e">ranAll</span><span style="color:#f92672">())</span> <span style="color:#f92672">||</span>
-              <span style="color:#f92672">(!</span>jId<span style="color:#f92672">.</span><span style="color:#a6e22e">equals</span><span style="color:#f92672">(</span>jobId<span style="color:#f92672">)</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>jvmRunner<span style="color:#f92672">.</span><span style="color:#a6e22e">isBusy</span><span style="color:#f92672">()))</span> <span style="color:#f92672">{</span>
-            runnerToKill <span style="color:#f92672">=</span> jvmRunner<span style="color:#f92672">;</span>
-            spawnNewJvm <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
-          <span style="color:#f92672">}</span>
-        <span style="color:#f92672">}</span>
-      <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
-        spawnNewJvm <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
-      <span style="color:#f92672">}</span>
-    
-      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>spawnNewJvm<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>runnerToKill <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-          LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Killing JVM: &#34;</span> <span style="color:#f92672">+</span> runnerToKill<span style="color:#f92672">.</span><span style="color:#a6e22e">jvmId</span><span style="color:#f92672">);</span>
-          runnerToKill<span style="color:#f92672">.</span><span style="color:#a6e22e">kill</span><span style="color:#f92672">();</span>
-        <span style="color:#f92672">}</span>
-        spawnNewJvm<span style="color:#f92672">(</span>jobId<span style="color:#f92672">,</span> env<span style="color:#f92672">,</span> t<span style="color:#f92672">);</span>
-        <span style="color:#66d9ef">return</span><span style="color:#f92672">;</span>
-      <span style="color:#f92672">}</span>
-<span style="color:#f92672">}</span>
-</code></pre></div><ol start="14">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">synchronized</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">reapJvm</span>( 
+</span></span><span style="display:flex;"><span>        TaskRunner t, JvmEnv env) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (t.<span style="color:#a6e22e">getTaskInProgress</span>().<span style="color:#a6e22e">wasKilled</span>()) {
+</span></span><span style="display:flex;"><span>       <span style="color:#75715e">//如果task被杀死则直接返回</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">boolean</span> spawnNewJvm <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>;
+</span></span><span style="display:flex;"><span>      JobID jobId <span style="color:#f92672">=</span> t.<span style="color:#a6e22e">getTask</span>().<span style="color:#a6e22e">getJobID</span>();
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">//检查是否有空闲的槽，如果小于最大jvm数，则重新开启一个jvm，不让你从现有job的空闲jvm中选择一个，或者杀死另外job的空闲jvm</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">int</span> numJvmsSpawned <span style="color:#f92672">=</span> jvmIdToRunner.<span style="color:#a6e22e">size</span>();
+</span></span><span style="display:flex;"><span>      JvmRunner runnerToKill <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (numJvmsSpawned <span style="color:#f92672">&gt;=</span> maxJvms) {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//go through the list of JVMs for all jobs.</span>
+</span></span><span style="display:flex;"><span>        Iterator<span style="color:#f92672">&lt;</span>Map.<span style="color:#a6e22e">Entry</span><span style="color:#f92672">&lt;</span>JVMId, JvmRunner<span style="color:#f92672">&gt;&gt;</span> jvmIter <span style="color:#f92672">=</span> 
+</span></span><span style="display:flex;"><span>          jvmIdToRunner.<span style="color:#a6e22e">entrySet</span>().<span style="color:#a6e22e">iterator</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> (jvmIter.<span style="color:#a6e22e">hasNext</span>()) {
+</span></span><span style="display:flex;"><span>          JvmRunner jvmRunner <span style="color:#f92672">=</span> jvmIter.<span style="color:#a6e22e">next</span>().<span style="color:#a6e22e">getValue</span>();
+</span></span><span style="display:flex;"><span>          JobID jId <span style="color:#f92672">=</span> jvmRunner.<span style="color:#a6e22e">jvmId</span>.<span style="color:#a6e22e">getJobId</span>();
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e">//look for a free JVM for this job; if one exists then just break</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">if</span> (jId.<span style="color:#a6e22e">equals</span>(jobId) <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>jvmRunner.<span style="color:#a6e22e">isBusy</span>() <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>jvmRunner.<span style="color:#a6e22e">ranAll</span>()){
+</span></span><span style="display:flex;"><span>            setRunningTaskForJvm(jvmRunner.<span style="color:#a6e22e">jvmId</span>, t); <span style="color:#75715e">//reserve the JVM</span>
+</span></span><span style="display:flex;"><span>            LOG.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;No new JVM spawned for jobId/taskid: &#34;</span> <span style="color:#f92672">+</span> 
+</span></span><span style="display:flex;"><span>                     jobId<span style="color:#f92672">+</span><span style="color:#e6db74">&#34;/&#34;</span><span style="color:#f92672">+</span>t.<span style="color:#a6e22e">getTask</span>().<span style="color:#a6e22e">getTaskID</span>() <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>                     <span style="color:#e6db74">&#34;. Attempting to reuse: &#34;</span> <span style="color:#f92672">+</span> jvmRunner.<span style="color:#a6e22e">jvmId</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">if</span> ((jId.<span style="color:#a6e22e">equals</span>(jobId) <span style="color:#f92672">&amp;&amp;</span> jvmRunner.<span style="color:#a6e22e">ranAll</span>()) <span style="color:#f92672">||</span>
+</span></span><span style="display:flex;"><span>              (<span style="color:#f92672">!</span>jId.<span style="color:#a6e22e">equals</span>(jobId) <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>jvmRunner.<span style="color:#a6e22e">isBusy</span>())) {
+</span></span><span style="display:flex;"><span>            runnerToKill <span style="color:#f92672">=</span> jvmRunner;
+</span></span><span style="display:flex;"><span>            spawnNewJvm <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>        spawnNewJvm <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (spawnNewJvm) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (runnerToKill <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>          LOG.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;Killing JVM: &#34;</span> <span style="color:#f92672">+</span> runnerToKill.<span style="color:#a6e22e">jvmId</span>);
+</span></span><span style="display:flex;"><span>          runnerToKill.<span style="color:#a6e22e">kill</span>();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        spawnNewJvm(jobId, env, t);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ol start="14">
 <li>JvmManagerForType的spawnNewJvm方法。重新启动一个jvm。</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">spawnNewJvm</span><span style="color:#f92672">(</span>JobID jobId<span style="color:#f92672">,</span> JvmEnv env<span style="color:#f92672">,</span>  
-        TaskRunner t<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-      JvmRunner jvmRunner <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> JvmRunner<span style="color:#f92672">(</span>env<span style="color:#f92672">,</span>jobId<span style="color:#f92672">);</span>
-      jvmIdToRunner<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>jvmRunner<span style="color:#f92672">.</span><span style="color:#a6e22e">jvmId</span><span style="color:#f92672">,</span> jvmRunner<span style="color:#f92672">);</span>
-      jvmRunner<span style="color:#f92672">.</span><span style="color:#a6e22e">setDaemon</span><span style="color:#f92672">(</span><span style="color:#66d9ef">true</span><span style="color:#f92672">);</span>
-      jvmRunner<span style="color:#f92672">.</span><span style="color:#a6e22e">setName</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;JVM Runner &#34;</span> <span style="color:#f92672">+</span> jvmRunner<span style="color:#f92672">.</span><span style="color:#a6e22e">jvmId</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; spawned.&#34;</span><span style="color:#f92672">);</span>
-      setRunningTaskForJvm<span style="color:#f92672">(</span>jvmRunner<span style="color:#f92672">.</span><span style="color:#a6e22e">jvmId</span><span style="color:#f92672">,</span> t<span style="color:#f92672">);</span>
-      LOG<span style="color:#f92672">.</span><span style="color:#a6e22e">info</span><span style="color:#f92672">(</span>jvmRunner<span style="color:#f92672">.</span><span style="color:#a6e22e">getName</span><span style="color:#f92672">());</span>
-      jvmRunner<span style="color:#f92672">.</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
-    <span style="color:#f92672">}</span>
-</code></pre></div><ol start="15">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">spawnNewJvm</span>(JobID jobId, JvmEnv env,  
+</span></span><span style="display:flex;"><span>        TaskRunner t) {
+</span></span><span style="display:flex;"><span>      JvmRunner jvmRunner <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> JvmRunner(env,jobId);
+</span></span><span style="display:flex;"><span>      jvmIdToRunner.<span style="color:#a6e22e">put</span>(jvmRunner.<span style="color:#a6e22e">jvmId</span>, jvmRunner);
+</span></span><span style="display:flex;"><span>      jvmRunner.<span style="color:#a6e22e">setDaemon</span>(<span style="color:#66d9ef">true</span>);
+</span></span><span style="display:flex;"><span>      jvmRunner.<span style="color:#a6e22e">setName</span>(<span style="color:#e6db74">&#34;JVM Runner &#34;</span> <span style="color:#f92672">+</span> jvmRunner.<span style="color:#a6e22e">jvmId</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; spawned.&#34;</span>);
+</span></span><span style="display:flex;"><span>      setRunningTaskForJvm(jvmRunner.<span style="color:#a6e22e">jvmId</span>, t);
+</span></span><span style="display:flex;"><span>      LOG.<span style="color:#a6e22e">info</span>(jvmRunner.<span style="color:#a6e22e">getName</span>());
+</span></span><span style="display:flex;"><span>      jvmRunner.<span style="color:#a6e22e">start</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div><ol start="15">
 <li>JvmRunner线程的run方法。</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-        runChild<span style="color:#f92672">(</span>env<span style="color:#f92672">);</span>
-      <span style="color:#f92672">}</span>
-</code></pre></div><ol start="16">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span>() {
+</span></span><span style="display:flex;"><span>        runChild(env);
+</span></span><span style="display:flex;"><span>      }
+</span></span></code></pre></div><ol start="16">
 <li>JvmRunner线程的runChild方法。其中掉ShellCommandExecutor的execute方法。 ShellCommandExecutor封装了shell执行。即把前面步骤构造的JvmEnv类型的执行信息分装成一个字符串列表，使用该列表构造一 个ShellCommandExecutor来执行命令。</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">runChild</span><span style="color:#f92672">(</span>JvmEnv env<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-env<span style="color:#f92672">.</span><span style="color:#a6e22e">vargs</span><span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>Integer<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">(</span>jvmId<span style="color:#f92672">.</span><span style="color:#a6e22e">getId</span><span style="color:#f92672">()));</span>
-          List<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> wrappedCommand <span style="color:#f92672">=</span> 
-            TaskLog<span style="color:#f92672">.</span><span style="color:#a6e22e">captureOutAndError</span><span style="color:#f92672">(</span>env<span style="color:#f92672">.</span><span style="color:#a6e22e">setup</span><span style="color:#f92672">,</span> env<span style="color:#f92672">.</span><span style="color:#a6e22e">vargs</span><span style="color:#f92672">,</span> env<span style="color:#f92672">.</span><span style="color:#a6e22e">stdout</span><span style="color:#f92672">,</span> env<span style="color:#f92672">.</span><span style="color:#a6e22e">stderr</span><span style="color:#f92672">,</span>
-                env<span style="color:#f92672">.</span><span style="color:#a6e22e">logSize</span><span style="color:#f92672">,</span> env<span style="color:#f92672">.</span><span style="color:#a6e22e">pidFile</span><span style="color:#f92672">);</span>
-          shexec <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ShellCommandExecutor<span style="color:#f92672">(</span>wrappedCommand<span style="color:#f92672">.</span><span style="color:#a6e22e">toArray</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> String<span style="color:#f92672">[</span>0<span style="color:#f92672">]),</span> 
-              env<span style="color:#f92672">.</span><span style="color:#a6e22e">workDir</span><span style="color:#f92672">,</span> env<span style="color:#f92672">.</span><span style="color:#a6e22e">env</span><span style="color:#f92672">);</span>
-          shexec<span style="color:#f92672">.</span><span style="color:#a6e22e">execute</span><span style="color:#f92672">();</span>
-<span style="color:#f92672">}</span>
-</code></pre></div><p>完.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">runChild</span>(JvmEnv env) {
+</span></span><span style="display:flex;"><span>env.<span style="color:#a6e22e">vargs</span>.<span style="color:#a6e22e">add</span>(Integer.<span style="color:#a6e22e">toString</span>(jvmId.<span style="color:#a6e22e">getId</span>()));
+</span></span><span style="display:flex;"><span>          List<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> wrappedCommand <span style="color:#f92672">=</span> 
+</span></span><span style="display:flex;"><span>            TaskLog.<span style="color:#a6e22e">captureOutAndError</span>(env.<span style="color:#a6e22e">setup</span>, env.<span style="color:#a6e22e">vargs</span>, env.<span style="color:#a6e22e">stdout</span>, env.<span style="color:#a6e22e">stderr</span>,
+</span></span><span style="display:flex;"><span>                env.<span style="color:#a6e22e">logSize</span>, env.<span style="color:#a6e22e">pidFile</span>);
+</span></span><span style="display:flex;"><span>          shexec <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ShellCommandExecutor(wrappedCommand.<span style="color:#a6e22e">toArray</span>(<span style="color:#66d9ef">new</span> String<span style="color:#f92672">[</span>0<span style="color:#f92672">]</span>), 
+</span></span><span style="display:flex;"><span>              env.<span style="color:#a6e22e">workDir</span>, env.<span style="color:#a6e22e">env</span>);
+</span></span><span style="display:flex;"><span>          shexec.<span style="color:#a6e22e">execute</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>完.</p>
 
   
 

@@ -2,83 +2,68 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>code on 爱豆吧！</title>
-    <link>http://idouba.cc/tags/code/</link>
+    <link>http://idouba.com/tags/code/</link>
     <description>Recent content in code on 爱豆吧！</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>&lt;a href=&#39;https://beian.miit.gov.cn/&#39; target=&#39;_blank&#39;&gt;浙ICP备18050493号-1&lt;/a&gt; 浙公网安备 33010802006262号</copyright>
-    <lastBuildDate>Mon, 23 Jul 2018 14:35:50 +0000</lastBuildDate><atom:link href="http://idouba.cc/tags/code/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 23 Jul 2018 14:35:50 +0000</lastBuildDate>
+    <atom:link href="http://idouba.com/tags/code/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Istio技术与实践02：源码解析之Istio on Kubernetes 统一服务发现</title>
-      <link>http://idouba.cc/istio-01-code-pilot-service-discovery-upon-k8s/</link>
+      <link>http://idouba.com/istio-01-code-pilot-service-discovery-upon-k8s/</link>
       <pubDate>Mon, 23 Jul 2018 14:35:50 +0000</pubDate>
-      
-      <guid>http://idouba.cc/istio-01-code-pilot-service-discovery-upon-k8s/</guid>
+      <guid>http://idouba.com/istio-01-code-pilot-service-discovery-upon-k8s/</guid>
       <description>【摘要】 本文基于Pilot服务发现Kubernetes部分源码重点介绍在Istio on Kubernetes环境下，如何基于Pilot的Adapter机制实现Istio管理的服务直接使用Kubernetes service来做统一服务发现，避免了其他微服务框架运行在Kubernetes环境时上下两套服务目录的局面。并以此为入口从架构、场景等方面总结下Istio和Kubernetes的结合关系。 前言 文章Istio技术与实践01： 源码解析之Pilot多云平台服务发现机制结合Pilot的代码实现介绍了Ist</description>
     </item>
-    
     <item>
       <title>Istio技术与实践01： 源码解析之Pilot多云平台服务发现机制</title>
-      <link>http://idouba.cc/istio-01-code-pilot-service-discovery-adapter/</link>
+      <link>http://idouba.com/istio-01-code-pilot-service-discovery-adapter/</link>
       <pubDate>Sat, 21 Jul 2018 16:12:44 +0000</pubDate>
-      
-      <guid>http://idouba.cc/istio-01-code-pilot-service-discovery-adapter/</guid>
+      <guid>http://idouba.com/istio-01-code-pilot-service-discovery-adapter/</guid>
       <description>前言 本文结合Pilot中的关键代码来说明下Istio的服务发现的机制、原理和流程。并以Eureka为例看下Adapter的机制如何支持多云环境下的服务发现。可以了解到： 1. Istio的服务模型; 2. Istio发现的机制和原理; 3. Istio服务发现的adpater机制。 基于以上了解可以根据需开发集成自有的服务注册表，完成服务发现的功能。 服务模型 首先，Istio作为一个（微）服务治理的平台，和其他的微服务模型一样也提供了Service，ServiceInstance这样抽象服务模型。如Service的定</description>
     </item>
-    
     <item>
       <title>kubernetes liveness probe 流程</title>
-      <link>http://idouba.cc/kubernetes-liveness-probe/</link>
+      <link>http://idouba.com/kubernetes-liveness-probe/</link>
       <pubDate>Fri, 01 Sep 2017 15:39:48 +0000</pubDate>
-      
-      <guid>http://idouba.cc/kubernetes-liveness-probe/</guid>
+      <guid>http://idouba.com/kubernetes-liveness-probe/</guid>
       <description>1 概述 kubernetes提供了的Probe可以进行健康检查。 https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/ 对pod中的每个容器通过配置liveness或者readiness。 当liveness probe failed后，该container会杀掉，并重新创建；而readinessProbe失败，则该pod ip 会从service的endpoints列表中删除，即隔离到该后端的请求。 如liveness 配置如下： livenessProbe: httpGet: port: 10252 path: “/healthz” initialDelaySeconds: 15 timeoutSeconds: 15 文中尝试端到端的看下整个过程有哪些组件参与进来，怎么配合工作的。 2 配置 pkg/api/types.go#P</description>
     </item>
-    
     <item>
       <title>kubernetes federation 工作机制之资源对象同步</title>
-      <link>http://idouba.cc/kubernetes-federation-sync-accross-cluster/</link>
+      <link>http://idouba.com/kubernetes-federation-sync-accross-cluster/</link>
       <pubDate>Tue, 15 Aug 2017 15:51:34 +0000</pubDate>
-      
-      <guid>http://idouba.cc/kubernetes-federation-sync-accross-cluster/</guid>
+      <guid>http://idouba.com/kubernetes-federation-sync-accross-cluster/</guid>
       <description>1 前言 希望通过本文最简单的方式向熟悉k8s的人说明白其上的federation是干什么的，如何工作的。 关于federation，比较官方的说法是：集群联邦可以让租户/企业根据需要扩展或伸缩所需要的集群；可以让租户/企业在跨地区甚至跨地域的多个集群上部署、调度、监测管理应用。通过集群联邦，租户/企业可以在指定集群上部署应用，可以拉通私有云和公有云建立混合云(hybrid cloud)。 如在design-proposal 中描述的federation提供了cross-cluster scheduling, cross-cluster service discovery, cross-cluster migration, cross-cluster**ing and auditing, cross-cluster load</description>
     </item>
-    
     <item>
       <title>Sort源码实现比较Go&amp;Java语言风格(3)</title>
-      <link>http://idouba.cc/compare-go-and-java-style-by-sort-implement-3/</link>
+      <link>http://idouba.com/compare-go-and-java-style-by-sort-implement-3/</link>
       <pubDate>Tue, 01 Dec 2015 15:20:55 +0000</pubDate>
-      
-      <guid>http://idouba.cc/compare-go-and-java-style-by-sort-implement-3/</guid>
+      <guid>http://idouba.com/compare-go-and-java-style-by-sort-implement-3/</guid>
       <description>前面两部分分别描述了Go和java两种语言对sort的使用方式和源码实现。作为go初学者，最想做的是通过例子和源码来对新的语言有个理解。这部分就结合自己的理解整理下，可以看到，是非常主观。 4 语言语法比较 可以看到，两种语言的思路基本上是一样的，用户必须定义比较规则。在排序过程中都要考察集合长度，使用用户定义的比较规则，然后调整元素位置来达到排序的效果，对应go的interface要求的三个方法。但是还是有挺多不同。 首先从使用方式上看，go的规则（通过方法来体现）定义在集合上，并且定义了三个方法，分</description>
     </item>
-    
     <item>
       <title>Sort源码实现比较Go&amp;Java语言风格(2)</title>
-      <link>http://idouba.cc/compare-go-and-java-style-by-sort-implement-2/</link>
+      <link>http://idouba.com/compare-go-and-java-style-by-sort-implement-2/</link>
       <pubDate>Tue, 01 Dec 2015 15:18:12 +0000</pubDate>
-      
-      <guid>http://idouba.cc/compare-go-and-java-style-by-sort-implement-2/</guid>
+      <guid>http://idouba.com/compare-go-and-java-style-by-sort-implement-2/</guid>
       <description>接上篇博文，工作中用到了go排序的功能，作为go新手，在参照着例子，并读了go的sort.go部分涉及的源码，了解了go中排序的细节和实现算法，这些在上篇博文中有介绍。作为一个java ZHONGDU*2的用户，不由自主的想到了java中对应实现的样子，在这里也非常简要的贴出来，描述下java中排序的用法，和java源码中对应部分的实现，比较好奇java是和go一样，也用的时候快速排序吗？ 3 Java 排序源码解析 主要代码Looks like this： 3.1 使用例子 public class Person implements Comparable&amp;amp;lt;Person&amp;amp;gt; { private String name; private int age; @Override public int compareTo(Person o) { return this.age - o.age; } public static void main(String</description>
     </item>
-    
     <item>
       <title>Sort源码实现比较Go&amp;Java语言风格(1)</title>
-      <link>http://idouba.cc/compare-go-and-java-style-by-sort-implement-1/</link>
+      <link>http://idouba.com/compare-go-and-java-style-by-sort-implement-1/</link>
       <pubDate>Tue, 01 Dec 2015 05:11:15 +0000</pubDate>
-      
-      <guid>http://idouba.cc/compare-go-and-java-style-by-sort-implement-1/</guid>
+      <guid>http://idouba.com/compare-go-and-java-style-by-sort-implement-1/</guid>
       <description>1 前言 刚开始拥抱go，非常新鲜！才使用没多久，属于没有经验，有一点感受的那种。具体也说不了特别清楚，就是觉得：简单，直接，灵活，方便。作为一个 java 重度中毒（ZHANGDU*2）用户，过程中还是习惯对照着思考，至少在这个阶段。也好，发现对照着想，似乎更容易融会贯通。 对资深的go程序员来说，应该都是非常基础基本的问题，但也挡不住咱这个小白要发表下感想。 第一篇文章首先结合最近做一个小feature时用到go中元素排序的功能，顺便了解下两种语言中排序功能的使用方式，各自源码中对排序功能的实现。当然最主要的</description>
     </item>
-    
     <item>
       <title>最简单例子图解JVM内存分配和回收</title>
-      <link>http://idouba.cc/a-simple-example-demo-jvm-allocation-and-gc/</link>
+      <link>http://idouba.com/a-simple-example-demo-jvm-allocation-and-gc/</link>
       <pubDate>Tue, 15 Jul 2014 05:49:37 +0000</pubDate>
-      
-      <guid>http://idouba.cc/a-simple-example-demo-jvm-allocation-and-gc/</guid>
+      <guid>http://idouba.com/a-simple-example-demo-jvm-allocation-and-gc/</guid>
       <description>一、简介 JVM采用分代垃圾回收。在JVM的内存空间中把堆空间分为年老代和年轻代。将大量（据说是90%以上）创建了没多久就会消亡的对象存储在年轻代，而年老代中存放生命周期长久的实例对象。年轻代中又被分为Eden区(圣经中的伊甸园)、和两个Survivor区。新的对象分配是首先放在Eden区，Survivor区作为Eden区和Old区的缓冲，在Survivor区的对象经历若干次收集仍然存活的，就会被转移到年老区。 简单讲，就是生命期短的对象放在一起，将少数生命期长的对象放在一起，分别采用不同的回收策略</description>
     </item>
-    
   </channel>
 </rss>

@@ -8,14 +8,14 @@
 <meta property="og:title" content="Sort源码实现比较Go&amp;Java语言风格(3)" />
 <meta property="og:description" content="前面两部分分别描述了Go和java两种语言对sort的使用方式和源码实现。作为go初学者，最想做的是通过例子和源码来对新的语言有个理解。这部分就结合自己的理解整理下，可以看到，是非常主观。 4 语言语法比较 可以看到，两种语言的思路基本上是一样的，用户必须定义比较规则。在排序过程中都要考察集合长度，使用用户定义的比较规则，然后调整元素位置来达到排序的效果，对应go的interface要求的三个方法。但是还是有挺多不同。 首先从使用方式上看，go的规则（通过方法来体现）定义在集合上，并且定义了三个方法，分" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://idouba.cc/compare-go-and-java-style-by-sort-implement-3/" />
+<meta property="og:url" content="http://idouba.com/compare-go-and-java-style-by-sort-implement-3/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2015-12-01T15:20:55+00:00" />
 <meta property="article:modified_time" content="2015-12-01T15:20:55+00:00" />
 
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Sort源码实现比较Go&amp;Java语言风格(3)"/>
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Sort源码实现比较Go&amp;Java语言风格(3)"/>
 <meta name="twitter:description" content="前面两部分分别描述了Go和java两种语言对sort的使用方式和源码实现。作为go初学者，最想做的是通过例子和源码来对新的语言有个理解。这部分就结合自己的理解整理下，可以看到，是非常主观。 4 语言语法比较 可以看到，两种语言的思路基本上是一样的，用户必须定义比较规则。在排序过程中都要考察集合长度，使用用户定义的比较规则，然后调整元素位置来达到排序的效果，对应go的interface要求的三个方法。但是还是有挺多不同。 首先从使用方式上看，go的规则（通过方法来体现）定义在集合上，并且定义了三个方法，分"/>
-<meta name="generator" content="Hugo 0.80.0" />
+<meta name="generator" content="Hugo 0.121.2">
 
 
     
@@ -24,7 +24,7 @@
   "@context": "http://schema.org",
   "@type": "BlogPosting",
   "headline": "Sort源码实现比较Go\u0026Java语言风格(3)",
-  "url": "http:\/\/idouba.cc\/compare-go-and-java-style-by-sort-implement-3\/",
+  "url": "http:\/\/idouba.com\/compare-go-and-java-style-by-sort-implement-3\/",
   "wordCount": "4490",
   "datePublished": "2015-12-01T15:20:55+00:00",
   "dateModified": "2015-12-01T15:20:55+00:00",
@@ -32,25 +32,25 @@
     "@type": "Person",
     "name": "douba"
   },
-  "keywords": "go, java, sort, code"
+  "keywords": "Golang, Java"
 }
 </script>
 
 
 
-    <link rel="canonical" href="http://idouba.cc/compare-go-and-java-style-by-sort-implement-3/">
+    <link rel="canonical" href="http://idouba.com/compare-go-and-java-style-by-sort-implement-3/">
 
     <title>Sort源码实现比较Go&amp;Java语言风格(3) | 爱豆吧！</title>
 
     
     <!-- combined, minified CSS -->
     
-    <link href="http://idouba.cc/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    <link href="http://idouba.com/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
     
 
     <!-- minified Font Awesome for SVG icons -->
     
-    <script defer src="http://idouba.cc/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+    <script defer src="http://idouba.com/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
 
     <!-- RSS 2.0 feed -->
     
@@ -67,7 +67,7 @@
     <div class="blog-masthead">
       <div class="container">
         <nav class="nav blog-nav">
-          <a class="nav-link " href="http://idouba.cc/">Home</a>
+          <a class="nav-link " href="http://idouba.com/">Home</a>
         </nav>
       </div>
     </div>
@@ -77,7 +77,7 @@
     
     <header class="blog-header">
       <div class="container">
-        <h1 class="blog-title" dir="auto"><a href="http://idouba.cc/" rel="home">爱豆吧！</a></h1>
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.com/" rel="home">爱豆吧！</a></h1>
         <p class="lead blog-description" dir="auto">idouba@beta.</p>
       </div>
     </header>
@@ -94,16 +94,16 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/compare-go-and-java-style-by-sort-implement-3/">Sort源码实现比较Go&amp;Java语言风格(3)</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.com/compare-go-and-java-style-by-sort-implement-3/">Sort源码实现比较Go&amp;Java语言风格(3)</a></h2>
     <p class="blog-post-meta"><time datetime="2015-12-01T15:20:55Z">Tue Dec 01, 2015</time> by douba in 
-<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/go/" rel="category tag">go</a>, <a href="/categories/java/" rel="category tag">java</a>
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/golang/" rel="category tag">Golang</a>
 
 
-<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/go/" rel="tag">go</a>, <a href="/tags/java/" rel="tag">java</a>, <a href="/tags/sort/" rel="tag">sort</a>, <a href="/tags/code/" rel="tag">code</a>
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/golang/" rel="tag">Golang</a>, <a href="/tags/java/" rel="tag">Java</a>
 
 </p>
   </header>
-  <p>前面两部分分别描述了<a href="http://www.idouba.net/compare-go-and-java-style-by-sort-implement-1/">Go</a>和<a href="http://www.idouba.net/compare-go-and-java-style-by-sort-implement-2/">java</a>两种语言对sort的使用方式和源码实现。作为go初学者，最想做的是通过例子和源码来对新的语言有个理解。这部分就结合自己的理解整理下，可以看到，是非常主观。</p>
+  <p>前面两部分分别描述了<a href="../compare-go-and-java-style-by-sort-implement-1/">Go</a>和<a href="../compare-go-and-java-style-by-sort-implement-2/">java</a>两种语言对sort的使用方式和源码实现。作为go初学者，最想做的是通过例子和源码来对新的语言有个理解。这部分就结合自己的理解整理下，可以看到，是非常主观。</p>
 <p>4 语言语法比较</p>
 <p>可以看到，两种语言的思路基本上是一样的，用户必须定义比较规则。在排序过程中都要考察集合长度，使用用户定义的比较规则，然后调整元素位置来达到排序的效果，对应go的interface要求的三个方法。但是还是有挺多不同。</p>
 <p>首先从使用方式上看，go的规则（通过方法来体现）定义在集合上，并且定义了三个方法，分别获取集合的状况，元素比较的规则，元素位置操作的方法；而java的规则定义在元素上，用户只用一个元素比较的规则<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Comparable.html#compareTo(T)">compareTo</a>就够了。看起来java要求用户定义少，因为其封装的多，这也是其一贯的风格。对用户要似乎更友好一点。比较而言go更直接，简单。留给程序员能干预的更多一点。但还是觉得Len和Swap方法留给用户定义的意义不是很大，就像源码中自带的好几个例子，Len除了返回集合长度， Swap(i,j)除了{ a[i], a[j] = a[j], a[i] }，真想不好我们还能赋予它其他的使用方法。</p>
@@ -111,20 +111,20 @@
 <p>看到了java的uitl包，下面除了Collections和Arrays这样几个工具类外更多的是<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html">List</a>、<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html">Map</a>、<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html">Set</a>这样的数据结构定义（通过接口），以及常用的ArrayList，LinedList，HashMap，HashTable，TreeSet这样的实现。同样的这样键值对的容器，即有HashMap这样非同步的，又有Hashtable这样同步的，同步个容器上嫌Hashtable上加一把锁影响并发性能，后来大师<a href="http://g.oswego.edu/">Doug Lea</a>，又发明了ConcurrentMap接口，以及现在已成经典的实现<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ConcurrentHashMap.html">ConcurrentHashMap</a>，在一个容器上分开加多把锁。</p>
 <p>而比较而言，go的结构就简单很多，语言内置容器数组和map提供了几乎所有我们要的功能，并且其操作非常简单，在源码中费劲的想找其他基于其上的结构居然没有找见。Go的简的风格在此体现的真是明显，只提供基础的数据结构，和对这些结构的好用的操作。稍微用了下切片操作真的非常赞，非要对照下和java的ArrayList挺像，但是[:]这样操作起来真的很简单直接。另外看sort源码时发现两个语言在各自package中，和sort 相伴的也都是search之类的操作。</p>
 <p>当然，看例子中还有源码中两个语言的语法差别那就更多了。尤其要称赞下go的几个非常酷的语法。如快排中找中间点的方法</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">doPivot</span>(<span style="color:#a6e22e">data</span> <span style="color:#a6e22e">Interface</span>, <span style="color:#a6e22e">lo</span>, <span style="color:#a6e22e">hi</span> <span style="color:#66d9ef">int</span>) (<span style="color:#a6e22e">midlo</span>, <span style="color:#a6e22e">midhi</span> <span style="color:#66d9ef">int</span>){..
-<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">lo</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">b</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">hi</span> <span style="color:#f92672">-</span> (<span style="color:#a6e22e">d</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">c</span>)
-}
-</code></pre></div><p>居然可以返回多个返回值，不用再像原来那样，要么一个返回值作为参数传进来，另外一个从return上取，要么就不得不构造一个结构来做组织多个返回值，费劲又别扭。真是解决程序员的真正问题。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">doPivot</span>(<span style="color:#a6e22e">data</span> <span style="color:#a6e22e">Interface</span>, <span style="color:#a6e22e">lo</span>, <span style="color:#a6e22e">hi</span> <span style="color:#66d9ef">int</span>) (<span style="color:#a6e22e">midlo</span>, <span style="color:#a6e22e">midhi</span> <span style="color:#66d9ef">int</span>){..
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">return</span> <span style="color:#a6e22e">lo</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">b</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">hi</span> <span style="color:#f92672">-</span> (<span style="color:#a6e22e">d</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">c</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>居然可以返回多个返回值，不用再像原来那样，要么一个返回值作为参数传进来，另外一个从return上取，要么就不得不构造一个结构来做组织多个返回值，费劲又别扭。真是解决程序员的真正问题。</p>
 <p>还有，这个swap的方法实现，</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">a</span> <span style="color:#a6e22e">ByAge</span>) <span style="color:#a6e22e">Swap</span>(<span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">j</span> <span style="color:#66d9ef">int</span>) { <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span>], <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">j</span>] = <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">j</span>], <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span>] }
-</code></pre></div><p>这样一句就解决问题。而不是java这样费劲。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">a</span> <span style="color:#a6e22e">ByAge</span>) <span style="color:#a6e22e">Swap</span>(<span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">j</span> <span style="color:#66d9ef">int</span>) { <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span>], <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">j</span>] = <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">j</span>], <span style="color:#a6e22e">a</span>[<span style="color:#a6e22e">i</span>] }
+</span></span></code></pre></div><p>这样一句就解决问题。而不是java这样费劲。</p>
 <p>一下就把我大java比下去了。有没有想到很多年前，我们用c来数据结构的时候，老师反复强调，这时候要声明一个局部变量temp类做数据交换，非常神秘非常高级的知识点哈。在go这里居然真的可以直接交换。看上去有点像SQL这样的非过程语言了，又有点像我们描述代码功能的伪代码，只要告诉我你想干啥描述清楚，过程的能省就省了。非常非常简单，就这一小点，让咱这个新人产生了无数好感。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">swap</span><span style="color:#f92672">(</span>Object<span style="color:#f92672">[]</span> x<span style="color:#f92672">,</span> <span style="color:#66d9ef">int</span> a<span style="color:#f92672">,</span> <span style="color:#66d9ef">int</span> b<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
-Object t <span style="color:#f92672">=</span> x<span style="color:#f92672">[</span>a<span style="color:#f92672">];</span>
-x<span style="color:#f92672">[</span>a<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> x<span style="color:#f92672">[</span>b<span style="color:#f92672">];</span>
-x<span style="color:#f92672">[</span>b<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> t<span style="color:#f92672">;</span>
-<span style="color:#f92672">}</span>
-</code></pre></div><p>当然还有左大括号的使用，声明未使用的变量编译报错等新语法，看着蛮横，但却是简单。有一点点不习惯的是居然用方法名首字母的大小写来区分方法的访问权限，不像java中public protected private这样关键字来修饰，但说实话，写大写字母大头的方法还是有点瞅着怪怪的，老想给改成小写，虽然都是所谓的驼峰式的命名。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">swap</span>(Object<span style="color:#f92672">[]</span> x, <span style="color:#66d9ef">int</span> a, <span style="color:#66d9ef">int</span> b) {
+</span></span><span style="display:flex;"><span>Object t <span style="color:#f92672">=</span> x<span style="color:#f92672">[</span>a<span style="color:#f92672">]</span>;
+</span></span><span style="display:flex;"><span>x<span style="color:#f92672">[</span>a<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> x<span style="color:#f92672">[</span>b<span style="color:#f92672">]</span>;
+</span></span><span style="display:flex;"><span>x<span style="color:#f92672">[</span>b<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> t;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>当然还有左大括号的使用，声明未使用的变量编译报错等新语法，看着蛮横，但却是简单。有一点点不习惯的是居然用方法名首字母的大小写来区分方法的访问权限，不像java中public protected private这样关键字来修饰，但说实话，写大写字母大头的方法还是有点瞅着怪怪的，老想给改成小写，虽然都是所谓的驼峰式的命名。</p>
 <p>语法上最有感触的还是interface上的差别，在怀疑go是不是在刻意淡化interface或者压根儿人家就不承认那是你们原来认识的interface。</p>
 <p>除了语法上像例子中描述的必须要implements一个接口，然实现接口中规定的方法。在java中我们一般会写一个interface，然后在框架中使用这个interface，来调用interface中定义的方法，模板一样的构造业务逻辑，后面的子类只要实现了这个接口，就可以走这个模板里的流程。几乎所有号称framework的牛叉框架都是这么干的，尤其像spring struts这些已经在深入人心了，所有搞web编程的小朋友们不管理解不理解，首先就会配置**.xml 在里面写**.Action之类，然后在自己的代码里implements一下这个Action的interace（或者中间再搞一层抽象类），就可以来堆积自己的业务（在简历上就可以写熟练掌握**框架）。</p>
 <p>在我们的项目中确实也经常写一堆的Abstract Class 和Interface，定义这些顶层对象的行为，以一定抽象和设计的角度来编码这些顶层对象在整个业务中的角色地位和使用。这也体现了一种约束，不只是代码上的约束，也是开发过程的一种约束，一种契约和协议，项目中其他角色的人这部分实现必须要实现这些接口，也必须要按照规定的行为来实现。多符合我们项目开发过程中，老大制定规则，小弟负责遵守实施的思路。把文档文档中的设计变成interface，实现不好就编译错，这个约束力老大们多喜欢啊。</p>
@@ -135,16 +135,16 @@ x<span style="color:#f92672">[</span>b<span style="color:#f92672">]</span> <span
 <p>整体看下来。Go无处不在秀气简洁之道，包的组成，结构的定义，看源码涉及的代码行，大致也能看出来。当然也不会为了夸强调go的简洁，就使劲埋汰java。个人觉得，与语言的发展阶段可能有关系。这里用的java的源码为了简单期间是<a href="http://docs.oracle.com/javase/6/docs/api/java/util/Collections.html#sort(java.util.List)">jdk1.6</a>版本，能看到用的是mergesort，在新的<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#sort(java.util.List)">jdk1.8</a>中改为引入一个<a href="http://svn.python.org/projects/python/trunk/Objects/listsort.txt">TimSort</a>的排序方法的 TimSort类，原来的mergesort现在重命名为legacyMergeSort，并且声明在未来会去掉。</p>
 <p>Go作为一个比较新的语言，简单是其风格。但相信随着发展，也会逐步扩展些功能出来。）但就这接触这几天，有些地方还是比较肤浅的要吐槽下，比如上面看到<a href="https://golang.org/src/sort/sort.go">sort.go</a>的源码中，似乎真的再使劲淡化Interface吗？也太低调了吧，在子类实现的时候不用implements提名下也就算了，这里这么重要的的一个Interface居然连个像样的名字都没有，藏在package sort中，取名就叫Interface，这名字还不如没名字呢。哪像我大java中对应的接口名曰<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Comparable.html">Comparable</a>接口这么响亮霸气，最主要是能告诉人家我是什么东西。</p>
 <p>还有，看源码中最核心的快速排序方法：func quickSort(data Interface, a, b, maxDepth int)。方法声明上怎么还a、b都上来啦，也太信手啦，最起码也得start，end这样的吧。尤其看到方法中递归调用quickSort时候，a，b两个最重要的变量像小蝌蚪一样游弋在这段核心代码段中</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">quickSort</span>(<span style="color:#a6e22e">data</span>, <span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">mlo</span>, <span style="color:#a6e22e">maxDepth</span>)
-<span style="color:#a6e22e">a</span> = <span style="color:#a6e22e">mhi</span> <span style="color:#75715e">// i.e., quickSort(data, mhi, b)
-</span><span style="color:#75715e"></span>} <span style="color:#66d9ef">else</span> {
-<span style="color:#a6e22e">quickSort</span>(<span style="color:#a6e22e">data</span>, <span style="color:#a6e22e">mhi</span>, <span style="color:#a6e22e">b</span>, <span style="color:#a6e22e">maxDepth</span>)
-<span style="color:#a6e22e">b</span> = <span style="color:#a6e22e">mlo</span> <span style="color:#75715e">// i.e., quickSort(data, a, mlo)
-</span><span style="color:#75715e"></span>}
-</code></pre></div><p>作者是觉得是a、b是洒脱，还是孤独。呵呵，也是说到这里，调侃下。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">quickSort</span>(<span style="color:#a6e22e">data</span>, <span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">mlo</span>, <span style="color:#a6e22e">maxDepth</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">a</span> = <span style="color:#a6e22e">mhi</span> <span style="color:#75715e">// i.e., quickSort(data, mhi, b)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>} <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">quickSort</span>(<span style="color:#a6e22e">data</span>, <span style="color:#a6e22e">mhi</span>, <span style="color:#a6e22e">b</span>, <span style="color:#a6e22e">maxDepth</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">b</span> = <span style="color:#a6e22e">mlo</span> <span style="color:#75715e">// i.e., quickSort(data, a, mlo)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>作者是觉得是a、b是洒脱，还是孤独。呵呵，也是说到这里，调侃下。</p>
 <h4 id="5-后记">5 后记</h4>
 <p>总的，这几天接触下来的感受，似乎能体会到语言的作者应该是一个老程序员吧，起码是非常了解程序员的大师。很多细节都是在为程序员考虑，对程序员非常友好。 基于为程序员提供一个更方便的语言，把挺多咱们这种老（其实不老哈）程序员以前只是敢想想嚷嚷两下的东西真的给做出来了。非常酷，非常NB，非常惊艳。上手非常容易，但是稍微思考下，会发现其设计非常讲究，尤其挺多和其他习惯用的语言比较打破比较多的开始会不习惯，慢慢也能体会到作者的良苦用心。希望在慢慢使用中，慢慢体会。</p>
-<p>尤其是读到一点源码的时候，以前就有这样的体会，读这个语言相关<a href="http://www.idouba.net/tags/source/">源码</a><!-- raw HTML omitted -->的时候，能感受到一些文档中表达不到的东西，有些我们看了源码会比文档理解更深刻；有些我们会发现人传人的所谓官方文档吹的很NB，代码中也就这样，换咱做不了那么高明，大致也能做个差不多的样，而有些时候冷不丁看到有些源码中出现类似变量声明未使用（这个在go中居然要编译报错了，彪悍！），变量类型使用错、明显逻辑错、循环不正确、几个相关包中方法各自重复定义，也会调侃大师代码覆盖测试不够，不得不感叹大师也不是神，也会犯咱们每天都在犯的小错。不管是其上的那种体会，都会顿时觉得和作者亲近很多。就像以前念书的时候，老师说的读一篇巨著能感受大师的思考，就像在和大师跨时空对话一样。<!-- raw HTML omitted --></p>
+<p>尤其是读到一点源码的时候，以前就有这样的体会，读这个语言相关<a href="../tags/source/">源码</a><!-- raw HTML omitted -->的时候，能感受到一些文档中表达不到的东西，有些我们看了源码会比文档理解更深刻；有些我们会发现人传人的所谓官方文档吹的很NB，代码中也就这样，换咱做不了那么高明，大致也能做个差不多的样，而有些时候冷不丁看到有些源码中出现类似变量声明未使用（这个在go中居然要编译报错了，彪悍！），变量类型使用错、明显逻辑错、循环不正确、几个相关包中方法各自重复定义，也会调侃大师代码覆盖测试不够，不得不感叹大师也不是神，也会犯咱们每天都在犯的小错。不管是其上的那种体会，都会顿时觉得和作者亲近很多。就像以前念书的时候，老师说的读一篇巨著能感受大师的思考，就像在和大师跨时空对话一样。<!-- raw HTML omitted --></p>
 <p>总体来说，感觉很好。包括sublime很轻便，代码补全提示都很不错，用着很舒服，写代码效率很高。另外，API可以联网看，居然还可以在自己机器上起个godocserver，而且自己gopath里面的代码和注释都会被load进来，虽然想想实现也不难，但真的是非常酷。访问<a href="http://localhost:6060/pkg/">package</a>，非常方便。</p>
 <p>当然啰嗦这么多，也只是一个新手个人零碎的一点体会。流水账一样的列举了一些体会，其中观点个人背景和个人主观色彩非常明显。不是一个面向主题的有深度的“深入论述java和go若干特性。。。”之类的专题文档。很多还是停留在体会，如go的interface，好像能感觉到其设计，想描述，但又说不完整，原因还是实践不够，体会不深，理解可能会有偏差。</p>
 

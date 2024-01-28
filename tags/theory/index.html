@@ -8,35 +8,34 @@
 <meta property="og:title" content="theory" />
 <meta property="og:description" content="idouba@beta." />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="http://idouba.cc/tags/theory/" />
-<meta property="og:updated_time" content="2014-01-05T12:23:26+00:00" />
+<meta property="og:url" content="http://idouba.com/tags/theory/" />
 
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="theory"/>
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="theory"/>
 <meta name="twitter:description" content="idouba@beta."/>
-<meta name="generator" content="Hugo 0.80.0" />
+<meta name="generator" content="Hugo 0.121.2">
 
 
     
       
     
 
-    <link rel="canonical" href="http://idouba.cc/tags/theory/">
+    <link rel="canonical" href="http://idouba.com/tags/theory/">
 
     <title>爱豆吧！</title>
 
     
     <!-- combined, minified CSS -->
     
-    <link href="http://idouba.cc/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    <link href="http://idouba.com/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
     
 
     <!-- minified Font Awesome for SVG icons -->
     
-    <script defer src="http://idouba.cc/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+    <script defer src="http://idouba.com/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
 
     <!-- RSS 2.0 feed -->
-    <link rel="alternate" type="application/rss+xml" href="http://idouba.cc/tags/theory/index.xml" title="爱豆吧！" />
+    <link rel="alternate" type="application/rss+xml" href="http://idouba.com/tags/theory/index.xml" title="爱豆吧！" />
     
 
     
@@ -51,7 +50,7 @@
     <div class="blog-masthead">
       <div class="container">
         <nav class="nav blog-nav">
-          <a class="nav-link " href="http://idouba.cc/">Home</a>
+          <a class="nav-link " href="http://idouba.com/">Home</a>
         </nav>
       </div>
     </div>
@@ -61,7 +60,7 @@
     
     <header class="blog-header">
       <div class="container">
-        <h1 class="blog-title" dir="auto"><a href="http://idouba.cc/" rel="home">爱豆吧！</a></h1>
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.com/" rel="home">爱豆吧！</a></h1>
         <p class="lead blog-description" dir="auto">idouba@beta.</p>
       </div>
     </header>
@@ -82,7 +81,7 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/wikipedia_isolation/">【译】数据库事务隔离级别</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.com/wikipedia_isolation/">【译】数据库事务隔离级别</a></h2>
     <p class="blog-post-meta"><time datetime="2014-01-05T12:23:26Z">Sun Jan 05, 2014</time> by douba in 
 <span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/database/" rel="category tag">database</a>, <a href="/categories/database-concept/" rel="category tag">database concept</a>
 
@@ -121,7 +120,7 @@
 <p>在<a href="http://en.wikipedia.org/w/index.php?title=%E6%95%B0%E6%8D%AE%E5%BA%93&amp;action=edit&amp;redlink=1" title="数据库 (page does not exist)">数据库</a>事务的<a href="http://en.wikipedia.org/wiki/ACID" title="ACID">ACID</a>四个属性中，隔离性是一个最常放松的一个。为了获取更高的隔离等级，数据库系统的 <a href="http://en.wikipedia.org/wiki/Lock_%28database%29" title="Lock (database)">锁</a>机制或者<a href="http://en.wikipedia.org/wiki/Multiversion_concurrency_control" title="Multiversion concurrency control">多版本并发控制</a>机制都会影响<a href="http://en.wikipedia.org/wiki/Concurrency_%28computer_science%29" title="Concurrency (computer science)">并发</a>。 <a href="http://en.wikipedia.org/wiki/Software_application" title="Software application">应用软件</a>也需要额外的逻辑来使其正常工作。</p>
 <p>很多<a href="http://en.wikipedia.org/wiki/DBMS" title="DBMS">DBMS</a>定义了不同的“事务隔离等级”来控制锁的程度。在很多数据库系统中，多数的数据库事务都避免高等级的隔离等级（如可序列化）从而减少对系统的锁定开销。程序员需要小心的分析数据库访问部分的代码来保证隔离级别的降低不会造成难以发现的代码bug。相反的，更高的隔离级别会增加<a href="http://en.wikipedia.org/wiki/Deadlock" title="Deadlock">死锁</a>发生的几率，同样需要编程过程中去避免。</p>
 <p><a href="http://en.wikipedia.org/wiki/American_National_Standards_Institute" title="American National Standards Institute">ANSI</a>/<a href="http://en.wikipedia.org/wiki/International_Organization_for_Standardization" title="International Organization for Standardization">ISO</a> <a href="http://en.wikipedia.org/wiki/SQL" title="SQL">SQL</a>定义的标准隔离级别如下。</p>
-  <a href='http://idouba.cc/wikipedia_isolation/'>Read more →</a>
+  <a href='http://idouba.com/wikipedia_isolation/'>Read more →</a>
 </article> 
 
 

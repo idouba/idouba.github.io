@@ -2,20 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>B tree on 爱豆吧！</title>
-    <link>http://idouba.cc/tags/b-tree/</link>
+    <link>http://idouba.com/tags/b-tree/</link>
     <description>Recent content in B tree on 爱豆吧！</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>&lt;a href=&#39;https://beian.miit.gov.cn/&#39; target=&#39;_blank&#39;&gt;浙ICP备18050493号-1&lt;/a&gt; 浙公网安备 33010802006262号</copyright>
-    <lastBuildDate>Wed, 18 Jun 2014 09:27:23 +0000</lastBuildDate><atom:link href="http://idouba.cc/tags/b-tree/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 18 Jun 2014 09:27:23 +0000</lastBuildDate>
+    <atom:link href="http://idouba.com/tags/b-tree/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>B树在数据库索引中的应用剖析(发表版本)</title>
-      <link>http://idouba.cc/about-btrees-application-in-database-index-in-programmer/</link>
+      <link>http://idouba.com/about-btrees-application-in-database-index-in-programmer/</link>
       <pubDate>Wed, 18 Jun 2014 09:27:23 +0000</pubDate>
-      
-      <guid>http://idouba.cc/about-btrees-application-in-database-index-in-programmer/</guid>
+      <guid>http://idouba.com/about-btrees-application-in-database-index-in-programmer/</guid>
       <description>最近一篇发表于《程序员》2014年6月刊上的文章。有点遗憾发现，有些部分被编辑修改过了，读起来有点怪怪的。最典型的是习惯于对某些比较经典的定义引用wikipedia或者原始白皮书中原始的E文，在文中发现都被硬译过了，表达的意思自己都有点看不懂了！ 最终修改后提交的版本归档下： 引言 关于数据库索引，随便Google一个Oracle index，Mysql index总能得到“某某索引之n条经典建议”之类大量结果。笔者认为，较之直接借鉴，在搞清实际需求的基础上，对备选方案的原理尽可能深入全面的了解会更有利于</description>
     </item>
-    
   </channel>
 </rss>

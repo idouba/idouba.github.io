@@ -8,14 +8,14 @@
 <meta property="og:title" content="Istio 调用链埋点原理剖析—是否真的“零修改”？" />
 <meta property="og:description" content="发在Infoq上的一篇文章，答疑当前大家工作中碰到的Istio调用链的问题，最终澄清了观点，并推动社区修改了说法，避免误解。 前言 在 Istio 的实践中最近经常被问到一个问题，使用 Istio 做调用链用户的业务代码是不是完全 0 侵入，到底要不要修改业务代码？ 看官方介绍： Istio makes it easy to create a network of deployed services with load balancing, service-to-service authentication, monitoring, and more, without any changes in service code. 是不用修改任何代码即可做各种治理。实际使用中应用程序不做任何修改，使用 Istio 的调用链输出总是断开的，这到底是什么原因呢？ 对以上问题关注的人比较多，但是貌似说的都不是特别清楚，在最近的 K8S 技术社区的 Meetup 上笔者专门做" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://idouba.cc/istio-tracing-is-not-zero-code-change/" />
+<meta property="og:url" content="http://idouba.com/istio-tracing-is-not-zero-code-change/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2018-11-29T15:23:04+00:00" />
 <meta property="article:modified_time" content="2018-11-29T15:23:04+00:00" />
 
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Istio 调用链埋点原理剖析—是否真的“零修改”？"/>
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Istio 调用链埋点原理剖析—是否真的“零修改”？"/>
 <meta name="twitter:description" content="发在Infoq上的一篇文章，答疑当前大家工作中碰到的Istio调用链的问题，最终澄清了观点，并推动社区修改了说法，避免误解。 前言 在 Istio 的实践中最近经常被问到一个问题，使用 Istio 做调用链用户的业务代码是不是完全 0 侵入，到底要不要修改业务代码？ 看官方介绍： Istio makes it easy to create a network of deployed services with load balancing, service-to-service authentication, monitoring, and more, without any changes in service code. 是不用修改任何代码即可做各种治理。实际使用中应用程序不做任何修改，使用 Istio 的调用链输出总是断开的，这到底是什么原因呢？ 对以上问题关注的人比较多，但是貌似说的都不是特别清楚，在最近的 K8S 技术社区的 Meetup 上笔者专门做"/>
-<meta name="generator" content="Hugo 0.80.0" />
+<meta name="generator" content="Hugo 0.121.2">
 
 
     
@@ -24,33 +24,33 @@
   "@context": "http://schema.org",
   "@type": "BlogPosting",
   "headline": "Istio 调用链埋点原理剖析—是否真的“零修改”？",
-  "url": "http:\/\/idouba.cc\/istio-tracing-is-not-zero-code-change\/",
-  "wordCount": "5998",
+  "url": "http:\/\/idouba.com\/istio-tracing-is-not-zero-code-change\/",
+  "wordCount": "5986",
   "datePublished": "2018-11-29T15:23:04+00:00",
   "dateModified": "2018-11-29T15:23:04+00:00",
   "author": {
     "@type": "Person",
     "name": "idouba"
   },
-  "keywords": "Istio, Tracing, istio, published, mesh, tracing"
+  "keywords": "Istio, 发表, Infoq"
 }
 </script>
 
 
 
-    <link rel="canonical" href="http://idouba.cc/istio-tracing-is-not-zero-code-change/">
+    <link rel="canonical" href="http://idouba.com/istio-tracing-is-not-zero-code-change/">
 
     <title>Istio 调用链埋点原理剖析—是否真的“零修改”？ | 爱豆吧！</title>
 
     
     <!-- combined, minified CSS -->
     
-    <link href="http://idouba.cc/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
+    <link href="http://idouba.com/css/style.6da5c906cc7a8fbb93f31cd2316c5dbe3f19ac4aa6bfb066f1243045b8f6061e.css" rel="stylesheet" integrity="sha256-baXJBsx6j7uT8xzSMWxdvj8ZrEqmv7Bm8SQwRbj2Bh4=" crossorigin="anonymous">
     
 
     <!-- minified Font Awesome for SVG icons -->
     
-    <script defer src="http://idouba.cc/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
+    <script defer src="http://idouba.com/js/fontawesome.min.90e14c13cee52929ac33e1c21694a3cc95063a194eb22aad9f7976434e1a9125.js" integrity="sha256-kOFME87lKSmsM&#43;HCFpSjzJUGOhlOsiqtn3l2Q04akSU=" crossorigin="anonymous"></script>
 
     <!-- RSS 2.0 feed -->
     
@@ -67,7 +67,7 @@
     <div class="blog-masthead">
       <div class="container">
         <nav class="nav blog-nav">
-          <a class="nav-link " href="http://idouba.cc/">Home</a>
+          <a class="nav-link " href="http://idouba.com/">Home</a>
         </nav>
       </div>
     </div>
@@ -77,7 +77,7 @@
     
     <header class="blog-header">
       <div class="container">
-        <h1 class="blog-title" dir="auto"><a href="http://idouba.cc/" rel="home">爱豆吧！</a></h1>
+        <h1 class="blog-title" dir="auto"><a href="http://idouba.com/" rel="home">爱豆吧！</a></h1>
         <p class="lead blog-description" dir="auto">idouba@beta.</p>
       </div>
     </header>
@@ -94,12 +94,12 @@
 
 <article class="blog-post">
   <header>
-    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.cc/istio-tracing-is-not-zero-code-change/">Istio 调用链埋点原理剖析—是否真的“零修改”？</a></h2>
+    <h2 class="blog-post-title" dir="auto"><a href="http://idouba.com/istio-tracing-is-not-zero-code-change/">Istio 调用链埋点原理剖析—是否真的“零修改”？</a></h2>
     <p class="blog-post-meta"><time datetime="2018-11-29T15:23:04Z">Thu Nov 29, 2018</time> by idouba in 
-<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">Istio</a>, <a href="/categories/tracing/" rel="category tag">Tracing</a>
+<span class="fas fa-folder" aria-hidden="true"></span>&nbsp;<a href="/categories/istio/" rel="category tag">Istio</a>
 
 
-<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/istio/" rel="tag">istio</a>, <a href="/tags/published/" rel="tag">published</a>, <a href="/tags/mesh/" rel="tag">mesh</a>, <a href="/tags/tracing/" rel="tag">tracing</a>
+<span class="fas fa-tag" aria-hidden="true"></span>&nbsp;<a href="/tags/istio/" rel="tag">Istio</a>, <a href="/tags/%E5%8F%91%E8%A1%A8/" rel="tag">发表</a>, <a href="/tags/infoq/" rel="tag">Infoq</a>
 
 </p>
   </header>
@@ -150,13 +150,13 @@
 <li>Outbound 流量：对于经过 Sidecar 流出的流量，如果经过 Sidecar 时 Header 中没有任何跟踪相关的信息，则会创建根 Span，并将该跟 Span 相关上下文信息放在请求头中传递给下一个调用的服务；当存在 Trace 信息时，Sidecar 从 Header 中提取 Span 相关信息，并基于这个 Span 创建子 Span，并将新的 Span 信息加在请求头中传递。</li>
 </ul>
 <p>特别是 Outbound 部分的调用链埋点逻辑，通过一段伪代码描述如下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">parentSpan <span style="color:#f92672">=</span> tracer<span style="color:#f92672">.</span><span style="color:#a6e22e">getTracer</span><span style="color:#f92672">().</span><span style="color:#a6e22e">extract</span><span style="color:#f92672">(</span>headers<span style="color:#f92672">);</span>
- 	<span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>parentSpan <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">){</span>
- 	span <span style="color:#f92672">=</span> tracer<span style="color:#f92672">.</span><span style="color:#a6e22e">buildSpan</span><span style="color:#f92672">(</span>operation<span style="color:#f92672">).</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
- 	<span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
- 	span <span style="color:#f92672">=</span> tracer<span style="color:#f92672">.</span><span style="color:#a6e22e">buildSpan</span><span style="color:#f92672">(</span>operation<span style="color:#f92672">).</span><span style="color:#a6e22e">asChildOf</span><span style="color:#f92672">(</span>parentSpan<span style="color:#f92672">).</span><span style="color:#a6e22e">start</span><span style="color:#f92672">();</span>
- 	<span style="color:#f92672">}</span>
-</code></pre></div><p>如图是对前面 Zipkin 上输出的一个 Trace 一个透视图，观察下每个调用的细节。可以看到每个阶段四个服务与部署在它旁边上的 Sidecar 是怎么配合的。在图上只标记了 Sidecar 生成的 Span 主要信息。下面基于具体的例子我们走一遍流程，类剖析下细节，最终得出我们关系的业务代码要做哪些事情？</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>parentSpan <span style="color:#f92672">=</span> tracer.<span style="color:#a6e22e">getTracer</span>().<span style="color:#a6e22e">extract</span>(headers);
+</span></span><span style="display:flex;"><span> 	<span style="color:#66d9ef">if</span>(parentSpan <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>){
+</span></span><span style="display:flex;"><span> 	span <span style="color:#f92672">=</span> tracer.<span style="color:#a6e22e">buildSpan</span>(operation).<span style="color:#a6e22e">start</span>();
+</span></span><span style="display:flex;"><span> 	} <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span> 	span <span style="color:#f92672">=</span> tracer.<span style="color:#a6e22e">buildSpan</span>(operation).<span style="color:#a6e22e">asChildOf</span>(parentSpan).<span style="color:#a6e22e">start</span>();
+</span></span><span style="display:flex;"><span> 	}
+</span></span></code></pre></div><p>如图是对前面 Zipkin 上输出的一个 Trace 一个透视图，观察下每个调用的细节。可以看到每个阶段四个服务与部署在它旁边上的 Sidecar 是怎么配合的。在图上只标记了 Sidecar 生成的 Span 主要信息。下面基于具体的例子我们走一遍流程，类剖析下细节，最终得出我们关系的业务代码要做哪些事情？</p>
 <p>因为 Sidecar 处理 Inbound 和 Outbound 的逻辑有所不同，在图上表也分开两个框图分开表达。如 Productpage，接收外部请求是一个处理，给 Details 发出请求是一个处理，给 Reviews 发出请求是另外一个处理，因此围绕 Productpage 这个 app 有三个黑色的处理块，其实是一个 Sidecar 在做事。</p>
 <p>同时，为了不使的图上箭头太多，最终的 Response 都没有表达出来，其实图上每个请求的箭头都有一个反方向的 Response。在服务发起方的 Sidecar 会收到 Response 时，会记录一个 CR(client Received) 表示收到响应的时间并计算整个 Span 的持续时间。</p>
 <p><img src="https://static001.infoq.cn/resource/image/a0/48/a041f85697f8ff38076e3d3856f3ad48.png" alt=""></p>
@@ -176,115 +176,115 @@
 <p>回答问题一，只需理解一点，这里的 App 业务代码是处理请求不是转发请求，即图上左边的 Request to Productpage 到 Productpage 中请求就截止了，要怎么处理完全是 Productpage 的服务接口的内容了，可以是调用本地处理逻辑直接返回，也可以是如示例中的场景构造新的请求调用其他的服务。右边的 Request from Productpage 完全是 Productpage 服务构造的发出的另外一个请求。</p>
 <p>回答问题二，需要理解当前 Envoy 是独立的 Listener 来处理 Inbound 和 Outbound 的请求。Inbound 只会处理入的流量并将流量转发到本地的服务实例上。而 Outbound 就是根据服务发现找到对应的目标服务后端上。除了在一个进程里外两个之间可以说没有任何关系。 另外如问题一描述，因为到 Outbound 已经是一个新构造的请求了，使得想维护一个 map 来记录这些 Trace 信息这种方案也变得不可行。</p>
 <p>例子中 Productpage 访问 Reviews 的 Span 详细如下，删减掉一些数据只保留主要信息大致是这样：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{ 
-	<span style="color:#f92672">&#34;traceId&#34;</span>: <span style="color:#e6db74">&#34;f79a31352fe7cae9&#34;</span>,
-	 <span style="color:#f92672">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;cb4c86fb667f3114&#34;</span>,
-	 <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;reviews-route&#34;</span>,
-	 <span style="color:#f92672">&#34;parentId&#34;</span>: <span style="color:#e6db74">&#34;f79a31352fe7cae9&#34;</span>,
-	 <span style="color:#f92672">&#34;timestamp&#34;</span>: <span style="color:#ae81ff">1536132571847838</span>,
-	 <span style="color:#f92672">&#34;duration&#34;</span>: <span style="color:#ae81ff">64849</span>,
-	 <span style="color:#f92672">&#34;annotations&#34;</span>: [ { 
-		<span style="color:#f92672">&#34;timestamp&#34;</span>: <span style="color:#ae81ff">1536132571847838</span>,
-		 <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;cs&#34;</span>,
-		 <span style="color:#f92672">&#34;endpoint&#34;</span>: { 
-			<span style="color:#f92672">&#34;serviceName&#34;</span>: <span style="color:#e6db74">&#34;productpage&#34;</span>,
-			 <span style="color:#f92672">&#34;ipv4&#34;</span>: <span style="color:#e6db74">&#34;172.16.0.33&#34;</span> 
-		} 
-	},   { 
-		<span style="color:#f92672">&#34;timestamp&#34;</span>: <span style="color:#ae81ff">1536132571848121</span>,
-		 <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;sr&#34;</span>,
-		 <span style="color:#f92672">&#34;endpoint&#34;</span>: { 
-			<span style="color:#f92672">&#34;serviceName&#34;</span>: <span style="color:#e6db74">&#34;reviews&#34;</span>,
-			 <span style="color:#f92672">&#34;ipv4&#34;</span>: <span style="color:#e6db74">&#34;172.16.0.32&#34;</span> 
-		} 
-	},   { 
-		<span style="color:#f92672">&#34;timestamp&#34;</span>: <span style="color:#ae81ff">1536132571912403</span>,
-		 <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;ss&#34;</span>,
-		 <span style="color:#f92672">&#34;endpoint&#34;</span>: { 
-			<span style="color:#f92672">&#34;serviceName&#34;</span>: <span style="color:#e6db74">&#34;reviews&#34;</span>,
-			 <span style="color:#f92672">&#34;ipv4&#34;</span>: <span style="color:#e6db74">&#34;172.16.0.32&#34;</span> 
-		} 
-	},   { 
-		<span style="color:#f92672">&#34;timestamp&#34;</span>: <span style="color:#ae81ff">1536132571912687</span>,
-		 <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;cr&#34;</span>,
-		 <span style="color:#f92672">&#34;endpoint&#34;</span>: { 
-			<span style="color:#f92672">&#34;serviceName&#34;</span>: <span style="color:#e6db74">&#34;productpage&#34;</span>,
-			 <span style="color:#f92672">&#34;ipv4&#34;</span>: <span style="color:#e6db74">&#34;172.16.0.33&#34;</span> 
-		} 
-	} ],
-	 <span style="color:#f92672">&#34;binaryAnnotations&#34;</span>: [ { 
-		<span style="color:#f92672">&#34;key&#34;</span>: <span style="color:#e6db74">&#34;http.status_code&#34;</span>,
-		 <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;200&#34;</span>,
-		 <span style="color:#f92672">&#34;endpoint&#34;</span>: { 
-			<span style="color:#f92672">&#34;serviceName&#34;</span>: <span style="color:#e6db74">&#34;reviews&#34;</span>,
-			 <span style="color:#f92672">&#34;ipv4&#34;</span>: <span style="color:#e6db74">&#34;172.16.0.32&#34;</span> 
-		} 
-	},   { 
-		<span style="color:#f92672">&#34;key&#34;</span>: <span style="color:#e6db74">&#34;http.url&#34;</span>,
-		 <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;http://reviews:9080/reviews/0&#34;</span>,
-		 <span style="color:#f92672">&#34;endpoint&#34;</span>: { 
-			<span style="color:#f92672">&#34;serviceName&#34;</span>: <span style="color:#e6db74">&#34;productpage&#34;</span>,
-			 <span style="color:#f92672">&#34;ipv4&#34;</span>: <span style="color:#e6db74">&#34;172.16.0.33&#34;</span> 
-		} 
-	},   { 
-		<span style="color:#f92672">&#34;key&#34;</span>: <span style="color:#e6db74">&#34;response_size&#34;</span>,
-		 <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;375&#34;</span>,
-		 <span style="color:#f92672">&#34;endpoint&#34;</span>: { 
-			<span style="color:#f92672">&#34;serviceName&#34;</span>: <span style="color:#e6db74">&#34;reviews&#34;</span>,
-			 <span style="color:#f92672">&#34;ipv4&#34;</span>: <span style="color:#e6db74">&#34;172.16.0.32&#34;</span> 
-		} 
-	} ] 
-}
-</code></pre></div><p>Productpage 的 Proxy 上报了个 CS，CR, Reviews 的那个 Proxy 上报了个 SS，SR。分别表示 Productpage 作为 client 什么时候发出请求，什么时候最终收到请求，Reviews 的 Proxy 什么时候收到了客户端的请求，什么时候发出了 response。另外还包括这次访问的其他信息如 Response Code、Response Size 等。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{ 
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">&#34;traceId&#34;</span>: <span style="color:#e6db74">&#34;f79a31352fe7cae9&#34;</span>,
+</span></span><span style="display:flex;"><span>	 <span style="color:#f92672">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;cb4c86fb667f3114&#34;</span>,
+</span></span><span style="display:flex;"><span>	 <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;reviews-route&#34;</span>,
+</span></span><span style="display:flex;"><span>	 <span style="color:#f92672">&#34;parentId&#34;</span>: <span style="color:#e6db74">&#34;f79a31352fe7cae9&#34;</span>,
+</span></span><span style="display:flex;"><span>	 <span style="color:#f92672">&#34;timestamp&#34;</span>: <span style="color:#ae81ff">1536132571847838</span>,
+</span></span><span style="display:flex;"><span>	 <span style="color:#f92672">&#34;duration&#34;</span>: <span style="color:#ae81ff">64849</span>,
+</span></span><span style="display:flex;"><span>	 <span style="color:#f92672">&#34;annotations&#34;</span>: [ { 
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">&#34;timestamp&#34;</span>: <span style="color:#ae81ff">1536132571847838</span>,
+</span></span><span style="display:flex;"><span>		 <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;cs&#34;</span>,
+</span></span><span style="display:flex;"><span>		 <span style="color:#f92672">&#34;endpoint&#34;</span>: { 
+</span></span><span style="display:flex;"><span>			<span style="color:#f92672">&#34;serviceName&#34;</span>: <span style="color:#e6db74">&#34;productpage&#34;</span>,
+</span></span><span style="display:flex;"><span>			 <span style="color:#f92672">&#34;ipv4&#34;</span>: <span style="color:#e6db74">&#34;172.16.0.33&#34;</span> 
+</span></span><span style="display:flex;"><span>		} 
+</span></span><span style="display:flex;"><span>	},   { 
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">&#34;timestamp&#34;</span>: <span style="color:#ae81ff">1536132571848121</span>,
+</span></span><span style="display:flex;"><span>		 <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;sr&#34;</span>,
+</span></span><span style="display:flex;"><span>		 <span style="color:#f92672">&#34;endpoint&#34;</span>: { 
+</span></span><span style="display:flex;"><span>			<span style="color:#f92672">&#34;serviceName&#34;</span>: <span style="color:#e6db74">&#34;reviews&#34;</span>,
+</span></span><span style="display:flex;"><span>			 <span style="color:#f92672">&#34;ipv4&#34;</span>: <span style="color:#e6db74">&#34;172.16.0.32&#34;</span> 
+</span></span><span style="display:flex;"><span>		} 
+</span></span><span style="display:flex;"><span>	},   { 
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">&#34;timestamp&#34;</span>: <span style="color:#ae81ff">1536132571912403</span>,
+</span></span><span style="display:flex;"><span>		 <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;ss&#34;</span>,
+</span></span><span style="display:flex;"><span>		 <span style="color:#f92672">&#34;endpoint&#34;</span>: { 
+</span></span><span style="display:flex;"><span>			<span style="color:#f92672">&#34;serviceName&#34;</span>: <span style="color:#e6db74">&#34;reviews&#34;</span>,
+</span></span><span style="display:flex;"><span>			 <span style="color:#f92672">&#34;ipv4&#34;</span>: <span style="color:#e6db74">&#34;172.16.0.32&#34;</span> 
+</span></span><span style="display:flex;"><span>		} 
+</span></span><span style="display:flex;"><span>	},   { 
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">&#34;timestamp&#34;</span>: <span style="color:#ae81ff">1536132571912687</span>,
+</span></span><span style="display:flex;"><span>		 <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;cr&#34;</span>,
+</span></span><span style="display:flex;"><span>		 <span style="color:#f92672">&#34;endpoint&#34;</span>: { 
+</span></span><span style="display:flex;"><span>			<span style="color:#f92672">&#34;serviceName&#34;</span>: <span style="color:#e6db74">&#34;productpage&#34;</span>,
+</span></span><span style="display:flex;"><span>			 <span style="color:#f92672">&#34;ipv4&#34;</span>: <span style="color:#e6db74">&#34;172.16.0.33&#34;</span> 
+</span></span><span style="display:flex;"><span>		} 
+</span></span><span style="display:flex;"><span>	} ],
+</span></span><span style="display:flex;"><span>	 <span style="color:#f92672">&#34;binaryAnnotations&#34;</span>: [ { 
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">&#34;key&#34;</span>: <span style="color:#e6db74">&#34;http.status_code&#34;</span>,
+</span></span><span style="display:flex;"><span>		 <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;200&#34;</span>,
+</span></span><span style="display:flex;"><span>		 <span style="color:#f92672">&#34;endpoint&#34;</span>: { 
+</span></span><span style="display:flex;"><span>			<span style="color:#f92672">&#34;serviceName&#34;</span>: <span style="color:#e6db74">&#34;reviews&#34;</span>,
+</span></span><span style="display:flex;"><span>			 <span style="color:#f92672">&#34;ipv4&#34;</span>: <span style="color:#e6db74">&#34;172.16.0.32&#34;</span> 
+</span></span><span style="display:flex;"><span>		} 
+</span></span><span style="display:flex;"><span>	},   { 
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">&#34;key&#34;</span>: <span style="color:#e6db74">&#34;http.url&#34;</span>,
+</span></span><span style="display:flex;"><span>		 <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;http://reviews:9080/reviews/0&#34;</span>,
+</span></span><span style="display:flex;"><span>		 <span style="color:#f92672">&#34;endpoint&#34;</span>: { 
+</span></span><span style="display:flex;"><span>			<span style="color:#f92672">&#34;serviceName&#34;</span>: <span style="color:#e6db74">&#34;productpage&#34;</span>,
+</span></span><span style="display:flex;"><span>			 <span style="color:#f92672">&#34;ipv4&#34;</span>: <span style="color:#e6db74">&#34;172.16.0.33&#34;</span> 
+</span></span><span style="display:flex;"><span>		} 
+</span></span><span style="display:flex;"><span>	},   { 
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">&#34;key&#34;</span>: <span style="color:#e6db74">&#34;response_size&#34;</span>,
+</span></span><span style="display:flex;"><span>		 <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;375&#34;</span>,
+</span></span><span style="display:flex;"><span>		 <span style="color:#f92672">&#34;endpoint&#34;</span>: { 
+</span></span><span style="display:flex;"><span>			<span style="color:#f92672">&#34;serviceName&#34;</span>: <span style="color:#e6db74">&#34;reviews&#34;</span>,
+</span></span><span style="display:flex;"><span>			 <span style="color:#f92672">&#34;ipv4&#34;</span>: <span style="color:#e6db74">&#34;172.16.0.32&#34;</span> 
+</span></span><span style="display:flex;"><span>		} 
+</span></span><span style="display:flex;"><span>	} ] 
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Productpage 的 Proxy 上报了个 CS，CR, Reviews 的那个 Proxy 上报了个 SS，SR。分别表示 Productpage 作为 client 什么时候发出请求，什么时候最终收到请求，Reviews 的 Proxy 什么时候收到了客户端的请求，什么时候发出了 response。另外还包括这次访问的其他信息如 Response Code、Response Size 等。</p>
 <h2 id="业务代码修改">业务代码修改</h2>
 <p>根据前面的分析我们可以得到结论：埋点逻辑是在 Sidecar 代理中完成，应用程序不用处理复杂的埋点逻辑，但应用程序需要配合在请求头上传递生成的 Trace 相关信息。下面抽取服务代码来印证下结论，并看下业务代码到底是怎么修改的。</p>
 <p>Python 写的 Productpage 在服务端处理请求时，先从 Request 中提取接收到的 Header。然后再构造请求调用 Details 获取服务接口，并将 Header 转发出去。</p>
 <p>首先处理 Productpage 请问的 Restful 方法中从 Request 中提取 Trace 相关的 Header.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">app<span style="color:#f92672">.</span>route(<span style="color:#e6db74">&#39;/productpage&#39;</span>)
- 	<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">front</span>():
- 	product_id <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span> <span style="color:#75715e"># TODO: replace default value</span>
- 	Headers <span style="color:#f92672">=</span> getForwardHeaders(Request)
- 	<span style="color:#960050;background-color:#1e0010">…</span>
- 	detailsStatus, details <span style="color:#f92672">=</span> getProductDetails(product_id, headers)
- 	reviewsStatus, reviews <span style="color:#f92672">=</span> getProductReviews(product_id, headers)
- 	<span style="color:#66d9ef">return</span> <span style="color:#960050;background-color:#1e0010">…</span>
-</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">getForwardHeaders</span>(request):
- 	Headers <span style="color:#f92672">=</span> {}
- 	incoming_Headers <span style="color:#f92672">=</span> [ <span style="color:#e6db74">&#39;x-request-id&#39;</span>,
- 	<span style="color:#e6db74">&#39;x-b3-traceid&#39;</span>,
- 	<span style="color:#e6db74">&#39;x-b3-spanId&#39;</span>,
- 	<span style="color:#e6db74">&#39;x-b3-parentspanid&#39;</span>,
- 	<span style="color:#e6db74">&#39;x-b3-sampled&#39;</span>,
- 	<span style="color:#e6db74">&#39;x-b3-flags&#39;</span>,
- 	<span style="color:#e6db74">&#39;x-ot-span-context&#39;</span>
- 	]
-
- 	<span style="color:#66d9ef">for</span> ihdr <span style="color:#f92672">in</span> incoming_Headers:
- 	val <span style="color:#f92672">=</span> request<span style="color:#f92672">.</span>headers<span style="color:#f92672">.</span>get(ihdr)
- 	<span style="color:#66d9ef">if</span> val <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> None:
- 	headers[ihdr] <span style="color:#f92672">=</span> val
- 	<span style="color:#66d9ef">return</span> headers
-</code></pre></div><p> 	for ihdr in incoming_Headers:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>app<span style="color:#f92672">.</span>route(<span style="color:#e6db74">&#39;/productpage&#39;</span>)
+</span></span><span style="display:flex;"><span> 	<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">front</span>():
+</span></span><span style="display:flex;"><span> 	product_id <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span> <span style="color:#75715e"># TODO: replace default value</span>
+</span></span><span style="display:flex;"><span> 	Headers <span style="color:#f92672">=</span> getForwardHeaders(Request)
+</span></span><span style="display:flex;"><span> 	<span style="color:#960050;background-color:#1e0010">…</span>
+</span></span><span style="display:flex;"><span> 	detailsStatus, details <span style="color:#f92672">=</span> getProductDetails(product_id, headers)
+</span></span><span style="display:flex;"><span> 	reviewsStatus, reviews <span style="color:#f92672">=</span> getProductReviews(product_id, headers)
+</span></span><span style="display:flex;"><span> 	<span style="color:#66d9ef">return</span> <span style="color:#960050;background-color:#1e0010">…</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">getForwardHeaders</span>(request):
+</span></span><span style="display:flex;"><span> 	Headers <span style="color:#f92672">=</span> {}
+</span></span><span style="display:flex;"><span> 	incoming_Headers <span style="color:#f92672">=</span> [ <span style="color:#e6db74">&#39;x-request-id&#39;</span>,
+</span></span><span style="display:flex;"><span> 	<span style="color:#e6db74">&#39;x-b3-traceid&#39;</span>,
+</span></span><span style="display:flex;"><span> 	<span style="color:#e6db74">&#39;x-b3-spanId&#39;</span>,
+</span></span><span style="display:flex;"><span> 	<span style="color:#e6db74">&#39;x-b3-parentspanid&#39;</span>,
+</span></span><span style="display:flex;"><span> 	<span style="color:#e6db74">&#39;x-b3-sampled&#39;</span>,
+</span></span><span style="display:flex;"><span> 	<span style="color:#e6db74">&#39;x-b3-flags&#39;</span>,
+</span></span><span style="display:flex;"><span> 	<span style="color:#e6db74">&#39;x-ot-span-context&#39;</span>
+</span></span><span style="display:flex;"><span> 	]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> 	<span style="color:#66d9ef">for</span> ihdr <span style="color:#f92672">in</span> incoming_Headers:
+</span></span><span style="display:flex;"><span> 	val <span style="color:#f92672">=</span> request<span style="color:#f92672">.</span>headers<span style="color:#f92672">.</span>get(ihdr)
+</span></span><span style="display:flex;"><span> 	<span style="color:#66d9ef">if</span> val <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span> 	headers[ihdr] <span style="color:#f92672">=</span> val
+</span></span><span style="display:flex;"><span> 	<span style="color:#66d9ef">return</span> headers
+</span></span></code></pre></div><p> 	for ihdr in incoming_Headers:
  	val = request.headers.get(ihdr)
  	if val is not None:
  	headers[ihdr] = val
  	return headers<!-- raw HTML omitted --></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">getProductReviews</span>(product_id, headers):
- 	url <span style="color:#f92672">=</span> reviews[<span style="color:#e6db74">&#39;name&#39;</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/&#34;</span> <span style="color:#f92672">+</span> reviews[<span style="color:#e6db74">&#39;endpoint&#39;</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/&#34;</span> <span style="color:#f92672">+</span> str(product_id)
- 	res <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(url, headers<span style="color:#f92672">=</span>Headers, timeout<span style="color:#f92672">=</span><span style="color:#ae81ff">3.0</span>)
-</code></pre></div><p>Reviews 服务中 Java 的 Rest 代码类似，在服务端接收请求时，除了接收 Request 中的业务参数外，还要提取 Header 信息，调用 Ratings 服务时再传递下去。其他的 Productpage 调用 Details，Reviews 调用 ratings 逻辑类似。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@GET</span>
-<span style="color:#a6e22e">@Path</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/reviews/{productId}&#34;</span><span style="color:#f92672">)</span>
-<span style="color:#66d9ef">public</span> Response <span style="color:#a6e22e">bookReviewsById</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@PathParam</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;productId&#34;</span><span style="color:#f92672">)</span> <span style="color:#66d9ef">int</span> productId<span style="color:#f92672">,</span>
-<span style="color:#a6e22e">@HeaderParam</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;end-user&#34;</span><span style="color:#f92672">)</span> String user<span style="color:#f92672">,</span>
-<span style="color:#a6e22e">@HeaderParam</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;x-request-id&#34;</span><span style="color:#f92672">)</span> String xreq<span style="color:#f92672">,</span>
-<span style="color:#a6e22e">@HeaderParam</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;x-b3-traceid&#34;</span><span style="color:#f92672">)</span> String xTraceId<span style="color:#f92672">,</span>
-<span style="color:#a6e22e">@HeaderParam</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;x-b3-spanid&#34;</span><span style="color:#f92672">)</span> String xSpanId<span style="color:#f92672">,</span>
-<span style="color:#a6e22e">@HeaderParam</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;x-b3-parentspanid&#34;</span><span style="color:#f92672">)</span> String xparentSpanId<span style="color:#f92672">,</span>
-<span style="color:#a6e22e">@HeaderParam</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;x-b3-sampled&#34;</span><span style="color:#f92672">)</span> String xsampled<span style="color:#f92672">,</span>
-<span style="color:#a6e22e">@HeaderParam</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;x-b3-flags&#34;</span><span style="color:#f92672">)</span> String xflags<span style="color:#f92672">,</span>
-<span style="color:#a6e22e">@HeaderParam</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;x-ot-span-context&#34;</span><span style="color:#f92672">)</span> String xotSpan<span style="color:#f92672">)</span>
-</code></pre></div><p>当然这里只是个 demo，示意下要在那个环节修改代码。实际项目中我们不会这样在每个业务方法上作这样的修改，这样对代码的侵入，甚至说污染太严重。根据语言的特点会尽力把这段逻辑提取成一段通用逻辑，只要能在接收和发送请求的地方能机械的 forward 这几个 Trace 相关的 Header 即可。如果需要更多的控制，如在在 Span 上加特定的 Tag，或者在应用代码中代码中对某个服务内部方法的调用进详细跟踪需要构造一个 Span，可以使用类似 opentracing 的对应方法来实现。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">getProductReviews</span>(product_id, headers):
+</span></span><span style="display:flex;"><span> 	url <span style="color:#f92672">=</span> reviews[<span style="color:#e6db74">&#39;name&#39;</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/&#34;</span> <span style="color:#f92672">+</span> reviews[<span style="color:#e6db74">&#39;endpoint&#39;</span>] <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/&#34;</span> <span style="color:#f92672">+</span> str(product_id)
+</span></span><span style="display:flex;"><span> 	res <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(url, headers<span style="color:#f92672">=</span>Headers, timeout<span style="color:#f92672">=</span><span style="color:#ae81ff">3.0</span>)
+</span></span></code></pre></div><p>Reviews 服务中 Java 的 Rest 代码类似，在服务端接收请求时，除了接收 Request 中的业务参数外，还要提取 Header 信息，调用 Ratings 服务时再传递下去。其他的 Productpage 调用 Details，Reviews 调用 ratings 逻辑类似。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@GET</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Path</span>(<span style="color:#e6db74">&#34;/reviews/{productId}&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> Response <span style="color:#a6e22e">bookReviewsById</span>(<span style="color:#a6e22e">@PathParam</span>(<span style="color:#e6db74">&#34;productId&#34;</span>) <span style="color:#66d9ef">int</span> productId,
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@HeaderParam</span>(<span style="color:#e6db74">&#34;end-user&#34;</span>) String user,
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@HeaderParam</span>(<span style="color:#e6db74">&#34;x-request-id&#34;</span>) String xreq,
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@HeaderParam</span>(<span style="color:#e6db74">&#34;x-b3-traceid&#34;</span>) String xTraceId,
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@HeaderParam</span>(<span style="color:#e6db74">&#34;x-b3-spanid&#34;</span>) String xSpanId,
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@HeaderParam</span>(<span style="color:#e6db74">&#34;x-b3-parentspanid&#34;</span>) String xparentSpanId,
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@HeaderParam</span>(<span style="color:#e6db74">&#34;x-b3-sampled&#34;</span>) String xsampled,
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@HeaderParam</span>(<span style="color:#e6db74">&#34;x-b3-flags&#34;</span>) String xflags,
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@HeaderParam</span>(<span style="color:#e6db74">&#34;x-ot-span-context&#34;</span>) String xotSpan)
+</span></span></code></pre></div><p>当然这里只是个 demo，示意下要在那个环节修改代码。实际项目中我们不会这样在每个业务方法上作这样的修改，这样对代码的侵入，甚至说污染太严重。根据语言的特点会尽力把这段逻辑提取成一段通用逻辑，只要能在接收和发送请求的地方能机械的 forward 这几个 Trace 相关的 Header 即可。如果需要更多的控制，如在在 Span 上加特定的 Tag，或者在应用代码中代码中对某个服务内部方法的调用进详细跟踪需要构造一个 Span，可以使用类似 opentracing 的对应方法来实现。</p>
 <h2 id="社区声明">社区声明</h2>
 <p>最近一直在和社区沟通，督促在更显著的位置明确的告诉使用者用 Istio 作治理并不是所有场景下都不需要修改代码，比如调用链，虽然用户不用业务代码埋点，但还是需要修改些代码。尤其是避免首页“without any change”对大家的误导。得到回应是 1.1 中社区首页 what-is-istio 已经修改了这部分说明，不再是 1.0 中说<!-- raw HTML omitted -->without any changes in service code<!-- raw HTML omitted -->，而是改为<!-- raw HTML omitted -->with few or no code changes in service code<!-- raw HTML omitted -->。提示大家在使用 Isito 进行调用链埋点时，应用程序需要进行适当的修改。当然了解了其中原理，做起来也不会太麻烦。</p>
 <p><img src="https://static001.infoq.cn/resource/image/a4/5c/a498b31f5b985601b0975e687b27bd5c.png" alt=""></p>
