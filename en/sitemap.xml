@@ -365,6 +365,14 @@
     <loc>https://idouba.com/daily-japanese-speak-in-office-in-chinese/</loc>
     <lastmod>2004-12-13T13:26:10+00:00</lastmod>
   </url><url>
+    <loc>https://idouba.com/posts/untitled/</loc>
+  </url><url>
+    <loc>https://idouba.com/tags/istiocon/</loc>
+  </url><url>
+    <loc>https://idouba.com/best-practice-from-spring-cloud-to-istio/</loc>
+  </url><url>
+    <loc>https://idouba.com/best-practice-from-spring-cloud-to-istio/</loc>
+  </url><url>
     <loc>https://idouba.com/series/</loc>
     <xhtml:link
                 rel="alternate"
@@ -376,5 +384,9 @@
                 hreflang="en"
                 href="https://idouba.com/series/"
                 />
+  </url><url>
+    <loc>https://idouba.com/tags/springcloud/</loc>
+  </url><url>
+    <loc>https://idouba.com/tags/%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BC/</loc>
   </url>
 </urlset>
