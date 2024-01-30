@@ -51,19 +51,5 @@ Istio中虽然没有显示的提供这样一个状态图，但是大家熟悉Ist
       </description>
     </item>
     
-    <item>
-      <title>Istio灰度发布实践 –《云原生服务网格Istio》书摘05</title>
-      <link>https://idouba.com/best-practice-from-spring-cloud-to-istio/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://idouba.com/best-practice-from-spring-cloud-to-istio/</guid>
-      <description>
-        
-          
-          
-        
-      </description>
-    </item>
-    
   </channel>
 </rss>
