@@ -9,7 +9,7 @@
   
   >
   <head>
-<title>Istio灰度发布实践 –《云原生服务网格Istio》书摘05 | 爱豆吧！</title>
+<title>SpringClod到Istio最佳实践 | 爱豆吧！</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -22,15 +22,15 @@
 <meta property="og:locale" content="en" />
 
 <meta property="og:type" content="article">
-<meta name="description" content="北京时间2月23日，在全球首届社区峰会IstioCon 2021中，华为云应用服务网格首席架构师张超盟发表了《Best practice:from Spring Cloud to Istio》主题演讲，分享了Istio在生产中使用的实际案例。
+<meta name="description" content="记录在北京时间2月23日，在全球首届社区峰会IstioCon 2021中，发表的《Best practice:from Spring Cloud to Istio》技术演讲。回答经常被客户和同事们问到的一个问题，SpringCloud和Istio的关系，如何演进。
 官网链 …" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="">
-<meta name="twitter:title" content="Istio灰度发布实践 –《云原生服务网格Istio》书摘05" />
+<meta name="twitter:title" content="SpringClod到Istio最佳实践" />
 <meta name="twitter:image" content="https://idouba.com/images/thumbnail.png"/>
 <meta property="og:url" content="https://idouba.com/best-practice-from-spring-cloud-to-istio/" />
-<meta property="og:title" content="Istio灰度发布实践 –《云原生服务网格Istio》书摘05" />
-<meta property="og:description" content="北京时间2月23日，在全球首届社区峰会IstioCon 2021中，华为云应用服务网格首席架构师张超盟发表了《Best practice:from Spring Cloud to Istio》主题演讲，分享了Istio在生产中使用的实际案例。
+<meta property="og:title" content="SpringClod到Istio最佳实践" />
+<meta property="og:description" content="记录在北京时间2月23日，在全球首届社区峰会IstioCon 2021中，发表的《Best practice:from Spring Cloud to Istio》技术演讲。回答经常被客户和同事们问到的一个问题，SpringCloud和Istio的关系，如何演进。
 官网链 …" />
 <meta property="og:image" content="https://idouba.com/images/thumbnail.png" />
 
@@ -146,7 +146,7 @@
   
 <div class="grid-inverse wrap content">
   <article class="post_content">
-    <h1 class="post_title">Istio灰度发布实践 –《云原生服务网格Istio》书摘05</h1>
+    <h1 class="post_title">SpringClod到Istio最佳实践</h1>
   <div class="post_meta">
     <span><svg class="icon">
   <title>calendar</title>
@@ -154,23 +154,24 @@
 </svg>
 </span>
     <span class="post_date">
-      Jan 1, 0001</span>
+      Feb 23, 2021</span>
     <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/istiocon/' title="IstioCon" class="post_tag button button_translucent">IstioCon
         </a><a href='https://idouba.com/tags/springcloud/' title="SpringCloud" class="post_tag button button_translucent">SpringCloud
         </a><a href='https://idouba.com/tags/%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BC/' title="服务网格" class="post_tag button button_translucent">服务网格
+        </a><a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' title="演讲" class="post_tag button button_translucent">演讲
         </a>
     </span>
     <span class="page_only">&nbsp;·
   <div class="post_share">
     Share on:
-    <a href="https://twitter.com/intent/tweet?text=Istio%e7%81%b0%e5%ba%a6%e5%8f%91%e5%b8%83%e5%ae%9e%e8%b7%b5%20%e2%80%93%e3%80%8a%e4%ba%91%e5%8e%9f%e7%94%9f%e6%9c%8d%e5%8a%a1%e7%bd%91%e6%a0%bcIstio%e3%80%8b%e4%b9%a6%e6%91%9805&url=https%3a%2f%2fidouba.com%2fbest-practice-from-spring-cloud-to-istio%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
+    <a href="https://twitter.com/intent/tweet?text=SpringClod%e5%88%b0Istio%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5&url=https%3a%2f%2fidouba.com%2fbest-practice-from-spring-cloud-to-istio%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
       <svg class="icon">
   <title>twitter</title>
   <use xlink:href="#twitter"></use>
 </svg>
 
     </a>
-    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fbest-practice-from-spring-cloud-to-istio%2f&t=Istio%e7%81%b0%e5%ba%a6%e5%8f%91%e5%b8%83%e5%ae%9e%e8%b7%b5%20%e2%80%93%e3%80%8a%e4%ba%91%e5%8e%9f%e7%94%9f%e6%9c%8d%e5%8a%a1%e7%bd%91%e6%a0%bcIstio%e3%80%8b%e4%b9%a6%e6%91%9805" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
+    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fbest-practice-from-spring-cloud-to-istio%2f&t=SpringClod%e5%88%b0Istio%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
       <svg class="icon">
   <title>facebook</title>
   <use xlink:href="#facebook"></use>
@@ -195,7 +196,8 @@
   </span>
   </div>
 
-    <div class="post_body"><p>北京时间2月23日，在全球首届社区峰会IstioCon 2021中，华为云应用服务网格首席架构师张超盟发表了《Best practice:from Spring Cloud to Istio》主题演讲，分享了Istio在生产中使用的实际案例。</p>
+    <div class="post_body"><hr>
+<p>记录在北京时间2月23日，在全球首届社区峰会IstioCon 2021中，发表的《Best practice:from Spring Cloud to Istio》技术演讲。回答经常被客户和同事们问到的一个问题，SpringCloud和Istio的关系，如何演进。</p>
 <p><figure>
   <picture>
 
@@ -940,7 +942,7 @@
 <p>4）也是我们推荐的方案，使用Istio进行微服务治理正在成为越来越多用户的技术选择。</p>
 <p>以上四个关系顺时针结合在一起为我们的解决方案构造一个完整的闭环。</p>
 <p>完。</p>
-<h3 id="附演讲稿下载picture2021-02-23-best-practice-from-spring-cloud-to-istiospringcloudtoistio-zhangchaomengpdf">附：<a href="%5B../picture/2021-02-23-best-practice-from-spring-cloud-to-istio/SpringCloudtoIstio-ZhangChaomeng.pdf%5D()">演讲稿下载</a></h3>
+<h4 id="附演讲稿下载picture2021-02-23-best-practice-from-spring-cloud-to-istiospringcloudtoistio-zhangchaomengpdf">附：<a href="%5B../picture/2021-02-23-best-practice-from-spring-cloud-to-istio/SpringCloudtoIstio-ZhangChaomeng.pdf%5D()">演讲稿下载</a></h4>
 
     </div>
 <div class="post_comments">
@@ -976,6 +978,9 @@
     <h2 class="mt-4">Recent Posts</h2>
     <ul class="flex-column">
       <li>
+        <a href="https://idouba.com/best-practice-from-spring-cloud-to-istio/" class="nav-link" title="SpringClod到Istio最佳实践">SpringClod到Istio最佳实践</a>
+      </li>
+      <li>
         <a href="https://idouba.com/istio-canary-release-pratice-of-cloudnativeistio-05/" class="nav-link" title="Istio灰度发布实践 –《云原生服务网格Istio》书摘05">Istio灰度发布实践 –《云原生服务网格Istio》书摘05</a>
       </li>
       <li>
@@ -995,9 +1000,6 @@
       </li>
       <li>
         <a href="https://idouba.com/the-first-day-of-2019/" class="nav-link" title="2019年元旦忆我的咕咚队友">2019年元旦忆我的咕咚队友</a>
-      </li>
-      <li>
-        <a href="https://idouba.com/istio-tracing-is-not-zero-code-change/" class="nav-link" title="Istio 调用链埋点原理剖析—是否真的“零修改”？">Istio 调用链埋点原理剖析—是否真的“零修改”？</a>
       </li>
     </ul>
     <div>
@@ -1104,6 +1106,11 @@
           <span class="button_tally">3</span>
         </a>
         
+        <a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' class="post_tag button button_translucent" title="演讲">
+          演讲
+          <span class="button_tally">3</span>
+        </a>
+        
         <a href='https://idouba.com/tags/%E7%A8%8B%E5%BA%8F%E5%91%98/' class="post_tag button button_translucent" title="程序员">
           程序员
           <span class="button_tally">3</span>
@@ -1121,11 +1128,6 @@
         
         <a href='https://idouba.com/tags/executor/' class="post_tag button button_translucent" title="executor">
           EXECUTOR
-          <span class="button_tally">2</span>
-        </a>
-        
-        <a href='https://idouba.com/tags/kubernetes/' class="post_tag button button_translucent" title="kubernetes">
-          KUBERNETES
           <span class="button_tally">2</span>
         </a>
         
@@ -1283,7 +1285,7 @@
             </a>
             
             
-            <a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' class=" post_tag button button_translucent" data-position=2 title="演讲">演讲<span class="button_tally">2</span>
+            <a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' class=" post_tag button button_translucent" data-position=3 title="演讲">演讲<span class="button_tally">3</span>
             </a>
             
             
