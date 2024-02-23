@@ -157,6 +157,76 @@
   <div class="excerpt">
     <div class="excerpt_header">
       <h3 class="post_link">
+        <a href="https://idouba.com/hadoop_mapreduce_tasktracker_launch_task/" title="【hadoop代码笔记】hadoop作业提交之TaskTracker 启动task">【hadoop代码笔记】hadoop作业提交之TaskTracker 启动task</a>
+      </h3>
+      
+  <div class="post_meta">
+    <span><svg class="icon">
+  <title>calendar</title>
+  <use xlink:href="#calendar"></use>
+</svg>
+</span>
+    <span class="post_date">
+      Jan 21, 2014</span>
+    <span class="post_time"> · 5 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/hadoop/' title="hadoop" class="post_tag button button_translucent">hadoop
+        </a><a href='https://idouba.com/tags/java/' title="java" class="post_tag button button_translucent">java
+        </a><a href='https://idouba.com/tags/mapreduce/' title="mapreduce" class="post_tag button button_translucent">mapreduce
+        </a>
+    </span>
+    <span class="page_only">&nbsp;·
+  <div class="post_share">
+    Share on:
+    <a href="https://twitter.com/intent/tweet?text=%e3%80%90hadoop%e4%bb%a3%e7%a0%81%e7%ac%94%e8%ae%b0%e3%80%91hadoop%e4%bd%9c%e4%b8%9a%e6%8f%90%e4%ba%a4%e4%b9%8bTaskTracker%20%e5%90%af%e5%8a%a8task&url=https%3a%2f%2fidouba.com%2fhadoop_mapreduce_tasktracker_launch_task%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>twitter</title>
+  <use xlink:href="#twitter"></use>
+</svg>
+
+    </a>
+    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fhadoop_mapreduce_tasktracker_launch_task%2f&t=%e3%80%90hadoop%e4%bb%a3%e7%a0%81%e7%ac%94%e8%ae%b0%e3%80%91hadoop%e4%bd%9c%e4%b8%9a%e6%8f%90%e4%ba%a4%e4%b9%8bTaskTracker%20%e5%90%af%e5%8a%a8task" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>facebook</title>
+  <use xlink:href="#facebook"></use>
+</svg>
+
+    </a>
+    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
+      <svg class="icon">
+  <title>linkedin</title>
+  <use xlink:href="#linkedin"></use>
+</svg>
+
+    </a>
+    <a href="https://idouba.com/hadoop_mapreduce_tasktracker_launch_task/" title="Copy Link" class="link link_yank">
+      <svg class="icon">
+  <title>copy</title>
+  <use xlink:href="#copy"></use>
+</svg>
+
+    </a>
+  </div>
+  </span>
+  </div>
+
+    </div>
+      <div class="excerpt_footer">
+        <div class="pale">
+          
+            <p><strong>一、概要描述</strong></p>
+<p>在<a href="../hadoop_mapreduce_tasktracker_retrieve_task">上篇博文</a>描 述了TaskTracker从Jobtracker如何从JobTracker获取到要执行的Task。在从JobTracker获取到 LaunchTaskAction后，执行addToTaskQueue方法来把要执行的Task加入到queue。在本篇博文中，我们来关注下该方法 后，TaskTracker怎么来处理这些Task。</p>
+<p>实际上，TaskTracker初始化时，会初始化并启动两个TaskLauncher类型的线程，mapLauncher，reduceLauncher。在TaskTracker从JobTracher获取到任务后，对应的会把任务添加到两个 TaskLauncher的Queue中，其实 …</p>
+          
+          <br>
+          <a href="https://idouba.com/hadoop_mapreduce_tasktracker_launch_task/" title="Read More" class="excerpt_more button">Read More</a>
+        </div>
+      </div>
+    </div>
+  </li>
+
+        <li class="post_item">
+  <div class="excerpt">
+    <div class="excerpt_header">
+      <h3 class="post_link">
         <a href="https://idouba.com/hadoop_mapreduce_job_init/" title="【hadoop代码笔记】hadoop作业提交之Job初始化">【hadoop代码笔记】hadoop作业提交之Job初始化</a>
       </h3>
       
@@ -791,76 +861,6 @@ Unsupervised learning (clustering):The class labels of training data is unknown 
     </div>
   </li>
 
-        <li class="post_item">
-  <div class="excerpt">
-    <div class="excerpt_header">
-      <h3 class="post_link">
-        <a href="https://idouba.com/history-letter-to-someone-mentor-so-called/" title="给某某导师的一封邮件">给某某导师的一封邮件</a>
-      </h3>
-      
-  <div class="post_meta">
-    <span><svg class="icon">
-  <title>calendar</title>
-  <use xlink:href="#calendar"></use>
-</svg>
-</span>
-    <span class="post_date">
-      Jun 8, 2013</span>
-    <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/%E4%BF%A1/' title="信" class="post_tag button button_translucent">信
-        </a><a href='https://idouba.com/tags/%E5%85%B3%E4%BA%8E/' title="关于" class="post_tag button button_translucent">关于
-        </a>
-    </span>
-    <span class="page_only">&nbsp;·
-  <div class="post_share">
-    Share on:
-    <a href="https://twitter.com/intent/tweet?text=%e7%bb%99%e6%9f%90%e6%9f%90%e5%af%bc%e5%b8%88%e7%9a%84%e4%b8%80%e5%b0%81%e9%82%ae%e4%bb%b6&url=https%3a%2f%2fidouba.com%2fhistory-letter-to-someone-mentor-so-called%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>twitter</title>
-  <use xlink:href="#twitter"></use>
-</svg>
-
-    </a>
-    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fhistory-letter-to-someone-mentor-so-called%2f&t=%e7%bb%99%e6%9f%90%e6%9f%90%e5%af%bc%e5%b8%88%e7%9a%84%e4%b8%80%e5%b0%81%e9%82%ae%e4%bb%b6" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>facebook</title>
-  <use xlink:href="#facebook"></use>
-</svg>
-
-    </a>
-    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
-      <svg class="icon">
-  <title>linkedin</title>
-  <use xlink:href="#linkedin"></use>
-</svg>
-
-    </a>
-    <a href="https://idouba.com/history-letter-to-someone-mentor-so-called/" title="Copy Link" class="link link_yank">
-      <svg class="icon">
-  <title>copy</title>
-  <use xlink:href="#copy"></use>
-</svg>
-
-    </a>
-  </div>
-  </span>
-  </div>
-
-    </div>
-      <div class="excerpt_footer">
-        <div class="pale">
-          
-            <p>整理之前常用的网易邮箱的时候，发现几篇比较长的邮件，感受到了当年的年轻气盛，被自己小激励了一把。当年觉得很私密的邮件，现在倒愿意在自己的空间归档下,不然可能就真的扔掉了。是研究生入学前给当年向某位知名人生导师写的邮件，并未得到回复:-(。看到邮件里描述自己的还挺可爱的，虽然使劲回忆起来有些太心酸太囧的经历没有好意思写进去。但是有的啰嗦，怪不得人家不回呢，呵呵。好像更像是自己和自己说话。有热情，有干劲，但是似乎有一点偏执。现在回头看。豆妈说一定不要让我们豆豆也这么辛苦。很感激当年的这些经历，也不太愿意掖着藏着。倒是现在的自己有些地方需要重新拾起来一点当年的热情。
-XX 老师您好：
-问候您，希望不会很冒昧。
-“要做就做到最好，做到山穷水 …</p>
-          
-          <br>
-          <a href="https://idouba.com/history-letter-to-someone-mentor-so-called/" title="Read More" class="excerpt_more button">Read More</a>
-        </div>
-      </div>
-    </div>
-  </li>
-
       <li>
     <ul class="pagination pagination-default">
       <li class="page-item">
@@ -917,6 +917,9 @@ XX 老师您好：
     <h2 class="mt-4">Recent Posts</h2>
     <ul class="flex-column">
       <li>
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-1-DC/" class="nav-link" title="基于实际案例解析Istio访问日志ResponseFlag之DC">基于实际案例解析Istio访问日志ResponseFlag之DC</a>
+      </li>
+      <li>
         <a href="https://idouba.com/best-practice-from-spring-cloud-to-istio/" class="nav-link" title="SpringClod到Istio最佳实践">SpringClod到Istio最佳实践</a>
       </li>
       <li>
@@ -937,21 +940,18 @@ XX 老师您好：
       <li>
         <a href="https://idouba.com/istio-curcuit-break-of-cloudnativeistio/" class="nav-link" title="Istio服务熔断 –《云原生服务网格Istio》书摘01">Istio服务熔断 –《云原生服务网格Istio》书摘01</a>
       </li>
-      <li>
-        <a href="https://idouba.com/the-first-day-of-2019/" class="nav-link" title="2019年元旦忆我的咕咚队友">2019年元旦忆我的咕咚队友</a>
-      </li>
     </ul>
     <div>
       <h2 class="mt-4 taxonomy" id="categories-section">Categories</h2>
       <nav class="tags_nav">
-        <a href='https://idouba.com/categories/%E9%9A%8F%E7%AC%94/' class="post_tag button button_translucent" title="随笔">
-          随笔
+        <a href='https://idouba.com/categories/istio/' class="post_tag button button_translucent" title="istio">
+          ISTIO
           <span class="button_tally">14</span>
         </a>
         
-        <a href='https://idouba.com/categories/istio/' class="post_tag button button_translucent" title="istio">
-          ISTIO
-          <span class="button_tally">12</span>
+        <a href='https://idouba.com/categories/%E9%9A%8F%E7%AC%94/' class="post_tag button button_translucent" title="随笔">
+          随笔
+          <span class="button_tally">14</span>
         </a>
         
         <a href='https://idouba.com/categories/hadoop/' class="post_tag button button_translucent" title="hadoop">
@@ -1025,6 +1025,11 @@ XX 老师您好：
           <span class="button_tally">6</span>
         </a>
         
+        <a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' class="post_tag button button_translucent" title="演讲">
+          演讲
+          <span class="button_tally">5</span>
+        </a>
+        
         <a href='https://idouba.com/tags/golang/' class="post_tag button button_translucent" title="golang">
           GOLANG
           <span class="button_tally">4</span>
@@ -1042,11 +1047,6 @@ XX 老师您好：
         
         <a href='https://idouba.com/tags/oracle/' class="post_tag button button_translucent" title="oracle">
           ORACLE
-          <span class="button_tally">3</span>
-        </a>
-        
-        <a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' class="post_tag button button_translucent" title="演讲">
-          演讲
           <span class="button_tally">3</span>
         </a>
         
@@ -1081,6 +1081,10 @@ XX 老师您好：
             
             
             <a href='https://idouba.com/tags/aqs/' class=" post_tag button button_translucent" data-position=1 title="aqs">AQS<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/dc/' class=" post_tag button button_translucent" data-position=1 title="dc">DC<span class="button_tally">1</span>
             </a>
             
             
@@ -1137,6 +1141,10 @@ XX 老师您好：
             
             
             <a href='https://idouba.com/tags/k-medoids/' class=" post_tag button button_translucent" data-position=1 title="k-medoids">K-MEDOIDS<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/kubecon/' class=" post_tag button button_translucent" data-position=2 title="kubecon">KUBECON<span class="button_tally">2</span>
             </a>
             
             
@@ -1216,7 +1224,7 @@ XX 老师您好：
             </a>
             
             
-            <a href='https://idouba.com/tags/%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BC/' class=" post_tag button button_translucent" data-position=1 title="服务网格">服务网格<span class="button_tally">1</span>
+            <a href='https://idouba.com/tags/%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BC/' class=" post_tag button button_translucent" data-position=2 title="服务网格">服务网格<span class="button_tally">2</span>
             </a>
             
             
@@ -1224,7 +1232,7 @@ XX 老师您好：
             </a>
             
             
-            <a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' class=" post_tag button button_translucent" data-position=3 title="演讲">演讲<span class="button_tally">3</span>
+            <a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' class=" post_tag button button_translucent" data-position=5 title="演讲">演讲<span class="button_tally">5</span>
             </a>
             
             
@@ -1249,6 +1257,10 @@ XX 老师您好：
             
             
             <a href='https://idouba.com/tags/%E8%A5%BF%E5%AE%89/' class=" post_tag button button_translucent" data-position=1 title="西安">西安<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E8%AE%BF%E9%97%AE%E6%97%A5%E5%BF%97/' class=" post_tag button button_translucent" data-position=2 title="访问日志">访问日志<span class="button_tally">2</span>
             </a>
             
             

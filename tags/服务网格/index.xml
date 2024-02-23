@@ -18,7 +18,6 @@
         
           
             记录在北京时间2月23日，在全球首届社区峰会IstioCon 2021中，发表的《Best practice:from Spring Cloud to Istio》技术演讲。回答经常被客户和同事们问到的一个问题，SpringCloud和Istio的关系，如何演进。
-官网链接：https://events.istio.io/istiocon-2021/sessions/best-practice%EF%BC%9Afrom-spring-cloud-to-istio/
 以下为演讲全文: 大家好，我是来自华为云的工程师。很荣幸有机会和大家分享Istio在生产中使用的实际案例。
 华为云应用服务网格从2018年在公有云上线， 作为全球最早的几个网格服务之一，经历和见证了从早期对网格的了解、尝试到当前大规模使用的过程。服务的客户越来越多，场景也越来越复杂。这其中的通用功能作为feature大都贡献到Istio社区，解决方案层面的实践也希望通过这样的机会和大家交流。
 本次我选取的主题是Spring Cloud to Istio。来自我们客户的Spring cloud的项目和Istio的结合与迁移案例。
@@ -46,6 +45,26 @@ Istio中虽然没有显示的提供这样一个状态图，但是大家熟悉Ist
 3）升级所有应用以应对服务管理需求变化 第三个问题是一个比较典型的问题。客户有一个公共团队专门维护了一套基于Spring cloud的自有开发框架，在每次升级开发框架时，不得不求着业务团队来升级自己的服务。经常会SDK自身修改测试工作量不大，但却要制定很长周期的升级计划，来对上千个基于这个SDK开发的服务分组重新编译，打包，升级，而且经常要陪着业务团队在夜间变更。业务团队因为自身没有什么改动，考虑到这个升级带来的工作量和线上风险，一般也没有什么动力。
 4）从单体式架构向微服务架构迁移 这是一个比较普遍的问题，就是渐进的微服务化。马丁福勒在著名的文章单体到微服务的拆分中（https://martinfowler.com/articles/break-monolith-into-microservices.html ）也提到了对渐进微服务化的倡议，如何能从业务上将一个大的业务分割，解耦，然后逐步微服务化。马丁福勒强调 “解耦的是业务能力不是代码” ，大神将代码的解耦留给了开发者。
 但是站在开发者的角度讲渐进的微服务不是一个容易的事情。以基于Spring cloud框架进行微服务开发为例，为了所有的微服务间进行统一的服务发现、负载均衡，消费和执行同样的治理策略，必须要求所有的微服务基于同样的，甚至是统一版本的SDK来开发。
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>基于实际案例解析Istio访问日志ResponseFlag之DC</title>
+      <link>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-index/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-index/</guid>
+      <description>
+        
+          
+            KubeCon 2023在上海做的一个关于Istio访问日志的演讲。
+访问日志是应用系统运维的重要手段，可以有效地帮助我们进行问题的定位定界。
+对于七层的访问日志一般我们会通过HTTP响应码了解请求的状况，如503、502、404、403等。Envoy在访问日志中引入了应答标记Response Flag，辅助HTTP响应码，进一步描述访问或连接的细节问题。如发生 了503错误后，通过503 UH 503 UF 503 UC 503 NC 等区分各种不同的503产生的原因，提供线索让运维人员针对性地解决问题。
+但是Envoy 和Istio社区对于Response Flag的信息非常少，身边的同事，还有我们的客户经常在生产中碰到了这些应Response Flag不知道咋处理。
+这次分享比较详细地把我们生产中碰到的常见的Response Flag挨个构造条件重现一遍，和大家一起剖析每个的含义、表示的问题，和对这些问题一般的处理方法。作为参照帮助大家理解生产中的类似问题。
           
           
         
