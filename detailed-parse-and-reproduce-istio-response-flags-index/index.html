@@ -9,7 +9,7 @@
   
   >
   <head>
-<title>基于实际案例解析Istio访问日志ResponseFlag之DC | 爱豆吧！</title>
+<title>基于实际案例解析Istio访问日志ResponseFlag系列 | 爱豆吧！</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -22,18 +22,16 @@
 <meta property="og:locale" content="en" />
 
 <meta property="og:type" content="article">
-<meta name="description" content="KubeCon 2023在上海做的一个关于Istio访问日志的演讲。
-访问日志是应用系统运维的重要手段，可以有效地帮助我们进行问题的定位定界。
-对于七层的访问日志一般我们会通过HTTP响应码了解请求的状况，如503、502、404、403等。Envoy在访问日志中引入了应答标记Response Flag，辅助HTTP响 …" />
+<meta name="description" content="访问日志是应用系统运维的重要手段，可以有效地帮助我们进行问题的定位定界。
+对于七层的访问日志一般我们会通过HTTP响应码了解请求的状况，如503、502、404、403等。Envoy在访问日志中引入了应答标记Response Flag，辅助HTTP响应码，进一步描述访问或连接的细节问题。如发生 了503错误后，通 …" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="">
-<meta name="twitter:title" content="基于实际案例解析Istio访问日志ResponseFlag之DC" />
+<meta name="twitter:title" content="基于实际案例解析Istio访问日志ResponseFlag系列" />
 <meta name="twitter:image" content="https://idouba.com/images/thumbnail.png"/>
 <meta property="og:url" content="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-index/" />
-<meta property="og:title" content="基于实际案例解析Istio访问日志ResponseFlag之DC" />
-<meta property="og:description" content="KubeCon 2023在上海做的一个关于Istio访问日志的演讲。
-访问日志是应用系统运维的重要手段，可以有效地帮助我们进行问题的定位定界。
-对于七层的访问日志一般我们会通过HTTP响应码了解请求的状况，如503、502、404、403等。Envoy在访问日志中引入了应答标记Response Flag，辅助HTTP响 …" />
+<meta property="og:title" content="基于实际案例解析Istio访问日志ResponseFlag系列" />
+<meta property="og:description" content="访问日志是应用系统运维的重要手段，可以有效地帮助我们进行问题的定位定界。
+对于七层的访问日志一般我们会通过HTTP响应码了解请求的状况，如503、502、404、403等。Envoy在访问日志中引入了应答标记Response Flag，辅助HTTP响应码，进一步描述访问或连接的细节问题。如发生 了503错误后，通 …" />
 <meta property="og:image" content="https://idouba.com/images/thumbnail.png" />
 
 <link rel="apple-touch-icon" sizes="180x180" href="https://idouba.com/icons/apple-touch-icon.png">
@@ -148,7 +146,7 @@
   
 <div class="grid-inverse wrap content">
   <article class="post_content">
-    <h1 class="post_title">基于实际案例解析Istio访问日志ResponseFlag之DC</h1>
+    <h1 class="post_title">基于实际案例解析Istio访问日志ResponseFlag系列</h1>
   <div class="post_meta">
     <span><svg class="icon">
   <title>calendar</title>
@@ -156,7 +154,7 @@
 </svg>
 </span>
     <span class="post_date">
-      Jan 1, 0001</span>
+      Sep 27, 2023</span>
     <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/kubecon/' title="KubeCon" class="post_tag button button_translucent">KubeCon
         </a><a href='https://idouba.com/tags/%E8%AE%BF%E9%97%AE%E6%97%A5%E5%BF%97/' title="访问日志" class="post_tag button button_translucent">访问日志
         </a><a href='https://idouba.com/tags/%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BC/' title="服务网格" class="post_tag button button_translucent">服务网格
@@ -166,14 +164,14 @@
     <span class="page_only">&nbsp;·
   <div class="post_share">
     Share on:
-    <a href="https://twitter.com/intent/tweet?text=%e5%9f%ba%e4%ba%8e%e5%ae%9e%e9%99%85%e6%a1%88%e4%be%8b%e8%a7%a3%e6%9e%90Istio%e8%ae%bf%e9%97%ae%e6%97%a5%e5%bf%97ResponseFlag%e4%b9%8bDC&url=https%3a%2f%2fidouba.com%2fdetailed-parse-and-reproduce-istio-response-flags-index%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
+    <a href="https://twitter.com/intent/tweet?text=%e5%9f%ba%e4%ba%8e%e5%ae%9e%e9%99%85%e6%a1%88%e4%be%8b%e8%a7%a3%e6%9e%90Istio%e8%ae%bf%e9%97%ae%e6%97%a5%e5%bf%97ResponseFlag%e7%b3%bb%e5%88%97&url=https%3a%2f%2fidouba.com%2fdetailed-parse-and-reproduce-istio-response-flags-index%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
       <svg class="icon">
   <title>twitter</title>
   <use xlink:href="#twitter"></use>
 </svg>
 
     </a>
-    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fdetailed-parse-and-reproduce-istio-response-flags-index%2f&t=%e5%9f%ba%e4%ba%8e%e5%ae%9e%e9%99%85%e6%a1%88%e4%be%8b%e8%a7%a3%e6%9e%90Istio%e8%ae%bf%e9%97%ae%e6%97%a5%e5%bf%97ResponseFlag%e4%b9%8bDC" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
+    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fdetailed-parse-and-reproduce-istio-response-flags-index%2f&t=%e5%9f%ba%e4%ba%8e%e5%ae%9e%e9%99%85%e6%a1%88%e4%be%8b%e8%a7%a3%e6%9e%90Istio%e8%ae%bf%e9%97%ae%e6%97%a5%e5%bf%97ResponseFlag%e7%b3%bb%e5%88%97" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
       <svg class="icon">
   <title>facebook</title>
   <use xlink:href="#facebook"></use>
@@ -199,11 +197,17 @@
   </div>
 
     <div class="post_body"><hr>
-<p><a href="https://kccncosschn2023.sched.com/event/b34cdc5babaf550b06b72c5aeb5ab21e">KubeCon 2023</a>在上海做的一个关于Istio访问日志的演讲。</p>
 <p>访问日志是应用系统运维的重要手段，可以有效地帮助我们进行问题的定位定界。</p>
 <p>对于七层的访问日志一般我们会通过HTTP响应码了解请求的状况，如503、502、404、403等。Envoy在访问日志中引入了应答标记Response Flag，辅助HTTP响应码，进一步描述访问或连接的细节问题。如发生 了503错误后，通过503 UH 503 UF 503 UC 503 NC 等区分各种不同的503产生的原因，提供线索让运维人员针对性地解决问题。</p>
 <p>但是Envoy 和Istio社区对于Response Flag的信息非常少，身边的同事，还有我们的客户经常在生产中碰到了这些应Response Flag不知道咋处理。</p>
-<p>这次分享比较详细地把我们生产中碰到的常见的Response Flag挨个构造条件重现一遍，和大家一起剖析每个的含义、表示的问题，和对这些问题一般的处理方法。作为参照帮助大家理解生产中的类似问题。</p>
+<p><a href="https://kccncosschn2023.sched.com/event/b34cdc5babaf550b06b72c5aeb5ab21e">KubeCon 2023</a>在上海做的一个关于Istio访问日志的演讲。比较详细地把我们生产中碰到的常见的Response Flag挨个构造条件重现一遍，和大家一起剖析每个的含义、表示的问题，和对这些问题一般的处理方法。作为参照帮助大家理解生产中的类似问题。</p>
+<img src="../picture/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-index/cover.png" style="zoom:67%;" />
+<p>00：<a href="/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-00-Normal/">正常访问</a></p>
+<p>01：<a href="/detailed-parse-and-reproduce-istio-response-flags-01-DC/">下游连接终止 DC (DownstreamConnectionTermination)</a></p>
+<p>02：<a href="/detailed-parse-and-reproduce-istio-response-flags-02-UH/">上游服务没有健康的后端实例 UH (NoHealthyUpstream)</a></p>
+<p>03：<a href="/detailed-parse-and-reproduce-istio-response-flags-03-UF/">上游连接失败 UF (UpstreamConnectionFailure)</a></p>
+<p>04：<a href="/detailed-parse-and-reproduce-istio-response-flags-04-URX/">上游超过重试次数 URX (UpstreamRetryLimitExceded)</a></p>
+<p>05：<a href="/detailed-parse-and-reproduce-istio-response-flags-05-UPE/">上游服务协议错误 UPE (UpstreamProtocolError)</a></p>
 
     </div>
 <div class="post_comments">
@@ -239,28 +243,28 @@
     <h2 class="mt-4">Recent Posts</h2>
     <ul class="flex-column">
       <li>
-        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-1-DC/" class="nav-link" title="基于实际案例解析Istio访问日志ResponseFlag之DC">基于实际案例解析Istio访问日志ResponseFlag之DC</a>
+        <a href="https://idouba.com/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-00-Normal/" class="nav-link" title="Istio访问日志ResponseFlag重现与解析系列00正常访问">Istio访问日志ResponseFlag重现与解析系列00正常访问</a>
+      </li>
+      <li>
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-01-DC/" class="nav-link" title="Istio访问日志ResponseFlag重现与解析系列01之DC">Istio访问日志ResponseFlag重现与解析系列01之DC</a>
+      </li>
+      <li>
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-02-UH/" class="nav-link" title="Istio访问日志ResponseFlag重现与解析系列02之UH">Istio访问日志ResponseFlag重现与解析系列02之UH</a>
+      </li>
+      <li>
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-03-UF/" class="nav-link" title="Istio访问日志ResponseFlag重现与解析系列03之UF">Istio访问日志ResponseFlag重现与解析系列03之UF</a>
+      </li>
+      <li>
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-04-URX/" class="nav-link" title="Istio访问日志ResponseFlag重现与解析系列04之URX">Istio访问日志ResponseFlag重现与解析系列04之URX</a>
+      </li>
+      <li>
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-05-UPE/" class="nav-link" title="Istio访问日志ResponseFlag重现与解析系列05之UPE">Istio访问日志ResponseFlag重现与解析系列05之UPE</a>
+      </li>
+      <li>
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-index/" class="nav-link" title="基于实际案例解析Istio访问日志ResponseFlag系列">基于实际案例解析Istio访问日志ResponseFlag系列</a>
       </li>
       <li>
         <a href="https://idouba.com/best-practice-from-spring-cloud-to-istio/" class="nav-link" title="SpringClod到Istio最佳实践">SpringClod到Istio最佳实践</a>
-      </li>
-      <li>
-        <a href="https://idouba.com/istio-canary-release-pratice-of-cloudnativeistio-05/" class="nav-link" title="Istio灰度发布实践 –《云原生服务网格Istio》书摘05">Istio灰度发布实践 –《云原生服务网格Istio》书摘05</a>
-      </li>
-      <li>
-        <a href="https://idouba.com/istio-sidecar-injection-of-cloudnativeistio-04/" class="nav-link" title="Sidecar Injector自动注入的原理 –《云原生服务网格Istio》书摘04">Sidecar Injector自动注入的原理 –《云原生服务网格Istio》书摘04</a>
-      </li>
-      <li>
-        <a href="https://idouba.com/istio-canary-release-of-cloudnativeistio-03/" class="nav-link" title="Istio灰度发布 –《云原生服务网格Istio》书摘03">Istio灰度发布 –《云原生服务网格Istio》书摘03</a>
-      </li>
-      <li>
-        <a href="https://idouba.com/stio-prometheus-cloudnative-istio-06/" class="nav-link" title="Istio通过Prometheus收集遥测数据--《云原生服务网格Istio》书摘06">Istio通过Prometheus收集遥测数据--《云原生服务网格Istio》书摘06</a>
-      </li>
-      <li>
-        <a href="https://idouba.com/istio-pilot-design-of-cloudnativeistio-02/" class="nav-link" title="Pilot的设计亮点–《云原生服务网格Istio》书摘02">Pilot的设计亮点–《云原生服务网格Istio》书摘02</a>
-      </li>
-      <li>
-        <a href="https://idouba.com/istio-curcuit-break-of-cloudnativeistio/" class="nav-link" title="Istio服务熔断 –《云原生服务网格Istio》书摘01">Istio服务熔断 –《云原生服务网格Istio》书摘01</a>
       </li>
     </ul>
     <div>
@@ -268,7 +272,7 @@
       <nav class="tags_nav">
         <a href='https://idouba.com/categories/istio/' class="post_tag button button_translucent" title="istio">
           ISTIO
-          <span class="button_tally">14</span>
+          <span class="button_tally">19</span>
         </a>
         
         <a href='https://idouba.com/categories/%E9%9A%8F%E7%AC%94/' class="post_tag button button_translucent" title="随笔">
@@ -337,19 +341,34 @@
           <span class="button_tally">10</span>
         </a>
         
+        <a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' class="post_tag button button_translucent" title="演讲">
+          演讲
+          <span class="button_tally">10</span>
+        </a>
+        
         <a href='https://idouba.com/tags/hadoop/' class="post_tag button button_translucent" title="hadoop">
           HADOOP
           <span class="button_tally">9</span>
         </a>
         
-        <a href='https://idouba.com/tags/%E4%BA%91%E5%8E%9F%E7%94%9F%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BCistio%E5%8E%9F%E7%90%86%E5%AE%9E%E8%B7%B5%E6%9E%B6%E6%9E%84%E4%B8%8E%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/' class="post_tag button button_translucent" title="云原生服务网格istio原理实践架构与源码解析">
-          云原生服务网格ISTIO原理实践架构与源码解析
+        <a href='https://idouba.com/tags/kubecon/' class="post_tag button button_translucent" title="kubecon">
+          KUBECON
+          <span class="button_tally">7</span>
+        </a>
+        
+        <a href='https://idouba.com/tags/%E8%AE%BF%E9%97%AE%E6%97%A5%E5%BF%97/' class="post_tag button button_translucent" title="访问日志">
+          访问日志
+          <span class="button_tally">7</span>
+        </a>
+        
+        <a href='https://idouba.com/tags/responseflags/' class="post_tag button button_translucent" title="responseflags">
+          RESPONSEFLAGS
           <span class="button_tally">6</span>
         </a>
         
-        <a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' class="post_tag button button_translucent" title="演讲">
-          演讲
-          <span class="button_tally">5</span>
+        <a href='https://idouba.com/tags/%E4%BA%91%E5%8E%9F%E7%94%9F%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BCistio%E5%8E%9F%E7%90%86%E5%AE%9E%E8%B7%B5%E6%9E%B6%E6%9E%84%E4%B8%8E%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/' class="post_tag button button_translucent" title="云原生服务网格istio原理实践架构与源码解析">
+          云原生服务网格ISTIO原理实践架构与源码解析
+          <span class="button_tally">6</span>
         </a>
         
         <a href='https://idouba.com/tags/golang/' class="post_tag button button_translucent" title="golang">
@@ -375,21 +394,6 @@
         <a href='https://idouba.com/tags/%E7%A8%8B%E5%BA%8F%E5%91%98/' class="post_tag button button_translucent" title="程序员">
           程序员
           <span class="button_tally">3</span>
-        </a>
-        
-        <a href='https://idouba.com/tags/%E7%B4%A2%E5%BC%95/' class="post_tag button button_translucent" title="索引">
-          索引
-          <span class="button_tally">3</span>
-        </a>
-        
-        <a href='https://idouba.com/tags/%E9%9A%8F%E7%AC%94/' class="post_tag button button_translucent" title="随笔">
-          随笔
-          <span class="button_tally">3</span>
-        </a>
-        
-        <a href='https://idouba.com/tags/executor/' class="post_tag button button_translucent" title="executor">
-          EXECUTOR
-          <span class="button_tally">2</span>
         </a>
         
         
@@ -466,7 +470,7 @@
             </a>
             
             
-            <a href='https://idouba.com/tags/kubecon/' class=" post_tag button button_translucent" data-position=2 title="kubecon">KUBECON<span class="button_tally">2</span>
+            <a href='https://idouba.com/tags/kubecon/' class=" post_tag button button_translucent" data-position=7 title="kubecon">KUBECON<span class="button_tally">7</span>
             </a>
             
             
@@ -486,6 +490,10 @@
             </a>
             
             
+            <a href='https://idouba.com/tags/responseflags/' class=" post_tag button button_translucent" data-position=6 title="responseflags">RESPONSEFLAGS<span class="button_tally">6</span>
+            </a>
+            
+            
             <a href='https://idouba.com/tags/rpc/' class=" post_tag button button_translucent" data-position=1 title="rpc">RPC<span class="button_tally">1</span>
             </a>
             
@@ -495,6 +503,22 @@
             
             
             <a href='https://idouba.com/tags/springcloud/' class=" post_tag button button_translucent" data-position=1 title="springcloud">SPRINGCLOUD<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/uf/' class=" post_tag button button_translucent" data-position=1 title="uf">UF<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/uh/' class=" post_tag button button_translucent" data-position=1 title="uh">UH<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/upe/' class=" post_tag button button_translucent" data-position=1 title="upe">UPE<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/urx/' class=" post_tag button button_translucent" data-position=1 title="urx">URX<span class="button_tally">1</span>
             </a>
             
             
@@ -554,7 +578,7 @@
             </a>
             
             
-            <a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' class=" post_tag button button_translucent" data-position=5 title="演讲">演讲<span class="button_tally">5</span>
+            <a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' class=" post_tag button button_translucent" data-position=10 title="演讲">演讲<span class="button_tally">10</span>
             </a>
             
             
@@ -582,7 +606,7 @@
             </a>
             
             
-            <a href='https://idouba.com/tags/%E8%AE%BF%E9%97%AE%E6%97%A5%E5%BF%97/' class=" post_tag button button_translucent" data-position=2 title="访问日志">访问日志<span class="button_tally">2</span>
+            <a href='https://idouba.com/tags/%E8%AE%BF%E9%97%AE%E6%97%A5%E5%BF%97/' class=" post_tag button button_translucent" data-position=7 title="访问日志">访问日志<span class="button_tally">7</span>
             </a>
             
             

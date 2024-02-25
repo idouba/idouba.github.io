@@ -157,6 +157,426 @@
   <div class="excerpt">
     <div class="excerpt_header">
       <h3 class="post_link">
+        <a href="https://idouba.com/istio-01-code-pilot-service-discovery-adapter/" title="Istio技术与实践01： 源码解析之Pilot多云平台服务发现机制">Istio技术与实践01： 源码解析之Pilot多云平台服务发现机制</a>
+      </h3>
+      
+  <div class="post_meta">
+    <span><svg class="icon">
+  <title>calendar</title>
+  <use xlink:href="#calendar"></use>
+</svg>
+</span>
+    <span class="post_date">
+      Jul 21, 2018</span>
+    <span class="post_time"> · 3 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/pilot/' title="Pilot" class="post_tag button button_translucent">Pilot
+        </a><a href='https://idouba.com/tags/istio/' title="Istio" class="post_tag button button_translucent">Istio
+        </a>
+    </span>
+    <span class="page_only">&nbsp;·
+  <div class="post_share">
+    Share on:
+    <a href="https://twitter.com/intent/tweet?text=Istio%e6%8a%80%e6%9c%af%e4%b8%8e%e5%ae%9e%e8%b7%b501%ef%bc%9a%20%e6%ba%90%e7%a0%81%e8%a7%a3%e6%9e%90%e4%b9%8bPilot%e5%a4%9a%e4%ba%91%e5%b9%b3%e5%8f%b0%e6%9c%8d%e5%8a%a1%e5%8f%91%e7%8e%b0%e6%9c%ba%e5%88%b6&url=https%3a%2f%2fidouba.com%2fistio-01-code-pilot-service-discovery-adapter%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>twitter</title>
+  <use xlink:href="#twitter"></use>
+</svg>
+
+    </a>
+    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fistio-01-code-pilot-service-discovery-adapter%2f&t=Istio%e6%8a%80%e6%9c%af%e4%b8%8e%e5%ae%9e%e8%b7%b501%ef%bc%9a%20%e6%ba%90%e7%a0%81%e8%a7%a3%e6%9e%90%e4%b9%8bPilot%e5%a4%9a%e4%ba%91%e5%b9%b3%e5%8f%b0%e6%9c%8d%e5%8a%a1%e5%8f%91%e7%8e%b0%e6%9c%ba%e5%88%b6" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>facebook</title>
+  <use xlink:href="#facebook"></use>
+</svg>
+
+    </a>
+    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
+      <svg class="icon">
+  <title>linkedin</title>
+  <use xlink:href="#linkedin"></use>
+</svg>
+
+    </a>
+    <a href="https://idouba.com/istio-01-code-pilot-service-discovery-adapter/" title="Copy Link" class="link link_yank">
+      <svg class="icon">
+  <title>copy</title>
+  <use xlink:href="#copy"></use>
+</svg>
+
+    </a>
+  </div>
+  </span>
+  </div>
+
+    </div>
+      <div class="excerpt_footer">
+        <div class="pale">
+          
+            <p>前言 本文结合Pilot中的关键代码来说明下Istio的服务发现的机制、原理和流程。并以Eureka为例看下Adapter的机制如何支持多云环境下的服务发现。可以了解到： 1. Istio的服务模型; 2. Istio发现的机制和原理; 3. Istio服务发现的adpater机制。 基于以上了解可以根据需开发集成自有的服务注册表，完成服务发现的功能。
+服务模型 首先，Istio作为一个（微）服务治理的平台，和其他的微服务模型一样也提供了Service，ServiceInstance这样抽象服务模型。如Service的定义中所表达的，一个服务有一个全域名，可以有一个或多个侦听端口。
+1type Service struct { 2 …</p>
+          
+          <br>
+          <a href="https://idouba.com/istio-01-code-pilot-service-discovery-adapter/" title="Read More" class="excerpt_more button">Read More</a>
+        </div>
+      </div>
+    </div>
+  </li>
+
+        <li class="post_item">
+  <div class="excerpt">
+    <div class="excerpt_header">
+      <h3 class="post_link">
+        <a href="https://idouba.com/cas-in-kids-garden/" title="论CAS在幼儿园点名中的应用">论CAS在幼儿园点名中的应用</a>
+      </h3>
+      
+  <div class="post_meta">
+    <span><svg class="icon">
+  <title>calendar</title>
+  <use xlink:href="#calendar"></use>
+</svg>
+</span>
+    <span class="post_date">
+      Oct 30, 2017</span>
+    <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/%E9%9A%8F%E7%AC%94/' title="随笔" class="post_tag button button_translucent">随笔
+        </a><a href='https://idouba.com/tags/doudou/' title="doudou" class="post_tag button button_translucent">doudou
+        </a>
+    </span>
+    <span class="page_only">&nbsp;·
+  <div class="post_share">
+    Share on:
+    <a href="https://twitter.com/intent/tweet?text=%e8%ae%baCAS%e5%9c%a8%e5%b9%bc%e5%84%bf%e5%9b%ad%e7%82%b9%e5%90%8d%e4%b8%ad%e7%9a%84%e5%ba%94%e7%94%a8&url=https%3a%2f%2fidouba.com%2fcas-in-kids-garden%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>twitter</title>
+  <use xlink:href="#twitter"></use>
+</svg>
+
+    </a>
+    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fcas-in-kids-garden%2f&t=%e8%ae%baCAS%e5%9c%a8%e5%b9%bc%e5%84%bf%e5%9b%ad%e7%82%b9%e5%90%8d%e4%b8%ad%e7%9a%84%e5%ba%94%e7%94%a8" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>facebook</title>
+  <use xlink:href="#facebook"></use>
+</svg>
+
+    </a>
+    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
+      <svg class="icon">
+  <title>linkedin</title>
+  <use xlink:href="#linkedin"></use>
+</svg>
+
+    </a>
+    <a href="https://idouba.com/cas-in-kids-garden/" title="Copy Link" class="link link_yank">
+      <svg class="icon">
+  <title>copy</title>
+  <use xlink:href="#copy"></use>
+</svg>
+
+    </a>
+  </div>
+  </span>
+  </div>
+
+    </div>
+      <div class="excerpt_footer">
+        <div class="pale">
+          
+            <p>宝贝的幼儿园老师都是漂亮活泼又富有爱心的小天使一样的人物，非常神奇的教会了宝贝们很多我们家长们都搞不定的事情，非常有办法的完全不用发火的将这些淘气的小家伙们修理的服服贴贴，在小宝贝们眼里简直就是神一般的存在，当然在家长眼里也是。
+如果你以为这就是全部，那就大错特错了。就在这两天发现了，她们居然也是深谙各种计算机中的算法。不得不偷着怀疑这些白天在学校里的陪孩子们玩的小姑娘们下班后是不是在菊厂或者其他公司写代码。
+这不这两天在家长群里发了消息，就小露了一手。这个案例的背景是要收集到每个宝贝的家长对一个重要通知的确认。上级的重要通知，每个家的家长都要确认。如果你说请在群里回复“收到”那简直弱爆了。最终怎么确认每个都收到了。
+看看我们美女老 …</p>
+          
+          <br>
+          <a href="https://idouba.com/cas-in-kids-garden/" title="Read More" class="excerpt_more button">Read More</a>
+        </div>
+      </div>
+    </div>
+  </li>
+
+        <li class="post_item">
+  <div class="excerpt">
+    <div class="excerpt_header">
+      <h3 class="post_link">
+        <a href="https://idouba.com/kubernetes-liveness-probe/" title="kubernetes liveness probe 流程">kubernetes liveness probe 流程</a>
+      </h3>
+      
+  <div class="post_meta">
+    <span><svg class="icon">
+  <title>calendar</title>
+  <use xlink:href="#calendar"></use>
+</svg>
+</span>
+    <span class="post_date">
+      Sep 1, 2017</span>
+    <span class="post_time"> · 3 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/kubernetes/' title="Kubernetes" class="post_tag button button_translucent">Kubernetes
+        </a>
+    </span>
+    <span class="page_only">&nbsp;·
+  <div class="post_share">
+    Share on:
+    <a href="https://twitter.com/intent/tweet?text=kubernetes%20liveness%20probe%20%e6%b5%81%e7%a8%8b&url=https%3a%2f%2fidouba.com%2fkubernetes-liveness-probe%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>twitter</title>
+  <use xlink:href="#twitter"></use>
+</svg>
+
+    </a>
+    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fkubernetes-liveness-probe%2f&t=kubernetes%20liveness%20probe%20%e6%b5%81%e7%a8%8b" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>facebook</title>
+  <use xlink:href="#facebook"></use>
+</svg>
+
+    </a>
+    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
+      <svg class="icon">
+  <title>linkedin</title>
+  <use xlink:href="#linkedin"></use>
+</svg>
+
+    </a>
+    <a href="https://idouba.com/kubernetes-liveness-probe/" title="Copy Link" class="link link_yank">
+      <svg class="icon">
+  <title>copy</title>
+  <use xlink:href="#copy"></use>
+</svg>
+
+    </a>
+  </div>
+  </span>
+  </div>
+
+    </div>
+      <div class="excerpt_footer">
+        <div class="pale">
+          
+            <p>1 概述 kubernetes提供了的Probe可以进行健康检查。
+<a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/">https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/</a>
+对pod中的每个容器通过配置liveness或者readiness。
+当liveness probe failed后，该container会杀掉，并重新创建；而readinessProbe失败，则该pod ip 会从service的endpoints列表中删除，即隔离到该后端的请求。
+如liveness 配置如下：
+1livenessProbe: 2 httpGet: 3 …</p>
+          
+          <br>
+          <a href="https://idouba.com/kubernetes-liveness-probe/" title="Read More" class="excerpt_more button">Read More</a>
+        </div>
+      </div>
+    </div>
+  </li>
+
+        <li class="post_item">
+  <div class="excerpt">
+    <div class="excerpt_header">
+      <h3 class="post_link">
+        <a href="https://idouba.com/kubernetes-federation-sync-accross-cluster/" title="kubernetes federation 工作机制之资源对象同步">kubernetes federation 工作机制之资源对象同步</a>
+      </h3>
+      
+  <div class="post_meta">
+    <span><svg class="icon">
+  <title>calendar</title>
+  <use xlink:href="#calendar"></use>
+</svg>
+</span>
+    <span class="post_date">
+      Aug 15, 2017</span>
+    <span class="post_time"> · 2 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/golang/' title="Golang" class="post_tag button button_translucent">Golang
+        </a><a href='https://idouba.com/tags/kubernetes/' title="Kubernetes" class="post_tag button button_translucent">Kubernetes
+        </a>
+    </span>
+    <span class="page_only">&nbsp;·
+  <div class="post_share">
+    Share on:
+    <a href="https://twitter.com/intent/tweet?text=kubernetes%20federation%20%e5%b7%a5%e4%bd%9c%e6%9c%ba%e5%88%b6%e4%b9%8b%e8%b5%84%e6%ba%90%e5%af%b9%e8%b1%a1%e5%90%8c%e6%ad%a5&url=https%3a%2f%2fidouba.com%2fkubernetes-federation-sync-accross-cluster%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>twitter</title>
+  <use xlink:href="#twitter"></use>
+</svg>
+
+    </a>
+    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fkubernetes-federation-sync-accross-cluster%2f&t=kubernetes%20federation%20%e5%b7%a5%e4%bd%9c%e6%9c%ba%e5%88%b6%e4%b9%8b%e8%b5%84%e6%ba%90%e5%af%b9%e8%b1%a1%e5%90%8c%e6%ad%a5" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>facebook</title>
+  <use xlink:href="#facebook"></use>
+</svg>
+
+    </a>
+    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
+      <svg class="icon">
+  <title>linkedin</title>
+  <use xlink:href="#linkedin"></use>
+</svg>
+
+    </a>
+    <a href="https://idouba.com/kubernetes-federation-sync-accross-cluster/" title="Copy Link" class="link link_yank">
+      <svg class="icon">
+  <title>copy</title>
+  <use xlink:href="#copy"></use>
+</svg>
+
+    </a>
+  </div>
+  </span>
+  </div>
+
+    </div>
+      <div class="excerpt_footer">
+        <div class="pale">
+          
+            <p>1 前言 希望通过本文最简单的方式向熟悉k8s的人说明白其上的federation是干什么的，如何工作的。
+关于federation，比较官方的说法是：集群联邦可以让租户/企业根据需要扩展或伸缩所需要的集群；可以让租户/企业在跨地区甚至跨地域的多个集群上部署、调度、监测管理应用。通过集群联邦，租户/企业可以在指定集群上部署应用，可以拉通私有云和公有云建立混合云(hybrid cloud)。
+如在design-proposal 中描述的federation提供了cross-cluster scheduling, cross-cluster service discovery, cross-cluster migration, …</p>
+          
+          <br>
+          <a href="https://idouba.com/kubernetes-federation-sync-accross-cluster/" title="Read More" class="excerpt_more button">Read More</a>
+        </div>
+      </div>
+    </div>
+  </li>
+
+        <li class="post_item">
+  <div class="excerpt">
+    <div class="excerpt_header">
+      <h3 class="post_link">
+        <a href="https://idouba.com/thief-culture-of-the-city/" title="古城贼文化">古城贼文化</a>
+      </h3>
+      
+  <div class="post_meta">
+    <span><svg class="icon">
+  <title>calendar</title>
+  <use xlink:href="#calendar"></use>
+</svg>
+</span>
+    <span class="post_date">
+      Dec 31, 2016</span>
+    <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/%E8%A5%BF%E5%AE%89/' title="西安" class="post_tag button button_translucent">西安
+        </a>
+    </span>
+    <span class="page_only">&nbsp;·
+  <div class="post_share">
+    Share on:
+    <a href="https://twitter.com/intent/tweet?text=%e5%8f%a4%e5%9f%8e%e8%b4%bc%e6%96%87%e5%8c%96&url=https%3a%2f%2fidouba.com%2fthief-culture-of-the-city%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>twitter</title>
+  <use xlink:href="#twitter"></use>
+</svg>
+
+    </a>
+    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fthief-culture-of-the-city%2f&t=%e5%8f%a4%e5%9f%8e%e8%b4%bc%e6%96%87%e5%8c%96" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>facebook</title>
+  <use xlink:href="#facebook"></use>
+</svg>
+
+    </a>
+    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
+      <svg class="icon">
+  <title>linkedin</title>
+  <use xlink:href="#linkedin"></use>
+</svg>
+
+    </a>
+    <a href="https://idouba.com/thief-culture-of-the-city/" title="Copy Link" class="link link_yank">
+      <svg class="icon">
+  <title>copy</title>
+  <use xlink:href="#copy"></use>
+</svg>
+
+    </a>
+  </div>
+  </span>
+  </div>
+
+    </div>
+      <div class="excerpt_footer">
+        <div class="pale">
+          
+            <p>吃完晚饭与淋波&amp;宝强在园区周边溜达一圈，不知怎么的扯到了小偷和被盗这个悲催的话题。三个人各自讲了自己经历的这方面的糗事，居然洋洋洒洒的扯了咕咚3000步。发现无论是数量还是质量还是精彩指数都完爆那两位，而这些素材都得益于在家乡古城的那几年经历，然后晚上回来虽然很晚了还是把这些归纳整理了下。
+记忆最深刻的是在解放路上图书大厦的那次遭遇。那会儿刚从东北的铁路工地上回到家乡的这个城市，好久找不到工作，最后在和平门里一个老民居的公司里跑业务送东西。无意中撞到附近解放路上图书大厦里，后来就每天上午在这里看半天书，下午接着去跑业务。到现在能从搞工地的工程跨界到另外一个工程，也是这阵子开的头。
+和那位君子（后文中都君子，是简称，不是尊称。 …</p>
+          
+          <br>
+          <a href="https://idouba.com/thief-culture-of-the-city/" title="Read More" class="excerpt_more button">Read More</a>
+        </div>
+      </div>
+    </div>
+  </li>
+
+        <li class="post_item">
+  <div class="excerpt">
+    <div class="excerpt_header">
+      <h3 class="post_link">
+        <a href="https://idouba.com/weekly-xisong-g20/" title="稀松！对不住杭州，对不住G20">稀松！对不住杭州，对不住G20</a>
+      </h3>
+      
+  <div class="post_meta">
+    <span><svg class="icon">
+  <title>calendar</title>
+  <use xlink:href="#calendar"></use>
+</svg>
+</span>
+    <span class="post_date">
+      Sep 4, 2016</span>
+    <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/g20/' title="G20" class="post_tag button button_translucent">G20
+        </a>
+    </span>
+    <span class="page_only">&nbsp;·
+  <div class="post_share">
+    Share on:
+    <a href="https://twitter.com/intent/tweet?text=%e7%a8%80%e6%9d%be%ef%bc%81%e5%af%b9%e4%b8%8d%e4%bd%8f%e6%9d%ad%e5%b7%9e%ef%bc%8c%e5%af%b9%e4%b8%8d%e4%bd%8fG20&url=https%3a%2f%2fidouba.com%2fweekly-xisong-g20%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>twitter</title>
+  <use xlink:href="#twitter"></use>
+</svg>
+
+    </a>
+    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fweekly-xisong-g20%2f&t=%e7%a8%80%e6%9d%be%ef%bc%81%e5%af%b9%e4%b8%8d%e4%bd%8f%e6%9d%ad%e5%b7%9e%ef%bc%8c%e5%af%b9%e4%b8%8d%e4%bd%8fG20" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>facebook</title>
+  <use xlink:href="#facebook"></use>
+</svg>
+
+    </a>
+    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
+      <svg class="icon">
+  <title>linkedin</title>
+  <use xlink:href="#linkedin"></use>
+</svg>
+
+    </a>
+    <a href="https://idouba.com/weekly-xisong-g20/" title="Copy Link" class="link link_yank">
+      <svg class="icon">
+  <title>copy</title>
+  <use xlink:href="#copy"></use>
+</svg>
+
+    </a>
+  </div>
+  </span>
+  </div>
+
+    </div>
+      <div class="excerpt_footer">
+        <div class="pale">
+          
+            <p>注：这是第一篇用手机敲出来的文字，每天下午五点半开始在医院挂那瓶红色肺炎专用药的那四个小时。
+熟悉的时间又来到这个最近开始熟悉的地方。这两天杭州g20，今天周末，临出门看了眼电视里习主席G20开幕布上的演讲。
+右手上扎的针眼太有点多，今天换左手。腾出右手来闲着想记点东西。
+这周过得和平时很不同。和很多生活在这个城市的人感觉一样，路上很空，街道人很少。连输液这边的护士都说这里现在的人都比平日少了好几成。与现实周围形成反差的是朋友圈里很热闹，名种晒图，大江南北。
+对不住大家，对不住这个盛世的气氛。这周一个小人物过得异常的。。。稀松！
+低烧了几乎整个八月，在月底了没扛住还是来到了这个地方。
+有多稀松！
+开始一天，单位里，翘班跑医院抽血拍 …</p>
+          
+          <br>
+          <a href="https://idouba.com/weekly-xisong-g20/" title="Read More" class="excerpt_more button">Read More</a>
+        </div>
+      </div>
+    </div>
+  </li>
+
+        <li class="post_item">
+  <div class="excerpt">
+    <div class="excerpt_header">
+      <h3 class="post_link">
         <a href="https://idouba.com/compare-go-and-java-style-by-sort-implement-3/" title="Sort源码实现比较Go&amp;Java语言风格(3)">Sort源码实现比较Go&amp;Java语言风格(3)</a>
       </h3>
       
@@ -430,418 +850,6 @@
     </div>
   </li>
 
-        <li class="post_item">
-  <div class="excerpt">
-    <div class="excerpt_header">
-      <h3 class="post_link">
-        <a href="https://idouba.com/executor-framework-thread-pool-task-execution-part-01/" title="戏（细）说Executor框架线程池任务执行全过程（上）">戏（细）说Executor框架线程池任务执行全过程（上）</a>
-      </h3>
-      
-  <div class="post_meta">
-    <span><svg class="icon">
-  <title>calendar</title>
-  <use xlink:href="#calendar"></use>
-</svg>
-</span>
-    <span class="post_date">
-      Jun 5, 2015</span>
-    <span class="post_time"> · 2 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/infoq/' title="Infoq" class="post_tag button button_translucent">Infoq
-        </a><a href='https://idouba.com/tags/executor/' title="Executor" class="post_tag button button_translucent">Executor
-        </a><a href='https://idouba.com/tags/java/' title="Java" class="post_tag button button_translucent">Java
-        </a>
-    </span>
-    <span class="page_only">&nbsp;·
-  <div class="post_share">
-    Share on:
-    <a href="https://twitter.com/intent/tweet?text=%e6%88%8f%ef%bc%88%e7%bb%86%ef%bc%89%e8%af%b4Executor%e6%a1%86%e6%9e%b6%e7%ba%bf%e7%a8%8b%e6%b1%a0%e4%bb%bb%e5%8a%a1%e6%89%a7%e8%a1%8c%e5%85%a8%e8%bf%87%e7%a8%8b%ef%bc%88%e4%b8%8a%ef%bc%89&url=https%3a%2f%2fidouba.com%2fexecutor-framework-thread-pool-task-execution-part-01%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>twitter</title>
-  <use xlink:href="#twitter"></use>
-</svg>
-
-    </a>
-    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fexecutor-framework-thread-pool-task-execution-part-01%2f&t=%e6%88%8f%ef%bc%88%e7%bb%86%ef%bc%89%e8%af%b4Executor%e6%a1%86%e6%9e%b6%e7%ba%bf%e7%a8%8b%e6%b1%a0%e4%bb%bb%e5%8a%a1%e6%89%a7%e8%a1%8c%e5%85%a8%e8%bf%87%e7%a8%8b%ef%bc%88%e4%b8%8a%ef%bc%89" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>facebook</title>
-  <use xlink:href="#facebook"></use>
-</svg>
-
-    </a>
-    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
-      <svg class="icon">
-  <title>linkedin</title>
-  <use xlink:href="#linkedin"></use>
-</svg>
-
-    </a>
-    <a href="https://idouba.com/executor-framework-thread-pool-task-execution-part-01/" title="Copy Link" class="link link_yank">
-      <svg class="icon">
-  <title>copy</title>
-  <use xlink:href="#copy"></use>
-</svg>
-
-    </a>
-  </div>
-  </span>
-  </div>
-
-    </div>
-      <div class="excerpt_footer">
-        <div class="pale">
-          
-            <p>归档下发表于infoq.com 2015年6月的两篇文章。本来是一篇文章，经过Infoq编辑Alice Ding建议，拆分为&lt;上&gt;和&lt;下&gt;两部分。谢谢Alice对文章的细心校对，帮我发下了其中的很多问题。添加下infoq要求的声明：本文为InfoQ中文站特供稿件，首发地址为：http://www.infoq.com/cn/articles/executor-framework-thread-pool-task-execution-part-01。如需转载，请与InfoQ中文站联系。
-内容综述 基于Executor接口中将任务提交和任务执行解耦的设计，ExecutorService和其各种功能强大的实现类提供了 …</p>
-          
-          <br>
-          <a href="https://idouba.com/executor-framework-thread-pool-task-execution-part-01/" title="Read More" class="excerpt_more button">Read More</a>
-        </div>
-      </div>
-    </div>
-  </li>
-
-        <li class="post_item">
-  <div class="excerpt">
-    <div class="excerpt_header">
-      <h3 class="post_link">
-        <a href="https://idouba.com/learn_table_join_from_search_and_sort/" title="从Search Sort到Join">从Search Sort到Join</a>
-      </h3>
-      
-  <div class="post_meta">
-    <span><svg class="icon">
-  <title>calendar</title>
-  <use xlink:href="#calendar"></use>
-</svg>
-</span>
-    <span class="post_date">
-      May 7, 2015</span>
-    <span class="post_time"> · 2 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/%E8%A1%A8%E8%BF%9E%E6%8E%A5/' title="表连接" class="post_tag button button_translucent">表连接
-        </a><a href='https://idouba.com/tags/%E7%A8%8B%E5%BA%8F%E5%91%98/' title="《程序员》" class="post_tag button button_translucent">《程序员》
-        </a>
-    </span>
-    <span class="page_only">&nbsp;·
-  <div class="post_share">
-    Share on:
-    <a href="https://twitter.com/intent/tweet?text=%e4%bb%8eSearch%20Sort%e5%88%b0Join&url=https%3a%2f%2fidouba.com%2flearn_table_join_from_search_and_sort%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>twitter</title>
-  <use xlink:href="#twitter"></use>
-</svg>
-
-    </a>
-    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2flearn_table_join_from_search_and_sort%2f&t=%e4%bb%8eSearch%20Sort%e5%88%b0Join" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>facebook</title>
-  <use xlink:href="#facebook"></use>
-</svg>
-
-    </a>
-    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
-      <svg class="icon">
-  <title>linkedin</title>
-  <use xlink:href="#linkedin"></use>
-</svg>
-
-    </a>
-    <a href="https://idouba.com/learn_table_join_from_search_and_sort/" title="Copy Link" class="link link_yank">
-      <svg class="icon">
-  <title>copy</title>
-  <use xlink:href="#copy"></use>
-</svg>
-
-    </a>
-  </div>
-  </span>
-  </div>
-
-    </div>
-      <div class="excerpt_footer">
-        <div class="pale">
-          
-            <p>发表于《程序员》2015年4月B的一篇文章，在博客归档下。根据杂志社要求，在自己博客发表该文章亦须注明：本文为CSDN编译整理，未经允许不得转载，如需转载请联系market#csdn.net(#换成@)
-想通过原理来说明一些技术白皮书上“什么时候应该使用什么”这个“应该”后面的原因。通过数据结构中经典的排序查找算法来推倒解释数据库中几种经典的表连接背后的算法原理，和原理决定的在各种数据库中不同的应用和限制。以简单的算法来讲出数据库系统中看着核心强大功能的本质的算法设计。较之白皮书中不同数据库的不同描述，尽量去除差异，通过原理来描述功能，做到深入浅出。
-一、前言 Join的语义是把两张表的通过属性的关联条件值组合在一起，一般意义上数据 …</p>
-          
-          <br>
-          <a href="https://idouba.com/learn_table_join_from_search_and_sort/" title="Read More" class="excerpt_more button">Read More</a>
-        </div>
-      </div>
-    </div>
-  </li>
-
-        <li class="post_item">
-  <div class="excerpt">
-    <div class="excerpt_header">
-      <h3 class="post_link">
-        <a href="https://idouba.com/about-projects/" title="跨界看项目那些事儿">跨界看项目那些事儿</a>
-      </h3>
-      
-  <div class="post_meta">
-    <span><svg class="icon">
-  <title>calendar</title>
-  <use xlink:href="#calendar"></use>
-</svg>
-</span>
-    <span class="post_date">
-      Apr 10, 2015</span>
-    <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/%E9%9A%8F%E7%AC%94/' title="随笔" class="post_tag button button_translucent">随笔
-        </a>
-    </span>
-    <span class="page_only">&nbsp;·
-  <div class="post_share">
-    Share on:
-    <a href="https://twitter.com/intent/tweet?text=%e8%b7%a8%e7%95%8c%e7%9c%8b%e9%a1%b9%e7%9b%ae%e9%82%a3%e4%ba%9b%e4%ba%8b%e5%84%bf&url=https%3a%2f%2fidouba.com%2fabout-projects%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>twitter</title>
-  <use xlink:href="#twitter"></use>
-</svg>
-
-    </a>
-    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fabout-projects%2f&t=%e8%b7%a8%e7%95%8c%e7%9c%8b%e9%a1%b9%e7%9b%ae%e9%82%a3%e4%ba%9b%e4%ba%8b%e5%84%bf" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>facebook</title>
-  <use xlink:href="#facebook"></use>
-</svg>
-
-    </a>
-    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
-      <svg class="icon">
-  <title>linkedin</title>
-  <use xlink:href="#linkedin"></use>
-</svg>
-
-    </a>
-    <a href="https://idouba.com/about-projects/" title="Copy Link" class="link link_yank">
-      <svg class="icon">
-  <title>copy</title>
-  <use xlink:href="#copy"></use>
-</svg>
-
-    </a>
-  </div>
-  </span>
-  </div>
-
-    </div>
-      <div class="excerpt_footer">
-        <div class="pale">
-          
-            <p>年底了，该总结了。例行的招呼几个项目负责人对几个项目执行情况进行总结，项目上中实践比较成功的，记录细节，评估其他项目借鉴的可能性；项目上存在的问题，重点一起剖析下。由表面现象，到深层次的原因，力图通过讨论或争论都能有一致的认识，形成改进。但希望是理解了改进，而不是被要求改进。为了更生动的说明自己的观点，作为主持人的笔者准备了一个大家都比较熟悉的例子，公司附近的一个工地上项目。居然发现效果很好，新鲜，生动，容易被大家理解和引起共鸣。也是，在批判自己的过程中，肆无忌惮的给第三方挑毛病的确是很爽的一件事情！笔者在进入软件这个行当之前干的就是在[铁路工地上干活][1]的，经常不自觉的把这两种项目拿来比较。虽然看上去是有点跨界，其实也差别不 …</p>
-          
-          <br>
-          <a href="https://idouba.com/about-projects/" title="Read More" class="excerpt_more button">Read More</a>
-        </div>
-      </div>
-    </div>
-  </li>
-
-        <li class="post_item">
-  <div class="excerpt">
-    <div class="excerpt_header">
-      <h3 class="post_link">
-        <a href="https://idouba.com/sync-implementation-by-aqs/" title="源码剖析AQS在几个同步工具类中的使用">源码剖析AQS在几个同步工具类中的使用</a>
-      </h3>
-      
-  <div class="post_meta">
-    <span><svg class="icon">
-  <title>calendar</title>
-  <use xlink:href="#calendar"></use>
-</svg>
-</span>
-    <span class="post_date">
-      Apr 6, 2015</span>
-    <span class="post_time"> · 10 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/aqs/' title="AQS" class="post_tag button button_translucent">AQS
-        </a><a href='https://idouba.com/tags/%E5%B9%B6%E5%8F%91/' title="并发" class="post_tag button button_translucent">并发
-        </a><a href='https://idouba.com/tags/java/' title="java" class="post_tag button button_translucent">java
-        </a>
-    </span>
-    <span class="page_only">&nbsp;·
-  <div class="post_share">
-    Share on:
-    <a href="https://twitter.com/intent/tweet?text=%e6%ba%90%e7%a0%81%e5%89%96%e6%9e%90AQS%e5%9c%a8%e5%87%a0%e4%b8%aa%e5%90%8c%e6%ad%a5%e5%b7%a5%e5%85%b7%e7%b1%bb%e4%b8%ad%e7%9a%84%e4%bd%bf%e7%94%a8&url=https%3a%2f%2fidouba.com%2fsync-implementation-by-aqs%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>twitter</title>
-  <use xlink:href="#twitter"></use>
-</svg>
-
-    </a>
-    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fsync-implementation-by-aqs%2f&t=%e6%ba%90%e7%a0%81%e5%89%96%e6%9e%90AQS%e5%9c%a8%e5%87%a0%e4%b8%aa%e5%90%8c%e6%ad%a5%e5%b7%a5%e5%85%b7%e7%b1%bb%e4%b8%ad%e7%9a%84%e4%bd%bf%e7%94%a8" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>facebook</title>
-  <use xlink:href="#facebook"></use>
-</svg>
-
-    </a>
-    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
-      <svg class="icon">
-  <title>linkedin</title>
-  <use xlink:href="#linkedin"></use>
-</svg>
-
-    </a>
-    <a href="https://idouba.com/sync-implementation-by-aqs/" title="Copy Link" class="link link_yank">
-      <svg class="icon">
-  <title>copy</title>
-  <use xlink:href="#copy"></use>
-</svg>
-
-    </a>
-  </div>
-  </span>
-  </div>
-
-    </div>
-      <div class="excerpt_footer">
-        <div class="pale">
-          
-            <p><ol>
-<li>前言 AQS(AbstractQueuedSynchronizer)是 java.util.concurrent的基础。J.U.C中宣传的封装良好的好用的同步工具类Semaphore、CountDownLatch、ReentrantLock、ReentrantReadWriteLock、FutureTask等虽然各自都有不同特征，但是简单看一下源码，每个类内部都包含一个如下的内部类定义：
-abstract static class Sync extends AbstractQueuedSynchronizer 同时每个类内部都包含有这样一个属性，连属性名都一样！注释已经暗示了，该类的同步机制正是通过这个AQS的子类来完成的。不 …</li>
-</ol>
-</p>
-          
-          <br>
-          <a href="https://idouba.com/sync-implementation-by-aqs/" title="Read More" class="excerpt_more button">Read More</a>
-        </div>
-      </div>
-    </div>
-  </li>
-
-        <li class="post_item">
-  <div class="excerpt">
-    <div class="excerpt_header">
-      <h3 class="post_link">
-        <a href="https://idouba.com/one-new-bug-report-of-liebao-huochepiao/" title="实际抢票体验描述和分析“猎豹抢票跨站推荐功能有票刷不到”的疑似bug">实际抢票体验描述和分析“猎豹抢票跨站推荐功能有票刷不到”的疑似bug</a>
-      </h3>
-      
-  <div class="post_meta">
-    <span><svg class="icon">
-  <title>calendar</title>
-  <use xlink:href="#calendar"></use>
-</svg>
-</span>
-    <span class="post_date">
-      Dec 23, 2014</span>
-    <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/12306/' title="12306" class="post_tag button button_translucent">12306
-        </a><a href='https://idouba.com/tags/%E9%9A%8F%E7%AC%94/' title="随笔" class="post_tag button button_translucent">随笔
-        </a>
-    </span>
-    <span class="page_only">&nbsp;·
-  <div class="post_share">
-    Share on:
-    <a href="https://twitter.com/intent/tweet?text=%e5%ae%9e%e9%99%85%e6%8a%a2%e7%a5%a8%e4%bd%93%e9%aa%8c%e6%8f%8f%e8%bf%b0%e5%92%8c%e5%88%86%e6%9e%90%e2%80%9c%e7%8c%8e%e8%b1%b9%e6%8a%a2%e7%a5%a8%e8%b7%a8%e7%ab%99%e6%8e%a8%e8%8d%90%e5%8a%9f%e8%83%bd%e6%9c%89%e7%a5%a8%e5%88%b7%e4%b8%8d%e5%88%b0%e2%80%9d%e7%9a%84%e7%96%91%e4%bc%bcbug&url=https%3a%2f%2fidouba.com%2fone-new-bug-report-of-liebao-huochepiao%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>twitter</title>
-  <use xlink:href="#twitter"></use>
-</svg>
-
-    </a>
-    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fone-new-bug-report-of-liebao-huochepiao%2f&t=%e5%ae%9e%e9%99%85%e6%8a%a2%e7%a5%a8%e4%bd%93%e9%aa%8c%e6%8f%8f%e8%bf%b0%e5%92%8c%e5%88%86%e6%9e%90%e2%80%9c%e7%8c%8e%e8%b1%b9%e6%8a%a2%e7%a5%a8%e8%b7%a8%e7%ab%99%e6%8e%a8%e8%8d%90%e5%8a%9f%e8%83%bd%e6%9c%89%e7%a5%a8%e5%88%b7%e4%b8%8d%e5%88%b0%e2%80%9d%e7%9a%84%e7%96%91%e4%bc%bcbug" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>facebook</title>
-  <use xlink:href="#facebook"></use>
-</svg>
-
-    </a>
-    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
-      <svg class="icon">
-  <title>linkedin</title>
-  <use xlink:href="#linkedin"></use>
-</svg>
-
-    </a>
-    <a href="https://idouba.com/one-new-bug-report-of-liebao-huochepiao/" title="Copy Link" class="link link_yank">
-      <svg class="icon">
-  <title>copy</title>
-  <use xlink:href="#copy"></use>
-</svg>
-
-    </a>
-  </div>
-  </span>
-  </div>
-
-    </div>
-      <div class="excerpt_footer">
-        <div class="pale">
-          
-            <p>前言 快过年了，又到了一年抢票时。今年douba和douma计划要带着doudou回姥姥家。昨天在家用抢票软件居然发现了一个bug，那就是在猎豹抢票中跨站推荐的车票几天里一直是没有，但是在12306手动尝试不同的跨站可以买到票，怀疑是猎豹在处理车次信息的时候对于变化的车次没有考虑到所致。在文中以实际操作尝试对这个bug做个比较详细的描述，并加上一点定位和分析，希望可以帮助这款神器的使用者和开发者提供些有用信息。按照douma的指示，今天上班来中午吃完饭不休息了，匆匆写下发表出来，供其他焦急的抢票战友们借鉴。不要只是懒懒的用工具刷，过于依赖神器，该动手时候要动动手才有可能抢到票。祝大家都能抢到心仪的车票。
-正文 在本次战役中，除 …</p>
-          
-          <br>
-          <a href="https://idouba.com/one-new-bug-report-of-liebao-huochepiao/" title="Read More" class="excerpt_more button">Read More</a>
-        </div>
-      </div>
-    </div>
-  </li>
-
-        <li class="post_item">
-  <div class="excerpt">
-    <div class="excerpt_header">
-      <h3 class="post_link">
-        <a href="https://idouba.com/performance-comparison-of-oracle-paging/" title="oracle分页技术性能比较">oracle分页技术性能比较</a>
-      </h3>
-      
-  <div class="post_meta">
-    <span><svg class="icon">
-  <title>calendar</title>
-  <use xlink:href="#calendar"></use>
-</svg>
-</span>
-    <span class="post_date">
-      Oct 14, 2014</span>
-    <span class="post_time"> · 10 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/oracle/' title="Oracle" class="post_tag button button_translucent">Oracle
-        </a>
-    </span>
-    <span class="page_only">&nbsp;·
-  <div class="post_share">
-    Share on:
-    <a href="https://twitter.com/intent/tweet?text=oracle%e5%88%86%e9%a1%b5%e6%8a%80%e6%9c%af%e6%80%a7%e8%83%bd%e6%af%94%e8%be%83&url=https%3a%2f%2fidouba.com%2fperformance-comparison-of-oracle-paging%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>twitter</title>
-  <use xlink:href="#twitter"></use>
-</svg>
-
-    </a>
-    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fperformance-comparison-of-oracle-paging%2f&t=oracle%e5%88%86%e9%a1%b5%e6%8a%80%e6%9c%af%e6%80%a7%e8%83%bd%e6%af%94%e8%be%83" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>facebook</title>
-  <use xlink:href="#facebook"></use>
-</svg>
-
-    </a>
-    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
-      <svg class="icon">
-  <title>linkedin</title>
-  <use xlink:href="#linkedin"></use>
-</svg>
-
-    </a>
-    <a href="https://idouba.com/performance-comparison-of-oracle-paging/" title="Copy Link" class="link link_yank">
-      <svg class="icon">
-  <title>copy</title>
-  <use xlink:href="#copy"></use>
-</svg>
-
-    </a>
-  </div>
-  </span>
-  </div>
-
-    </div>
-      <div class="excerpt_footer">
-        <div class="pale">
-          
-            <p>一、前言 在一个有30亿条数据的大表上分页，为了对方案进行性能测试，先忽略其他条件查询的影响，单看下分页部分的性能，顺便考察说明下oracle中rownum使用中一些比较tricky的地方。 实验条件： 表结构如下，内有2千万条实验数据。
-二、实验 提供7种不同方式（其实是5种，二和四是一种、三和五是一种）方式的 。第一种只是为了demo一下假设的一种错误逻辑方式，第二种和第四种是一种逻辑正确，但是性能极差的方式。筛选下来看上去性能可行的方式是第五、第六、第七方式。 这里仅仅记录没中方式的执行结果和计划。
-方式1 笨笨的想想。Oracle里面不是有个变量叫rownum，顾名思义，就是行号的意思，我要获取第十行到第二十行的数据，sql …</p>
-          
-          <br>
-          <a href="https://idouba.com/performance-comparison-of-oracle-paging/" title="Read More" class="excerpt_more button">Read More</a>
-        </div>
-      </div>
-    </div>
-  </li>
-
       <li>
     <ul class="pagination pagination-default">
       <li class="page-item">
@@ -869,7 +877,7 @@ abstract static class Sync extends AbstractQueuedSynchronizer 同时每个类内
         <a href="/page/4/" aria-label="Next" class="page-link" role="button"><span aria-hidden="true">&raquo;</span></a>
       </li>
       <li class="page-item">
-        <a href="/page/6/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        <a href="/page/7/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
       </li>
     </ul>
       </li>
@@ -898,28 +906,28 @@ abstract static class Sync extends AbstractQueuedSynchronizer 同时每个类内
     <h2 class="mt-4">Recent Posts</h2>
     <ul class="flex-column">
       <li>
-        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-1-DC/" class="nav-link" title="基于实际案例解析Istio访问日志ResponseFlag之DC">基于实际案例解析Istio访问日志ResponseFlag之DC</a>
+        <a href="https://idouba.com/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-00-Normal/" class="nav-link" title="Istio访问日志ResponseFlag重现与解析系列00正常访问">Istio访问日志ResponseFlag重现与解析系列00正常访问</a>
+      </li>
+      <li>
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-01-DC/" class="nav-link" title="Istio访问日志ResponseFlag重现与解析系列01之DC">Istio访问日志ResponseFlag重现与解析系列01之DC</a>
+      </li>
+      <li>
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-02-UH/" class="nav-link" title="Istio访问日志ResponseFlag重现与解析系列02之UH">Istio访问日志ResponseFlag重现与解析系列02之UH</a>
+      </li>
+      <li>
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-03-UF/" class="nav-link" title="Istio访问日志ResponseFlag重现与解析系列03之UF">Istio访问日志ResponseFlag重现与解析系列03之UF</a>
+      </li>
+      <li>
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-04-URX/" class="nav-link" title="Istio访问日志ResponseFlag重现与解析系列04之URX">Istio访问日志ResponseFlag重现与解析系列04之URX</a>
+      </li>
+      <li>
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-05-UPE/" class="nav-link" title="Istio访问日志ResponseFlag重现与解析系列05之UPE">Istio访问日志ResponseFlag重现与解析系列05之UPE</a>
+      </li>
+      <li>
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-index/" class="nav-link" title="基于实际案例解析Istio访问日志ResponseFlag系列">基于实际案例解析Istio访问日志ResponseFlag系列</a>
       </li>
       <li>
         <a href="https://idouba.com/best-practice-from-spring-cloud-to-istio/" class="nav-link" title="SpringClod到Istio最佳实践">SpringClod到Istio最佳实践</a>
-      </li>
-      <li>
-        <a href="https://idouba.com/istio-canary-release-pratice-of-cloudnativeistio-05/" class="nav-link" title="Istio灰度发布实践 –《云原生服务网格Istio》书摘05">Istio灰度发布实践 –《云原生服务网格Istio》书摘05</a>
-      </li>
-      <li>
-        <a href="https://idouba.com/istio-sidecar-injection-of-cloudnativeistio-04/" class="nav-link" title="Sidecar Injector自动注入的原理 –《云原生服务网格Istio》书摘04">Sidecar Injector自动注入的原理 –《云原生服务网格Istio》书摘04</a>
-      </li>
-      <li>
-        <a href="https://idouba.com/istio-canary-release-of-cloudnativeistio-03/" class="nav-link" title="Istio灰度发布 –《云原生服务网格Istio》书摘03">Istio灰度发布 –《云原生服务网格Istio》书摘03</a>
-      </li>
-      <li>
-        <a href="https://idouba.com/stio-prometheus-cloudnative-istio-06/" class="nav-link" title="Istio通过Prometheus收集遥测数据--《云原生服务网格Istio》书摘06">Istio通过Prometheus收集遥测数据--《云原生服务网格Istio》书摘06</a>
-      </li>
-      <li>
-        <a href="https://idouba.com/istio-pilot-design-of-cloudnativeistio-02/" class="nav-link" title="Pilot的设计亮点–《云原生服务网格Istio》书摘02">Pilot的设计亮点–《云原生服务网格Istio》书摘02</a>
-      </li>
-      <li>
-        <a href="https://idouba.com/istio-curcuit-break-of-cloudnativeistio/" class="nav-link" title="Istio服务熔断 –《云原生服务网格Istio》书摘01">Istio服务熔断 –《云原生服务网格Istio》书摘01</a>
       </li>
     </ul>
     <div>
@@ -927,7 +935,7 @@ abstract static class Sync extends AbstractQueuedSynchronizer 同时每个类内
       <nav class="tags_nav">
         <a href='https://idouba.com/categories/istio/' class="post_tag button button_translucent" title="istio">
           ISTIO
-          <span class="button_tally">14</span>
+          <span class="button_tally">19</span>
         </a>
         
         <a href='https://idouba.com/categories/%E9%9A%8F%E7%AC%94/' class="post_tag button button_translucent" title="随笔">
@@ -996,19 +1004,34 @@ abstract static class Sync extends AbstractQueuedSynchronizer 同时每个类内
           <span class="button_tally">10</span>
         </a>
         
+        <a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' class="post_tag button button_translucent" title="演讲">
+          演讲
+          <span class="button_tally">10</span>
+        </a>
+        
         <a href='https://idouba.com/tags/hadoop/' class="post_tag button button_translucent" title="hadoop">
           HADOOP
           <span class="button_tally">9</span>
         </a>
         
-        <a href='https://idouba.com/tags/%E4%BA%91%E5%8E%9F%E7%94%9F%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BCistio%E5%8E%9F%E7%90%86%E5%AE%9E%E8%B7%B5%E6%9E%B6%E6%9E%84%E4%B8%8E%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/' class="post_tag button button_translucent" title="云原生服务网格istio原理实践架构与源码解析">
-          云原生服务网格ISTIO原理实践架构与源码解析
+        <a href='https://idouba.com/tags/kubecon/' class="post_tag button button_translucent" title="kubecon">
+          KUBECON
+          <span class="button_tally">7</span>
+        </a>
+        
+        <a href='https://idouba.com/tags/%E8%AE%BF%E9%97%AE%E6%97%A5%E5%BF%97/' class="post_tag button button_translucent" title="访问日志">
+          访问日志
+          <span class="button_tally">7</span>
+        </a>
+        
+        <a href='https://idouba.com/tags/responseflags/' class="post_tag button button_translucent" title="responseflags">
+          RESPONSEFLAGS
           <span class="button_tally">6</span>
         </a>
         
-        <a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' class="post_tag button button_translucent" title="演讲">
-          演讲
-          <span class="button_tally">5</span>
+        <a href='https://idouba.com/tags/%E4%BA%91%E5%8E%9F%E7%94%9F%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BCistio%E5%8E%9F%E7%90%86%E5%AE%9E%E8%B7%B5%E6%9E%B6%E6%9E%84%E4%B8%8E%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/' class="post_tag button button_translucent" title="云原生服务网格istio原理实践架构与源码解析">
+          云原生服务网格ISTIO原理实践架构与源码解析
+          <span class="button_tally">6</span>
         </a>
         
         <a href='https://idouba.com/tags/golang/' class="post_tag button button_translucent" title="golang">
@@ -1034,21 +1057,6 @@ abstract static class Sync extends AbstractQueuedSynchronizer 同时每个类内
         <a href='https://idouba.com/tags/%E7%A8%8B%E5%BA%8F%E5%91%98/' class="post_tag button button_translucent" title="程序员">
           程序员
           <span class="button_tally">3</span>
-        </a>
-        
-        <a href='https://idouba.com/tags/%E7%B4%A2%E5%BC%95/' class="post_tag button button_translucent" title="索引">
-          索引
-          <span class="button_tally">3</span>
-        </a>
-        
-        <a href='https://idouba.com/tags/%E9%9A%8F%E7%AC%94/' class="post_tag button button_translucent" title="随笔">
-          随笔
-          <span class="button_tally">3</span>
-        </a>
-        
-        <a href='https://idouba.com/tags/executor/' class="post_tag button button_translucent" title="executor">
-          EXECUTOR
-          <span class="button_tally">2</span>
         </a>
         
         
@@ -1125,7 +1133,7 @@ abstract static class Sync extends AbstractQueuedSynchronizer 同时每个类内
             </a>
             
             
-            <a href='https://idouba.com/tags/kubecon/' class=" post_tag button button_translucent" data-position=2 title="kubecon">KUBECON<span class="button_tally">2</span>
+            <a href='https://idouba.com/tags/kubecon/' class=" post_tag button button_translucent" data-position=7 title="kubecon">KUBECON<span class="button_tally">7</span>
             </a>
             
             
@@ -1145,6 +1153,10 @@ abstract static class Sync extends AbstractQueuedSynchronizer 同时每个类内
             </a>
             
             
+            <a href='https://idouba.com/tags/responseflags/' class=" post_tag button button_translucent" data-position=6 title="responseflags">RESPONSEFLAGS<span class="button_tally">6</span>
+            </a>
+            
+            
             <a href='https://idouba.com/tags/rpc/' class=" post_tag button button_translucent" data-position=1 title="rpc">RPC<span class="button_tally">1</span>
             </a>
             
@@ -1154,6 +1166,22 @@ abstract static class Sync extends AbstractQueuedSynchronizer 同时每个类内
             
             
             <a href='https://idouba.com/tags/springcloud/' class=" post_tag button button_translucent" data-position=1 title="springcloud">SPRINGCLOUD<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/uf/' class=" post_tag button button_translucent" data-position=1 title="uf">UF<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/uh/' class=" post_tag button button_translucent" data-position=1 title="uh">UH<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/upe/' class=" post_tag button button_translucent" data-position=1 title="upe">UPE<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/urx/' class=" post_tag button button_translucent" data-position=1 title="urx">URX<span class="button_tally">1</span>
             </a>
             
             
@@ -1213,7 +1241,7 @@ abstract static class Sync extends AbstractQueuedSynchronizer 同时每个类内
             </a>
             
             
-            <a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' class=" post_tag button button_translucent" data-position=5 title="演讲">演讲<span class="button_tally">5</span>
+            <a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' class=" post_tag button button_translucent" data-position=10 title="演讲">演讲<span class="button_tally">10</span>
             </a>
             
             
@@ -1241,7 +1269,7 @@ abstract static class Sync extends AbstractQueuedSynchronizer 同时每个类内
             </a>
             
             
-            <a href='https://idouba.com/tags/%E8%AE%BF%E9%97%AE%E6%97%A5%E5%BF%97/' class=" post_tag button button_translucent" data-position=2 title="访问日志">访问日志<span class="button_tally">2</span>
+            <a href='https://idouba.com/tags/%E8%AE%BF%E9%97%AE%E6%97%A5%E5%BF%97/' class=" post_tag button button_translucent" data-position=7 title="访问日志">访问日志<span class="button_tally">7</span>
             </a>
             
             
