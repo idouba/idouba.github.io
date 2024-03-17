@@ -151,6 +151,50 @@
     </item>
     
     <item>
+      <title>Istio访问日志ResponseFlag重现与解析系列06之DPE</title>
+      <link>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-06-DPE/</link>
+      <pubDate>Wed, 27 Sep 2023 15:50:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-06-DPE/</guid>
+      <description>
+        
+          
+            KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第六个关注的Response Flag是DPE，全称是 DownstreamProtocolError ，官方定义表示&amp;quot;The downstream request had an HTTP protocol error&amp;quot;
+含义： UPE表示下游协议错误。如下游客户端通过一个错误的协议访问目标服务时，一般服务端会记录400DPE的日志
+重现环境： 客户端Pod，注入了Sidecar。注意这里选择的是busybox容器，确认容器中包含telnet命令。 目标服务，一个Cluster类型的Kubernetes服务，多个服务实例。服务端Pod可以注入Siecar，也可以不用注入。 重现步骤： 第一步： 从注入了网格代理的客户端Pod中通过目标名和服务端口访问目标服务，观察代理的访问日志，得到正常的200响应码。从服务端和客户端的访问日志上都可以看到服务在目标服务的多个实例上负载均衡。正常访问参照本系列的环境部分描述。
+第二步： 在客户端busybox容器中，telnet目标服务的服务地址和端口，会得到400 Bad Request的错误。表示因为客户端的请求错误导致访问失败，根本原因当然是客户端协议错误，没有如服务端要求发送HTTP协议的请求。
+第三步： 观察访问日志，客户端日志是一条四层的访问日志，因为是四层的访问 。
+1[2023-08-21T13:56:45.757Z] &amp;#34;- - -&amp;#34; 0 - - - &amp;#34;-&amp;#34; 25 162 53038 - &amp;#34;-&amp;#34; &amp;#34;-&amp;#34; &amp;#34;-&amp;#34; &amp;#34;-&amp;#34; &amp;#34;10.246.91.131:80&amp;#34; PassthroughCluster 10.66.0.38:45964 10.246.91.131:80 10.66.0.38:43958 - - 第四步： 服务端日志记录400 DPE 表示下游协议错误。
+1[2023-08-21T13:57:37.792Z] &amp;#34;- - HTTP/1.1&amp;#34; 400 DPE http1.codec_error - &amp;#34;-&amp;#34; 0 11 0 - &amp;#34;-&amp;#34; &amp;#34;-&amp;#34; &amp;#34;-&amp;#34; &amp;#34;-&amp;#34; &amp;#34;-&amp;#34; - - 10.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>Istio访问日志ResponseFlag重现与解析系列07之NC</title>
+      <link>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-07-NC/</link>
+      <pubDate>Wed, 27 Sep 2023 15:50:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-07-NC/</guid>
+      <description>
+        
+          
+            KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第七个关注的Response Flag是NC，全称是NoClusterFound，官方定义表示Upstream cluster not found&amp;quot;
+含义： NC表示没有上游集群，即在网格流量路由中定义的目标服务后端不存在。Istio中比较典型的场景如分流策略中流量发送给V2标识的服务子集，但是DestinationRule中并没有定义该版本标识的服务子集。
+重现环境： 客户端Pod，注入了Sidecar。 目标服务，一个Cluster类型的Kubernetes服务，多个服务实例。服务端Pod可以注入Siecar，也可以不用注入。 重现步骤： 第一步： 从注入了网格代理的客户端Pod中通过目标名和服务端口访问目标服务，观察代理的访问日志，得到正常的200响应码。从服务端和客户端的访问日志上都可以看到服务在目标服务的多个实例上负载均衡。正常访问参照本系列的环境部分描述。
+第二步： 在原有正常访问的环境上，给目标服务配置VirtualService 和DestinationRule，在VirtualService中定义服务的流量发给v2的服务子集，而在DestinationRule中只定义v1的服务子集。
+1apiVersion: networking.istio.io/v1beta1 2kind: VirtualService 3metadata: 4 name: nginx-80 5 namespace: accesslog 6spec: 7 hosts: 8 - nginx 9 http: 10 - route: 11 - destination: 12 host: nginx.accesslog.svc.cluster.local 13 subset: v2 # subset NOT exists 1apiVersion: networking.istio.io/v1beta1 2kind: DestinationRule 3metadata: 4 name: nginx 5 namespace: accesslog 6spec: 7 host: nginx 8 subsets: 9 - labels: 10 version: v1 11 name: v1 # Only v1 第三步： .
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
       <title>基于实际案例解析Istio访问日志ResponseFlag系列</title>
       <link>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-index/</link>
       <pubDate>Wed, 27 Sep 2023 15:50:08 +0000</pubDate>
@@ -161,14 +205,17 @@
           
             访问日志是应用系统运维的重要手段，可以有效地帮助我们进行问题的定位定界。
 对于七层的访问日志一般我们会通过HTTP响应码了解请求的状况，如503、502、404、403等。Envoy在访问日志中引入了应答标记Response Flag，辅助HTTP响应码，进一步描述访问或连接的细节问题。如发生 了503错误后，通过503 UH 503 UF 503 UC 503 NC 等区分各种不同的503产生的原因，提供线索让运维人员针对性地解决问题。
-但是Envoy 和Istio社区对于Response Flag的信息非常少，身边的同事，还有我们的客户经常在生产中碰到了这些应Response Flag不知道咋处理。
+但是Envoy 和Istio社区对于Response Flag的信息非常少，只有非常干巴的一句Flage这个英文组合的单词展开，没有解释清楚每个标记的含义，更没有说明那种情况下会出现这个标记。身边的同事，还有我们的客户经常在生产中碰到了这些应Response Flag不知道如何处理。
 KubeCon 2023在上海做的一个关于Istio访问日志的演讲。比较详细地把我们生产中碰到的常见的Response Flag挨个构造条件重现一遍，和大家一起剖析每个的含义、表示的问题，和对这些问题一般的处理方法。作为参照帮助大家理解生产中的类似问题。
+会场现场大家反馈比较好，非常受用。受限于40分钟（尽管还拖堂了10分钟），每种场景也只是简单说明。回来不少听众都要材料，感动于大家的认可和热情，干脆把PPT里的每个Slide稍微说人话的稍微描述下，对得起演讲标题的重现案例的说法。
 00：正常访问
 01：下游连接终止 DC (DownstreamConnectionTermination)
 02：上游服务没有健康的后端实例 UH (NoHealthyUpstream)
 03：上游连接失败 UF (UpstreamConnectionFailure)
 04：上游超过重试次数 URX (UpstreamRetryLimitExceded)
 05：上游服务协议错误 UPE (UpstreamProtocolError)
+06：下游服务协议错误 DPE (DownstreamProtocolError)
+07：上游集群不存在 NC (NoClusterFound)
           
           
         

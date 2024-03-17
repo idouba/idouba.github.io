@@ -199,8 +199,9 @@
     <div class="post_body"><hr>
 <p>访问日志是应用系统运维的重要手段，可以有效地帮助我们进行问题的定位定界。</p>
 <p>对于七层的访问日志一般我们会通过HTTP响应码了解请求的状况，如503、502、404、403等。Envoy在访问日志中引入了应答标记Response Flag，辅助HTTP响应码，进一步描述访问或连接的细节问题。如发生 了503错误后，通过503 UH 503 UF 503 UC 503 NC 等区分各种不同的503产生的原因，提供线索让运维人员针对性地解决问题。</p>
-<p>但是Envoy 和Istio社区对于Response Flag的信息非常少，身边的同事，还有我们的客户经常在生产中碰到了这些应Response Flag不知道咋处理。</p>
+<p>但是Envoy 和Istio社区对于Response Flag的信息非常少，只有非常干巴的一句Flage这个英文组合的单词展开，没有解释清楚每个标记的含义，更没有说明那种情况下会出现这个标记。身边的同事，还有我们的客户经常在生产中碰到了这些应Response Flag不知道如何处理。</p>
 <p><a href="https://kccncosschn2023.sched.com/event/b34cdc5babaf550b06b72c5aeb5ab21e">KubeCon 2023</a>在上海做的一个关于Istio访问日志的演讲。比较详细地把我们生产中碰到的常见的Response Flag挨个构造条件重现一遍，和大家一起剖析每个的含义、表示的问题，和对这些问题一般的处理方法。作为参照帮助大家理解生产中的类似问题。</p>
+<p>会场现场大家反馈比较好，非常受用。受限于40分钟（尽管还拖堂了10分钟），每种场景也只是简单说明。回来不少听众都要材料，感动于大家的认可和热情，干脆把PPT里的每个Slide稍微说人话的稍微描述下，对得起演讲标题的重现案例的说法。</p>
 <img src="../picture/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-index/cover.png" style="zoom:67%;" />
 <p>00：<a href="/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-00-Normal/">正常访问</a></p>
 <p>01：<a href="/detailed-parse-and-reproduce-istio-response-flags-01-DC/">下游连接终止 DC (DownstreamConnectionTermination)</a></p>
@@ -208,6 +209,8 @@
 <p>03：<a href="/detailed-parse-and-reproduce-istio-response-flags-03-UF/">上游连接失败 UF (UpstreamConnectionFailure)</a></p>
 <p>04：<a href="/detailed-parse-and-reproduce-istio-response-flags-04-URX/">上游超过重试次数 URX (UpstreamRetryLimitExceded)</a></p>
 <p>05：<a href="/detailed-parse-and-reproduce-istio-response-flags-05-UPE/">上游服务协议错误 UPE (UpstreamProtocolError)</a></p>
+<p>06：<a href="/detailed-parse-and-reproduce-istio-response-flags-06-DPE/">下游服务协议错误 DPE (DownstreamProtocolError)</a></p>
+<p>07：<a href="/detailed-parse-and-reproduce-istio-response-flags-07-NC/">上游集群不存在 NC (NoClusterFound)</a></p>
 
     </div>
 <div class="post_comments">
@@ -261,10 +264,10 @@
         <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-05-UPE/" class="nav-link" title="Istio访问日志ResponseFlag重现与解析系列05之UPE">Istio访问日志ResponseFlag重现与解析系列05之UPE</a>
       </li>
       <li>
-        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-index/" class="nav-link" title="基于实际案例解析Istio访问日志ResponseFlag系列">基于实际案例解析Istio访问日志ResponseFlag系列</a>
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-06-DPE/" class="nav-link" title="Istio访问日志ResponseFlag重现与解析系列06之DPE">Istio访问日志ResponseFlag重现与解析系列06之DPE</a>
       </li>
       <li>
-        <a href="https://idouba.com/best-practice-from-spring-cloud-to-istio/" class="nav-link" title="SpringClod到Istio最佳实践">SpringClod到Istio最佳实践</a>
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-07-NC/" class="nav-link" title="Istio访问日志ResponseFlag重现与解析系列07之NC">Istio访问日志ResponseFlag重现与解析系列07之NC</a>
       </li>
     </ul>
     <div>
@@ -272,7 +275,7 @@
       <nav class="tags_nav">
         <a href='https://idouba.com/categories/istio/' class="post_tag button button_translucent" title="istio">
           ISTIO
-          <span class="button_tally">19</span>
+          <span class="button_tally">21</span>
         </a>
         
         <a href='https://idouba.com/categories/%E9%9A%8F%E7%AC%94/' class="post_tag button button_translucent" title="随笔">
@@ -331,6 +334,11 @@
           <span class="button_tally">15</span>
         </a>
         
+        <a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' class="post_tag button button_translucent" title="演讲">
+          演讲
+          <span class="button_tally">12</span>
+        </a>
+        
         <a href='https://idouba.com/tags/istio/' class="post_tag button button_translucent" title="istio">
           ISTIO
           <span class="button_tally">11</span>
@@ -341,11 +349,6 @@
           <span class="button_tally">10</span>
         </a>
         
-        <a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' class="post_tag button button_translucent" title="演讲">
-          演讲
-          <span class="button_tally">10</span>
-        </a>
-        
         <a href='https://idouba.com/tags/hadoop/' class="post_tag button button_translucent" title="hadoop">
           HADOOP
           <span class="button_tally">9</span>
@@ -353,17 +356,17 @@
         
         <a href='https://idouba.com/tags/kubecon/' class="post_tag button button_translucent" title="kubecon">
           KUBECON
-          <span class="button_tally">7</span>
+          <span class="button_tally">9</span>
         </a>
         
         <a href='https://idouba.com/tags/%E8%AE%BF%E9%97%AE%E6%97%A5%E5%BF%97/' class="post_tag button button_translucent" title="访问日志">
           访问日志
-          <span class="button_tally">7</span>
+          <span class="button_tally">9</span>
         </a>
         
         <a href='https://idouba.com/tags/responseflags/' class="post_tag button button_translucent" title="responseflags">
           RESPONSEFLAGS
-          <span class="button_tally">6</span>
+          <span class="button_tally">8</span>
         </a>
         
         <a href='https://idouba.com/tags/%E4%BA%91%E5%8E%9F%E7%94%9F%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BCistio%E5%8E%9F%E7%90%86%E5%AE%9E%E8%B7%B5%E6%9E%B6%E6%9E%84%E4%B8%8E%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/' class="post_tag button button_translucent" title="云原生服务网格istio原理实践架构与源码解析">
@@ -415,6 +418,10 @@
             
             
             <a href='https://idouba.com/tags/doudou/' class=" post_tag button button_translucent" data-position=3 title="doudou">DOUDOU<span class="button_tally">3</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/dpe/' class=" post_tag button button_translucent" data-position=1 title="dpe">DPE<span class="button_tally">1</span>
             </a>
             
             
@@ -470,7 +477,7 @@
             </a>
             
             
-            <a href='https://idouba.com/tags/kubecon/' class=" post_tag button button_translucent" data-position=7 title="kubecon">KUBECON<span class="button_tally">7</span>
+            <a href='https://idouba.com/tags/kubecon/' class=" post_tag button button_translucent" data-position=9 title="kubecon">KUBECON<span class="button_tally">9</span>
             </a>
             
             
@@ -482,6 +489,10 @@
             </a>
             
             
+            <a href='https://idouba.com/tags/nc/' class=" post_tag button button_translucent" data-position=1 title="nc">NC<span class="button_tally">1</span>
+            </a>
+            
+            
             <a href='https://idouba.com/tags/oracle/' class=" post_tag button button_translucent" data-position=3 title="oracle">ORACLE<span class="button_tally">3</span>
             </a>
             
@@ -490,7 +501,7 @@
             </a>
             
             
-            <a href='https://idouba.com/tags/responseflags/' class=" post_tag button button_translucent" data-position=6 title="responseflags">RESPONSEFLAGS<span class="button_tally">6</span>
+            <a href='https://idouba.com/tags/responseflags/' class=" post_tag button button_translucent" data-position=8 title="responseflags">RESPONSEFLAGS<span class="button_tally">8</span>
             </a>
             
             
@@ -578,7 +589,7 @@
             </a>
             
             
-            <a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' class=" post_tag button button_translucent" data-position=10 title="演讲">演讲<span class="button_tally">10</span>
+            <a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' class=" post_tag button button_translucent" data-position=12 title="演讲">演讲<span class="button_tally">12</span>
             </a>
             
             
@@ -606,7 +617,7 @@
             </a>
             
             
-            <a href='https://idouba.com/tags/%E8%AE%BF%E9%97%AE%E6%97%A5%E5%BF%97/' class=" post_tag button button_translucent" data-position=7 title="访问日志">访问日志<span class="button_tally">7</span>
+            <a href='https://idouba.com/tags/%E8%AE%BF%E9%97%AE%E6%97%A5%E5%BF%97/' class=" post_tag button button_translucent" data-position=9 title="访问日志">访问日志<span class="button_tally">9</span>
             </a>
             
             
