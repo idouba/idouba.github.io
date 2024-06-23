@@ -22,16 +22,18 @@
 <meta property="og:locale" content="en" />
 
 <meta property="og:type" content="article">
-<meta name="description" content="访问日志是应用系统运维的重要手段，可以有效地帮助我们进行问题的定位定界。
-对于七层的访问日志一般我们会通过HTTP响应码了解请求的状况，如503、502、404、403等。Envoy在访问日志中引入了应答标记Response Flag，辅助HTTP响应码，进一步描述访问或连接的细节问题。如发生 了503错误后，通 …" />
+<meta name="description" content="背景： 访问日志是应用系统运维的重要手段，可以有效地帮助我们进行问题的定位定界。
+在服务网格中，访问日志也是可观测性能力的一块重要内容。不同于指标提供访问的统计信息，访问日志记录了每一次访问的详细信息。不管是作为安全审计，还是做系统运维，访问日志都是最得力的手段。
+访问日志记录了每次访问的时间、请求、应答、耗时、源服务 …" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="">
 <meta name="twitter:title" content="基于实际案例解析Istio访问日志ResponseFlag系列" />
 <meta name="twitter:image" content="https://idouba.com/images/thumbnail.png"/>
 <meta property="og:url" content="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-index/" />
 <meta property="og:title" content="基于实际案例解析Istio访问日志ResponseFlag系列" />
-<meta property="og:description" content="访问日志是应用系统运维的重要手段，可以有效地帮助我们进行问题的定位定界。
-对于七层的访问日志一般我们会通过HTTP响应码了解请求的状况，如503、502、404、403等。Envoy在访问日志中引入了应答标记Response Flag，辅助HTTP响应码，进一步描述访问或连接的细节问题。如发生 了503错误后，通 …" />
+<meta property="og:description" content="背景： 访问日志是应用系统运维的重要手段，可以有效地帮助我们进行问题的定位定界。
+在服务网格中，访问日志也是可观测性能力的一块重要内容。不同于指标提供访问的统计信息，访问日志记录了每一次访问的详细信息。不管是作为安全审计，还是做系统运维，访问日志都是最得力的手段。
+访问日志记录了每次访问的时间、请求、应答、耗时、源服务 …" />
 <meta property="og:image" content="https://idouba.com/images/thumbnail.png" />
 
 <link rel="apple-touch-icon" sizes="180x180" href="https://idouba.com/icons/apple-touch-icon.png">
@@ -168,9 +170,12 @@
   </div>
 
     <div class="post_body"><hr>
-<p><a href="https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage">访问日志</a>是应用系统运维的重要手段，可以有效地帮助我们进行问题的定位定界。</p>
+<h3 id="背景">背景：</h3>
+<p>访问日志是应用系统运维的重要手段，可以有效地帮助我们进行问题的定位定界。</p>
+<p>在服务网格中，访问日志也是可观测性能力的一块重要内容。不同于指标提供访问的统计信息，访问日志记录了每一次访问的详细信息。不管是作为安全审计，还是做系统运维，访问日志都是最得力的手段。</p>
+<p>访问日志记录了每次访问的时间、请求、应答、耗时、源服务和目标服务等信息。帮助运维人员进行有效的故障定位定界。生产中我们也经常会检索分析一批日志看特点，如是否慢的请求的应答体都比较大，来自某个特定服务的服务接口总出错，或者来自某个特定源服务的访问不正常等，帮助我们发现系统问题。</p>
 <p>对于七层的访问日志一般我们会通过HTTP响应码了解请求的状况，如503、502、404、403等。Envoy在访问日志中引入了应答标记Response Flag，辅助HTTP响应码，进一步描述访问或连接的细节问题。如发生 了503错误后，通过503 UH、 503 UF、 503 UC、 503 NC 等区分各种不同的503产生的原因，提供线索让运维人员针对性地解决问题。</p>
-<p>但是Envoy 和Istio社区对于Response Flag的信息非常少，只有如下非常干巴的把组合的单词展开，没有解释清楚每个标记的含义，更没有说明哪种情况下会出现这个标记。身边的同事，还有我们的客户经常在生产中碰到了这些应Response Flag不知道如何处理。</p>
+<p>但是Envoy 和Istio社区的<a href="https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage">访问日志</a>对于Response Flag的信息非常少，所有的内容也只是如下非常干巴的把组合的单词展开，没有解释清楚每个标记的含义，更没有说明哪种情况下会出现这个标记。身边的同事，还有我们的客户经常在生产中碰到了这些应Response Flag不知道如何处理。有客户的工程师反馈说，看到了Response Code里那几个奇怪UC、UH等字符比看见503还让人抓狂。</p>
 <table>
 <thead>
 <tr>
@@ -181,20 +186,86 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>NoHealthyUpstream</strong></td>
-<td><strong>UH</strong></td>
-<td>No healthy upstream hosts in upstream cluster in addition to 503 response code.</td>
+<td><strong>DownstreamConnectionTermination</strong></td>
+<td><strong>DC</strong></td>
+<td>Downstream connection termination.</td>
 </tr>
 <tr>
-<td><strong>UpstreamConnectionFailure</strong></td>
-<td><strong>UF</strong></td>
-<td>Upstream connection failure in addition to 503 response code.</td>
+<td><strong>FailedLocalHealthCheck</strong></td>
+<td><strong>LH</strong></td>
+<td>Local service failed <a href="https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/upstream/health_checking#arch-overview-health-checking">health check request</a> in addition to 503 response code.</td>
+</tr>
+<tr>
+<td><strong>UpstreamRequestTimeout</strong></td>
+<td><strong>UT</strong></td>
+<td>Upstream request timeout in addition to 504 response code.</td>
+</tr>
+<tr>
+<td><strong>LocalReset</strong></td>
+<td><strong>LR</strong></td>
+<td>Connection local reset in addition to 503 response code.</td>
+</tr>
+<tr>
+<td><strong>UpstreamRemoteReset</strong></td>
+<td><strong>UR</strong></td>
+<td>Upstream remote reset in addition to 503 response code.</td>
+</tr>
+<tr>
+<td><strong>UpstreamConnectionTermination</strong></td>
+<td><strong>UC</strong></td>
+<td>Upstream connection termination in addition to 503 response code.</td>
+</tr>
+<tr>
+<td><strong>DelayInjected</strong></td>
+<td><strong>DI</strong></td>
+<td>The request processing was delayed for a period specified via <a href="https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/fault_filter#config-http-filters-fault-injection">fault injection</a>.</td>
+</tr>
+<tr>
+<td><strong>FaultInjected</strong></td>
+<td><strong>FI</strong></td>
+<td>The request was aborted with a response code specified via <a href="https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/fault_filter#config-http-filters-fault-injection">fault injection</a>.</td>
+</tr>
+<tr>
+<td><strong>RateLimited</strong></td>
+<td><strong>RL</strong></td>
+<td>The request was ratelimited locally by the <a href="https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/rate_limit_filter#config-http-filters-rate-limit">HTTP rate limit filter</a> in addition to 429 response code.</td>
 </tr>
 </tbody>
 </table>
-<p><a href="https://kccncosschn2023.sched.com/event/b34cdc5babaf550b06b72c5aeb5ab21e">KubeCon 2023</a>在上海做的一个关于Istio访问日志的演讲。比较详细地把我们生产中碰到的常见的Response Flag挨个构造条件重现一遍，和大家一起剖析每个的含义、表示的问题，和对这些问题一般的处理方法。作为参照帮助大家理解生产中的类似问题。</p>
-<p>会场现场大家反馈比较好，非常受用。受限于40分钟（尽管还拖堂了10分钟），每种场景也只是简单说明。回来不少听众都要材料，感动于大家的认可和热情，干脆把PPT里的每个Slide稍微说人话的稍微描述下，对得起演讲标题的重现案例的说法。</p>
-<img src="../picture/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-index/cover.png" style="zoom:67%;" />
+<p>在日常支持客户各种环境的过程中，留意积累各种异常场景对应的Response Code，在内部给组内容同事做过一些小范围的分享，正好今年上海的<a href="https://kccncosschn2023.sched.com/event/b34cdc5babaf550b06b72c5aeb5ab21e">KubeCon 2023</a>，就尝试报了个相关议题。</p>
+<h3 id="内容">内容：</h3>
+<p>话说故障随时随地都可能发生，在这个时间点Wednesday September 27, 2023 3:50pm - 4:25pm CST，这个会议室<a href="https://kccncosschn2023.sched.com/venue/3%E5%B1%82+305B%E4%BC%9A%E8%AE%AE%E5%AE%A4%7C+3F+Room+305B">3层 305B会议室| 3F Room 305B</a>，在我的演讲开始前，我的笔记本接到现场的投影仪上，组织方的投影出了问题。换了现场其他的笔记本，组织方的两个外国工程师在笔记本上一顿设置，趴在地上对投影仪一顿设置，还是不行。最后只能短路了一些信号，只是最基础的现场录像。当时就感叹如果有一个像网格的Response Flag一样明确地标识出故障类型，现场的两个老哥了解到链路上的笔记本、投影仪、亦或其他组件有问题，就能快速修复，不用耽误现场那么多人的十几分钟时间，当然我也能避免尬在台上近距离围观一个问题定位过程。</p>
+<p>在准备的这个演讲中比较详细地把我在生产中碰到的常见的Response Flag挨个构造条件重现一遍，剖析每个Flag的具体含义，不是Envoy官方文档的一行半精简文字；每个Flag表示的问题，当然构造的时候挑纯粹简单场景构造，但是能代表一类问题；对这些问题一般的处理方法，有些是故障的有针对性的处理，有些只是访问细节表达、网格配置内容体现的自然无需处理。作为参照帮助听众理解和解决生产中的类似问题。</p>
+<p><figure>
+  <picture>
+
+    
+      
+        
+        
+        
+        
+        
+        
+    <img
+      loading="lazy"
+      decoding="async"
+      alt="Sched"
+      
+        class="image_figure image_internal image_unprocessed"
+        src="../picture/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-index/event.png"
+      
+      
+    />
+
+    </picture>
+</figure>
+</p>
+<p>会场现场大家反馈比较好，提问提的拖堂了不少，会场组织方的美眉一直提醒。John zheng特别过来说比我昨天刚在<a href="https://istioconchina2023.sched.com/event/1RoVD/cert-manager-istioduo-fa-lia-zha-re-cert-manager-help-enhance-security-and-flexibility-of-istio-certificate-management-chaomeng-zhang-huawei">IstioCon</a>上讲的另外一个关于Istio 安全的内容还要干货，有内容。谢谢John，刚才会议现场投影不可用，怀疑笔记本问题时，你借笔记本给我用，只是抱歉会后你强烈建议我后面报个北美或欧洲的议题把这部分做个更大范围的分享，觉得麻烦没有回应。</p>
+<p>前阵子家里有点事情，这个议题准备主要也是把工作中的点总结了下，没有顾上好好去规划评估内容和讲出来要花的时间，导致现场讲下来太干，内容太多。本来说话就很快，为了完成内容不得不更快，特别是看到后面组织方美眉一个劲的举牌子提示时间。导致有些内容比较粗的就过了下。想想也是，在规划的25分钟的时间里硬塞进了14个不算简单的实践，尽管硬拖堂讲了40分钟，还是讲的比较粗。</p>
+<p>会后现场、微信群和YouTube下有听众要材料，感动于大家的认可和热情，在把PPT传到官方后，决定把PPT里的每个Slide的实践稍微展开描述性，也算对得起演讲标题的重现案例的说法。</p>
+<img src="../picture/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-index/cover.png" style="zoom: 150%;" />
+<p>下面是演讲中提到的每种Response Flag分别独立一个材料描述了下，这里汇总一个列表。</p>
 <ul>
 <li>
 <p>00：<a href="/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-00-Normal/">正常访问</a></p>
@@ -241,6 +312,14 @@
 <li>
 <p>14：<a href="/detailed-parse-and-reproduce-istio-response-flags-14-RL/">服务限流RL(RateLimited)</a>  重现客户端限流</p>
 </li>
+</ul>
+<h3 id="附">附：</h3>
+<ul>
+<li><a href="https://static.sched.com/hosted_files/kccncosschn2023/a9/Detailed%20Parse%20and%20Reproduce%20Response%20Flags%20of%20Istio%20Access%20Log%20Based%20on....pdf">演讲材料(官方Slides)</a></li>
+<li><a href="https://www.youtube.com/watch?v=jh6H3uPE8sY">Video(YouTube)</a></li>
+<li><a href="https://mp.weixin.qq.com/s/Vp9pFtfi0_iLFmSnj3H25Q">视频(国内)</a></li>
+<li><a href="https://www.bilibili.com/video/BV1cj411t7es/">视频(国内)</a></li>
+<li><a href="https://kccncosschn2023.sched.com/event/b34cdc5babaf550b06b72c5aeb5ab21e">官方Sched主页</a></li>
 </ul>
 
     </div>

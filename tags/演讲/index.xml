@@ -17,18 +17,12 @@
       <description>
         
           
-            访问日志是应用系统运维的重要手段，可以有效地帮助我们进行问题的定位定界。
+            背景： 访问日志是应用系统运维的重要手段，可以有效地帮助我们进行问题的定位定界。
+在服务网格中，访问日志也是可观测性能力的一块重要内容。不同于指标提供访问的统计信息，访问日志记录了每一次访问的详细信息。不管是作为安全审计，还是做系统运维，访问日志都是最得力的手段。
+访问日志记录了每次访问的时间、请求、应答、耗时、源服务和目标服务等信息。帮助运维人员进行有效的故障定位定界。生产中我们也经常会检索分析一批日志看特点，如是否慢的请求的应答体都比较大，来自某个特定服务的服务接口总出错，或者来自某个特定源服务的访问不正常等，帮助我们发现系统问题。
 对于七层的访问日志一般我们会通过HTTP响应码了解请求的状况，如503、502、404、403等。Envoy在访问日志中引入了应答标记Response Flag，辅助HTTP响应码，进一步描述访问或连接的细节问题。如发生 了503错误后，通过503 UH、 503 UF、 503 UC、 503 NC 等区分各种不同的503产生的原因，提供线索让运维人员针对性地解决问题。
-但是Envoy 和Istio社区对于Response Flag的信息非常少，只有如下非常干巴的把组合的单词展开，没有解释清楚每个标记的含义，更没有说明哪种情况下会出现这个标记。身边的同事，还有我们的客户经常在生产中碰到了这些应Response Flag不知道如何处理。
-Long name Short name Description NoHealthyUpstream UH No healthy upstream hosts in upstream cluster in addition to 503 response code. UpstreamConnectionFailure UF Upstream connection failure in addition to 503 response code. KubeCon 2023在上海做的一个关于Istio访问日志的演讲。比较详细地把我们生产中碰到的常见的Response Flag挨个构造条件重现一遍，和大家一起剖析每个的含义、表示的问题，和对这些问题一般的处理方法。作为参照帮助大家理解生产中的类似问题。
-会场现场大家反馈比较好，非常受用。受限于40分钟（尽管还拖堂了10分钟），每种场景也只是简单说明。回来不少听众都要材料，感动于大家的认可和热情，干脆把PPT里的每个Slide稍微说人话的稍微描述下，对得起演讲标题的重现案例的说法。
-00：正常访问
-01：下游连接终止 DC (DownstreamConnectionTermination)
-02：上游服务没有健康的后端实例 UH (NoHealthyUpstream)
-03：上游连接失败 UF (UpstreamConnectionFailure)
-04：上游超过重试次数 URX (UpstreamRetryLimitExceded)
-05：上游服务协议错误 UPE (UpstreamProtocolError)
-06：下游服务协议错误 DPE (DownstreamProtocolError)
+但是Envoy 和Istio社区的访问日志对于Response Flag的信息非常少，所有的内容也只是如下非常干巴的把组合的单词展开，没有解释清楚每个标记的含义，更没有说明哪种情况下会出现这个标记。身边的同事，还有我们的客户经常在生产中碰到了这些应Response Flag不知道如何处理。有客户的工程师反馈说，看到了Response Code里那几个奇怪UC、UH等字符比看见503还让人抓狂。
+Long name Short name Description DownstreamConnectionTermination DC Downstream connection termination. FailedLocalHealthCheck LH Local service failed health check request in addition to 503 response code. UpstreamRequestTimeout UT Upstream request timeout in addition to 504 response code. LocalReset LR Connection local reset in addition to 503 response code. UpstreamRemoteReset UR Upstream remote reset in addition to 503 response code.
           
           
         
