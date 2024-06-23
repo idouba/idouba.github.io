@@ -232,7 +232,7 @@
 </tr>
 </tbody>
 </table>
-<p>在日常支持客户各种环境的过程中，留意积累各种异常场景对应的Response Code，在内部给组内容同事做过一些小范围的分享，正好今年上海的<a href="https://kccncosschn2023.sched.com/event/b34cdc5babaf550b06b72c5aeb5ab21e">KubeCon 2023</a>，就尝试报了个相关议题。</p>
+<p>在日常支持客户各种环境的过程中，留意积累各种异常场景对应的Response Code，在内部给组内容同事做过一些小范围的分享，正好今年上海的<a href="https://kccncosschn2023.sched.com/event/b34cdc5babaf550b06b72c5aeb5ab21e">KubeCon 2023</a>，就尝试报了个相关议题做了个实践类的分享。</p>
 <h3 id="内容">内容：</h3>
 <p>话说故障随时随地都可能发生，在这个时间点Wednesday September 27, 2023 3:50pm - 4:25pm CST，这个会议室<a href="https://kccncosschn2023.sched.com/venue/3%E5%B1%82+305B%E4%BC%9A%E8%AE%AE%E5%AE%A4%7C+3F+Room+305B">3层 305B会议室| 3F Room 305B</a>，在我的演讲开始前，我的笔记本接到现场的投影仪上，组织方的投影出了问题。换了现场其他的笔记本，组织方的两个外国工程师在笔记本上一顿设置，趴在地上对投影仪一顿设置，还是不行。最后只能短路了一些信号，只是最基础的现场录像。当时就感叹如果有一个像网格的Response Flag一样明确地标识出故障类型，现场的两个老哥了解到链路上的笔记本、投影仪、亦或其他组件有问题，就能快速修复，不用耽误现场那么多人的十几分钟时间，当然我也能避免尬在台上近距离围观一个问题定位过程。</p>
 <p>在准备的这个演讲中比较详细地把我在生产中碰到的常见的Response Flag挨个构造条件重现一遍，剖析每个Flag的具体含义，不是Envoy官方文档的一行半精简文字；每个Flag表示的问题，当然构造的时候挑纯粹简单场景构造，但是能代表一类问题；对这些问题一般的处理方法，有些是故障的有针对性的处理，有些只是访问细节表达、网格配置内容体现的自然无需处理。作为参照帮助听众理解和解决生产中的类似问题。</p>
@@ -264,7 +264,31 @@
 <p>会场现场大家反馈比较好，提问提的拖堂了不少，会场组织方的美眉一直提醒。John zheng特别过来说比我昨天刚在<a href="https://istioconchina2023.sched.com/event/1RoVD/cert-manager-istioduo-fa-lia-zha-re-cert-manager-help-enhance-security-and-flexibility-of-istio-certificate-management-chaomeng-zhang-huawei">IstioCon</a>上讲的另外一个关于Istio 安全的内容还要干货，有内容。谢谢John，刚才会议现场投影不可用，怀疑笔记本问题时，你借笔记本给我用，只是抱歉会后你强烈建议我后面报个北美或欧洲的议题把这部分做个更大范围的分享，觉得麻烦没有回应。</p>
 <p>前阵子家里有点事情，这个议题准备主要也是把工作中的点总结了下，没有顾上好好去规划评估内容和讲出来要花的时间，导致现场讲下来太干，内容太多。本来说话就很快，为了完成内容不得不更快，特别是看到后面组织方美眉一个劲的举牌子提示时间。导致有些内容比较粗的就过了下。想想也是，在规划的25分钟的时间里硬塞进了14个不算简单的实践，尽管硬拖堂讲了40分钟，还是讲的比较粗。</p>
 <p>会后现场、微信群和YouTube下有听众要材料，感动于大家的认可和热情，在把PPT传到官方后，决定把PPT里的每个Slide的实践稍微展开描述性，也算对得起演讲标题的重现案例的说法。</p>
-<img src="../picture/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-index/cover.png" style="zoom: 150%;" />
+<p><figure>
+  <picture>
+
+    
+      
+        
+        
+        
+        
+        
+        
+    <img
+      loading="lazy"
+      decoding="async"
+      alt="Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case"
+      
+        class="image_figure image_internal image_unprocessed"
+        src="../picture/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-index/live.png"
+      
+      
+    />
+
+    </picture>
+</figure>
+</p>
 <p>下面是演讲中提到的每种Response Flag分别独立一个材料描述了下，这里汇总一个列表。</p>
 <ul>
 <li>
