@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Golang on 爱豆吧！</title>
+    <link>https://idouba.com/tags/golang/</link>
+    <description>Recent content in Golang on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Tue, 15 Aug 2017 15:51:34 +0000</lastBuildDate><atom:link href="https://idouba.com/tags/golang/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>kubernetes federation 工作机制之资源对象同步</title>
+      <link>https://idouba.com/kubernetes-federation-sync-accross-cluster/</link>
+      <pubDate>Tue, 15 Aug 2017 15:51:34 +0000</pubDate>
+      
+      <guid>https://idouba.com/kubernetes-federation-sync-accross-cluster/</guid>
+      <description>
+        
+          
+            1 前言 希望通过本文最简单的方式向熟悉k8s的人说明白其上的federation是干什么的，如何工作的。
+关于federation，比较官方的说法是：集群联邦可以让租户/企业根据需要扩展或伸缩所需要的集群；可以让租户/企业在跨地区甚至跨地域的多个集群上部署、调度、监测管理应用。通过集群联邦，租户/企业可以在指定集群上部署应用，可以拉通私有云和公有云建立混合云(hybrid cloud)。
+如在design-proposal 中描述的federation提供了cross-cluster scheduling, cross-cluster service discovery, cross-cluster migration, cross-cluster**ing and auditing, cross-cluster load balancing。
+简单讲就一句话。能调用一个api，向操作一个k8s集群一样操作多个k8s集群。主要是拉通其下的k8s集群在上部署应用，发布服务，并且可以让其互相访问。
+那么是怎么做到的呢？熟悉了kubernetes代码和主要的工作逻辑会发现非常简单。简单看下这部分代码会就会发现federation有如下特点：
+复用了kubernets的机制 复用kubernetes的代码 扩展了kubernetes的对象（的定义和功能） 2. 架构 Federation 层的主要组件包括Federation-API Server，Controller-Manager和ETCD。根据Decoupled 的设计的目标和kubernetes 共用类库，而不是共用一个紧密的结构结构。在结构上解耦可以保证，Federation层故障，其下的每个个kubernetes集群不受影响。另外FederationAPI接口和kube-api接口完全兼容，用户可以像之前操作单个kubernetes集群一样操作联邦。
+和Kubernetes类似，用户通过kubectl或者API调用向FederationAPI server的接口创建和维护各种对象，数据对象被持久化存储在Federation的ETCD中。联邦只是维护了规划，真正干活还是在其下的各个Cluster上（现实生活中其实也总是这样，你见过在联邦的川普干过什么正经事情）。真正关键的联邦如何通过一个统一的入口来接收请求，在各个cluster上调度。具体到（代码）功能就是联邦中指令如何在cluster上被落实执行。
+联邦和其下k8s 集群的调用关系。调用细节下面描述。
+3. 主要流程 关键就在于Federation的组件Controller-manager。和K8s其他的controller作用和工作机制类似，通过watch api-server 执行动作来维护集群状态。Federation的Controller-manager的处理逻辑和kubernetes略有不同，在于它一般都要连两个API server，watch 3个API 对象
+对于每种Resource对象，都对应一个Controller，在Federation的Controller-manager启动时，启动这些Controller。
+以ConfigMap为例，ConfigMapController启动后会watch如下三类接口：
+Federation API server的Cluster接口federation/v1beta1/cluster； Federation API server的ConfigMap接口v1/configmap； Federation 管理的 N 个kubernetes cluster的Kube-API server 的ConfigMap的接口：v1/ configmap 当ConfigMapController watch到有户通过Federation API 创建（或者更新删除）一个ConfigMap，则会调用对应的每个cluster 的kube-apiserver创建（或者更新删除）对应的ConfigMap。
+当ConfigMapController Watch到有新的Cluster加入进来时，调用新的Cluster的kube-api接口创建ConfigMap。Configmap、Secret等对象都是依照以上逻辑，从上向下Sync。
+以ConfigMap 的controller为例，其他的都是遵从同一个模板流程。在NewConfigMapController场景controller时对watch 3个api。
+Federation API server的ConfigMap接口v1/configmap；
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>Sort源码实现比较Go&amp;Java语言风格(3)</title>
+      <link>https://idouba.com/compare-go-and-java-style-by-sort-implement-3/</link>
+      <pubDate>Tue, 01 Dec 2015 15:20:55 +0000</pubDate>
+      
+      <guid>https://idouba.com/compare-go-and-java-style-by-sort-implement-3/</guid>
+      <description>
+        
+          
+            前面两部分分别描述了Go和java两种语言对sort的使用方式和源码实现。作为go初学者，最想做的是通过例子和源码来对新的语言有个理解。这部分就结合自己的理解整理下，可以看到，是非常主观。
+4 语言语法比较
+可以看到，两种语言的思路基本上是一样的，用户必须定义比较规则。在排序过程中都要考察集合长度，使用用户定义的比较规则，然后调整元素位置来达到排序的效果，对应go的interface要求的三个方法。但是还是有挺多不同。
+首先从使用方式上看，go的规则（通过方法来体现）定义在集合上，并且定义了三个方法，分别获取集合的状况，元素比较的规则，元素位置操作的方法；而java的规则定义在元素上，用户只用一个元素比较的规则compareTo就够了。看起来java要求用户定义少，因为其封装的多，这也是其一贯的风格。对用户要似乎更友好一点。比较而言go更直接，简单。留给程序员能干预的更多一点。但还是觉得Len和Swap方法留给用户定义的意义不是很大，就像源码中自带的好几个例子，Len除了返回集合长度， Swap(i,j)除了{ a[i], a[j] = a[j], a[i] }，真想不好我们还能赋予它其他的使用方法。
+从package的组织，能看到Go中更面向功能（或者说行为），功能更简单直接，而java更是面向对象组织的，封装更多。看到go sort的package下面的内容如图，而java一个Collections下面这么多功能方法，而看所在的的uitl包下上内容（只能截一屏还有一大半显示不全）。
+看到了java的uitl包，下面除了Collections和Arrays这样几个工具类外更多的是List、Map、Set这样的数据结构定义（通过接口），以及常用的ArrayList，LinedList，HashMap，HashTable，TreeSet这样的实现。同样的这样键值对的容器，即有HashMap这样非同步的，又有Hashtable这样同步的，同步个容器上嫌Hashtable上加一把锁影响并发性能，后来大师Doug Lea，又发明了ConcurrentMap接口，以及现在已成经典的实现ConcurrentHashMap，在一个容器上分开加多把锁。
+而比较而言，go的结构就简单很多，语言内置容器数组和map提供了几乎所有我们要的功能，并且其操作非常简单，在源码中费劲的想找其他基于其上的结构居然没有找见。Go的简的风格在此体现的真是明显，只提供基础的数据结构，和对这些结构的好用的操作。稍微用了下切片操作真的非常赞，非要对照下和java的ArrayList挺像，但是[:]这样操作起来真的很简单直接。另外看sort源码时发现两个语言在各自package中，和sort 相伴的也都是search之类的操作。
+当然，看例子中还有源码中两个语言的语法差别那就更多了。尤其要称赞下go的几个非常酷的语法。如快排中找中间点的方法
+1func doPivot(data Interface, lo, hi int) (midlo, midhi int){.. 2return lo + b - a, hi - (d - c) 3} 居然可以返回多个返回值，不用再像原来那样，要么一个返回值作为参数传进来，另外一个从return上取，要么就不得不构造一个结构来做组织多个返回值，费劲又别扭。真是解决程序员的真正问题。
+还有，这个swap的方法实现，
+1func (a ByAge) Swap(i, j int) { a[i], a[j] = a[j], a[i] } 这样一句就解决问题。而不是java这样费劲。
+一下就把我大java比下去了。有没有想到很多年前，我们用c来数据结构的时候，老师反复强调，这时候要声明一个局部变量temp类做数据交换，非常神秘非常高级的知识点哈。在go这里居然真的可以直接交换。看上去有点像SQL这样的非过程语言了，又有点像我们描述代码功能的伪代码，只要告诉我你想干啥描述清楚，过程的能省就省了。非常非常简单，就这一小点，让咱这个新人产生了无数好感。
+1private static void swap(Object[] x, int a, int b) { 2Object t = x[a]; 3x[a] = x[b]; 4x[b] = t; 5} 当然还有左大括号的使用，声明未使用的变量编译报错等新语法，看着蛮横，但却是简单。有一点点不习惯的是居然用方法名首字母的大小写来区分方法的访问权限，不像java中public protected private这样关键字来修饰，但说实话，写大写字母大头的方法还是有点瞅着怪怪的，老想给改成小写，虽然都是所谓的驼峰式的命名。
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>Sort源码实现比较Go&amp;Java语言风格(2)</title>
+      <link>https://idouba.com/compare-go-and-java-style-by-sort-implement-2/</link>
+      <pubDate>Tue, 01 Dec 2015 15:18:12 +0000</pubDate>
+      
+      <guid>https://idouba.com/compare-go-and-java-style-by-sort-implement-2/</guid>
+      <description>
+        
+          
+            接上篇博文，工作中用到了go排序的功能，作为go新手，在参照着例子，并读了go的sort.go部分涉及的源码，了解了go中排序的细节和实现算法，这些在上篇博文中有介绍。作为一个java ZHONGDU*2的用户，不由自主的想到了java中对应实现的样子，在这里也非常简要的贴出来，描述下java中排序的用法，和java源码中对应部分的实现，比较好奇java是和go一样，也用的时候快速排序吗？
+3 Java 排序源码解析 主要代码Looks like this： 3.1 使用例子
+1public class Person implements Comparable&amp;amp;lt;Person&amp;amp;gt; { 2private String name; 3private int age; 4 5 6@Override 7public int compareTo(Person o) { 8return this.age - o.age; 9} 10 11public static void main(String args[]) 12{ 13List&amp;amp;lt;Person&amp;amp;gt; persons = new ArrayList&amp;amp;lt;Person&amp;amp;gt;(); 14Collections.sort(persons); 15} 16} 和go中不同，必须要在class的第一行implements Comparable这个接口，然后在实现这个接口中定义的compareTo方法，告诉接口到底元素是怎么比较大小的。于是这也追踪下Collections.sort()方法中是如何使用这个compareTo规则来进行排序的。
+3.2 源码解析 Collections是一个工具类，调用的是另外一个工具类Arrays中提供的静态方法。java中很少有class名用复数的，和Collection这也一个单数表达的是interface不同，这两个有悠久历史的类下面提供了很多static的工具方法。
+1public static &amp;amp;lt;T extends Comparable&amp;amp;lt;? super T&amp;amp;gt;&amp;amp;gt; void sort(List&amp;amp;lt;T&amp;amp;gt; list) { 2Object[] a = list.toArray(); 3Arrays.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>Sort源码实现比较Go&amp;Java语言风格(1)</title>
+      <link>https://idouba.com/compare-go-and-java-style-by-sort-implement-1/</link>
+      <pubDate>Tue, 01 Dec 2015 05:11:15 +0000</pubDate>
+      
+      <guid>https://idouba.com/compare-go-and-java-style-by-sort-implement-1/</guid>
+      <description>
+        
+          
+            1 前言 刚开始拥抱go，非常新鲜！才使用没多久，属于没有经验，有一点感受的那种。具体也说不了特别清楚，就是觉得：简单，直接，灵活，方便。作为一个 java 重度中毒（ZHANGDU*2）用户，过程中还是习惯对照着思考，至少在这个阶段。也好，发现对照着想，似乎更容易融会贯通。 对资深的go程序员来说，应该都是非常基础基本的问题，但也挡不住咱这个小白要发表下感想。
+第一篇文章首先结合最近做一个小feature时用到go中元素排序的功能，顺便了解下两种语言中排序功能的使用方式，各自源码中对排序功能的实现。当然最主要的是在这个过程中，作为go初学者对语言的体会和理解。
+2 Go排序源码解析 现在一般不太会自己写排序算法的实现了，就去搜go的package， 如愿找到了package sort?，和猜想的接口差不多，有一个func Sort(data Interface) 。只要把待排序的对象传到一个sort方法中就可以了。
+只是对这个Interface?对象还有点疑惑，这个Interface是个啥东西呀？带着这个疑问，瞄见了package前面这个这个example（裁剪了部分非关键代码）。
+2.1 go排序例子 1type Person struct { 2Name string 3Age int 4} 5// ByAge implements sort.Interface for []Person based on the Age field. 6type ByAge []Person 7func (a ByAge) Len() int { return len(a) } 8func (a ByAge) Swap(i, j int) { a[i], a[j] = a[j], a[i] } 9func (a ByAge) Less(i, j int) bool { return a[i].
+          
+          
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>

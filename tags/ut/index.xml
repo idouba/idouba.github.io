@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>UT on 爱豆吧！</title>
+    <link>https://idouba.com/tags/ut/</link>
+    <description>Recent content in UT on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Sun, 08 Oct 2023 15:50:08 +0000</lastBuildDate><atom:link href="https://idouba.com/tags/ut/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>UT(上游请求超时)--Istio访问日志ResponseFlag重现与解析11</title>
+      <link>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-11-UT/</link>
+      <pubDate>Sun, 08 Oct 2023 15:50:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-11-UT/</guid>
+      <description>
+        
+          
+            KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第11个关注的Response Flag是UT，全称是UpstreamRequestTimeout，官方定义表示Upstream request timeout in addition to 504 response code.
+含义： UT表示表示上游请求超时，一般伴随返回“504”的HTTP状态码。如典型场景在VirtualService中给目标服务配置了超时时间，当服务请求超过配置的超时时间，客户端代理自动超时，取消请求。
+重现环境： 客户端Pod，注入了Sidecar。 目标服务，为了模拟一个慢的服务，我们这个环境比前面的稍微复杂一些。把一个目标服务通过Ingress-gateway发布出来对外可以访问，同时给这个服务配置10秒的延迟；整个模拟一个慢的服务。 重现步骤： 第一步： 从注入了网格代理的客户端Pod中通过Ingress-gateway的地址192.168.99.99:9999访问目标服务，观察代理的访问日志，得到正常的200响应码。从客户端的访问日志上都可以看到服务在目标服务的多个实例上负载均衡。正常访问参照本系列的环境部分描述。
+第二步： 通过Serviceentry定义这个服务服务的访问地址是nginx.external，这样这个通过Ingress-gateway访问的目标服务在网格中就完成了服务注册，可以通过这个nginx.external被网格内的服务访问，当然也可以对这个服务配置流量策略。
+**第三步：**给nginx.external这个Serviceentry描述的目标服务通过VirtualService定义流量策略，即配置3秒的访问超时。
+1apiVersion: networking.istio.io/v1beta1 2kind: VirtualService 3metadata: 4 name: nginx-se-vs 5 namespace: accesslog 6spec: 7 hosts: 8 - nginx.external 9 http: 10 - timeout: 3s 11 route: 12 - destination: 13 host: nginx.external 第四步： 在客户端容器中curl这个目标服务，3秒后得到504 的状态码提示，同时会提示request timeout。
+**第五步：**观察客户端访问日志记录504 UT，表示访问超过了配置的超时时间。
+1[2023-08-20T15:00:52.250Z] &amp;#34;GET / HTTP/1.1&amp;#34; 504 UT response_timeout - &amp;#34;-&amp;#34; 0 24 3000 - &amp;#34;-&amp;#34; &amp;#34;curl/7.
+          
+          
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>source on 爱豆吧！</title>
+    <link>https://idouba.com/tags/source/</link>
+    <description>Recent content in source on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Sat, 18 Jan 2014 14:50:50 +0000</lastBuildDate><atom:link href="https://idouba.com/tags/source/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【hadoop代码笔记】hadoop作业提交之TaskTracker获取Task</title>
+      <link>https://idouba.com/hadoop_mapreduce_tasktracker_retrieve_task/</link>
+      <pubDate>Sat, 18 Jan 2014 14:50:50 +0000</pubDate>
+      
+      <guid>https://idouba.com/hadoop_mapreduce_tasktracker_retrieve_task/</guid>
+      <description>
+        
+          
+            一、概要描述
+在上上一篇博文和上一篇博文中 分别描述了jobTracker和其服务（功能）模块初始化完成后，接收JobClient提交的作业，并进行初始化。本文着重描 述，JobTracker如何选择作业的Task分发到TaskTracker。本文只是描述一个TaskTracker如何从JobTracker获取 Task任务。Task任务在TaskTracker如何执行将在后面博文中描述。
+二、 流程描述
+TaskTracker在run中调用offerService()方法一直死循环的去连接Jobtracker，先Jobtracker发送心跳，发送自身状态，并从Jobtracker获取任务指令来执行。 在JobTracker的heartbeat方法中，对于来自每一个TaskTracker的心跳请求，根据一定的作业调度策略调用assignTasks方法选择一定Task Scheduler调用对应的LoadManager的canAssignMap方法和canAssignReduce方法以决定是否可以给 tasktracker分配任务。默认的是CapBasedLoad，全局平均分配。即根据全局的任务槽数，全局的map任务数的比值得到一个load系 数，该系数乘以待分配任务的tasktracker的最大map任务数，即是该tasktracker能分配得到的任务数。如果太tracker当前运行 的任务数小于可运行的任务数，则任务可以分配新作业给他。（图中缺失了LoadManager的表达，也画不下了，就不加了。在代码详细分析中有） Scheduler的调用TaskSelector的obtainNewMapTask或者obtainNewReduceTask选择Task。 在DefaultTaskSelector中选择Task的方法其实只是封装了JobInProgress的对应方法。 JobTracker根据得到的Task构造TaskTrackerAction设置到到HeartbeatResponse返回给TaskTracker。 TaskTracker中将来自JobTracker的任务加入到TaskQueue中等待执行。 三、代码详细
+1. TaskTracker的入口函数main
+1JobConf conf=new JobConf(); 2 // enable the server to track time spent waiting on locks 3 ReflectionUtils.setContentionTracing 4 (conf.getBoolean(&amp;#34;tasktracker.contention.tracking&amp;#34;, false)); 5 new TaskTracker(conf).run(); TaskTracker的构造函数 1maxCurrentMapTasks = conf.getInt( 2 &amp;#34;mapred.tasktracker.map.tasks.maximum&amp;#34;, 2); 3maxCurrentReduceTasks = conf.getInt( 4 &amp;#34;mapred.tasktracker.reduce.tasks.maximum&amp;#34;, 2); 5this.jobTrackAddr = JobTracker.getAddress(conf); 6 7//启动httpserver 展示tasktracker状态。 8this.server = new HttpServer(&amp;#34;task&amp;#34;, httpBindAddress, httpPort, 9 httpPort == 0, conf); 10server.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>【hadoop代码笔记】hadoop作业提交之JobTracker接收作业提交</title>
+      <link>https://idouba.com/hadoop_mapreduce_jobadded/</link>
+      <pubDate>Thu, 16 Jan 2014 13:39:25 +0000</pubDate>
+      
+      <guid>https://idouba.com/hadoop_mapreduce_jobadded/</guid>
+      <description>
+        
+          
+            一、概要描述
+在上一篇博文中主要描述了JobTracker接收作业的几个服务（或功能）模块的初始化过程。本节将介绍这些服务（或功能）是如何接收到提交的job。本来作业的初始化也可以在本节内描述，但是涉及到JobInProgress的初始化过程放在一张图上太拥挤，就分开到下一篇文章中描述。
+二、 流程描述
+JobClient通过RPC的方式向JobTracker提交作业； 调用JobTracker的submitJob方法。该方法是JobTracker向外提供的供调用的提交作业的接口。 submit方法中调用JobTracker的addJob方法。 在addJob方法中会把作业加入到集合中供调度，并会触发注册的JobInProgressListener的jobAdded事件。由上篇博文的jobtracker相关服务和功能的初始化的FairScheduler的start方法中看到，这里注册的是两个JobInProgressListener。分别是FairScheduler的内部类JobListener和EagerTaskInitializationListener。 FairScheduler的内部类JobListener响应jobAdded事件事件。只是为每个加入的Job创建一个用于FairScheduler调度用的JobInfo对象，并将其和job的对应的存储在Map&amp;lt;JobInProgress, JobInfo&amp;gt; infos集合中。 EagerTaskInitializationListener响应jobAdded事件事件。jobAdded 只是简单的把job加入到一个List类型的 jobInitQueue中。并不直接对其进行初始化，对其中的job的处理由另外线程JobInitManager来做。该线程，一直检查 jobInitQueue是否有作业，有则拿出来从线程池中取一个线程InitJob处理。关于作业的初始化过程专门在下一篇文章中介绍。 JobTracker接收作业提交
+三、代码详细
+1. JobClient的submitJob方法，调用submitJobInternal方法。
+主要流程：
+1）通过调用JobTracker的getNewJobId()向jobtracker请求一个新的作业ID
+2）获取job的jar、输入分片、作业描述等几个路径信息，以jobId命名。
+3）其中getSystemDir()是返回jobtracker的系统目录，来放置job相关的文件。包括：mapreduce的jar文件submitJarFile、分片文件submitSplitFile、作业描述文件submitJobFile
+4）检查作业的输出说明，如果没有指定输出目录或输出目录以及存在，则作业不提交。参照org.apache.hadoop.mapreduce.lib.output.FileOutputFormat的checkOutputSpecs方法。如果没有指定，则抛出InvalidJobConfException，文件已经存在则抛出FileAlreadyExistsException
+5）计算作业的输入分片。通过InputFormat的getSplits(job)方法获得作业的split并将split序列化封装为RawSplit。返回split数目，也即代表有多个分片有多少个map。详细参见InputFormat获取Split的方法。
+6）writeNewSplits 方法把输入分片写到JobTracker的job目录下。
+7）将运行作业所需的资源（包括作业jar文件，配置文件和计算所得的输入分片）复制到jobtracker的文件系统中一个以作业ID命名的目录下。
+8） 使用句柄JobSubmissionProtocol通过RPC远程调用的submitJob()方法，向JobTracker提交作业。 JobTracker作业放入到内存队列中，由作业调度器进行调度。并初始化作业实例。JobTracker创建job成功后会给JobClient传回 一个JobStatus对象用于记录job的状态信息，如执行时间、Map和Reduce任务完成的比例等。JobClient会根据这个 JobStatus对象创建一个 NetworkedJob的RunningJob对象，用于定时从JobTracker获得执行过程的统计数据来监控并打印到用户的控制台。
+1 public RunningJob submitJobInternal(JobConf job) 2 throws FileNotFoundException, ClassNotFoundException, 3 InterruptedException, IOException { 4 5 // 1）通过调用JobTracker的getNewJobId()向jobtracker请求一个新的作业ID 6 JobID jobId = jobSubmitClient.getNewJobId(); 7 // 2）获取job的jar、输入分片、作业描述等几个路径信息，以jobId命名。 8 // 3）其中getSystemDir()是返回jobtracker的系统目录，来放置job相关的文件。包括：mapreduce的jar文件submitJarFile、分片文件submitSplitFile、作业描述文件submitJobFile 9 10 Path submitJobDir = new Path(getSystemDir(), jobId.toString()); 11 Path submitJarFile = new Path(submitJobDir, &amp;#34;job.
+          
+          
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>

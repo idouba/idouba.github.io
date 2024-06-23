@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>UH on 爱豆吧！</title>
+    <link>https://idouba.com/tags/uh/</link>
+    <description>Recent content in UH on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Fri, 29 Sep 2023 15:50:08 +0000</lastBuildDate><atom:link href="https://idouba.com/tags/uh/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>UH(上游没有健康的后端实例)--Istio访问日志ResponseFlag重现与解析02</title>
+      <link>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-02-UH/</link>
+      <pubDate>Fri, 29 Sep 2023 15:50:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-02-UH/</guid>
+      <description>
+        
+          
+            KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第二个关注的Response Flag是UH，UH的全称是NoHealthyUpstream，官方定义表示&amp;quot;No healthy upstream hosts in upstream cluster in addition to 503 response code.&amp;quot;
+含义： 表示上游服务没有健康的后端实例。典型场景如目标服务的后端实例不可用，比如在Kubernetes中目标服务的实例数设置为0.。
+重现环境： 客户端Pod，注入了Sidecar。 目标服务，一个Cluster类型的Kubernetes服务，多个服务实例。服务端Pod可以注入Siecar，也可以不用注入。 重现步骤： 第一步： 从注入了网格代理的客户端Pod中访问目标服务，观察代理的访问日志，得到正常的200响应码。从服务端和客户端的访问日志上都可以看到服务在目标服务的多个实例上负载均衡。正常访问参照本系列的环境部分描述。
+第二步： 在前面正常用例的基础上把目标服务的实例数scale到0，使得目标服务没有可用的实例。
+1kubectl scale --replicas=0 deployment/nginx -naccesslog 第三步： 重复前面客户端的访问，即从注入了sidecar的源服务负载中curl目标服务。这时观察客户端会得到503 的错误码，并且包含错误信息no healthy upstream。
+第四步： 观察客户端outbound的日志，记录了503 UH no_healthy_upstream 。
+1[2023-08-19T07:50:46.616Z] &amp;#34;GET / HTTP/1.1&amp;#34; 503 UH no_healthy_upstream - &amp;#34;-&amp;#34; 0 19 0 - &amp;#34;-&amp;#34; &amp;#34;curl/7.52.1&amp;#34; &amp;#34;25e82276-6d3e-481d-9c07-c1a3404bf5a9&amp;#34; &amp;#34;nginx.accesslog&amp;#34; &amp;#34;-&amp;#34; outbound|80|v1|nginx.accesslog.svc.cluster.local - 10.246.91.131:80 10.66.0.24:50552 - - TTT 1[2023-08-19T07:50:46.616Z] &amp;#34;GET / HTTP/1.
+          
+          
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>

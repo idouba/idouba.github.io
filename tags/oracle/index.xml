@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Oracle on 爱豆吧！</title>
+    <link>https://idouba.com/tags/oracle/</link>
+    <description>Recent content in Oracle on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Tue, 14 Oct 2014 08:53:14 +0000</lastBuildDate><atom:link href="https://idouba.com/tags/oracle/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>oracle分页技术性能比较</title>
+      <link>https://idouba.com/performance-comparison-of-oracle-paging/</link>
+      <pubDate>Tue, 14 Oct 2014 08:53:14 +0000</pubDate>
+      
+      <guid>https://idouba.com/performance-comparison-of-oracle-paging/</guid>
+      <description>
+        
+          
+            一、前言 在一个有30亿条数据的大表上分页，为了对方案进行性能测试，先忽略其他条件查询的影响，单看下分页部分的性能，顺便考察说明下oracle中rownum使用中一些比较tricky的地方。 实验条件： 表结构如下，内有2千万条实验数据。
+二、实验 提供7种不同方式（其实是5种，二和四是一种、三和五是一种）方式的 。第一种只是为了demo一下假设的一种错误逻辑方式，第二种和第四种是一种逻辑正确，但是性能极差的方式。筛选下来看上去性能可行的方式是第五、第六、第七方式。 这里仅仅记录没中方式的执行结果和计划。
+方式1 笨笨的想想。Oracle里面不是有个变量叫rownum，顾名思义，就是行号的意思，我要获取第十行到第二十行的数据，sql写起来很精练！比myslq的limit和mssql的top折腾看着还要优雅！
+1select * from idouba.APP_CLUSTEREDAUDITLOG where rownum between 10 and 20 喔！十条记录执行了十分钟还么有结果，一定是哪儿有问题了，shut了重试。那就来个简单的：
+1select * from idouba.APP_CLUSTEREDAUDITLOG where rownum =10 也没有记录，再尝试rownum=2都不会有记录。 分析rownum的原理就不难理解。rownum是查询到的结果集中的一个伪列，可以理解成在我们查询到的结果上加序号。按照这个逻辑，写rownum=1是能得到结果集的第一行。执行rownum=2时，先比较第一行，其rownum是1，则扔掉，考察下一行，rownum又是1，直到扫描完整个表，没有满足条件的结果集。 查询计划如下。
+已用时间: 00: 04: 01.81
+1执行计划 2---------------------------------------------------------- 3Plan hash value: 2858290634 4-------------------------------------------------------------------------------- 5| Id | Operation | Name | Rows | Bytes | Cost (%CPU)| Time | 6-------------------------------------------------------------------------------- 7| 0 | SELECT STATEMENT | | 20M| 146G| 102K (1)| 00:20:29 | 8| 1 | COUNT | | | | | | 9|* 2 | FILTER | | | | | | 10| 3 | INDEX FAST FULL SCAN| PK_ID | 20M| 146G| 102K (1)| 00:20:29 | 11-------------------------------------------------------------------------------- 12Predicate Information (identified by operation id): 13--------------------------------------------------- 14 2 - filter(ROWNUM=2) 15Note 16----- 17 - dynamic sampling used for this statement 18 19统计信息 20---------------------------------------------------------- 21 0 recursive calls 22 0 db block gets 23 461958 consistent gets 24 221499 physical reads 25 0 redo size 26 1956 bytes sent via SQL*Net to client 27 374 bytes received via SQL*Net from client 28 1 SQL*Net roundtrips to/from client 29 0 sorts (memory) 30 0 sorts (disk) 31 0 rows processed&amp;lt;/pre&amp;gt; 执行了4分钟，没有得到一条记录。尝试下面的方法。
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>从Count看Oracle执行计划的选择</title>
+      <link>https://idouba.com/analysis-oracle-execute-plan-from-count/</link>
+      <pubDate>Mon, 24 Mar 2014 12:53:50 +0000</pubDate>
+      
+      <guid>https://idouba.com/analysis-oracle-execute-plan-from-count/</guid>
+      <description>
+        
+          
+            一、 前言 在调查一个性能问题的时候，一个同事问道，为什么数据库有些时候这么不聪明，明明表上有索引，但是在执行一个简单的count的时候居然全表扫描了！难道不知道走索引更快么？
+试图从最简单的count来重新了解oracle查询计划的选择，以及最终产生的结果。虽然有些结果会让人觉得有些意外，并且可能会鄙视，这个查询计划选择真的不够聪明。但稍微用心点的去了解，做的已经足够细致了。大多数情况下，根据我们输入的信息，来自输入的SQL、表结构、索引状况、统计信息，会得出一个比较优的计划。所以和前面一直试图讲到索引和join方式一样，所有这样的选择不是因为数据库厂商这样规定的，而是基于存储的数据的实际情况，就**应该(甚至说不得不)**这么去选择。
+1-- Create table 2create table IDOUBA.APP_APPLICATIONAUDIT 3( 4 ID NUMBER, 5 UNIQUEID NUMBER, 6 POLICYID NUMBER, 7 IP VARCHAR2(200) not null, 8 IPNUM NUMBER not null, 9 MAC VARCHAR2(200), 10 USERVISIT VARCHAR2(100), 11 PHONE VARCHAR2(200), 12 GROUPNAME VARCHAR2(100), 13 PORT NUMBER, 14 APP_URL VARCHAR2(200), 15 TITLE VARCHAR2(200), 16 REQUESTS VARCHAR2(1000), 17 REQIDENTITYCARD VARCHAR2(1000), 18 REQKEY VARCHAR2(1000), 19 RESPONSEEKEY VARCHAR2(3000), 20 UPDATETIME DATE, 21 AUDITTYPE NUMBER, 22 TITLEID NUMBER, 23 SUBTITLEID NUMBER, 24 SERVERIP VARCHAR2(200), 25 DOMAINNAME VARCHAR2(200) 26) 27tablespace USERS 28 pctfree 10 29 initrans 1 30 maxtrans 255 31 storage 32 ( 33 initial 64K 34 minextents 1 35 maxextents unlimited 36 ); 37-- Create/Recreate indexes 38create index INDEX_UPDATETIME on IDOUBA.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>Oracle索引原理精简总结</title>
+      <link>https://idouba.com/oracle-index-brief/</link>
+      <pubDate>Wed, 19 Feb 2014 13:48:09 +0000</pubDate>
+      
+      <guid>https://idouba.com/oracle-index-brief/</guid>
+      <description>
+        
+          
+            结合使用整理Oracle的索引，主要权威的来自于Oracle Database Concepts与Oracle Database Performance Tuning Guide
+尝试用最少的字数介绍oracle的几种常用索引原理，主要是想简单分析其存储结构来说明其检索方式，和解释为什们某种索引使用与某种场合。（数据结构中最简单的ArrayList和LinkedList的使用场景）。阐述原因只有一个，就是因为其存储结构决定的。
+B树索引(默认类型) 存储结构： B+树，不多描述。和其他几种关系数据库一样，就是根据索引列(一个或多个)来构造一个B+树来存储索引。非叶子节点两个区域：存储下级子节点的值的范围，和到对应子节点地址（典型B+树的结构），主要作用是导航；叶子节点存储索引的键值和行的ROWID。另外，索引的叶子节点间构成了一个双向链表。类似mysql的myisam引擎的辅助索引，也类似mssql的非聚集索引。
+检索方式： 典型的平衡树的检索，栋根节点开始导航，选择下一个中间节点，直到找到对应的叶节点。需要说明的是，如果检索的所有列都在是索引中，则不用不用检索表，被称为Fast Full Index Scan；如果检索的列不都包含在索引中，则从树上找到索引列对应的key的叶子节点，需要根据其对应的ROWID，再次访问表，根据ROWID关联到其他属性。当Index Range Scan这种检索索引列的某个范围，则不用从根节点开始导航，直接选定开始的叶节点后，直接从叶节点的双向链表就可以完成。只需从根节点导航一次，找到开始的叶节点。
+B+树是一个balance树，所有的叶子都在同一层上，无论根据索引查找表中的哪一条记录，where columnIndex=selectValue中间导航的层数都是相同的，所执行的I/O此次数都是相同的。
+适合应用： 因为树状结构的特征，适合于适合与大量的增、删、改（OLTP），因为树状结构节点分裂、合并等很方便；适合高基数的列（唯一值多）的列索引，数据重叠太多，树状就快变为列表了，其查找功能就不能体现了。
+反向键索引 存储结构： 反向键索引是一种能够将索引键‘反转’的B*Tree索引。通过把键‘反转’，本来连续的键值变得非常‘离散’。当大量数据并行插入的时候，把本来一个索引块上的连续键值分散到不同的索引块上，减少了索引块的争用。
+检索方式： 和普通的B树索引没有差别。
+使用场景 因为存储结构同B树索引，使用场合也同B树索引。但是如WHERE?COL1?&amp;gt;?888这样的Index Range Scan不能用反向索引，因为存储结构决定这种本来连续的已经反向的不连续了。
+位图索引bitmap 存储结构 类似于java的BitSet采用最简单的方式存储某个值在哪些行出现，哪些行不出现。
+如在列性别上建索引。
+Value Row 1 Row 2 Row 3 Row 4 Row 5 Row 6 Row 7 M 1 1 1 1 F 1 1 1 在F行上Row12 row6 row7为1表示这些行的索引列取值是F。搜索一条记录的时候。
+**检索方式 当发出where sex=’F’ 这样的SQL语句时，会去搜索F所在的索引条目，然后扫描该索引条目中的bitmap里所有的bit位。第一个bit位为 1，则说明第一条记录上的C1值为01，于是返回第一条记录所在的ROWID（根据该索引条目里记录的start ROWID加上行号得到该记录所在的ROWID）。然后根据ROWID关联其他属性。
+适用应用： 适用于基数的列(low?cardinality)，因为存储的索引块会比较少。因此不适用创建复合索引，复合索引包含多列，它们的组合一般来说已经是高基数。
+          
+          
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>

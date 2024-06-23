@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>发表 on 爱豆吧！</title>
+    <link>https://idouba.com/tags/%E5%8F%91%E8%A1%A8/</link>
+    <description>Recent content in 发表 on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Thu, 29 Nov 2018 15:23:04 +0000</lastBuildDate><atom:link href="https://idouba.com/tags/%E5%8F%91%E8%A1%A8/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Istio 调用链埋点原理剖析—是否真的“零修改”？</title>
+      <link>https://idouba.com/istio-tracing-is-not-zero-code-change/</link>
+      <pubDate>Thu, 29 Nov 2018 15:23:04 +0000</pubDate>
+      
+      <guid>https://idouba.com/istio-tracing-is-not-zero-code-change/</guid>
+      <description>
+        
+          
+            发在Infoq上的一篇文章，答疑当前大家工作中碰到的Istio调用链的问题，最终澄清了观点，并推动社区修改了说法，避免误解。
+前言 在 Istio 的实践中最近经常被问到一个问题，使用 Istio 做调用链用户的业务代码是不是完全 0 侵入，到底要不要修改业务代码？
+看官方介绍：
+Istio makes it easy to create a network of deployed services with load balancing, service-to-service authentication, monitoring, and more, without any changes in service code.
+是不用修改任何代码即可做各种治理。实际使用中应用程序不做任何修改，使用 Istio 的调用链输出总是断开的，这到底是什么原因呢？
+对以上问题关注的人比较多，但是貌似说的都不是特别清楚，在最近的 K8S 技术社区的 Meetup 上笔者专门做了主题分享，通过解析 Istio 的架构机制与 Istio 中调用链的工作原理来回答以上问题。在本文中将节选里面的重点内容，基于 Istio 官方典型的示例来展开其中的每个细节和原理。
+Istio 本身的内容在这里不多介绍，作为 Google 继 Kubernetes 之后的又一重要项目，Istio 提供了 Service Mesh 方式服务治理的完整的解决方案。正如其首页介绍，通过非侵入的方式提供了服务的连接、控制、保护和观测能力。包括智能控制服务间的流量和 API 调用；提供授权、认证和通信加密机制自动保护服务安全；通过开放策略来控制调用者对服务的访问；另外提供了可扩展丰富的调用链、监控、日志等手段来对服务与性能进行观测。即用户不用修改代码，就可以实现各种服务治理能力。
+较之其他系统和平台，Istio 比较明显的一个特点是服务运行的监控数据都可以动态获取和输出，提供了强大的调用链、监控和调用日志收集输出的能力。配合可视化工具，运维人员可以方便的看到系统的运行状况，并发现问题进而解决问题。而我们基本上不用在自己的代码里做任何修改来生成数据并对接各种监控、日志、调用链等后端。非常神奇的是只要我们的程序被部署 run 起来，其运行数据就自动收集并在一个面板上展现出来。
+调用链概述 对于分布式系统的运维管理和故障定位来说，调用链当然是第一利器。
+正如 Service Mesh 的诞生是为了解决大规模分布式服务访问的治理问题，调用链的出现也是为了对应于大规模的复杂的分布式系统运行中碰到的故障定位定界问题。大量的服务调用、跨进程、跨服务器，可能还会跨多个物理机房。无论是服务自身问题还是网络环境的问题导致调用上链路上出现问题都比较复杂，如何定位就比单进程的一个服务打印一个异常栈来找出某个方法要困难的多。需要有一个类似的调用链路的跟踪，经一次请求的逻辑规矩完整的表达出来，可以观察到每个阶段的调用关系，并能看到每个阶段的耗时和调用详细情况。
+          
+          
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>

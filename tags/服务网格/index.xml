@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>服务网格 on 爱豆吧！</title>
+    <link>https://idouba.com/tags/%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BC/</link>
+    <description>Recent content in 服务网格 on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Sun, 15 Oct 2023 15:50:08 +0000</lastBuildDate><atom:link href="https://idouba.com/tags/%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BC/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>基于实际案例解析Istio访问日志ResponseFlag系列</title>
+      <link>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-index/</link>
+      <pubDate>Sun, 15 Oct 2023 15:50:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-index/</guid>
+      <description>
+        
+          
+            访问日志是应用系统运维的重要手段，可以有效地帮助我们进行问题的定位定界。
+对于七层的访问日志一般我们会通过HTTP响应码了解请求的状况，如503、502、404、403等。Envoy在访问日志中引入了应答标记Response Flag，辅助HTTP响应码，进一步描述访问或连接的细节问题。如发生 了503错误后，通过503 UH、 503 UF、 503 UC、 503 NC 等区分各种不同的503产生的原因，提供线索让运维人员针对性地解决问题。
+但是Envoy 和Istio社区对于Response Flag的信息非常少，只有如下非常干巴的把组合的单词展开，没有解释清楚每个标记的含义，更没有说明哪种情况下会出现这个标记。身边的同事，还有我们的客户经常在生产中碰到了这些应Response Flag不知道如何处理。
+Long name Short name Description NoHealthyUpstream UH No healthy upstream hosts in upstream cluster in addition to 503 response code. UpstreamConnectionFailure UF Upstream connection failure in addition to 503 response code. KubeCon 2023在上海做的一个关于Istio访问日志的演讲。比较详细地把我们生产中碰到的常见的Response Flag挨个构造条件重现一遍，和大家一起剖析每个的含义、表示的问题，和对这些问题一般的处理方法。作为参照帮助大家理解生产中的类似问题。
+会场现场大家反馈比较好，非常受用。受限于40分钟（尽管还拖堂了10分钟），每种场景也只是简单说明。回来不少听众都要材料，感动于大家的认可和热情，干脆把PPT里的每个Slide稍微说人话的稍微描述下，对得起演讲标题的重现案例的说法。
+00：正常访问
+01：下游连接终止 DC (DownstreamConnectionTermination)
+02：上游服务没有健康的后端实例 UH (NoHealthyUpstream)
+03：上游连接失败 UF (UpstreamConnectionFailure)
+04：上游超过重试次数 URX (UpstreamRetryLimitExceded)
+05：上游服务协议错误 UPE (UpstreamProtocolError)
+06：下游服务协议错误 DPE (DownstreamProtocolError)
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>SpringClod到Istio最佳实践</title>
+      <link>https://idouba.com/best-practice-from-spring-cloud-to-istio/</link>
+      <pubDate>Tue, 23 Feb 2021 15:32:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/best-practice-from-spring-cloud-to-istio/</guid>
+      <description>
+        
+          
+            记录在北京时间2月23日，在全球首届社区峰会IstioCon 2021中，发表的《Best practice:from Spring Cloud to Istio》技术演讲。回答经常被客户和同事们问到的一个问题，SpringCloud和Istio的关系，如何演进。
+以下为演讲全文: 大家好，我是来自华为云的工程师。很荣幸有机会和大家分享Istio在生产中使用的实际案例。
+华为云应用服务网格从2018年在公有云上线， 作为全球最早的几个网格服务之一，经历和见证了从早期对网格的了解、尝试到当前大规模使用的过程。服务的客户越来越多，场景也越来越复杂。这其中的通用功能作为feature大都贡献到Istio社区，解决方案层面的实践也希望通过这样的机会和大家交流。
+本次我选取的主题是Spring Cloud to Istio。来自我们客户的Spring cloud的项目和Istio的结合与迁移案例。
+演讲主要包含四部分的内容： 1）背景介绍
+2）使用Spring cloud微服务框架遇到的问题
+3）解决方案
+4）通过示例来描述方案的实践细节
+背景介绍 还是以微服务为切入点，微服务的诸多优势非常明显，但相应给整个系统带来的复杂度也非常显著。单体的系统变成了分布式后，网络问题，服务如何找到并访问到对端的服务发现问题，网络访问的容错保护问题等。连当年最简单的通过日志中的调用栈就能实现的问题定位，微服务化后必须要通过分布式调用链才能支持。怎样解决微服务带来的这些挑战？
+微服务SDK曾经是一个常用的解决方案。将微服务化后通用的能力封装在一个开发框架中，开发者使用这个框架开发写自己的业务代码，生成的微服务自然就内置了这些能力。在很长的一段时间内，这种形态是微服务治理的标配，以至于初学者以为只有这些SDK才是微服务。
+服务网格则通过另一种形态提供治理能力。不同于SDK方式，服务治理的能力在一个独立的代理进程中提供，完全和开发解耦。虽然从图上看两者差异非常小，后面我们将会从架构和实际案例来分析两者在设计理念上的差异，来体会前者是一个开发框架，而后者是一个基础设施。
+SDK形态中Spring cloud是最有影响力的代表项目。Spring cloud提供了构建分布式应用的开发工具集，如列表所示。其中被大部分开发者熟知的是微服务相关项目，如：服务注册发现eureka、配置管理 config、负载均衡ribbon、熔断容错Hystrix、调用链埋点sleuth、网关zuul或Spring cloud gateway等项目。在本次分享中提到的Spring cloud也特指Spring cloud的微服务开发套件。
+而网格形态中，最有影响力的项目当属Istio。Istio的这张架构图在这次演讲中会高频出现。作为本次分享的背景，我们只要知道架构上由控制面和数据面组成，控制面管理网格里面的服务和对服务配置的各种规则。数据面上每个服务间的出流量和入流量都会被和服务同POD的数据面代理拦截和执行流量管理的动作。
+除了架构外，作为背景的另外一个部分，我们挑两个基础功能稍微打开看下两者的设计和实现上的相同和不同。首先是服务发现和负载均衡。
+左边是Spring cloud，所有的微服务都会先注册中心，一般是Eureka进行服务注册，然后在服务访问时，consumer去注册中心进行服务发现得到待访问的目标服务的实例列表，使用客户端负载均衡ribbon选择一个服务实例发起访问。
+右边Istio不需要服务注册的过程，只需要从运行平台k8s中获取服务和实例的关系，在服务访问时，数据面代理Envoy拦截到流量，选择一个目标实例发送请求。可以看到都是基于服务发现数据进行客户端负载均衡，差别是服务发现数据来源不同，负载均衡的执行体不同。
+下面比较下熔断：
+左边为经典的Hystrix的状态迁移图。一段时间内实例连续的错误次数超过阈值则进入熔断开启状态，不接受请求；隔离一段时间后，会从熔断状态迁移到半熔断状态，如果正常则进入熔断关闭状态，可以接收请求；如果不正常则还是进入熔断开启状态。
+Istio中虽然没有显示的提供这样一个状态图，但是大家熟悉Istio规则和行为应该会发现，Istio中OutlierDection的阈值规则也都是这样设计的。两者的不同是Spring cloud的熔断是在SDK中Hystrix执行，Istio中是数据面proxy执行。Hystrix因为在业务代码中，允许用户通过编程做一些控制。
+以上分析可以看到服务发现、负载均衡和熔断，能力和机制都是类似的。如果忽略图上的某些细节，粗的看框图模型都是完全一样的，对比表格中也一般只有一项就是执行位置不同，这一点不同在实际应用中带来非常大的差异。
+使用Spring cloud微服务框架遇到的问题 本次演讲的重点是实践。以下是我们客户找到我们TOP的几个的问题，剖析下用户使用传统微服务框架碰到了哪些问题，这些大部分也是他们选择网格的最大动力。
+1）多语言问题 在企业应用开发下，一个业务使用统一的开发框架是非常合理常见的，很多开发团队为了提升效率，经常还会维护有自己公司或者团队的通用开发框架。当然因为大部分业务系统都是基于Java开发，所以Spring cloud开发框架，或者衍生于Spring cloud的各种开发框架使用的尤其广泛。
+但是在云原生场景下，业务一般更加复杂多样，特别是涉及到很多即存的老系统。我们不能要求为了微服务化将在用的一组成熟服务用Spring cloud重写下。用户非常希望有一种方式不重写原来的系统也能对其进行应用层服务访问管理。
+2）将Spring cloud的微服务运行在K8s上会有很大的概率出现服务发现不及时 前面介绍过Spring cloud服务发现是基于各个微服务先向注册中心进行服务注册的数据来实现的，在传统Spring cloud场景下，当微服务部署在VM上，服务动态变化要求没有那么高，顶多个别实例运行不正常，通过服务发现的健康检查就足够了。但是在k8s场景下，服务实例动态迁移是非常正常场景。如图示，producer的某个Pod已经从一个节点迁移到另外一个节点了，这时需要新的pod2的producer实例向eureka注册，老实例Pod1要去注册。
+如果该情况频繁发生，会出现注册中心数据维护不及时，导致服务发现和负载均衡到旧的实例pod1上，从而引起访问失败的情况。
+3）升级所有应用以应对服务管理需求变化 第三个问题是一个比较典型的问题。客户有一个公共团队专门维护了一套基于Spring cloud的自有开发框架，在每次升级开发框架时，不得不求着业务团队来升级自己的服务。经常会SDK自身修改测试工作量不大，但却要制定很长周期的升级计划，来对上千个基于这个SDK开发的服务分组重新编译，打包，升级，而且经常要陪着业务团队在夜间变更。业务团队因为自身没有什么改动，考虑到这个升级带来的工作量和线上风险，一般也没有什么动力。
+4）从单体式架构向微服务架构迁移 这是一个比较普遍的问题，就是渐进的微服务化。马丁福勒在著名的文章单体到微服务的拆分中（https://martinfowler.com/articles/break-monolith-into-microservices.html ）也提到了对渐进微服务化的倡议，如何能从业务上将一个大的业务分割，解耦，然后逐步微服务化。马丁福勒强调 “解耦的是业务能力不是代码” ，大神将代码的解耦留给了开发者。
+但是站在开发者的角度讲渐进的微服务不是一个容易的事情。以基于Spring cloud框架进行微服务开发为例，为了所有的微服务间进行统一的服务发现、负载均衡，消费和执行同样的治理策略，必须要求所有的微服务基于同样的，甚至是统一版本的SDK来开发。
+          
+          
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>

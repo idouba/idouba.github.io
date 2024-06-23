@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>演讲 on 爱豆吧！</title>
+    <link>https://idouba.com/tags/%E6%BC%94%E8%AE%B2/</link>
+    <description>Recent content in 演讲 on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Sun, 15 Oct 2023 15:50:08 +0000</lastBuildDate><atom:link href="https://idouba.com/tags/%E6%BC%94%E8%AE%B2/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>基于实际案例解析Istio访问日志ResponseFlag系列</title>
+      <link>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-index/</link>
+      <pubDate>Sun, 15 Oct 2023 15:50:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-index/</guid>
+      <description>
+        
+          
+            访问日志是应用系统运维的重要手段，可以有效地帮助我们进行问题的定位定界。
+对于七层的访问日志一般我们会通过HTTP响应码了解请求的状况，如503、502、404、403等。Envoy在访问日志中引入了应答标记Response Flag，辅助HTTP响应码，进一步描述访问或连接的细节问题。如发生 了503错误后，通过503 UH、 503 UF、 503 UC、 503 NC 等区分各种不同的503产生的原因，提供线索让运维人员针对性地解决问题。
+但是Envoy 和Istio社区对于Response Flag的信息非常少，只有如下非常干巴的把组合的单词展开，没有解释清楚每个标记的含义，更没有说明哪种情况下会出现这个标记。身边的同事，还有我们的客户经常在生产中碰到了这些应Response Flag不知道如何处理。
+Long name Short name Description NoHealthyUpstream UH No healthy upstream hosts in upstream cluster in addition to 503 response code. UpstreamConnectionFailure UF Upstream connection failure in addition to 503 response code. KubeCon 2023在上海做的一个关于Istio访问日志的演讲。比较详细地把我们生产中碰到的常见的Response Flag挨个构造条件重现一遍，和大家一起剖析每个的含义、表示的问题，和对这些问题一般的处理方法。作为参照帮助大家理解生产中的类似问题。
+会场现场大家反馈比较好，非常受用。受限于40分钟（尽管还拖堂了10分钟），每种场景也只是简单说明。回来不少听众都要材料，感动于大家的认可和热情，干脆把PPT里的每个Slide稍微说人话的稍微描述下，对得起演讲标题的重现案例的说法。
+00：正常访问
+01：下游连接终止 DC (DownstreamConnectionTermination)
+02：上游服务没有健康的后端实例 UH (NoHealthyUpstream)
+03：上游连接失败 UF (UpstreamConnectionFailure)
+04：上游超过重试次数 URX (UpstreamRetryLimitExceded)
+05：上游服务协议错误 UPE (UpstreamProtocolError)
+06：下游服务协议错误 DPE (DownstreamProtocolError)
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>NC(没有上游集群)--Istio访问日志ResponseFlag重现与解析07</title>
+      <link>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-07-NC/</link>
+      <pubDate>Wed, 04 Oct 2023 15:50:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-07-NC/</guid>
+      <description>
+        
+          
+            KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第七个关注的Response Flag是NC，全称是NoClusterFound，官方定义表示Upstream cluster not found&amp;quot;
+含义： NC表示没有上游集群，即在网格流量路由中定义的目标服务后端不存在。Istio中比较典型的场景如分流策略中流量发送给V2标识的服务子集，但是DestinationRule中并没有定义该版本标识的服务子集。
+重现环境： 客户端Pod，注入了Sidecar。 目标服务，一个Cluster类型的Kubernetes服务，多个服务实例。服务端Pod可以注入Siecar，也可以不用注入。 重现步骤： 第一步： 从注入了网格代理的客户端Pod中通过目标名和服务端口访问目标服务，观察代理的访问日志，得到正常的200响应码。从服务端和客户端的访问日志上都可以看到服务在目标服务的多个实例上负载均衡。正常访问参照本系列的环境部分描述。
+第二步： 在原有正常访问的环境上，给目标服务配置VirtualService 和DestinationRule，在VirtualService中定义服务的流量发给v2的服务子集，而在DestinationRule中只定义v1的服务子集。
+1apiVersion: networking.istio.io/v1beta1 2kind: VirtualService 3metadata: 4 name: nginx-80 5 namespace: accesslog 6spec: 7 hosts: 8 - nginx 9 http: 10 - route: 11 - destination: 12 host: nginx.accesslog.svc.cluster.local 13 subset: v2 # subset NOT exists 1apiVersion: networking.istio.io/v1beta1 2kind: DestinationRule 3metadata: 4 name: nginx 5 namespace: accesslog 6spec: 7 host: nginx 8 subsets: 9 - labels: 10 version: v1 11 name: v1 # Only v1 第三步： .
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>UH(上游没有健康的后端实例)--Istio访问日志ResponseFlag重现与解析02</title>
+      <link>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-02-UH/</link>
+      <pubDate>Fri, 29 Sep 2023 15:50:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-02-UH/</guid>
+      <description>
+        
+          
+            KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第二个关注的Response Flag是UH，UH的全称是NoHealthyUpstream，官方定义表示&amp;quot;No healthy upstream hosts in upstream cluster in addition to 503 response code.&amp;quot;
+含义： 表示上游服务没有健康的后端实例。典型场景如目标服务的后端实例不可用，比如在Kubernetes中目标服务的实例数设置为0.。
+重现环境： 客户端Pod，注入了Sidecar。 目标服务，一个Cluster类型的Kubernetes服务，多个服务实例。服务端Pod可以注入Siecar，也可以不用注入。 重现步骤： 第一步： 从注入了网格代理的客户端Pod中访问目标服务，观察代理的访问日志，得到正常的200响应码。从服务端和客户端的访问日志上都可以看到服务在目标服务的多个实例上负载均衡。正常访问参照本系列的环境部分描述。
+第二步： 在前面正常用例的基础上把目标服务的实例数scale到0，使得目标服务没有可用的实例。
+1kubectl scale --replicas=0 deployment/nginx -naccesslog 第三步： 重复前面客户端的访问，即从注入了sidecar的源服务负载中curl目标服务。这时观察客户端会得到503 的错误码，并且包含错误信息no healthy upstream。
+第四步： 观察客户端outbound的日志，记录了503 UH no_healthy_upstream 。
+1[2023-08-19T07:50:46.616Z] &amp;#34;GET / HTTP/1.1&amp;#34; 503 UH no_healthy_upstream - &amp;#34;-&amp;#34; 0 19 0 - &amp;#34;-&amp;#34; &amp;#34;curl/7.52.1&amp;#34; &amp;#34;25e82276-6d3e-481d-9c07-c1a3404bf5a9&amp;#34; &amp;#34;nginx.accesslog&amp;#34; &amp;#34;-&amp;#34; outbound|80|v1|nginx.accesslog.svc.cluster.local - 10.246.91.131:80 10.66.0.24:50552 - - TTT 1[2023-08-19T07:50:46.616Z] &amp;#34;GET / HTTP/1.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>SpringClod到Istio最佳实践</title>
+      <link>https://idouba.com/best-practice-from-spring-cloud-to-istio/</link>
+      <pubDate>Tue, 23 Feb 2021 15:32:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/best-practice-from-spring-cloud-to-istio/</guid>
+      <description>
+        
+          
+            记录在北京时间2月23日，在全球首届社区峰会IstioCon 2021中，发表的《Best practice:from Spring Cloud to Istio》技术演讲。回答经常被客户和同事们问到的一个问题，SpringCloud和Istio的关系，如何演进。
+以下为演讲全文: 大家好，我是来自华为云的工程师。很荣幸有机会和大家分享Istio在生产中使用的实际案例。
+华为云应用服务网格从2018年在公有云上线， 作为全球最早的几个网格服务之一，经历和见证了从早期对网格的了解、尝试到当前大规模使用的过程。服务的客户越来越多，场景也越来越复杂。这其中的通用功能作为feature大都贡献到Istio社区，解决方案层面的实践也希望通过这样的机会和大家交流。
+本次我选取的主题是Spring Cloud to Istio。来自我们客户的Spring cloud的项目和Istio的结合与迁移案例。
+演讲主要包含四部分的内容： 1）背景介绍
+2）使用Spring cloud微服务框架遇到的问题
+3）解决方案
+4）通过示例来描述方案的实践细节
+背景介绍 还是以微服务为切入点，微服务的诸多优势非常明显，但相应给整个系统带来的复杂度也非常显著。单体的系统变成了分布式后，网络问题，服务如何找到并访问到对端的服务发现问题，网络访问的容错保护问题等。连当年最简单的通过日志中的调用栈就能实现的问题定位，微服务化后必须要通过分布式调用链才能支持。怎样解决微服务带来的这些挑战？
+微服务SDK曾经是一个常用的解决方案。将微服务化后通用的能力封装在一个开发框架中，开发者使用这个框架开发写自己的业务代码，生成的微服务自然就内置了这些能力。在很长的一段时间内，这种形态是微服务治理的标配，以至于初学者以为只有这些SDK才是微服务。
+服务网格则通过另一种形态提供治理能力。不同于SDK方式，服务治理的能力在一个独立的代理进程中提供，完全和开发解耦。虽然从图上看两者差异非常小，后面我们将会从架构和实际案例来分析两者在设计理念上的差异，来体会前者是一个开发框架，而后者是一个基础设施。
+SDK形态中Spring cloud是最有影响力的代表项目。Spring cloud提供了构建分布式应用的开发工具集，如列表所示。其中被大部分开发者熟知的是微服务相关项目，如：服务注册发现eureka、配置管理 config、负载均衡ribbon、熔断容错Hystrix、调用链埋点sleuth、网关zuul或Spring cloud gateway等项目。在本次分享中提到的Spring cloud也特指Spring cloud的微服务开发套件。
+而网格形态中，最有影响力的项目当属Istio。Istio的这张架构图在这次演讲中会高频出现。作为本次分享的背景，我们只要知道架构上由控制面和数据面组成，控制面管理网格里面的服务和对服务配置的各种规则。数据面上每个服务间的出流量和入流量都会被和服务同POD的数据面代理拦截和执行流量管理的动作。
+除了架构外，作为背景的另外一个部分，我们挑两个基础功能稍微打开看下两者的设计和实现上的相同和不同。首先是服务发现和负载均衡。
+左边是Spring cloud，所有的微服务都会先注册中心，一般是Eureka进行服务注册，然后在服务访问时，consumer去注册中心进行服务发现得到待访问的目标服务的实例列表，使用客户端负载均衡ribbon选择一个服务实例发起访问。
+右边Istio不需要服务注册的过程，只需要从运行平台k8s中获取服务和实例的关系，在服务访问时，数据面代理Envoy拦截到流量，选择一个目标实例发送请求。可以看到都是基于服务发现数据进行客户端负载均衡，差别是服务发现数据来源不同，负载均衡的执行体不同。
+下面比较下熔断：
+左边为经典的Hystrix的状态迁移图。一段时间内实例连续的错误次数超过阈值则进入熔断开启状态，不接受请求；隔离一段时间后，会从熔断状态迁移到半熔断状态，如果正常则进入熔断关闭状态，可以接收请求；如果不正常则还是进入熔断开启状态。
+Istio中虽然没有显示的提供这样一个状态图，但是大家熟悉Istio规则和行为应该会发现，Istio中OutlierDection的阈值规则也都是这样设计的。两者的不同是Spring cloud的熔断是在SDK中Hystrix执行，Istio中是数据面proxy执行。Hystrix因为在业务代码中，允许用户通过编程做一些控制。
+以上分析可以看到服务发现、负载均衡和熔断，能力和机制都是类似的。如果忽略图上的某些细节，粗的看框图模型都是完全一样的，对比表格中也一般只有一项就是执行位置不同，这一点不同在实际应用中带来非常大的差异。
+使用Spring cloud微服务框架遇到的问题 本次演讲的重点是实践。以下是我们客户找到我们TOP的几个的问题，剖析下用户使用传统微服务框架碰到了哪些问题，这些大部分也是他们选择网格的最大动力。
+1）多语言问题 在企业应用开发下，一个业务使用统一的开发框架是非常合理常见的，很多开发团队为了提升效率，经常还会维护有自己公司或者团队的通用开发框架。当然因为大部分业务系统都是基于Java开发，所以Spring cloud开发框架，或者衍生于Spring cloud的各种开发框架使用的尤其广泛。
+但是在云原生场景下，业务一般更加复杂多样，特别是涉及到很多即存的老系统。我们不能要求为了微服务化将在用的一组成熟服务用Spring cloud重写下。用户非常希望有一种方式不重写原来的系统也能对其进行应用层服务访问管理。
+2）将Spring cloud的微服务运行在K8s上会有很大的概率出现服务发现不及时 前面介绍过Spring cloud服务发现是基于各个微服务先向注册中心进行服务注册的数据来实现的，在传统Spring cloud场景下，当微服务部署在VM上，服务动态变化要求没有那么高，顶多个别实例运行不正常，通过服务发现的健康检查就足够了。但是在k8s场景下，服务实例动态迁移是非常正常场景。如图示，producer的某个Pod已经从一个节点迁移到另外一个节点了，这时需要新的pod2的producer实例向eureka注册，老实例Pod1要去注册。
+如果该情况频繁发生，会出现注册中心数据维护不及时，导致服务发现和负载均衡到旧的实例pod1上，从而引起访问失败的情况。
+3）升级所有应用以应对服务管理需求变化 第三个问题是一个比较典型的问题。客户有一个公共团队专门维护了一套基于Spring cloud的自有开发框架，在每次升级开发框架时，不得不求着业务团队来升级自己的服务。经常会SDK自身修改测试工作量不大，但却要制定很长周期的升级计划，来对上千个基于这个SDK开发的服务分组重新编译，打包，升级，而且经常要陪着业务团队在夜间变更。业务团队因为自身没有什么改动，考虑到这个升级带来的工作量和线上风险，一般也没有什么动力。
+4）从单体式架构向微服务架构迁移 这是一个比较普遍的问题，就是渐进的微服务化。马丁福勒在著名的文章单体到微服务的拆分中（https://martinfowler.com/articles/break-monolith-into-microservices.html ）也提到了对渐进微服务化的倡议，如何能从业务上将一个大的业务分割，解耦，然后逐步微服务化。马丁福勒强调 “解耦的是业务能力不是代码” ，大神将代码的解耦留给了开发者。
+但是站在开发者的角度讲渐进的微服务不是一个容易的事情。以基于Spring cloud框架进行微服务开发为例，为了所有的微服务间进行统一的服务发现、负载均衡，消费和执行同样的治理策略，必须要求所有的微服务基于同样的，甚至是统一版本的SDK来开发。
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>Istio调用链埋点原理剖析—是否真的“零修改”分享实录（下）</title>
+      <link>https://idouba.com/istio-tracing-meetup-02/</link>
+      <pubDate>Sat, 10 Nov 2018 15:36:10 +0000</pubDate>
+      
+      <guid>https://idouba.com/istio-tracing-meetup-02/</guid>
+      <description>
+        
+          
+            接上文Istio调用链埋点原理剖析—是否真的“零修改”分享实录（上）
+Isito调用链** 调用链原理和场景 正如Service Mesh的诞生是为了解决大规模分布式服务访问的治理问题，调用链的出现也是为了对应于大规模的复杂的分布式系统运行中碰到的故障定位定界问题。大量的服务调用、跨进程、跨服务器，可能还会跨多个物理机房。无论是服务自身问题还是网络环境的问题导致调用上链路上出现问题都比较复杂，如何定位就比单进程的一个服务打印一个异常栈来找出某个方法要困难的多。需要有一个类似的调用链路的跟踪，经一次请求的逻辑规矩完整的表达出来，可以观察到每个阶段的调用关系，并能看到每个阶段的耗时和调用详细情况。Dapper, a Large-Scale Distributed Systems Tracing Infrastructure 描述了其中的原理和一般性的机制。模型中包含的术语也很多，理解最主要的两个即可：
+Trace：一次完整的分布式调用跟踪链路。 Span：跨服务的一次调用； 多个Span组合成一次Trace追踪记录。 上图是Dapper论文中的经典图示，左表示一个分布式调用关系。前端（A），两个中间层（B和C），以及两个后端（D和E）。用户发起一个请求时，先到达前端，再发送两个服务B和C。B直接应答，C服务调用后端D和E交互之后给A应答，A进而返回最终应答。要使用调用链跟踪，就是给每次调用添加TraceId、SpanId这样的跟踪标识和时间戳。
+右表示对应Span的管理关系。每个节点是一个Span，表示一个调用。至少包含Span的名、父SpanId和SpanId。节点间的连线下表示Span和父Span的关系。所有的Span属于一个跟踪，共用一个TraceId。从图上可以看到对前端A的调用Span的两个子Span分别是对B和C调用的Span，D和E两个后端服务调用的Span则都是C的子Span。
+调用链系统有很多实现，用的比较多的如zipkin，还有已经加入CNCF基金会并且的用的越来越多的Jaeger，满足Opentracing语义标准的就有这么多。
+一个完整的调用链跟踪系统，包括调用链埋点，调用链数据收集，调用链数据存储和处理，调用链数据检索（除了提供检索的APIServer，一般还要包含一个非常酷炫的调用链前端）等若干重要组件。上图是Jaeger的一个完整实现。这里我们仅关注与应用相关的内容，即调用链埋点的部分，看下在Istio中是否能做到”无侵入“的调用链埋点。当然在最后也会看下Istio机制下提供的不同的调用链数据收集方式。
+Istio标准BookInfo例子 简单期间，我们以Istio最经典的Bookinfo为例来说明。Bookinfo模拟在线书店的一个分类，显示一本书的信息。本身是一个异构应用，几个服务分别由不同的语言编写的。各个服务的模拟作用和调用关系是： productpage ：productpage 服务会调用 details 和 reviews 两个服务，用来生成页面。 details ：这个微服务包含了书籍的信息。 reviews ：这个微服务包含了书籍相关的评论。并调用 ratings 微服务。 ratings ：ratings 微服务中包含了由书籍评价组成的评级信息。 调用链输出 在Istio上运行这个典型例子，不用做任何的代码修改，自带的Zipkin上就能看到如下的调用链输出。可以看到展示给我们的调用链和Boookinfo这个场景设计的调用关系一致：productpage 服务会调用 details 和 reviews 两个服务，reviews调用了ratings 微服务。除了显示调用关系外，还显示了每个中间调用的耗时和调用详情。基于这个视图，服务的运维人员比较直观的定界到慢的或者有问题的服务，并钻取当时的调用细节，进而定位到问题。 我们就要关注下调用链埋点到底是在哪里做的，怎么做的？
+在Istio中，所有的治理逻辑的执行体都是和业务容器一起部署的Envoy这个Sidecar，不管是负载均衡、熔断、流量路由还是安全、可观察性的数据生成都是在Envoy上。Sidecar拦截了所有的流入和流出业务程序的流量，根据收到的规则执行执行各种动作。实际使用中一般是基于K8S提供的InitContainer机制，用于在Pod中执行一些初始化任务. InitContainer中执行了一段iptables的脚本。正是通过这些Iptables规则拦截pod中流量，并发送到Envoy上。Envoy拦截到Inbound和Outbound的流量会分别作不同操作，执行上面配置的操作，另外再把请求往下发，对于Outbound就是根据服务发现找到对应的目标服务后端上；对于Inbound流量则直接发到本地的服务实例上。
+我们今天的重点是看下拦截到流量后Sidecar在调用链埋点怎么做的。
+Istio调用链埋点逻辑 Envoy的埋点规则和在其他服务调用方和被调用方的对应埋点逻辑没有太大差别。
+Inbound流量：对于经过Sidecar流入应用程序的流量，如果经过Sidecar时Header中没有任何跟踪相关的信息，则会在创建一个根Span，TraceId就是这个SpanId，然后再将请求传递给业务容器的服务；如果请求中包含Trace相关的信息，则Sidecar从中提取Trace的上下文信息并发给应用程序。 Outbound流量：对于经过Sidecar流出的流量，如果经过Sidecar时Header中没有任何跟踪相关的信息，则会创建根Span，并将该跟Span相关上下文信息放在请求头中传递给下一个调用的服务；当存在Trace信息时，Sidecar从Header中提取Span相关信息，并基于这个Span创建子Span，并将新的Span信息加在请求头中传递。 特别是Outbound部分的调用链埋点逻辑，通过一段伪代码描述如图：
+调用链详细解析 如图是对前面Zipkin上输出的一个Trace一个透视图，观察下每个调用的细节。可以看到每个阶段四个服务与部署在它旁边上的Sidecar是怎么配合的。在图上只标记了Sidecar生成的Span主要信息。因为Sidecar 处理 Inbound和Outbound的逻辑有所不同，在图上表也分开两个框图分开表达。如productpage，接收外部请求是一个处理，给details发出请求是一个处理，给reviews发出请求是另外一个处理，因此围绕productpage这个app有三个黑色的处理块，其实是一个Sidecar在做事。
+同时，为了不使的图上箭头太多，最终的Response都没有表达出来，其实图上每个请求的箭头都有一个反方向的Response。在服务发起方的Sidecar会收到Response时，会记录一个CR(client Received)表示收到响应的时间并计算整个Span的持续时间。
+**下面通过解析下具体数据来找出埋点逻辑： **
+首先从调用入口的Gateway开始，Gateway作为一个独立部署在一个pod中的Envoy进程，当有请求过来时，它会将请求转给入口服务productpage。Gateway这个Envoy在发出请求时里面没有Trace信息，会生成一个根Span：SpanId和TraceId都是f79a31352fe7cae9，因为是第一个调用链上的第一个Span，也就是一般说的根Span，所有ParentId为空，在这个时候会记录CS（Client Send）； 请求从入口Gateway这个Envoy进入productpage的app业务进程其Inbound流量被productpage Pod内的Envoy拦截，Envoy处理请求头中带着Trace信息，记录SR(Server Received)，并将请求发送给productpage业务容器处理，productpage在处理请求的业务方法中在接受调用的参数时，除了接受一般的业务参数外，同时解析请求中的调用链Header信息，并把Header中的Trace信息传递给了调用的Details和Reviews的微服务。 从productpage出去的请求到达reviews服务前，其Oubtbound流量又一次通过同Pod的Envoy，Envoy埋点逻辑检查Header中包含了Trace相关信息，在将请求发出前会做客户端的调用链埋点，即以当前Span为parent Span，生成一个子Span：新的SpanId cb4c86fb667f3114，TraceId保持一致9a31352fe7cae9，ParentId就是上个Span的Id： f79a31352fe7cae9。 从prodcutepage到review的请求经过productpage的Sidecar走LB后，发给一个review的实例。请求在到达Review业务容器前，同样也被Review的Envoy拦截，Envoy检查从Header中解析出Trace信息存在，则发送Trace信息给reviews。reviews处理请求的服务端代码中同样接收和解析出这些包含Trace的Header信息，发送给下一个Ratings服务。 在这里我们只是理了一遍请求从入口Gateway，访问productpage服务，再访问reviews服务的流程。可以看到期间每个访问阶段，对服务的Inbound和Outbound流量都会被Envoy拦截并执行对应的调用链埋点逻辑。图示的Reviews访问Ratings和productpage访问Details逻辑与以上类似，这里不做复述。
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>Istio调用链埋点原理剖析—是否真的“零修改”分享实录（上）</title>
+      <link>https://idouba.com/istio-tracing-meetup-01/</link>
+      <pubDate>Sat, 10 Nov 2018 15:07:36 +0000</pubDate>
+      
+      <guid>https://idouba.com/istio-tracing-meetup-01/</guid>
+      <description>
+        
+          
+            **整理自在K8S技术社****关于Istio调用链的分享。** 前言 大家好，我是zhangchaomeng，来自华为Cloud BU，当前在做华为云应用服务网格。今天跟大家分享的主题是Istio调用链相关内容。通过剖析Istio的架构机制与Istio中调用链的工作原理来解答一个大家经常问道的一个问题：Istio是否像其官方文档中宣传的一样，对业务代码完全的无侵入，无需用做任何修改就可以完成所有的治理能力，包括调用链的埋点？
+关于这个问题，可以提前透漏下，答案是让人有点沮丧的，得改点。在Isito中你不用在自己的代码里使用各种埋点的SDK来做埋点的逻辑，但是必须要有适当的配合的修改。
+为什么本来无侵入的Service Mesh形态的技术却要求我们开发者修改些代码，到底要做哪些修改？Istio中调用链到底是怎么工作的？在下面的内容中将逐个回答这些问题。
+本次分享的主题包括两部分: 第一部分作为背景和基础，介绍Istio的架构和机制；第二部分将重点介绍Istio调用链的相关内容，解答前面提出的几个问题。
+Isito的架构和机制 Service Mesh 如官方介绍，Istio是一个用于连接、控制、保护和观测服务的一个开放平台。即：智能控制服务间的流量和API调用；提供授权、认证和通信加密机制自动保护服务安全；并使用各种策略来控制调用者对服务的访问；另外可以扩展丰富的调用链、监控、日志等手段来对服务的与性能进行观测。
+Istio是Google继Kubernetes之后的又一重要项目，提供了Service Mesh方式服务治理的完整的解决方案。2017年5月发布第一个版本 0.1， 2018年6月1日发布了0.8版本，第一个LTS版本，当前在使用的1.0版本是今年7.31发布，对外宣传可用于生产。最新的1.1版本将2018.11中旬最近发布(当时规划实际已延迟，作者注)。
+Istio属于Service Mesh的一种实现。通过一张典型图来了解下Service Mesh。如图示深色是Proxy，浅色的是服务，所有流入流出服务的都通过Proxy。Service Mesh正是由这一组轻量代理组成，和应用程序部署在一起，但是应用程序感知不到他的存在。特别对于云原生应用，服务间的应用访问拓扑都比较复杂，可以通过Service Mesh来保证服务间的调用请求在可靠、安全的传递。在实现上一般会有一个统一的控制面，对这些代理有个统一的管理，所有的代理都接入一个控制面。对代理进行生命期管理和统一的治理规则的配置。 这里是对Service Mesh特点的一个一般性描述，后面结合Isito的架构和机制可以看下在Istio中对应的实现。
+可以看到Service Mesh最核心的特点是在Proxy中实现治理逻辑，从而做到应用程序无感知。其实这个形态也是经过一个演变的过程的：
+最早的治理逻辑直接由业务代码开发人员设计和实现，对服务间的访问进行管理，在代码里其实也不分治理和业务，治理本身就是业务的一部分。这种形态的缺点非常明显就是业务代码和治理的耦合，同时公共的治理逻辑有大量的重复。
+很容易想到封装一个公共库，就是所谓的SDK，使用特定的SDK开发业务，则所有治理能力就内置了。Spring Cloud和Netflix都是此类的工具，使用比较广泛，除了治理能力外，SDK本身是个开发框架，基于一个语言统一、风格统一的开发框架开发新的项目非常好用。但这种形态语言相关，当前Java版本的SDK比较多。另外对于开发人员有一定的学习成本，必须熟悉这个SDK才能基于他开发。最重要的是推动已经在用的成熟的系统使用SDK重写下也不是个容易的事情。比如我们客户中就有用C开发的系统，运行稳定，基本不可能重写。对这类服务的治理就需要一个服务外面的治理方式。
+于是考虑是否可以继续封装，将治理能力提到进程外面来，作为独立进程。即Sidecar方式，也就是广泛关注的Service Mesh 的。真正可以做到对业务代码和进程0侵入，这对于原来的系统完全不用改造，直接使用Sidecar进行治理。
+用一段伪代码来表示以上形态的演变：
+可以看到随着封装越来越加强，从公共库级别，到进程级别。对业务的侵入越来越少，SDK的公共库从业务代码中解耦，Sidecar方式直接从业务进程解耦了。对应的治理位置越来越低，即生效的位置更加基础了。尤其是Service Mesh方式下面访问通过 Proxy执行治理，所以Service Mesh的方式也已被称为一种应用的基础设施层，和TCP/IP的协议栈一样。TCP/IP负责将字节流可靠地在网络节点间传递；而应用基础设施则保证服务间的请求在安全、可靠、可被管控的传递。这也对应了前面Istio作为Service Mesh一种实现的定位。 Istio 关键能力 Istio官方介绍自己的关键能力如上所示，我把它分为两部分：一部分是功能，另有一部分提供的扩展能力。
+功能上包括流量管理、策略执行、安全和可观察性。也正好应对了首页的连接、保护、控制和观测四大功能。
+流量管理：是Istio中最常用的功能。可以通过配置规则和访问路由，来控制服务间的流量和API调用。从而实现负载均衡、熔断、故障注入、重试、重定向等服务治理功能，并且可以通过配置流量规则来对将流量切分到不同版本上从而实现灰度发布的流程。 策略执行：指Istio支持支持访问控制、速率限制、配额管理的能力。这些能力都是通过可动态插入的策略控制后端实现。 安全：Istio提供的底层的安全通道、管理服务通信的认证、授权，使得开发任务只用关注业务代码中的安全相关即可。 可观察性：较之其他系统和平台，Istio比较明显的一个特点是服务运行的监控数据都可以动态获取和输出，提供了强大的调用链、监控和调用日志收集输出的能力。配合可视化工具，运维人员可以方便的看到系统的运行状况，并发现问题进而解决问题。我们这次分享的主题调用链也正是Isito可观察性的一个核心能力。 后面分析可以看到以上四个特性从管理面看，正好对应Istio的三个重要组件。
+扩展性：主要是指Istio从系统设计上对运行平台、交互的相关系统都尽可能的解耦，可扩展。这里列出的特性：
+平台支持：指Istio可以部署在各种环境上，支持Kubernetes、Consul等上部署的服务，在之前版本上还支持注册到Eureka上的Service，新版本对Eureka的支持被干掉了；
+集成和定制：指的Istio可以动态的对接各种如访问控制、配额管理等策略执行的后端和日志监控等客观性的后端。支持用户根据需要按照模板开发自己的后端方便的集成进来。
+其实这两个扩展性的能力正好也对应了Istio的两个核心组件Pilot和Mixer，后面Isito架构时一起看下。
+Istio 总体架构 以上是Isito的总体架构。上面是数据面，下半部分是控制面。 数据面Envoy是一个C++写的轻量代理，可以看到所有流入流出服务的流量都经过Proxy转发和处理，前面Istio中列出的所有的治理逻辑都是在Envoy上执行，正是拦截到服务访问间的流量才能进行各种治理；另外可以看到Sidecar都连到了一个统一的控制面。
+Istio其实专指控制面的几个服务组件：
+Pilot：Pilot干两个事情，一个是配置，就是前面功能介绍的智能路由和流量管理功能都是通过Pilot进行配置，并下发到Sidecar上去执行；另外一个是服务发现，可以对接不同的服务发现平台维护服务名和实例地址的关系并动态提供给Sidecar在服务请求时使用。Pilot的详细功能和机制见后面组件介绍。 Mixer：Mixer是Istio中比较特殊，当前甚至有点争议的组件。前面Isito核心功能中介绍的遥测和策略执行两个大特性均是Mixer提供。而Istio官方强调的集成和定制也是Mixer提供。即可以动态的配置和开发策略执行与遥测的后端，来实现对应的功能。Mixer的详细功能和机制见后面组件介绍。 Citadel：主要对应Istio核心功能中的安全部分。配合Pilot和Mixer实现秘钥和证书的管理、管理授权和审计，保证客户端和服务端的安全通信，通过内置的身份和凭证提供服务间的身份验证，并进而该通基于服务表示的策略执行。 Isito主要组件Pilot 如Istio架构中简介，Pilot实现服务发现和配置管理的功能。 作为服务发现，Pilot中定义了一个抽象的服务模型，包括服务、服务实例、版本等。并且只定义的服务发现的接口，并未实现服务发现的功能，而是通过Adapter机制以一种可扩展的方式来集成各种不同的服务发现，并转换成Istio通用的抽象模型。 如在Kubernetes中，Pilot中的Kubernetes适配器通过Kube-APIServer服务器得到Kubernetes中对应的资源信息。而对于像Eureka这种服务注册表，则是使用一个Eureka的HTTP Client去访问Eureka的名字服务的集群，获取服务实例的列表。不管哪种方式最终都转换成Pilot的标准服务发现定义，进而通过标准接口提供给Sidecar使用。
+而配置管理，则是定义并维护各种的流量规则，来实现负载均衡、熔断、故障注入、流量拆分等功能。并转换成Envoy中标准格式推送给Envoy，从而实现治理功能。所有的这些功能用户均不用修改代码接口完成。详细的配置方式可以参照Istio Traffic Routing中的规则定义。重点关注：VirtualService、 DestinationRule、 Gateway等规则定义。如可以使用流量规则来配置各种灰度发布，也可以通过注入一个故障来测试故障场景；可以配置熔断来进行故障恢复；并且可以对HTTP请求根据我们的需要进行重定向、重写，重试等操作。
+          
+          
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>DC on 爱豆吧！</title>
+    <link>https://idouba.com/tags/dc/</link>
+    <description>Recent content in DC on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Thu, 28 Sep 2023 15:50:08 +0000</lastBuildDate><atom:link href="https://idouba.com/tags/dc/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>DC(下游连接终止)--Istio访问日志ResponseFlag重现与解析01</title>
+      <link>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-01-DC/</link>
+      <pubDate>Thu, 28 Sep 2023 15:50:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-01-DC/</guid>
+      <description>
+        
+          
+            KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第一个关注的Response Flag是DC，DC的全称是DownstreamConnectionTermination，官方定义是”Downstream connection termination“。
+含义： DC表示下游连接终止。
+在访问目标服务时，在收到完整应答前，客户端主动断开连接时，会产生DC特征的应答标记。客户端断开应答的场景比较多，生产中我们经常碰到的是客户端设置了请求超时，超时后客户端断开了连接。则在访问日志中一般会记录本次请求的结果为DC。
+重现环境： 客户端Pod，注入了Sidecar。 目标服务，一个花费一定时间才会返回的服务。为了有机会再客户端请求发出后，收到应答前有机会主动断开，我们访问的服务不能太快速返回，所以这里构造一个10秒才会响应的服务，模拟一个看上去有点慢的服务。可以是编码的一个10秒才相应的服务。当然基于Istio非侵入方式构造一个慢服务非常方便。这里的目标服务是把一个目标服务通过Ingress-gateway发布出来对外可以访问，同时给这个服务配置10秒的延迟，来模拟一个慢的服务。 重现步骤： 第一步： 进入客户端Pod中curl目标服务，观察客户端访问结果和客户端代理的访问日志，可以看到访问结果正常。只是目标服务有延迟，总的访问耗时10秒。这里为了突出重点，正常访问的内容略去。
+第二步： 客户端通过命令行访问目标服务，客户端curl命令访问时，携带max-time参数，设置客户端curl的最大时间为2秒。观察访问结果。
+1curl -v -s 192.168.99.99:9999s/ --header &amp;#34;Host: nginx. external&amp;#34; --max-time 2 从客户端调用的截图上可以看到请求在2秒后结束，服务访问失败。废物本身需要10秒钟返回结果，在2秒的时候客户端因为超时主动断开。
+这里是为了模拟一种更接近真实应用的场景。在模拟环境下构造客户端断开更简单的办法是不设置超时，直接curl，在得到请求返回前ctl+c结束curl请求也可以得到类似的效果。
+第三步： 观察客户端的outbound日志可以看到收到了0 DC downstream_remote_disconnect的信息。同时一个小细节，客户端访问日志可以看到本次访问的耗时DURATION是1999毫秒，与我们配置的2秒钟超时吻合。
+1[2023-08-18T11:31:40.069Z] &amp;#34;GET / HTTP/1.1&amp;#34; 0 DC downstream_remote_disconnect - &amp;#34;-&amp;#34; 0 0 1999 - &amp;#34;-&amp;#34; &amp;#34;curl/7.52.1&amp;#34; &amp;#34;afe165f1-27ab-447e-823d-b5d50103d197&amp;#34; &amp;#34;nginx.external&amp;#34; &amp;#34;100.85.115.86:9090&amp;#34; outbound|9999||nginx.external 10.66.0.24:58540 192.168.99.99:9999 10.66.0.24:41660 - - 应对建议： DC一般无需特殊处理。
+大部分情况下DC的原因是，服务端耗时较长导致客户端在一定时间后断开了连接。这时候一般考虑优化目标服务，在有效的时间内返回应答。
+          
+          
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>

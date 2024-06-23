@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>UF on 爱豆吧！</title>
+    <link>https://idouba.com/tags/uf/</link>
+    <description>Recent content in UF on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Sat, 30 Sep 2023 15:50:08 +0000</lastBuildDate><atom:link href="https://idouba.com/tags/uf/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>UF(上游连接失败)--Istio访问日志ResponseFlag重现与解析03</title>
+      <link>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-03-UF/</link>
+      <pubDate>Sat, 30 Sep 2023 15:50:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-03-UF/</guid>
+      <description>
+        
+          
+            KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第三个关注的Response Flag是UF，UF的全称是 UpstreamConnectionFailure ，官方定义表示&amp;quot;Upstream connection failure in addition to 503 response code.&amp;quot;
+含义： 表示上游连接失败。典型场景如目标服务的服务端口不通。如客户端通过错误的端口访问目标服务时，会导致客户端的服务访问失败，客户端代理的Outbound日志会记录503UF。
+目标服务的服务实例端口不通，会导致服务端的服务访问失败，同时目标服务端代理的Inbound日志会记录503UF。我们构建一个服务不通客户端Outbound日志记录UF，服务端inbound 日志的503 U后面的在另外一个URX用例里可以看到，综合起来可以更完整理解UF的含义和出现场景。
+重现环境： 客户端Pod，注入了Sidecar。 目标服务，一个Cluster类型的Kubernetes服务，多个服务实例。服务端Pod可以注入Siecar，也可以不用注入。 重现步骤： 第一步： 从注入了网格代理的客户端Pod中通过目标名和服务端口访问目标服务，观察代理的访问日志，得到正常的200响应码。从服务端和客户端的访问日志上都可以看到服务在目标服务的多个实例上负载均衡。正常访问参照本系列的环境部分描述。
+第二步： 在第一个正常访问的用例基础上修改服务端口为错误的服务端口888。
+1apiVersion: v1 2kind: Service 3metadata: 4 name: nginx 5 namespace: accesslog 6spec: 7 ports: 8 - name: http 9 port: 888 # Modify service port 80-&amp;gt;888，make service request failed 10 protocol: TCP 11 targetPort: 80 12 selector: 13 app: nginx 14 type: ClusterIP 第三步： 在客户端容器中curl 目标服务端口80，curl命令返回503，错误信息包括：upstream connect error or disconnect/reset before headers.
+          
+          
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>

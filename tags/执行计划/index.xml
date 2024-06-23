@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>执行计划 on 爱豆吧！</title>
+    <link>https://idouba.com/tags/%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92/</link>
+    <description>Recent content in 执行计划 on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Mon, 24 Mar 2014 12:53:50 +0000</lastBuildDate><atom:link href="https://idouba.com/tags/%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>从Count看Oracle执行计划的选择</title>
+      <link>https://idouba.com/analysis-oracle-execute-plan-from-count/</link>
+      <pubDate>Mon, 24 Mar 2014 12:53:50 +0000</pubDate>
+      
+      <guid>https://idouba.com/analysis-oracle-execute-plan-from-count/</guid>
+      <description>
+        
+          
+            一、 前言 在调查一个性能问题的时候，一个同事问道，为什么数据库有些时候这么不聪明，明明表上有索引，但是在执行一个简单的count的时候居然全表扫描了！难道不知道走索引更快么？
+试图从最简单的count来重新了解oracle查询计划的选择，以及最终产生的结果。虽然有些结果会让人觉得有些意外，并且可能会鄙视，这个查询计划选择真的不够聪明。但稍微用心点的去了解，做的已经足够细致了。大多数情况下，根据我们输入的信息，来自输入的SQL、表结构、索引状况、统计信息，会得出一个比较优的计划。所以和前面一直试图讲到索引和join方式一样，所有这样的选择不是因为数据库厂商这样规定的，而是基于存储的数据的实际情况，就**应该(甚至说不得不)**这么去选择。
+1-- Create table 2create table IDOUBA.APP_APPLICATIONAUDIT 3( 4 ID NUMBER, 5 UNIQUEID NUMBER, 6 POLICYID NUMBER, 7 IP VARCHAR2(200) not null, 8 IPNUM NUMBER not null, 9 MAC VARCHAR2(200), 10 USERVISIT VARCHAR2(100), 11 PHONE VARCHAR2(200), 12 GROUPNAME VARCHAR2(100), 13 PORT NUMBER, 14 APP_URL VARCHAR2(200), 15 TITLE VARCHAR2(200), 16 REQUESTS VARCHAR2(1000), 17 REQIDENTITYCARD VARCHAR2(1000), 18 REQKEY VARCHAR2(1000), 19 RESPONSEEKEY VARCHAR2(3000), 20 UPDATETIME DATE, 21 AUDITTYPE NUMBER, 22 TITLEID NUMBER, 23 SUBTITLEID NUMBER, 24 SERVERIP VARCHAR2(200), 25 DOMAINNAME VARCHAR2(200) 26) 27tablespace USERS 28 pctfree 10 29 initrans 1 30 maxtrans 255 31 storage 32 ( 33 initial 64K 34 minextents 1 35 maxextents unlimited 36 ); 37-- Create/Recreate indexes 38create index INDEX_UPDATETIME on IDOUBA.
+          
+          
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>

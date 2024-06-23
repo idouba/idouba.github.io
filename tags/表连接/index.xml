@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>表连接 on 爱豆吧！</title>
+    <link>https://idouba.com/tags/%E8%A1%A8%E8%BF%9E%E6%8E%A5/</link>
+    <description>Recent content in 表连接 on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Thu, 07 May 2015 07:11:32 +0000</lastBuildDate><atom:link href="https://idouba.com/tags/%E8%A1%A8%E8%BF%9E%E6%8E%A5/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>从Search Sort到Join</title>
+      <link>https://idouba.com/learn_table_join_from_search_and_sort/</link>
+      <pubDate>Thu, 07 May 2015 07:11:32 +0000</pubDate>
+      
+      <guid>https://idouba.com/learn_table_join_from_search_and_sort/</guid>
+      <description>
+        
+          
+            发表于《程序员》2015年4月B的一篇文章，在博客归档下。根据杂志社要求，在自己博客发表该文章亦须注明：本文为CSDN编译整理，未经允许不得转载，如需转载请联系market#csdn.net(#换成@)
+想通过原理来说明一些技术白皮书上“什么时候应该使用什么”这个“应该”后面的原因。通过数据结构中经典的排序查找算法来推倒解释数据库中几种经典的表连接背后的算法原理，和原理决定的在各种数据库中不同的应用和限制。以简单的算法来讲出数据库系统中看着核心强大功能的本质的算法设计。较之白皮书中不同数据库的不同描述，尽量去除差异，通过原理来描述功能，做到深入浅出。
+一、前言 Join的语义是把两张表的通过属性的关联条件值组合在一起，一般意义上数据库范式越高，表被拆分的越多，应用中要被Join的表可能会越多。在我们日常开发中几乎找不到不涉及Join的SQL语句，哪怕未显示包含Join这个关键字。在数据库系统执行时，都会选用一种明确最优的Join方式来执行。通过对Join原理的理解能帮助理解数据库的Join选择，进而更深刻的理解查询计划，理解同样的表结构数据行数变化、索引的变化为什么会影响数据库Join方式的选择，从而更针对性的做好性能优化。
+如下图分别是oracle和mssql的执行计划，是涉及四个表的内连接。在查询计划中显示每一个步骤的表连接方式，从图中可以看到共有三个表连接操作(有意思的是，对于相似的数据集，两个数据库选择的连接方式不同)。
+​ 图表 1 Oracle执行计划
+Join原理在数据库厂商的文档中和经典的《数据库系统概念》中分别从应用和理论的角度上描述的足够详细。本文尝试从另外一个视角，通过数据结构中最基础的查找排序算法(Search&amp;amp;Sort)来类推和归纳最常用的三种Join方式的原理：嵌套循环连接(Nested Loop Join)、排序归并连接 (Sorted Merge Join)、 哈希连接(Hash Join)。进而了解三种方式之间的联系、演变以及原理决定的其应用上的细微差别。说明这几种表连接方式是数据库的技术，但和数据库索引等其他数据库技术一样，也是是典型的数据结构的延伸。
+​ 图表 2 Mssql执行计划
+二、实例数据 为了示意清楚，本文中用到的示例中的两个数据集比较简单。为如下两个表。
+T_FC Fc_id Fc_name OfficialSite CityId 1 Inter www.inter.it 2 2 Barcelona http://www.fcbarcelona.com/ 8 3 Manchester united http://www.manutd.com 12 4 Liverpool http://www.liverpoolfc.com/ 11 5 Arsenal http://www.arsenal.com/ 36 6 ACM http://www.acmilan.com/ 2 7 Chelsea http://www.chelseafc.com/ 36 8 Manchester city http://www.mcfc.co.uk/ 12 ​ 图表 3 测试数据T_FC
+T_City Fc_id*CityId* Fc_name Country Desc 36 Landon Britain ?
+          
+          
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>

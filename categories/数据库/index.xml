@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>数据库 on 爱豆吧！</title>
+    <link>https://idouba.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/</link>
+    <description>Recent content in 数据库 on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Thu, 07 May 2015 07:11:32 +0000</lastBuildDate><atom:link href="https://idouba.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>从Search Sort到Join</title>
+      <link>https://idouba.com/learn_table_join_from_search_and_sort/</link>
+      <pubDate>Thu, 07 May 2015 07:11:32 +0000</pubDate>
+      
+      <guid>https://idouba.com/learn_table_join_from_search_and_sort/</guid>
+      <description>
+        
+          
+            发表于《程序员》2015年4月B的一篇文章，在博客归档下。根据杂志社要求，在自己博客发表该文章亦须注明：本文为CSDN编译整理，未经允许不得转载，如需转载请联系market#csdn.net(#换成@)
+想通过原理来说明一些技术白皮书上“什么时候应该使用什么”这个“应该”后面的原因。通过数据结构中经典的排序查找算法来推倒解释数据库中几种经典的表连接背后的算法原理，和原理决定的在各种数据库中不同的应用和限制。以简单的算法来讲出数据库系统中看着核心强大功能的本质的算法设计。较之白皮书中不同数据库的不同描述，尽量去除差异，通过原理来描述功能，做到深入浅出。
+一、前言 Join的语义是把两张表的通过属性的关联条件值组合在一起，一般意义上数据库范式越高，表被拆分的越多，应用中要被Join的表可能会越多。在我们日常开发中几乎找不到不涉及Join的SQL语句，哪怕未显示包含Join这个关键字。在数据库系统执行时，都会选用一种明确最优的Join方式来执行。通过对Join原理的理解能帮助理解数据库的Join选择，进而更深刻的理解查询计划，理解同样的表结构数据行数变化、索引的变化为什么会影响数据库Join方式的选择，从而更针对性的做好性能优化。
+如下图分别是oracle和mssql的执行计划，是涉及四个表的内连接。在查询计划中显示每一个步骤的表连接方式，从图中可以看到共有三个表连接操作(有意思的是，对于相似的数据集，两个数据库选择的连接方式不同)。
+​ 图表 1 Oracle执行计划
+Join原理在数据库厂商的文档中和经典的《数据库系统概念》中分别从应用和理论的角度上描述的足够详细。本文尝试从另外一个视角，通过数据结构中最基础的查找排序算法(Search&amp;amp;Sort)来类推和归纳最常用的三种Join方式的原理：嵌套循环连接(Nested Loop Join)、排序归并连接 (Sorted Merge Join)、 哈希连接(Hash Join)。进而了解三种方式之间的联系、演变以及原理决定的其应用上的细微差别。说明这几种表连接方式是数据库的技术，但和数据库索引等其他数据库技术一样，也是是典型的数据结构的延伸。
+​ 图表 2 Mssql执行计划
+二、实例数据 为了示意清楚，本文中用到的示例中的两个数据集比较简单。为如下两个表。
+T_FC Fc_id Fc_name OfficialSite CityId 1 Inter www.inter.it 2 2 Barcelona http://www.fcbarcelona.com/ 8 3 Manchester united http://www.manutd.com 12 4 Liverpool http://www.liverpoolfc.com/ 11 5 Arsenal http://www.arsenal.com/ 36 6 ACM http://www.acmilan.com/ 2 7 Chelsea http://www.chelseafc.com/ 36 8 Manchester city http://www.mcfc.co.uk/ 12 ​ 图表 3 测试数据T_FC
+T_City Fc_id*CityId* Fc_name Country Desc 36 Landon Britain ?
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>oracle分页技术性能比较</title>
+      <link>https://idouba.com/performance-comparison-of-oracle-paging/</link>
+      <pubDate>Tue, 14 Oct 2014 08:53:14 +0000</pubDate>
+      
+      <guid>https://idouba.com/performance-comparison-of-oracle-paging/</guid>
+      <description>
+        
+          
+            一、前言 在一个有30亿条数据的大表上分页，为了对方案进行性能测试，先忽略其他条件查询的影响，单看下分页部分的性能，顺便考察说明下oracle中rownum使用中一些比较tricky的地方。 实验条件： 表结构如下，内有2千万条实验数据。
+二、实验 提供7种不同方式（其实是5种，二和四是一种、三和五是一种）方式的 。第一种只是为了demo一下假设的一种错误逻辑方式，第二种和第四种是一种逻辑正确，但是性能极差的方式。筛选下来看上去性能可行的方式是第五、第六、第七方式。 这里仅仅记录没中方式的执行结果和计划。
+方式1 笨笨的想想。Oracle里面不是有个变量叫rownum，顾名思义，就是行号的意思，我要获取第十行到第二十行的数据，sql写起来很精练！比myslq的limit和mssql的top折腾看着还要优雅！
+1select * from idouba.APP_CLUSTEREDAUDITLOG where rownum between 10 and 20 喔！十条记录执行了十分钟还么有结果，一定是哪儿有问题了，shut了重试。那就来个简单的：
+1select * from idouba.APP_CLUSTEREDAUDITLOG where rownum =10 也没有记录，再尝试rownum=2都不会有记录。 分析rownum的原理就不难理解。rownum是查询到的结果集中的一个伪列，可以理解成在我们查询到的结果上加序号。按照这个逻辑，写rownum=1是能得到结果集的第一行。执行rownum=2时，先比较第一行，其rownum是1，则扔掉，考察下一行，rownum又是1，直到扫描完整个表，没有满足条件的结果集。 查询计划如下。
+已用时间: 00: 04: 01.81
+1执行计划 2---------------------------------------------------------- 3Plan hash value: 2858290634 4-------------------------------------------------------------------------------- 5| Id | Operation | Name | Rows | Bytes | Cost (%CPU)| Time | 6-------------------------------------------------------------------------------- 7| 0 | SELECT STATEMENT | | 20M| 146G| 102K (1)| 00:20:29 | 8| 1 | COUNT | | | | | | 9|* 2 | FILTER | | | | | | 10| 3 | INDEX FAST FULL SCAN| PK_ID | 20M| 146G| 102K (1)| 00:20:29 | 11-------------------------------------------------------------------------------- 12Predicate Information (identified by operation id): 13--------------------------------------------------- 14 2 - filter(ROWNUM=2) 15Note 16----- 17 - dynamic sampling used for this statement 18 19统计信息 20---------------------------------------------------------- 21 0 recursive calls 22 0 db block gets 23 461958 consistent gets 24 221499 physical reads 25 0 redo size 26 1956 bytes sent via SQL*Net to client 27 374 bytes received via SQL*Net from client 28 1 SQL*Net roundtrips to/from client 29 0 sorts (memory) 30 0 sorts (disk) 31 0 rows processed&amp;lt;/pre&amp;gt; 执行了4分钟，没有得到一条记录。尝试下面的方法。
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>B树在数据库索引中的应用剖析(发表版本)</title>
+      <link>https://idouba.com/about-btrees-application-in-database-index-in-programmer/</link>
+      <pubDate>Wed, 18 Jun 2014 09:27:23 +0000</pubDate>
+      
+      <guid>https://idouba.com/about-btrees-application-in-database-index-in-programmer/</guid>
+      <description>
+        
+          
+            最近一篇发表于《程序员》2014年6月刊上的文章。有点遗憾发现，有些部分被编辑修改过了，读起来有点怪怪的。最典型的是习惯于对某些比较经典的定义引用wikipedia或者原始白皮书中原始的E文，在文中发现都被硬译过了，表达的意思自己都有点看不懂了！
+最终修改后提交的版本归档下：
+引言 关于数据库索引，随便Google一个Oracle index，Mysql index总能得到“某某索引之n条经典建议”之类大量结果。笔者认为，较之直接借鉴，在搞清实际需求的基础上，对备选方案的原理尽可能深入全面的了解会更有利于我们的决策。因为某种方案或者技术呈现出某种优势（包括可能没有被介绍到但一定存在的限制），不是厂商的白皮书这样规定，是由实现机制决定的或者说本身的结构决定的。
+本文重点介绍数据结构中经典的树（B树）结构在数据库索引中的经典应用，也会涉及到几种数据库中对此支持的细微不同，以期比较完整的描述实现原理。最终会发现这几种被不同数据库厂商冠以不同名字的东西原理上其实差不多，理论上其实是一个东西。文中只是略微空洞的介绍其实现原理，不涉及应用上具体的使用建议。
+关键字：B树 数据库索引 索引组织表（Index-Organized Tables） 聚集索引 非聚集索引 Oracle Mysql Mssql
+一、关于数据库索引 数据库索引在维基中的定义：A database index is a data structure that improves the speed of data retrieval operations on a database table at the cost of additional writes and the use of more storage space to maintain the extra copy of data. Indexes are used to quickly locate data without having to search every row in a database table every time a database table is accessed.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>从Count看Oracle执行计划的选择</title>
+      <link>https://idouba.com/analysis-oracle-execute-plan-from-count/</link>
+      <pubDate>Mon, 24 Mar 2014 12:53:50 +0000</pubDate>
+      
+      <guid>https://idouba.com/analysis-oracle-execute-plan-from-count/</guid>
+      <description>
+        
+          
+            一、 前言 在调查一个性能问题的时候，一个同事问道，为什么数据库有些时候这么不聪明，明明表上有索引，但是在执行一个简单的count的时候居然全表扫描了！难道不知道走索引更快么？
+试图从最简单的count来重新了解oracle查询计划的选择，以及最终产生的结果。虽然有些结果会让人觉得有些意外，并且可能会鄙视，这个查询计划选择真的不够聪明。但稍微用心点的去了解，做的已经足够细致了。大多数情况下，根据我们输入的信息，来自输入的SQL、表结构、索引状况、统计信息，会得出一个比较优的计划。所以和前面一直试图讲到索引和join方式一样，所有这样的选择不是因为数据库厂商这样规定的，而是基于存储的数据的实际情况，就**应该(甚至说不得不)**这么去选择。
+1-- Create table 2create table IDOUBA.APP_APPLICATIONAUDIT 3( 4 ID NUMBER, 5 UNIQUEID NUMBER, 6 POLICYID NUMBER, 7 IP VARCHAR2(200) not null, 8 IPNUM NUMBER not null, 9 MAC VARCHAR2(200), 10 USERVISIT VARCHAR2(100), 11 PHONE VARCHAR2(200), 12 GROUPNAME VARCHAR2(100), 13 PORT NUMBER, 14 APP_URL VARCHAR2(200), 15 TITLE VARCHAR2(200), 16 REQUESTS VARCHAR2(1000), 17 REQIDENTITYCARD VARCHAR2(1000), 18 REQKEY VARCHAR2(1000), 19 RESPONSEEKEY VARCHAR2(3000), 20 UPDATETIME DATE, 21 AUDITTYPE NUMBER, 22 TITLEID NUMBER, 23 SUBTITLEID NUMBER, 24 SERVERIP VARCHAR2(200), 25 DOMAINNAME VARCHAR2(200) 26) 27tablespace USERS 28 pctfree 10 29 initrans 1 30 maxtrans 255 31 storage 32 ( 33 initial 64K 34 minextents 1 35 maxextents unlimited 36 ); 37-- Create/Recreate indexes 38create index INDEX_UPDATETIME on IDOUBA.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>B树在数据库索引中的应用剖析（原稿）</title>
+      <link>https://idouba.com/about-btrees-application-in-database-index/</link>
+      <pubDate>Thu, 20 Mar 2014 08:18:48 +0000</pubDate>
+      
+      <guid>https://idouba.com/about-btrees-application-in-database-index/</guid>
+      <description>
+        
+          
+            引言 关于数据库索引，随便Google一个Oracle index，Mysql index总有大量的结果出来，其中不乏某某索引之n条经典建议。笔者认为，较之借鉴，在搞清楚了自己的需求的基础上，对备选方案的原理有个尽可能深入全面的了解会更有利于我们的选择和决策。因为某种方案或者技术呈现出某种优势（包括可能没有被介绍到但一定存在的限制），不是定义出来的，而是因为其实现机制决定的。就像LinkedList和ArrayList分别适用于什么应用不是Document里面定义的，是由其本身的结构决定的。数据库的索引也是一样，不是厂商的白皮书这样规定，而是其原理决定的。 本文只是重点介绍数据结构中经典的树（B树）结构在数据库索引中的经典应用，也会涉及到几种数据库中对此支持的细微不同，以期比较完整的描述实现原理。最终会发现这几种被不同数据库厂商冠以不同名字东西原理上其实差不多，理论上其实是一个东西。文中只是略微空洞的介绍其实现原理，不涉及应用上具体的使用建议。
+#####关键字：B树 数据库索引? 索引组织表（Index-Organized Tables） 聚集索引 非聚集索引 Oracle ?Mysql Mssql
+一、关于数据库索引 数据库索引在维基中的定义：A database index is a data structure that improves the speed of data retrieval operations on a database table at the cost of additional writes and the use of more storage space to maintain the extra copy of data. Indexes are used to quickly locate data without having to search every row in a database table every time a database table is accessed.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>Oracle索引原理精简总结</title>
+      <link>https://idouba.com/oracle-index-brief/</link>
+      <pubDate>Wed, 19 Feb 2014 13:48:09 +0000</pubDate>
+      
+      <guid>https://idouba.com/oracle-index-brief/</guid>
+      <description>
+        
+          
+            结合使用整理Oracle的索引，主要权威的来自于Oracle Database Concepts与Oracle Database Performance Tuning Guide
+尝试用最少的字数介绍oracle的几种常用索引原理，主要是想简单分析其存储结构来说明其检索方式，和解释为什们某种索引使用与某种场合。（数据结构中最简单的ArrayList和LinkedList的使用场景）。阐述原因只有一个，就是因为其存储结构决定的。
+B树索引(默认类型) 存储结构： B+树，不多描述。和其他几种关系数据库一样，就是根据索引列(一个或多个)来构造一个B+树来存储索引。非叶子节点两个区域：存储下级子节点的值的范围，和到对应子节点地址（典型B+树的结构），主要作用是导航；叶子节点存储索引的键值和行的ROWID。另外，索引的叶子节点间构成了一个双向链表。类似mysql的myisam引擎的辅助索引，也类似mssql的非聚集索引。
+检索方式： 典型的平衡树的检索，栋根节点开始导航，选择下一个中间节点，直到找到对应的叶节点。需要说明的是，如果检索的所有列都在是索引中，则不用不用检索表，被称为Fast Full Index Scan；如果检索的列不都包含在索引中，则从树上找到索引列对应的key的叶子节点，需要根据其对应的ROWID，再次访问表，根据ROWID关联到其他属性。当Index Range Scan这种检索索引列的某个范围，则不用从根节点开始导航，直接选定开始的叶节点后，直接从叶节点的双向链表就可以完成。只需从根节点导航一次，找到开始的叶节点。
+B+树是一个balance树，所有的叶子都在同一层上，无论根据索引查找表中的哪一条记录，where columnIndex=selectValue中间导航的层数都是相同的，所执行的I/O此次数都是相同的。
+适合应用： 因为树状结构的特征，适合于适合与大量的增、删、改（OLTP），因为树状结构节点分裂、合并等很方便；适合高基数的列（唯一值多）的列索引，数据重叠太多，树状就快变为列表了，其查找功能就不能体现了。
+反向键索引 存储结构： 反向键索引是一种能够将索引键‘反转’的B*Tree索引。通过把键‘反转’，本来连续的键值变得非常‘离散’。当大量数据并行插入的时候，把本来一个索引块上的连续键值分散到不同的索引块上，减少了索引块的争用。
+检索方式： 和普通的B树索引没有差别。
+使用场景 因为存储结构同B树索引，使用场合也同B树索引。但是如WHERE?COL1?&amp;gt;?888这样的Index Range Scan不能用反向索引，因为存储结构决定这种本来连续的已经反向的不连续了。
+位图索引bitmap 存储结构 类似于java的BitSet采用最简单的方式存储某个值在哪些行出现，哪些行不出现。
+如在列性别上建索引。
+Value Row 1 Row 2 Row 3 Row 4 Row 5 Row 6 Row 7 M 1 1 1 1 F 1 1 1 在F行上Row12 row6 row7为1表示这些行的索引列取值是F。搜索一条记录的时候。
+**检索方式 当发出where sex=’F’ 这样的SQL语句时，会去搜索F所在的索引条目，然后扫描该索引条目中的bitmap里所有的bit位。第一个bit位为 1，则说明第一条记录上的C1值为01，于是返回第一条记录所在的ROWID（根据该索引条目里记录的start ROWID加上行号得到该记录所在的ROWID）。然后根据ROWID关联其他属性。
+适用应用： 适用于基数的列(low?cardinality)，因为存储的索引块会比较少。因此不适用创建复合索引，复合索引包含多列，它们的组合一般来说已经是高基数。
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>【译】数据库事务隔离级别</title>
+      <link>https://idouba.com/wikipedia_isolation/</link>
+      <pubDate>Sun, 05 Jan 2014 12:23:26 +0000</pubDate>
+      
+      <guid>https://idouba.com/wikipedia_isolation/</guid>
+      <description>
+        
+          
+            看到wikipedia中文关于数据库相关的几个经典条目有点老旧，尤其和英文条目相比。确定开始翻译其中几篇，先从事务隔离等级开始。格式采用维基Sandbox发布后的格式。翻译完后自己校对过几遍，质量还可以。:-)
+已经在中文维基发布。
+翻译的中文条目地址：事务隔离等级；
+对应的英文条目地址：Isolation (database systems)
+欢迎大家指正，可以直接在维基上对应条目更新的！。
+事务隔离（isolation）定义了数据库系统中一个操作产生的影响什么时候以哪种方式可以对其他并发操作可见。隔离是事务ACID (原子性、一致性性、隔离性、持久性)四大属性中的一个重要属性。
+并发控制(Concurrency control) 并发控制描述了数据库处理隔离以保证数据正确性的机制。为了保证并行事务执行的准确执行数据库和存储引擎在设计的时候着重强调了这一点。典型的事务相关机制限制数据的访问顺序(执行调度)以满足可序列化 和可恢复性。限制数据访问意味着降低了执行的性能，并发控制机制就是要保证在满足这些限制的前提下提供尽可能高的性能。经常在不损害正确性的情况下，为了达到更好的性能，可序列化的的要求会减低一些，但是为了避免数据一致性的破坏，可恢复性必须保证。
+两阶段锁是关系数据库中最常见的提供了可序列化 和可恢复性的并发控制机制，为了访问一个数据库对象，事务首先要获得这个对象的 锁。对于不同的访问类型（如对对象的读写操作）和锁的类型，如果另外一个事务正持有这个对象的锁，获得锁的过程会被阻塞或者延迟。
+隔离级别(Isolation levels) 在数据库事务的ACID四个属性中，隔离性是一个最常放松的一个。为了获取更高的隔离等级，数据库系统的 锁机制或者多版本并发控制机制都会影响并发。 应用软件也需要额外的逻辑来使其正常工作。
+很多DBMS定义了不同的“事务隔离等级”来控制锁的程度。在很多数据库系统中，多数的数据库事务都避免高等级的隔离等级（如可序列化）从而减少对系统的锁定开销。程序员需要小心的分析数据库访问部分的代码来保证隔离级别的降低不会造成难以发现的代码bug。相反的，更高的隔离级别会增加死锁发生的几率，同样需要编程过程中去避免。
+ANSI/ISO SQL定义的标准隔离级别如下。
+可序列化(Serializable) 最高的隔离级别。
+在基于锁机制并发控制的DBMS实现可序列化要求在选定对象上的读锁和写锁保持直到事务结束后才能释放。在SELECT 的查询中使用一个“WHERE”子句来描述一个范围时应该获得一个“范围锁(range-locks)”。这种机制可以避免“幻影读(phantom reads)”现象。
+当采用不基于锁的并发控制时不用获取锁。但当系统探测到几个并发事务有“写冲突”的时候，只有其中一个是允许提交的。这种机制的详细描述见“’快照隔离”
+可重复读(Repeatable reads) 在可重复读(REPEATABLE READS)隔离级别中，基于锁机制并发控制的DBMS需要对选定对象的读锁(read locks)和写锁(write locks)一直保持到事务结束，但不要求“范围锁(range-locks)”，因此可能会发生“幻影读(phantom reads)”
+授权读(Read committed) 在授权读(READ COMMITTED)级别中，基于锁机制并发控制的DBMS需要对选定对象的写锁(write locks)一直保持到事务结束，但是读锁(read locks)在SELECT操作完成后马上释放（因此“不可重复读”现象可能会发生，见下面描述）。和前一种隔离级别一样，也不要求“范围锁(range-locks)”。
+简而言之，授权读这种隔离级别保证了读到的任何数据都是提交的数据，避免读到中间的未提交的数据，脏读(dirty reads)。但是不保证事务重新读的时候能读到相同的数据，因为在每次数据读完之后其他事务可以修改刚才读到的数据。
+未授权读(Read uncommitted) 未授权读(READ UNCOMMITTED)是最低的隔离级别。允许_脏读(dirty reads)_，事务可以看到其他事务“尚未提交”的修改。
+通过比低一级的隔离级别要求更多的限制，高一级的级别提供更强的隔离性。标准允许事务运行在更强的事务隔离级别上。(如在可重复读(REPEATABLE READS)隔离级别上执行授权读(READ COMMITTED)的事务是没有问题的)
+默认隔离级别 不同的DBMS默认隔离级别也不同。多少数据库允许用户设置隔离级别。有些DBMS在执行一个SELECT语句时使用额外的语法来获取锁(如_SELECT … FOR UPDATE_来获得在访问的数据行上的排他锁)
+读现象(Read phenomena) ANSI/ISO 标准SQL 92涉及三种不同的一个事务读取另外一个事务可能修改的数据的“读现象”。
+下面的例子中，两个事务，事务1执行语句1。接着，事务2执行语句2并且提交，最后事务1再执行语句1. 查询使用如下的数据表。
+id name age 1 Joe 20 2 Jill 25 脏读(Dirty reads (Uncommitted Dependency)) 当一个事务允许读取另外一个事务修改但未提交的数据时，就可能发生脏读(dirty reads)。
+          
+          
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>

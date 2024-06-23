@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>索引 on 爱豆吧！</title>
+    <link>https://idouba.com/tags/%E7%B4%A2%E5%BC%95/</link>
+    <description>Recent content in 索引 on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Wed, 18 Jun 2014 09:27:23 +0000</lastBuildDate><atom:link href="https://idouba.com/tags/%E7%B4%A2%E5%BC%95/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>B树在数据库索引中的应用剖析(发表版本)</title>
+      <link>https://idouba.com/about-btrees-application-in-database-index-in-programmer/</link>
+      <pubDate>Wed, 18 Jun 2014 09:27:23 +0000</pubDate>
+      
+      <guid>https://idouba.com/about-btrees-application-in-database-index-in-programmer/</guid>
+      <description>
+        
+          
+            最近一篇发表于《程序员》2014年6月刊上的文章。有点遗憾发现，有些部分被编辑修改过了，读起来有点怪怪的。最典型的是习惯于对某些比较经典的定义引用wikipedia或者原始白皮书中原始的E文，在文中发现都被硬译过了，表达的意思自己都有点看不懂了！
+最终修改后提交的版本归档下：
+引言 关于数据库索引，随便Google一个Oracle index，Mysql index总能得到“某某索引之n条经典建议”之类大量结果。笔者认为，较之直接借鉴，在搞清实际需求的基础上，对备选方案的原理尽可能深入全面的了解会更有利于我们的决策。因为某种方案或者技术呈现出某种优势（包括可能没有被介绍到但一定存在的限制），不是厂商的白皮书这样规定，是由实现机制决定的或者说本身的结构决定的。
+本文重点介绍数据结构中经典的树（B树）结构在数据库索引中的经典应用，也会涉及到几种数据库中对此支持的细微不同，以期比较完整的描述实现原理。最终会发现这几种被不同数据库厂商冠以不同名字的东西原理上其实差不多，理论上其实是一个东西。文中只是略微空洞的介绍其实现原理，不涉及应用上具体的使用建议。
+关键字：B树 数据库索引 索引组织表（Index-Organized Tables） 聚集索引 非聚集索引 Oracle Mysql Mssql
+一、关于数据库索引 数据库索引在维基中的定义：A database index is a data structure that improves the speed of data retrieval operations on a database table at the cost of additional writes and the use of more storage space to maintain the extra copy of data. Indexes are used to quickly locate data without having to search every row in a database table every time a database table is accessed.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>B树在数据库索引中的应用剖析（原稿）</title>
+      <link>https://idouba.com/about-btrees-application-in-database-index/</link>
+      <pubDate>Thu, 20 Mar 2014 08:18:48 +0000</pubDate>
+      
+      <guid>https://idouba.com/about-btrees-application-in-database-index/</guid>
+      <description>
+        
+          
+            引言 关于数据库索引，随便Google一个Oracle index，Mysql index总有大量的结果出来，其中不乏某某索引之n条经典建议。笔者认为，较之借鉴，在搞清楚了自己的需求的基础上，对备选方案的原理有个尽可能深入全面的了解会更有利于我们的选择和决策。因为某种方案或者技术呈现出某种优势（包括可能没有被介绍到但一定存在的限制），不是定义出来的，而是因为其实现机制决定的。就像LinkedList和ArrayList分别适用于什么应用不是Document里面定义的，是由其本身的结构决定的。数据库的索引也是一样，不是厂商的白皮书这样规定，而是其原理决定的。 本文只是重点介绍数据结构中经典的树（B树）结构在数据库索引中的经典应用，也会涉及到几种数据库中对此支持的细微不同，以期比较完整的描述实现原理。最终会发现这几种被不同数据库厂商冠以不同名字东西原理上其实差不多，理论上其实是一个东西。文中只是略微空洞的介绍其实现原理，不涉及应用上具体的使用建议。
+#####关键字：B树 数据库索引? 索引组织表（Index-Organized Tables） 聚集索引 非聚集索引 Oracle ?Mysql Mssql
+一、关于数据库索引 数据库索引在维基中的定义：A database index is a data structure that improves the speed of data retrieval operations on a database table at the cost of additional writes and the use of more storage space to maintain the extra copy of data. Indexes are used to quickly locate data without having to search every row in a database table every time a database table is accessed.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>Oracle索引原理精简总结</title>
+      <link>https://idouba.com/oracle-index-brief/</link>
+      <pubDate>Wed, 19 Feb 2014 13:48:09 +0000</pubDate>
+      
+      <guid>https://idouba.com/oracle-index-brief/</guid>
+      <description>
+        
+          
+            结合使用整理Oracle的索引，主要权威的来自于Oracle Database Concepts与Oracle Database Performance Tuning Guide
+尝试用最少的字数介绍oracle的几种常用索引原理，主要是想简单分析其存储结构来说明其检索方式，和解释为什们某种索引使用与某种场合。（数据结构中最简单的ArrayList和LinkedList的使用场景）。阐述原因只有一个，就是因为其存储结构决定的。
+B树索引(默认类型) 存储结构： B+树，不多描述。和其他几种关系数据库一样，就是根据索引列(一个或多个)来构造一个B+树来存储索引。非叶子节点两个区域：存储下级子节点的值的范围，和到对应子节点地址（典型B+树的结构），主要作用是导航；叶子节点存储索引的键值和行的ROWID。另外，索引的叶子节点间构成了一个双向链表。类似mysql的myisam引擎的辅助索引，也类似mssql的非聚集索引。
+检索方式： 典型的平衡树的检索，栋根节点开始导航，选择下一个中间节点，直到找到对应的叶节点。需要说明的是，如果检索的所有列都在是索引中，则不用不用检索表，被称为Fast Full Index Scan；如果检索的列不都包含在索引中，则从树上找到索引列对应的key的叶子节点，需要根据其对应的ROWID，再次访问表，根据ROWID关联到其他属性。当Index Range Scan这种检索索引列的某个范围，则不用从根节点开始导航，直接选定开始的叶节点后，直接从叶节点的双向链表就可以完成。只需从根节点导航一次，找到开始的叶节点。
+B+树是一个balance树，所有的叶子都在同一层上，无论根据索引查找表中的哪一条记录，where columnIndex=selectValue中间导航的层数都是相同的，所执行的I/O此次数都是相同的。
+适合应用： 因为树状结构的特征，适合于适合与大量的增、删、改（OLTP），因为树状结构节点分裂、合并等很方便；适合高基数的列（唯一值多）的列索引，数据重叠太多，树状就快变为列表了，其查找功能就不能体现了。
+反向键索引 存储结构： 反向键索引是一种能够将索引键‘反转’的B*Tree索引。通过把键‘反转’，本来连续的键值变得非常‘离散’。当大量数据并行插入的时候，把本来一个索引块上的连续键值分散到不同的索引块上，减少了索引块的争用。
+检索方式： 和普通的B树索引没有差别。
+使用场景 因为存储结构同B树索引，使用场合也同B树索引。但是如WHERE?COL1?&amp;gt;?888这样的Index Range Scan不能用反向索引，因为存储结构决定这种本来连续的已经反向的不连续了。
+位图索引bitmap 存储结构 类似于java的BitSet采用最简单的方式存储某个值在哪些行出现，哪些行不出现。
+如在列性别上建索引。
+Value Row 1 Row 2 Row 3 Row 4 Row 5 Row 6 Row 7 M 1 1 1 1 F 1 1 1 在F行上Row12 row6 row7为1表示这些行的索引列取值是F。搜索一条记录的时候。
+**检索方式 当发出where sex=’F’ 这样的SQL语句时，会去搜索F所在的索引条目，然后扫描该索引条目中的bitmap里所有的bit位。第一个bit位为 1，则说明第一条记录上的C1值为01，于是返回第一条记录所在的ROWID（根据该索引条目里记录的start ROWID加上行号得到该记录所在的ROWID）。然后根据ROWID关联其他属性。
+适用应用： 适用于基数的列(low?cardinality)，因为存储的索引块会比较少。因此不适用创建复合索引，复合索引包含多列，它们的组合一般来说已经是高基数。
+          
+          
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>

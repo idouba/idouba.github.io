@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>UC on 爱豆吧！</title>
+    <link>https://idouba.com/tags/uc/</link>
+    <description>Recent content in UC on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Mon, 09 Oct 2023 15:50:08 +0000</lastBuildDate><atom:link href="https://idouba.com/tags/uc/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>UC(上游连接中断)--Istio访问日志ResponseFlag重现与解析12</title>
+      <link>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-12-UC/</link>
+      <pubDate>Mon, 09 Oct 2023 15:50:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-12-UC/</guid>
+      <description>
+        
+          
+            KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第12个关注的Response Flag是UC，全称是UpstreamConnectionTermination，官方定义表示Upstream connection termination in addition to 503 response code.
+含义： UC表示上游连接中断，常见的一种现象是上游连接在返回应答前已经关闭。
+重现环境： UC是一个不太好构建的场景，环境和前面的大多数略有不同。
+客户端Pod，这里是特别写了一个Python程序。因为观测点在服务端代理，客户端是否注入Sidecar都可以。 目标服务，一个Cluster类型的Kubernetes服务，这里是一个代理了Nginx服务，多个服务实例。服务端Pod要求注入Siecar，观察服务端的访问日志。 重现步骤： 第一步： 配置nginx conf文件给Nginx添加一个后端后端服务。这里就是简单用tomcat容器在8080上起了一个服务。
+1 location /ucbackend { 2 proxy_http_version 1.1; 3 proxy_pass http://tomcat.accesslog:8080; 4 } 第二步： 不同于前面的测试，都是通过客户端命令行curl进行访问。构造UC的客户端控制稍微复杂些，这里编写一个简单的Python脚本，请求目标Nginx代理的服务，脚本中以Post方式发送请求，请求包括头域“Content-Length: 300”，说明将发送300大小的请求体 ，但实际发送的请求大小是0。
+当客户端容器中执行这个Python脚本时，服务端的Nginx会一直尝试接收300大小的请求，却一直收不齐，导致请求一直不会结束。这样就会触发Nginx默认的60秒超时，服务端Nginx在60秒后会自动断开连接，从而即构造出了上游连接断开的场景。
+第三步： 在客户端容器中执行以上Python程序， 观察Python脚本我们打印的输出，会看到执行后60秒得到了503的返回。
+第四步： 观察Nginx自身的日志记录了408，表示服务端不再等待，关闭了连接。
+1127.0.0.6 - - [25/Aug/2023:03:33:17 +0000] &amp;#34;POST /ucbackend/ HTTP/1.1&amp;#34; 408 0 &amp;#34;-&amp;#34; &amp;#34;-&amp;#34; &amp;#34;-&amp;#34; 第五步： 同时服务端代理记录503UC，表示服务端断开了连接，能看到日志上请求60秒（日志显示60060毫米）的耗时。
+1[2023-08-25T03:32:17.193Z] &amp;#34;POST /ucbackend/ HTTP/1.1&amp;#34; 503 UC upstream_reset_before_response_started{connection_termination} - &amp;#34;-&amp;#34; 0 95 60060 - &amp;#34;-&amp;#34; &amp;#34;-&amp;#34; &amp;#34;6a6febc2-d669-4788-8bf2-989371c07372&amp;#34; &amp;#34;10.
+          
+          
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>

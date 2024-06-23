@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Kubernetes on 爱豆吧！</title>
+    <link>https://idouba.com/categories/kubernetes/</link>
+    <description>Recent content in Kubernetes on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Fri, 01 Sep 2017 15:39:48 +0000</lastBuildDate><atom:link href="https://idouba.com/categories/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>kubernetes liveness probe 流程</title>
+      <link>https://idouba.com/kubernetes-liveness-probe/</link>
+      <pubDate>Fri, 01 Sep 2017 15:39:48 +0000</pubDate>
+      
+      <guid>https://idouba.com/kubernetes-liveness-probe/</guid>
+      <description>
+        
+          
+            1 概述 kubernetes提供了的Probe可以进行健康检查。
+https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
+对pod中的每个容器通过配置liveness或者readiness。
+当liveness probe failed后，该container会杀掉，并重新创建；而readinessProbe失败，则该pod ip 会从service的endpoints列表中删除，即隔离到该后端的请求。
+如liveness 配置如下：
+1livenessProbe: 2 httpGet: 3 port: 10252 4 path: “/healthz” 5 initialDelaySeconds: 15 6 timeoutSeconds: 15 文中尝试端到端的看下整个过程有哪些组件参与进来，怎么配合工作的。
+2 配置 pkg/api/types.go#Probe结构描述了Probe的一个定义。其中Handler是执行的动作，initialDelaySeconds表示容器启动后延迟多少秒初始化probe，考虑一般应用启动需要一定时间。periodSeconds 表示周期检查的间隔，默认10秒，最小1秒。timeoutSeconds会告诉健康检查等待多长时间，默认1秒，最小1秒。successThreshold表示连续探测多少次成功才算成功。failureThreshold表示连续探测多少次失败才算失败。默认是3.
+1type Probe struct { 2Handler json:&amp;#34;,inline&amp;#34; 3InitialDelaySeconds int32 json:&amp;#34;initialDelaySeconds,omitempty&amp;#34; 4TimeoutSeconds int32 json:&amp;#34;timeoutSeconds,omitempty&amp;#34; 5PeriodSeconds int32 json:&amp;#34;periodSeconds,omitempty&amp;#34; 6SuccessThreshold int32 json:&amp;#34;successThreshold,omitempty&amp;#34; 7FailureThreshold int32 json:&amp;#34;failureThreshold,omitempty&amp;#34; 8} 探测动作Handler支持httpget tcd 和exec三种动作。
+httpGet对应一个http请求，主要是配置http端口和path；TCPSocket对应一个TCP请求，主要是配置一个TCP端口，EXEC表示执行一个命令。各个handler详细的定义不看了。
+1type Handler struct { 2Exec *ExecAction json:&amp;#34;exec,omitempty&amp;#34; 3// HTTPGet specifies the http request to perform.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>kubernetes federation 工作机制之资源对象同步</title>
+      <link>https://idouba.com/kubernetes-federation-sync-accross-cluster/</link>
+      <pubDate>Tue, 15 Aug 2017 15:51:34 +0000</pubDate>
+      
+      <guid>https://idouba.com/kubernetes-federation-sync-accross-cluster/</guid>
+      <description>
+        
+          
+            1 前言 希望通过本文最简单的方式向熟悉k8s的人说明白其上的federation是干什么的，如何工作的。
+关于federation，比较官方的说法是：集群联邦可以让租户/企业根据需要扩展或伸缩所需要的集群；可以让租户/企业在跨地区甚至跨地域的多个集群上部署、调度、监测管理应用。通过集群联邦，租户/企业可以在指定集群上部署应用，可以拉通私有云和公有云建立混合云(hybrid cloud)。
+如在design-proposal 中描述的federation提供了cross-cluster scheduling, cross-cluster service discovery, cross-cluster migration, cross-cluster**ing and auditing, cross-cluster load balancing。
+简单讲就一句话。能调用一个api，向操作一个k8s集群一样操作多个k8s集群。主要是拉通其下的k8s集群在上部署应用，发布服务，并且可以让其互相访问。
+那么是怎么做到的呢？熟悉了kubernetes代码和主要的工作逻辑会发现非常简单。简单看下这部分代码会就会发现federation有如下特点：
+复用了kubernets的机制 复用kubernetes的代码 扩展了kubernetes的对象（的定义和功能） 2. 架构 Federation 层的主要组件包括Federation-API Server，Controller-Manager和ETCD。根据Decoupled 的设计的目标和kubernetes 共用类库，而不是共用一个紧密的结构结构。在结构上解耦可以保证，Federation层故障，其下的每个个kubernetes集群不受影响。另外FederationAPI接口和kube-api接口完全兼容，用户可以像之前操作单个kubernetes集群一样操作联邦。
+和Kubernetes类似，用户通过kubectl或者API调用向FederationAPI server的接口创建和维护各种对象，数据对象被持久化存储在Federation的ETCD中。联邦只是维护了规划，真正干活还是在其下的各个Cluster上（现实生活中其实也总是这样，你见过在联邦的川普干过什么正经事情）。真正关键的联邦如何通过一个统一的入口来接收请求，在各个cluster上调度。具体到（代码）功能就是联邦中指令如何在cluster上被落实执行。
+联邦和其下k8s 集群的调用关系。调用细节下面描述。
+3. 主要流程 关键就在于Federation的组件Controller-manager。和K8s其他的controller作用和工作机制类似，通过watch api-server 执行动作来维护集群状态。Federation的Controller-manager的处理逻辑和kubernetes略有不同，在于它一般都要连两个API server，watch 3个API 对象
+对于每种Resource对象，都对应一个Controller，在Federation的Controller-manager启动时，启动这些Controller。
+以ConfigMap为例，ConfigMapController启动后会watch如下三类接口：
+Federation API server的Cluster接口federation/v1beta1/cluster； Federation API server的ConfigMap接口v1/configmap； Federation 管理的 N 个kubernetes cluster的Kube-API server 的ConfigMap的接口：v1/ configmap 当ConfigMapController watch到有户通过Federation API 创建（或者更新删除）一个ConfigMap，则会调用对应的每个cluster 的kube-apiserver创建（或者更新删除）对应的ConfigMap。
+当ConfigMapController Watch到有新的Cluster加入进来时，调用新的Cluster的kube-api接口创建ConfigMap。Configmap、Secret等对象都是依照以上逻辑，从上向下Sync。
+以ConfigMap 的controller为例，其他的都是遵从同一个模板流程。在NewConfigMapController场景controller时对watch 3个api。
+Federation API server的ConfigMap接口v1/configmap；
+          
+          
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>

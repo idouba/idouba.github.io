@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Pilot on 爱豆吧！</title>
+    <link>https://idouba.com/tags/pilot/</link>
+    <description>Recent content in Pilot on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Mon, 23 Jul 2018 14:35:50 +0000</lastBuildDate><atom:link href="https://idouba.com/tags/pilot/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Istio技术与实践02：源码解析之Istio on Kubernetes 统一服务发现</title>
+      <link>https://idouba.com/istio-01-code-pilot-service-discovery-upon-k8s/</link>
+      <pubDate>Mon, 23 Jul 2018 14:35:50 +0000</pubDate>
+      
+      <guid>https://idouba.com/istio-01-code-pilot-service-discovery-upon-k8s/</guid>
+      <description>
+        
+          
+            【摘要】 本文基于Pilot服务发现Kubernetes部分源码重点介绍在Istio on Kubernetes环境下，如何基于Pilot的Adapter机制实现Istio管理的服务直接使用Kubernetes service来做统一服务发现，避免了其他微服务框架运行在Kubernetes环境时上下两套服务目录的局面。并以此为入口从架构、场景等方面总结下Istio和Kubernetes的结合关系。
+前言 文章Istio技术与实践01： 源码解析之Pilot多云平台服务发现机制结合Pilot的代码实现介绍了Istio的抽象服务模型和基于该模型的数据结构定义，了解到Istio上只是定义的服务发现的接口，并未实现服务发现的功能，而是通过Adapter机制以一种可扩展的方式来集成各种不同的服务发现。本文重点讲解Adapter机制在Kubernetes平台上的使用。即Istio on Kubernetes如何实现服务发现。
+Kubernetes和Istio的结合Kubernetes和Istio的结合 从场景和架构上看Istio和Kubernetes都是非常契合的一种搭配。从场景和架构上看Istio和Kubernetes都是非常契合的一种搭配。
+首先从场景上看Kuberntes为应用负载的部署、运维、扩缩容等提供了强大的支持。通过Service机制提供了负载间访问机制，通过域名结合Kubeproxy提供的转发机制可以方便的访问到对端的服务实例。因此如上图可以认为Kubernetes提供了一定的服务发现和负载均衡能力，但是较深入细致的流量治理能力，因为Kubnernetes所处的基础位置并未提供，而Istio正是补齐了这部分能力，两者的结合提供了一个端到端的容器服务运行和治理的解决方案。
+从架构看Istio和Kubernetes更是深度的结合。 得益于Kuberntes Pod的设计，数据面的Sidecar作为一种高性能轻量的代理自动注入到Pod中和业务容器部署在一起，接管业务容器的inbound和outbound的流量，从而实现对业务容器中服务访问的治理。在控制面上Istio基于其Adapter机制集成Kubernetes的域名，从而避免了两套名字服务的尴尬场景。
+在本文中将结合Pilot的代码实现来重点描述图中上半部分的实现，下半部分的内容Pilot提供的通用的API给Envoy使用可参照上一篇文章的DiscoverServer部分的描述。
+基于Kubernetes的服务发现 理解了Pilot的ServiceDiscovery的Adapter的主流程后，了解这部分内容比较容易。Pilot-discovery在initServiceControllers时，根据服务注册配置的方式，如果是Kubernetes，则会走到这个分支来构造K8sServiceController。
+1case serviceregistry.KubernetesRegistry: 2s.createK8sServiceControllers(serviceControllers, args); err != nil { 3return err 4} 创建controller其实就是创建了一个Kubenernetes的controller，可以看到List/Watch了Service、Endpoints、Node、Pod几个资源对象。
+1// NewController creates a new Kubernetes controller 2func NewController(client kubernetes.Interface, options ControllerOptions) *Controller { 3 out := &amp;amp;Controller{ 4 domainSuffix: options.DomainSuffix, 5 client: client, 6 queue: NewQueue(1 * time.Second), 7 } 8 out.services = out.createInformer(&amp;amp;v1.Service{}, &amp;#34;Service&amp;#34;, options.ResyncPeriod, 9 func(opts meta_v1.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>Istio技术与实践01： 源码解析之Pilot多云平台服务发现机制</title>
+      <link>https://idouba.com/istio-01-code-pilot-service-discovery-adapter/</link>
+      <pubDate>Sat, 21 Jul 2018 16:12:44 +0000</pubDate>
+      
+      <guid>https://idouba.com/istio-01-code-pilot-service-discovery-adapter/</guid>
+      <description>
+        
+          
+            前言 本文结合Pilot中的关键代码来说明下Istio的服务发现的机制、原理和流程。并以Eureka为例看下Adapter的机制如何支持多云环境下的服务发现。可以了解到： 1. Istio的服务模型; 2. Istio发现的机制和原理; 3. Istio服务发现的adpater机制。 基于以上了解可以根据需开发集成自有的服务注册表，完成服务发现的功能。
+服务模型 首先，Istio作为一个（微）服务治理的平台，和其他的微服务模型一样也提供了Service，ServiceInstance这样抽象服务模型。如Service的定义中所表达的，一个服务有一个全域名，可以有一个或多个侦听端口。
+1type Service struct { 2 // Hostname of the service, e.g. &amp;#34;catalog.mystore.com&amp;#34; 3 Hostname Hostname `json:&amp;#34;hostname&amp;#34;` 4 Address string `json:&amp;#34;address,omitempty&amp;#34;` 5 Addresses map[string]string `json:&amp;#34;addresses,omitempty&amp;#34;` 6 // Ports is the set of network ports where the service is listening for connections 7 Ports PortList `json:&amp;#34;ports,omitempty&amp;#34;` 8 ExternalName Hostname `json:&amp;#34;external&amp;#34;` 9 ... 10 } 当然这里的Service不只是mesh里定义的service，还可以是通过serviceEntry接入的外部服务。每个port的定义在这里：
+1type Port struct { 2 Name string `json:&amp;#34;name,omitempty&amp;#34;` 3 Port int `json:&amp;#34;port&amp;#34;` 4 Protocol Protocol `json:&amp;#34;protocol,omitempty&amp;#34;` 5 } 除了port外，还有 一个name和protocol。可以看到支持如下几个Protocol ：
+          
+          
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>

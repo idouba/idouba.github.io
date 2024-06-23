@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>UPE on 爱豆吧！</title>
+    <link>https://idouba.com/tags/upe/</link>
+    <description>Recent content in UPE on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Mon, 02 Oct 2023 15:50:08 +0000</lastBuildDate><atom:link href="https://idouba.com/tags/upe/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>UPE(上游服务协议错误)--Istio访问日志ResponseFlag重现与解析05</title>
+      <link>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-05-UPE/</link>
+      <pubDate>Mon, 02 Oct 2023 15:50:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-05-UPE/</guid>
+      <description>
+        
+          
+            KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第五个关注的Response Flag是UPE，全称是 UpstreamProtocolError ，官方定义表示&amp;quot;The upstream response had an HTTP protocol error.&amp;quot;
+含义： UPE表示上游服务协议错误。在网格中定义的服务的协议和服务实际的协议不一致时，当服务访问时，客户端会得到502协议错误的响应。同时服务端的入流量日志会记录502 UPE。
+重现环境： 客户端Pod，注入了Sidecar。 目标服务，一个Cluster类型的Kubernetes服务，多个服务实例。服务端Pod可以注入Siecar，也可以不用注入。 重现步骤： 第一步： 从注入了网格代理的客户端Pod中通过目标名和服务端口访问目标服务，观察代理的访问日志，得到正常的200响应码。从服务端和客户端的访问日志上都可以看到服务在目标服务的多个实例上负载均衡。正常访问参照本系列的环境部分描述。
+第二步： 在第一个正常用例基础上修改服务端口为gRPC，可以是修改端口名或者AppProtocol字段。
+1apiVersion: v1 2kind: Service 3metadata: 4 name: nginx 5 namespace: accesslog 6spec: 7 ports: 8 - name: grpc # modify protocol by port name or AppProtocol 9 port: 80 10 protocol: TCP 11 targetPort: 80 12 selector: 13 app: nginx 14 sessionAffinity: None 15 type: ClusterIP 第三步： 在客户端容器中正常的curl目标服务，得到502 Bad Gateway的错误，Reset reason 提示 protocol error。
+          
+          
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>
