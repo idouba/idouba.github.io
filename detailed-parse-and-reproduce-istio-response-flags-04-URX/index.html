@@ -172,31 +172,7 @@
 <p>第四个关注的Response Flag是URX，全称是 <strong>UpstreamRetryLimitExceded</strong>  ，官方定义表示&quot;<strong>The request was rejected because the</strong> <strong><a href="https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/route/v3/route_components.proto">upstream retry limit (HTTP)</a></strong> <strong>or</strong> <strong><a href="https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/network/tcp_proxy/v3/tcp_proxy.proto">maximum connect attempts (TCP)</a></strong> <strong>was reached.</strong>.&quot;</p>
 <h4 id="含义"><strong>含义：</strong></h4>
 <p>URX表示超过了HTTP的请求重试阈值，或者TCP的重连阈值，而导致访问被拒绝。这时客户端的访问日志中会记录URX。</p>
-<p><figure>
-  <picture>
-
-    
-      
-        
-        
-        
-        
-        
-        
-    <img
-      loading="lazy"
-      decoding="async"
-      alt="URX服务间访问模型"
-      
-        class="image_figure image_internal image_unprocessed"
-        src="../picture/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-04-URX/01.png"
-      
-      
-    />
-
-    </picture>
-</figure>
-</p>
+<img src="../picture/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-04-URX/01.png" alt="URX服务间访问模型" style="zoom:150%;" />
 <h4 id="重现环境"><strong>重现环境：</strong></h4>
 <ul>
 <li>客户端Pod，注入了Sidecar。</li>

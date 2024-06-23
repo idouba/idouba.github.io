@@ -172,31 +172,7 @@
 <p>第九个关注的Response Flag是DI，全称是<strong>DelayInjected</strong>，官方定义表示<strong>The request processing was delayed for a period specified via</strong> <strong><a href="https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/fault_filter">fault injection</a></strong>.</p>
 <h4 id="含义"><strong>含义：</strong></h4>
 <p><strong>DI</strong>表示请求中注入了一个延时故障。在VirtualService中配置了延时故障注入时，会在服务请求时产生配置的延时，并在访问日志中会记录DI的应答标记。</p>
-<p><figure>
-  <picture>
-
-    
-      
-        
-        
-        
-        
-        
-        
-    <img
-      loading="lazy"
-      decoding="async"
-      alt="DI服务访问"
-      
-        class="image_figure image_internal image_unprocessed"
-        src="../picture/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-09-DI/01.png"
-      
-      
-    />
-
-    </picture>
-</figure>
-</p>
+<img src="../picture/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-09-DI/01.png" alt="DI服务访问" style="zoom:150%;" />
 <h4 id="重现环境"><strong>重现环境：</strong></h4>
 <ul>
 <li>客户端Pod，注入了Sidecar。</li>

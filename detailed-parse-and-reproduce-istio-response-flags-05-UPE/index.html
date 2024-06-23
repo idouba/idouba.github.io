@@ -172,31 +172,7 @@
 <p>第五个关注的Response Flag是UPE，全称是 <strong>UpstreamProtocolError</strong> ，官方定义表示&quot;<strong>The upstream response had an HTTP protocol error.</strong>&quot;</p>
 <h4 id="含义"><strong>含义：</strong></h4>
 <p>UPE表示上游服务协议错误。在网格中定义的服务的协议和服务实际的协议不一致时，当服务访问时，客户端会得到502协议错误的响应。同时服务端的入流量日志会记录502 UPE。</p>
-<p><figure>
-  <picture>
-
-    
-      
-        
-        
-        
-        
-        
-        
-    <img
-      loading="lazy"
-      decoding="async"
-      alt="UPE服务访问"
-      
-        class="image_figure image_internal image_unprocessed"
-        src="../picture/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-05-UPE/01.png"
-      
-      
-    />
-
-    </picture>
-</figure>
-</p>
+<img src="../picture/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-05-UPE/01.png" alt="UPE服务访问" style="zoom:150%;" />
 <h4 id="重现环境"><strong>重现环境：</strong></h4>
 <ul>
 <li>客户端Pod，注入了Sidecar。</li>

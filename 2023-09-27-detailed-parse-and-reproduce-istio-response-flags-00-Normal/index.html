@@ -198,31 +198,7 @@
 </figure>
 </p>
 <p>早期的访问日志一般由应用程序输出，即要求用户在业务代码中记录每次访问。在服务网格中，和指标、调用链等可观测性能力类似，Istio通过非侵入方式提供访问日志的收集。</p>
-<p><figure>
-  <picture>
-
-    
-      
-        
-        
-        
-        
-        
-        
-    <img
-      loading="lazy"
-      decoding="async"
-      alt="Istio访问日收集"
-      
-        class="image_figure image_internal image_unprocessed"
-        src="../picture/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-00-Normal/02-accesslog-collection.png"
-      
-      
-    />
-
-    </picture>
-</figure>
-</p>
+<img src="../picture/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-00-Normal/02-accesslog-collection.png" alt="Istio访问日收集" style="zoom:150%;" />
 <p>过程大致是：</p>
 <p>1.网格数据面拦截流量，并根据配置的访问日志格式输出访问日志。</p>
 <p>2.数据面根据配置的ALS(Access log Service)地址上报访问日志。</p>

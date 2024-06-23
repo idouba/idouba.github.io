@@ -197,31 +197,7 @@
 <h4 id="含义"><strong>含义：</strong></h4>
 <p>DC表示下游连接终止。</p>
 <p>在访问目标服务时，在收到完整应答前，客户端主动断开连接时，会产生DC特征的应答标记。客户端断开应答的场景比较多，生产中我们经常碰到的是客户端设置了请求超时，超时后客户端断开了连接。则在访问日志中一般会记录本次请求的结果为DC。</p>
-<p><figure>
-  <picture>
-
-    
-      
-        
-        
-        
-        
-        
-        
-    <img
-      loading="lazy"
-      decoding="async"
-      alt="DC服务间访问关系"
-      
-        class="image_figure image_internal image_unprocessed"
-        src="../picture/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-DC/02.png"
-      
-      
-    />
-
-    </picture>
-</figure>
-</p>
+<img src="../picture/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-DC/02.png" alt="DC服务间访问关系" style="zoom:150%;" />
 <h4 id="重现环境"><strong>重现环境：</strong></h4>
 <ul>
 <li>客户端Pod，注入了Sidecar。</li>

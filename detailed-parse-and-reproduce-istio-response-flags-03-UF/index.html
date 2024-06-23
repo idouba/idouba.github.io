@@ -173,31 +173,7 @@
 <h4 id="含义"><strong>含义：</strong></h4>
 <p>表示上游连接失败。典型场景如目标服务的服务端口不通。如客户端通过错误的端口访问目标服务时，会导致客户端的服务访问失败，客户端代理的Outbound日志会记录503UF。</p>
 <p>目标服务的服务实例端口不通，会导致服务端的服务访问失败，同时目标服务端代理的Inbound日志会记录503UF。我们构建一个服务不通客户端Outbound日志记录UF，服务端inbound 日志的503 U后面的在另外一个<a href="/detailed-parse-and-reproduce-istio-response-flags-04-URX/">URX用例</a>里可以看到，综合起来可以更完整理解UF的含义和出现场景。</p>
-<p><figure>
-  <picture>
-
-    
-      
-        
-        
-        
-        
-        
-        
-    <img
-      loading="lazy"
-      decoding="async"
-      alt="UF服务访问关系"
-      
-        class="image_figure image_internal image_unprocessed"
-        src="../picture/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-03-UF/01.png"
-      
-      
-    />
-
-    </picture>
-</figure>
-</p>
+<img src="../picture\2023-09-27-detailed-parse-and-reproduce-istio-response-flags-03-UF/01.png" alt="UF服务访问关系" style="zoom:150%;" />
 <h4 id="重现环境"><strong>重现环境：</strong></h4>
 <ul>
 <li>客户端Pod，注入了Sidecar。</li>
