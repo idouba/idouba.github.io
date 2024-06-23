@@ -170,7 +170,7 @@
   </div>
 
     <div class="post_body"><hr>
-<h3 id="背景">背景：</h3>
+<h3 id="背景"><strong>背景：</strong></h3>
 <p>访问日志是应用系统运维的重要手段，可以有效地帮助我们进行问题的定位定界。</p>
 <p>在服务网格中，访问日志也是可观测性能力的一块重要内容。不同于指标提供访问的统计信息，访问日志记录了每一次访问的详细信息。不管是作为安全审计，还是做系统运维，访问日志都是最得力的手段。</p>
 <p>访问日志记录了每次访问的时间、请求、应答、耗时、源服务和目标服务等信息。帮助运维人员进行有效的故障定位定界。生产中我们也经常会检索分析一批日志看特点，如是否慢的请求的应答体都比较大，来自某个特定服务的服务接口总出错，或者来自某个特定源服务的访问不正常等，帮助我们发现系统问题。</p>
@@ -233,7 +233,7 @@
 </tbody>
 </table>
 <p>在日常支持客户各种环境的过程中，留意积累各种异常场景对应的Response Code，在内部给组内容同事做过一些小范围的分享，正好今年上海的<a href="https://kccncosschn2023.sched.com/event/b34cdc5babaf550b06b72c5aeb5ab21e">KubeCon 2023</a>，就尝试报了个相关议题做了个实践类的分享。</p>
-<h3 id="内容">内容：</h3>
+<h3 id="内容"><strong>内容：</strong></h3>
 <p>话说故障随时随地都可能发生，在这个时间点Wednesday September 27, 2023 3:50pm - 4:25pm CST，这个会议室<a href="https://kccncosschn2023.sched.com/venue/3%E5%B1%82+305B%E4%BC%9A%E8%AE%AE%E5%AE%A4%7C+3F+Room+305B">3层 305B会议室| 3F Room 305B</a>，在我的演讲开始前，我的笔记本接到现场的投影仪上，组织方的投影出了问题。换了现场其他的笔记本，组织方的两个外国工程师在笔记本上一顿设置，趴在地上对投影仪一顿设置，还是不行。最后只能短路了一些信号，只是最基础的现场录像。当时就感叹如果有一个像网格的Response Flag一样明确地标识出故障类型，现场的两个老哥了解到链路上的笔记本、投影仪、亦或其他组件有问题，就能快速修复，不用耽误现场那么多人的十几分钟时间，当然我也能避免尬在台上近距离围观一个问题定位过程。</p>
 <p>在准备的这个演讲中比较详细地把我在生产中碰到的常见的Response Flag挨个构造条件重现一遍，剖析每个Flag的具体含义，不是Envoy官方文档的一行半精简文字；每个Flag表示的问题，当然构造的时候挑纯粹简单场景构造，但是能代表一类问题；对这些问题一般的处理方法，有些是故障的有针对性的处理，有些只是访问细节表达、网格配置内容体现的自然无需处理。作为参照帮助听众理解和解决生产中的类似问题。</p>
 <p>会场现场大家反馈比较好，提问提的拖堂了不少，会场组织方的美眉一直提醒。John zheng特别过来说比我昨天刚在<a href="https://istioconchina2023.sched.com/event/1RoVD/cert-manager-istioduo-fa-lia-zha-re-cert-manager-help-enhance-security-and-flexibility-of-istio-certificate-management-chaomeng-zhang-huawei">IstioCon</a>上讲的另外一个关于Istio 安全的内容还要干货，有内容。谢谢John，刚才会议现场投影不可用，怀疑笔记本问题时，你借笔记本给我用，只是抱歉会后你强烈建议后面报个北美或欧洲的议题把这部分做个更大范围的分享，觉得麻烦没有积极回应。</p>
@@ -312,7 +312,7 @@
 <p>14：<a href="/detailed-parse-and-reproduce-istio-response-flags-14-RL/">服务限流RL(RateLimited)</a>  重现客户端限流</p>
 </li>
 </ul>
-<h3 id="附">附：</h3>
+<h3 id="附"><strong>附：</strong></h3>
 <ul>
 <li><a href="https://static.sched.com/hosted_files/kccncosschn2023/a9/Detailed%20Parse%20and%20Reproduce%20Response%20Flags%20of%20Istio%20Access%20Log%20Based%20on....pdf">演讲材料(官方Slides)</a></li>
 <li><a href="https://www.youtube.com/watch?v=jh6H3uPE8sY">Video(YouTube)</a></li>
