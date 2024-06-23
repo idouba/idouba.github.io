@@ -1,0 +1,957 @@
+
+<!DOCTYPE html>
+<html
+  lang="en"
+  data-figures=""
+  
+    class="page"
+  
+  
+  >
+  <head>
+<title>戏（细）说Executor框架线程池任务执行全过程（下） | 爱豆吧！</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+
+
+
+  
+<meta property="og:locale" content="en" />
+
+<meta property="og:type" content="article">
+<meta name="description" content="归档下发表于infoq.com 2015年6月的两篇文章。本来是一篇文章，经过Infoq编辑Alice Ding建议，拆分为&lt;上&gt;和&lt;下&gt;两部分。谢谢Alice对文章的细心校对，帮我发下了其中的很多问题。添加下infoq要求的声明：本文为InfoQ中文站特供稿件，首发地址 …" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:creator" content="">
+<meta name="twitter:title" content="戏（细）说Executor框架线程池任务执行全过程（下）" />
+<meta name="twitter:image" content="https://idouba.com/images/thumbnail.png"/>
+<meta property="og:url" content="https://idouba.com/executor-framework-thread-pool-task-execution-part-02/" />
+<meta property="og:title" content="戏（细）说Executor框架线程池任务执行全过程（下）" />
+<meta property="og:description" content="归档下发表于infoq.com 2015年6月的两篇文章。本来是一篇文章，经过Infoq编辑Alice Ding建议，拆分为&lt;上&gt;和&lt;下&gt;两部分。谢谢Alice对文章的细心校对，帮我发下了其中的很多问题。添加下infoq要求的声明：本文为InfoQ中文站特供稿件，首发地址 …" />
+<meta property="og:image" content="https://idouba.com/images/thumbnail.png" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="https://idouba.com/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://idouba.com/icons/favicon-32x32.png">
+<link rel="manifest" href="https://idouba.com/icons/site.webmanifest">
+
+<link rel="canonical" href="https://idouba.com/executor-framework-thread-pool-task-execution-part-02/">
+
+
+
+<link rel="preload" href="https://idouba.com/css/styles.42e2c5f6d8cf9c52872666f8d8b2678ad0c426978b9d78aff3c33b7a1e7f6f97f54bcdaf0518a25fb0fe26367d04f8b07c683b3b38b331cb098daadee06b1f3e.css" integrity = "sha512-QuLF9tjPnFKHJmb42LJnitDEJpeLnXiv88M7eh5/b5f1S82vBRiiX7D&#43;JjZ9BPiwfGg7OzizMcsJjare4GsfPg==" as="style" crossorigin="anonymous">
+
+
+
+<link rel="preload" href="https://idouba.com/en/js/bundle.ff336aa3aa59d3b9ad38479bb59153d96581fbb501e8946475e657e5412e6b0ecfd0011520c158ce613db24190d23242c59813c62c23f9d902b693489bbdf52f.js" as="script" integrity=
+"sha512-/zNqo6pZ07mtOEebtZFT2WWB&#43;7UB6JRkdeZX5UEuaw7P0AEVIMFYzmE9skGQ0jJCxZgTxiwj&#43;dkCtpNIm731Lw==" crossorigin="anonymous">
+
+
+<link rel="stylesheet" type="text/css" href="https://idouba.com/css/styles.42e2c5f6d8cf9c52872666f8d8b2678ad0c426978b9d78aff3c33b7a1e7f6f97f54bcdaf0518a25fb0fe26367d04f8b07c683b3b38b331cb098daadee06b1f3e.css" integrity="sha512-QuLF9tjPnFKHJmb42LJnitDEJpeLnXiv88M7eh5/b5f1S82vBRiiX7D&#43;JjZ9BPiwfGg7OzizMcsJjare4GsfPg==" crossorigin="anonymous">
+
+  </head>
+  <body
+    data-code="7"
+    data-lines="false"
+    id="documentTop"
+    data-lang="en"
+  >
+
+<header class="nav_header" >
+  <nav class="nav"><a href='https://idouba.com/' class="nav_brand nav_item" title="爱豆吧！">爱豆吧！
+  <div class="nav_close">
+    <div><svg class="icon">
+  <title>open-menu</title>
+  <use xlink:href="#open-menu"></use>
+</svg>
+<svg class="icon">
+  <title>closeme</title>
+  <use xlink:href="#closeme"></use>
+</svg>
+</div>
+  </div>
+</a>
+
+    <div class='nav_body nav_body_left'>
+      
+      
+      
+        
+
+  <div class="nav_parent">
+    <a href="https://idouba.com/" class="nav_item" title="Home">Home </a>
+  </div>
+  <div class="nav_parent">
+    <a href="https://idouba.com/post/rich-content/" class="nav_item" title="Archives">Archives </a>
+  </div>
+  <div class="nav_parent">
+    <a href="https://idouba.com/about/" class="nav_item" title="About">About </a>
+  </div>
+      
+      <div class="nav_parent">
+        <a href="#" class="nav_item">🌐</a>
+        <div class="nav_sub">
+          <span class="nav_child"></span>
+          
+          <a href="https://idouba.com/" class="nav_child nav_item">English</a>
+          
+          <a href="https://idouba.com/pt/" class="nav_child nav_item">Português</a>
+          
+        </div>
+      </div>
+<div class='follow'>
+<div class="color_mode">
+  <input type="checkbox" class="color_choice" id="mode">
+</div>
+
+</div>
+
+    </div>
+  </nav>
+</header>
+
+    <main>
+  
+<div class="grid-inverse wrap content">
+  <article class="post_content">
+    <h1 class="post_title">戏（细）说Executor框架线程池任务执行全过程（下）</h1>
+  <div class="post_meta">
+    <span><svg class="icon">
+  <title>calendar</title>
+  <use xlink:href="#calendar"></use>
+</svg>
+</span>
+    <span class="post_date">
+      Jun 5, 2015</span>
+    <span class="post_time"> · 2 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/infoq/' title="Infoq" class="post_tag button button_translucent">Infoq
+        </a><a href='https://idouba.com/tags/executor/' title="Executor" class="post_tag button button_translucent">Executor
+        </a><a href='https://idouba.com/tags/java/' title="Java" class="post_tag button button_translucent">Java
+        </a>
+    </span>
+    <span class="page_only">&nbsp;·
+  <div class="post_share">
+    Share on:
+    <a href="https://twitter.com/intent/tweet?text=%e6%88%8f%ef%bc%88%e7%bb%86%ef%bc%89%e8%af%b4Executor%e6%a1%86%e6%9e%b6%e7%ba%bf%e7%a8%8b%e6%b1%a0%e4%bb%bb%e5%8a%a1%e6%89%a7%e8%a1%8c%e5%85%a8%e8%bf%87%e7%a8%8b%ef%bc%88%e4%b8%8b%ef%bc%89&url=https%3a%2f%2fidouba.com%2fexecutor-framework-thread-pool-task-execution-part-02%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>twitter</title>
+  <use xlink:href="#twitter"></use>
+</svg>
+
+    </a>
+    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fexecutor-framework-thread-pool-task-execution-part-02%2f&t=%e6%88%8f%ef%bc%88%e7%bb%86%ef%bc%89%e8%af%b4Executor%e6%a1%86%e6%9e%b6%e7%ba%bf%e7%a8%8b%e6%b1%a0%e4%bb%bb%e5%8a%a1%e6%89%a7%e8%a1%8c%e5%85%a8%e8%bf%87%e7%a8%8b%ef%bc%88%e4%b8%8b%ef%bc%89" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>facebook</title>
+  <use xlink:href="#facebook"></use>
+</svg>
+
+    </a>
+    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
+      <svg class="icon">
+  <title>linkedin</title>
+  <use xlink:href="#linkedin"></use>
+</svg>
+
+    </a>
+    <a href="https://idouba.com/executor-framework-thread-pool-task-execution-part-02/" title="Copy Link" class="link link_yank">
+      <svg class="icon">
+  <title>copy</title>
+  <use xlink:href="#copy"></use>
+</svg>
+
+    </a>
+  </div>
+  </span>
+  </div>
+
+    <div class="post_body"><p>归档下发表于<a href="http://www.infoq.com/cn/">infoq.com 2015年6月</a>的两篇文章。本来是一篇文章，经过Infoq编辑<strong>Alice Ding</strong>建议，拆分为&lt;上&gt;和&lt;下&gt;两部分。谢谢Alice对文章的细心校对，帮我发下了其中的很多问题。添加下infoq要求的声明：本文为InfoQ中文站特供稿件，首发地址为：<a href="http://www.infoq.com/cn/articles/executor-framework-thread-pool-task-execution-part-02">http://www.infoq.com/cn/articles/executor-framework-thread-pool-task-execution-part-02</a> 。如需转载，请与InfoQ中文站联系。</p>
+<h3 id="内容综述">内容综述</h3>
+<p>基于Executor接口中将任务提交和任务执行解耦的设计，ExecutorService和其各种功能强大的实现类提供了非常简便方式来提交任务并获取任务执行结果，封装了任务执行的全部过程。本文尝试通过对j.u.c.下该部分源码的解析以ThreadPoolExecutor为例来追踪任务提交、执行、获取执行结果的整个过程。为了避免陷入枯燥的源码解释，将该过程和过程中涉及的角色与我们工作中的场景和场景中涉及的角色进行映射，力图生动和深入浅出。</p>
+<p><a href="http://www.idouba.net/executor-framework-thread-pool-task-execution-part-01/">上一篇文章</a>中通过引入的一个例子介绍了在Executor框架下，提交一个任务的过程，这个过程就像我们老大的老大要找个老大来执行一个任务那样简单。并通过剖析ExecutorService的一种经典实现ThreadPoolExecutor来分析接收任务的主要逻辑，发现ThreadPoolExecutor的工作思路和我们带项目的老大的工作思路完全一致。在本文中我们将继续后面的步骤，着重描述下任务执行的过程和任务执行结果获取的过程。会很容易发现，这个过程我们更加熟悉，因为正是每天我们工作的过程。除了ThreadPoolExecutor的内部类Worker外，对执行内容和执行结果封装的FutureTask的表现是这部分着重需要了解的。</p>
+<p>为了连贯期间，内容的编号延续上篇。</p>
+<h4 id="2-任务执行">2. 任务执行</h4>
+<p>其实应该说是任务被执行，任务是宾语。动宾结构：execute the task，执行任务，无论写成英文还是中文似乎都是这样。那么主语是是who呢？明显不是调用submit的那位（线程），那是哪位呢？上篇介绍ThreadPoolExecutor主要属性时提到其中有一个HashSet<Worker> workers的集合，我们有说明这里存储的就是线程池的工作队列的集合，队列的对象是Worker类型的工作线程，是ThreadPoolExecutor的一个内部类，实现了Runnable接口：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="ln">1</span><span class="cl"><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Worker</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Runnable</span><span class="w">
+</span></span></span></code></pre></div><p>8)看作业线程干什么当然是看它的run方法在干什么。如我们所料，作业线程就是在一直调用getTask方法获取任务，然后调用 runTask(task)方法执行任务。看到没有，是在while循环里面，就是不干完不罢休的意思！在加班干活的苦逼的朋友们，有没有遇见战友的亲切感觉？</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">run</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="w">                </span><span class="n">Runnable</span><span class="w"> </span><span class="n">task</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">firstTask</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="w">                </span><span class="c1">//循环从线程池的任务队列获取任务</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="w">                </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">task</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="p">(</span><span class="n">task</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getTask</span><span class="p">())</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="w">                </span><span class="c1">//执行任务</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="w">                    </span><span class="n">runTask</span><span class="p">(</span><span class="n">task</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="w">                    </span><span class="n">task</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="w">                </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="w">                </span><span class="n">workerDone</span><span class="p">(</span><span class="k">this</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="w">            </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><p>然后简单看下getTask和runTask(task)方法的内容。</p>
+<ol start="9">
+<li>getTask方法是ThreadPoolExecutor提供给其内部类Worker的的方法。作用就是一个，从任务队列中取任务，源源不断地输出任务。有没有想到老大手里拿的总是满满当当的project，也是源源不断的。</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="ln">1</span><span class="cl"><span class="n">Runnable</span><span class="w"> </span><span class="nf">getTask</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(;;)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="w">                  </span><span class="c1">//从任务队列的头部取任务</span><span class="w">
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="w">                  </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">workQueue</span><span class="p">.</span><span class="na">take</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="w">                    </span><span class="k">return</span><span class="w"> </span><span class="n">r</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="ln">6</span><span class="cl"><span class="w"> </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="ln">7</span><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><ol start="10">
+<li>runTask(Runnable task)是工作线程Worker真正处理拿到的每个具体任务。看到这里才可用确认我们的猜想，<a>之前提到</a>的“执行任务”这个动宾结构前面的主语正是这些Worker呀。唠叨了半天（看主要方法都看到了整整第10个了），前面都是派活，这里才是干活。和我们的工作何其相似！老大（LD），老大的老大（LD^2），老大的老大（LD^n） 非常辛苦，花了很多时间、精力在会议室、在project上想着怎么生成和安排任务，然而真的轮到咱哥们干活，可能花了不少时间，但看看流程就是这么简单。<strong>三个大字：“<strong><strong>Just do it</strong></strong>”。</strong></li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="ln">1</span><span class="cl"><span class="kd">private</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">runTask</span><span class="p">(</span><span class="n">Runnable</span><span class="w"> </span><span class="n">task</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">          
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="w">                   </span><span class="c1">//调用任务的run方法，即在Worker线程中执行Task内定义内容。</span><span class="w">
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="w">                    </span><span class="n">task</span><span class="p">.</span><span class="na">run</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><p>需要注意的地方出现了，调用的其实是task的run方法。看下FutureTask的run方法做了什么事情。</p>
+<p>这里插入一个FutureTask的类图。可以看到FutureTask实现了RunnableFuture接口，所以FutureTask即有Runnable接口的run方法来定义任务内容，也有Future接口中定义的get、cancel等方法来控制任务执行和获取执行结果。Runnable接口自不用说，Future接口的伟大设计，就是使得实现该接口的对象可以阻塞线程直到任务执行完毕，也可以取消任务执行，检测任务是执行完毕还是被取消了。想想在之前我们使用Thread.join()或者Thread.join(long millis)等待任务结束是多么苦涩啊。</p>
+<p>FutureTask内部定义了一个Sync的内部类，继承自AQS，来维护任务状态。关于AQS的设计思路，可以参照参考Doug Lea大师的原著<a href="http://gee.cs.oswego.edu/dl/papers/aqs.pdf">The java.util.concurrent Synchronizer Framework</a>。</p>
+<p><figure>
+  <picture>
+
+    
+      
+        
+        
+        
+        
+        
+        
+    <img
+      loading="lazy"
+      decoding="async"
+      alt=""
+      
+        class="image_figure image_internal image_unprocessed"
+        src="../wp-content/uploads/2015/06/2-FutureTask.jpg"
+      
+      
+    />
+
+    </picture>
+</figure>
+</p>
+<ol start="11">
+<li>和其他的同步工具类一样，FutureTask的主要工作内容也是委托给其定义的内部类Sync来完成。</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="ln">1</span><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">run</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="w">        </span><span class="c1">//调用Sync的对应方法</span><span class="w">
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="w">        </span><span class="n">sync</span><span class="p">.</span><span class="na">innerRun</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><ol start="12">
+<li>FutureTask.Sync.innerRun()，这样做的目的就是为了维护任务执行的状态，只有当执行完后才能够获得任务执行结果。在该方法中，首先设置执行状态为RUNNING只有判断任务的状态是运行状态，才调用任务内封装的回调，并且在执行完成后设置回调的返回值到FutureTask的result变量上。在FutureTask中，innerRun等每个“写”方法都会首先修改状态位，在后续会看到innerGet等“读”方法会先判断状态，然后才能决定后续的操作是否可以继续。下图是FutureTask.Sync中几个重要状态的流转情况，和其他的同步工具类一样，状态位使用的也是父类AQS的state属性。</li>
+</ol>
+<p><figure>
+  <picture>
+
+    
+      
+        
+        
+        
+        
+        
+        
+    <img
+      loading="lazy"
+      decoding="async"
+      alt=""
+      
+        class="image_figure image_internal image_unprocessed"
+        src="../wp-content/uploads/2015/06/4-Stm_futuretask_sync_state.png"
+      
+      
+    />
+
+    </picture>
+</figure>
+</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="kt">void</span><span class="w"> </span><span class="nf">innerRun</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="w">            </span><span class="c1">//通过对AQS的状态位state的判断来判断任务的状态是运行状态，则调用任务内封装的回调，并且设置回调的返回值</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 3</span><span class="cl"><span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">getState</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">RUNNING</span><span class="p">)</span><span class="w"> 
+</span></span></span><span class="line"><span class="ln"> 4</span><span class="cl"><span class="w">                    </span><span class="n">innerSet</span><span class="p">(</span><span class="n">callable</span><span class="p">.</span><span class="na">call</span><span class="p">());</span><span class="w">   
+</span></span></span><span class="line"><span class="ln"> 5</span><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 6</span><span class="cl"><span class="w">        
+</span></span></span><span class="line"><span class="ln"> 7</span><span class="cl"><span class="w"></span><span class="kt">void</span><span class="w"> </span><span class="nf">innerSet</span><span class="p">(</span><span class="n">V</span><span class="w"> </span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 8</span><span class="cl"><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(;;)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="ln"> 9</span><span class="cl"><span class="w">	</span><span class="kt">int</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getState</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="ln">10</span><span class="cl"><span class="w">        </span><span class="c1">//设置运行状态为完成，并且把回调额执行结果设置给result变量</span><span class="w">
+</span></span></span><span class="line"><span class="ln">11</span><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">compareAndSetState</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">RAN</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="ln">12</span><span class="cl"><span class="w">                </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="ln">13</span><span class="cl"><span class="w">                </span><span class="n">releaseShared</span><span class="p">(</span><span class="n">0</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="ln">14</span><span class="cl"><span class="w">                </span><span class="n">done</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="ln">15</span><span class="cl"><span class="w">	    </span><span class="k">return</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="w">            </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><p>至此工作线程执行Task就结束了。提交的任务是由Worker工作线程执行，正是在该线程上调用Task中定义的任务内容，即封装的Callable回调，并设置执行结果。下面就是最重要的部分：调用者如何获取执行的结果。让你加班那么久，总得把成果交出来吧。老大在等，因为老大的老大在等！</p>
+<h4 id="3-获取执行结果">3. 获取执行结果</h4>
+<p>前面说过，对于老大的老大这样的使用者来说，获取执行结果这个过程总是最容易的事情，只需调用FutureTask的get()方法即可。该方法是在Future接口中就定义的。get方法的作用就是等待执行结果。（Waits if necessary for the computation to complete, and then retrieves its result.）Future这个接口命名得真好，虽然是在未来，但是定义有一个get()方法，总是“可以掌控的未来，总是有收获的未来！”实现该接口的FutureTask也应该是这个意思，在未来要完成的任务，但是一样要有结果哦。</p>
+<ol start="13">
+<li>FutureTask的get方法同样委托给Sync来执行。和该方法类似，还有一个V get(long timeout, TimeUnit unit)，可以配置超时时间。</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="ln">1</span><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="n">V</span><span class="w"> </span><span class="nf">get</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">InterruptedException</span><span class="p">,</span><span class="w"> </span><span class="n">ExecutionException</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">sync</span><span class="p">.</span><span class="na">innerGet</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><ol start="14">
+<li>在<a>Sync</a>的 innerGet方法中，调用AQS父类定义的获取共享锁的方法acquireSharedInterruptibly来等待执行完成。如果执行完成了则可以继续执行后面的代码，返回result结果，否则如果还未完成，则阻塞线程等待执行完成。再大的老大要想获得结果也得等老子干完了才行！可以看到调用FutureTask的get方法，进而调用到该方法的一定是想要执行结果的线程，一般应该就是提交Task的线程，而这个任务的执行是在Worker的工作线程上，通过AQS来保证执行完毕才能获取执行结果。该方法中acquireSharedInterruptibly是AQS父类中定义的获取共享锁的方法，<a>但是到底满足什么条件可以成功获取共享锁，这是</a>Sync的tryAcquireShared方法内定义的。具体说来，innerIsDone用来判断是否执行完毕，如果执行完毕则向下执行，返回result即可；如果判断未完成，则调用AQS的doAcquireSharedInterruptibly来挂起当前线程，一直到满足条件。这种思路在其他的几种同步工具类<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/Semaphore.html">Semaphore</a>、<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/CountDownLatch.html">CountDownLatch</a>、<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/ReentrantLock.html">ReentrantLock</a>、<a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/ReentrantReadWriteLock.html">ReentrantReadWriteLock</a>也广泛使用。借助AQS框架，在获取锁时，先判断当前状态是否允许获取锁，若是允许则获取锁，否则获取不成功。获取不成功则会阻塞，进入阻塞队列。而释放锁时，一般会修改状态位，唤醒队列中的阻塞线程。每个同步工具类的自定义同步器都继承自AQS父类，是否可以获取锁根据同步类自身的功能要求覆盖AQS对应的try前缀方法，这些方法在AQS父类中都是只有定义没有内容。可以参照《<a href="http://www.idouba.net/sync-implementation-by-aqs/">源码剖析AQS在几个同步工具类中的使用</a>》来详细了解。</li>
+</ol>
+<p>突然想到想想那些被称为老大的，是不是整个career流程就是只干两件事情：submit a task， then wait and get the result。不对，还有一件事情，不是等待，而是催。“完了没，完了没？schedule很紧的，抓点紧啊，要不要适当加点班啊……”</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="ln">1</span><span class="cl"><span class="w">    </span><span class="n">V</span><span class="w"> </span><span class="nf">innerGet</span><span class="p">()</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">InterruptedException</span><span class="p">,</span><span class="w"> </span><span class="n">ExecutionException</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="w">           </span><span class="c1">//获得锁，表示执行完毕，才能获得后执行结果，否则阻塞等待执行完成再获取执行结果</span><span class="w">
+</span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="w">            </span><span class="n">acquireSharedInterruptibly</span><span class="p">(</span><span class="n">0</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="ln">4</span><span class="cl"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="ln">5</span><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="ln">6</span><span class="cl"><span class="w">    </span><span class="kd">protected</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">tryAcquireShared</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">ignore</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="ln">7</span><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">innerIsDone</span><span class="p">()</span><span class="o">?</span><span class="w"> </span><span class="n">1</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="o">-</span><span class="n">1</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="ln">8</span><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><p>至此，获得执行结果，圆满完成任务！</p>
+<p>老大的老大，拍着咱们老大的肩膀（或者深情的抚摸着咱们老大唏嘘胡茬的脸庞）说：“亲，你这活干的漂亮！”而隔壁桌座位的几个兄弟，刚熬了几个晚上加班交付完这波task后，发现任务队列里又有新任务了，俺们老大又从他的另外一个老大手里接来的任务了。每个人都按照这样的角色进行着，依照这样的角色安排和谐愉快地进行着。。。</p>
+<table>
+<thead>
+<tr>
+<th><strong>角色名</strong></th>
+<th><strong>任务用户</strong></th>
+<th><strong>任务管理者</strong></th>
+<th><strong>任务执行者</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>角色属性</strong></td>
+<td>任务的甲方</td>
+<td>任务的乙方</td>
+<td>乙方的工具</td>
+</tr>
+<tr>
+<td><strong>角色说明</strong></td>
+<td>选择合适的任务执行服务，如可以根据需要选择ThreadPoolExecutor还是ScheduledThreadPoolExecutor，并定制ExecutorService的配置。 定义好任务的工作内容和结果类型，提交任务，等待任务的执行结果</td>
+<td>接收提交的任务； 维护执行服务内部管理； 配置工作线程执行任务</td>
+<td>每个工作线程一直从任务执行服务获取待执行的任务，保证任务完成后返回执行结果。</td>
+</tr>
+<tr>
+<td><strong>Executor****中对应</strong></td>
+<td>创建获取ExecutorService、并提交Task的外部接口</td>
+<td>ExecutorService的各种实现。如经典的ThreadPoolExecutor，ScheduledThreadPoolExecutor</td>
+<td>执行服务内定义的配套的Worker线程。如ThreadPoolExecutor.Worker</td>
+</tr>
+<tr>
+<td><strong>主要接口方法</strong></td>
+<td>submit(Callable task)</td>
+<td>execute(Runnable command)</td>
+<td>runTask(Runnable task)</td>
+</tr>
+<tr>
+<td><strong>现实角色映射</strong></td>
+<td>手里有活的大老大</td>
+<td>领人干活的老大</td>
+<td>真正干活的码农</td>
+</tr>
+<tr>
+<td><strong>主要工作伪代码</strong></td>
+<td>taskService = createService() future=taskService.submitTask() future.get()</td>
+<td>executeTask() { addTask() createThread() }</td>
+<td>while(ture) { getTask() runTask() }</td>
+</tr>
+</tbody>
+</table>
+<h3 id="四-总结">四、 总结</h3>
+<p>从时序图上看主要的几个角色是这样配合完成任务提交、任务执行、获取执行结果这几个步骤的。</p>
+<p><figure>
+  <picture>
+
+    
+      
+        
+        
+        
+        
+        
+        
+    <img
+      loading="lazy"
+      decoding="async"
+      alt=""
+      
+        class="image_figure image_internal image_unprocessed"
+        src="../wp-content/uploads/2015/06/3-Sequence-diagram-submit-task2.png"
+      
+      
+    />
+
+    </picture>
+</figure>
+</p>
+<ol>
+<li>外面需要提交任务的角色（如例子中老大的老大），首先创建一个任务执行服务ExecutorService，一般使用工具类Executors的若干个工厂方法 创建不同特征的线程池ThreadPoolExecutor，例子中是使用newFixedThreadPool方法创建有n个固定工作线程的线程池。</li>
+<li>线程池是专门负责从外面接活的老大。把任务封装成一个FutureTask对象，并根据输入定义好要获得结果的类型，就可以submit任务了。</li>
+<li>线程池就像我们团队里管人管项目的老大，各个都有一套娴熟、有效的办法来对付输入的任务和手下干活的兄弟一样，内部有一套比较完整、细致的任务管理办法，工作线程管理办法，以便应付输入的任务。这些逻辑全部在其execute方法中体现。</li>
+<li>线程池接收输入的task，根据需要创建工作线程，启动工作线程来执行task。</li>
+<li>工作线程在其run方法中一直循环，从线程池领取可以执行的task，调用task的run方法执行task内定义的任务。</li>
+<li>FutureTask的run方法中调用其内部类Sync的innerRun方法来执行封装的具体任务，并把任务的执行结果返回给FutureTask的result变量。</li>
+<li>当提及任务的角色调用FutureTask的get方法获取执行结果时，Sync的innerGet方法被调用。根据任务的执行状态判断，任务执行完毕则返回执行结果；未执行完毕则等待。</li>
+</ol>
+<p>还记得我们费了半天劲试图找出任务执行时那个动宾结构的主语吗？从示例上看更像是线程池在向外提供任务执行的服务。就像我们的老大在代表我们接收任务、执行任务、提交执行结果。明显我们这些真正的Worker成了延伸，有点搞不懂到底我们是主语，还是主语延伸的工具，就像定义ThreadPoolExecutor的内部类Worker一样。我们只是工具，不是主语，是状语： execute the task by workers。突然想到毛主席当年的“数风流人物，还看今朝”，说的应该是这些Worker的劳苦大众吧，怎么都今朝这么久了，俺们这些Woker们还是风流不起来呢？风骚的作者居然在上面严肃的时序图上加了个风骚的小星星，向同行的Worker们致敬！</p>
+
+    </div>
+<div class="post_comments">
+  
+  
+  
+</div>
+
+
+
+
+  </article>
+<aside class="sidebar">
+  <section class="sidebar_inner">
+    <br>
+    
+  
+  <div class="search">
+    <input type="search" class="search_field form_field" placeholder='Search...' id="find" autocomplete="off" data-scope='posts'>
+    <label for="find" class="search_label"><svg class="icon">
+  <title>search</title>
+  <use xlink:href="#search"></use>
+</svg>
+
+    </label>
+    
+    <div class="search_results results"></div>
+  </div>
+
+
+    
+    
+    <h2 class="mt-4">Recent Posts</h2>
+    <ul class="flex-column">
+      <li>
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-index/" class="nav-link" title="基于实际案例解析Istio访问日志ResponseFlag系列">基于实际案例解析Istio访问日志ResponseFlag系列</a>
+      </li>
+      <li>
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-14-RL/" class="nav-link" title="RL(服务限流)--Istio访问日志ResponseFlag重现与解析14">RL(服务限流)--Istio访问日志ResponseFlag重现与解析14</a>
+      </li>
+      <li>
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-13-RL/" class="nav-link" title="RL(服务限流)--Istio访问日志ResponseFlag重现与解析13">RL(服务限流)--Istio访问日志ResponseFlag重现与解析13</a>
+      </li>
+      <li>
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-12-UC/" class="nav-link" title="UC(上游连接中断)--Istio访问日志ResponseFlag重现与解析12">UC(上游连接中断)--Istio访问日志ResponseFlag重现与解析12</a>
+      </li>
+      <li>
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-11-UT/" class="nav-link" title="UT(上游请求超时)--Istio访问日志ResponseFlag重现与解析11">UT(上游请求超时)--Istio访问日志ResponseFlag重现与解析11</a>
+      </li>
+      <li>
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-10-FI/" class="nav-link" title="FI(注入错误故障)--Istio访问日志ResponseFlag重现与解析10">FI(注入错误故障)--Istio访问日志ResponseFlag重现与解析10</a>
+      </li>
+      <li>
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-09-DI/" class="nav-link" title="DI(注入延时故障)--Istio访问日志ResponseFlag重现与解析09">DI(注入延时故障)--Istio访问日志ResponseFlag重现与解析09</a>
+      </li>
+      <li>
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-08-NR/" class="nav-link" title="NR(没有匹配的路由)--Istio访问日志ResponseFlag重现与解析08">NR(没有匹配的路由)--Istio访问日志ResponseFlag重现与解析08</a>
+      </li>
+    </ul>
+    <div>
+      <h2 class="mt-4 taxonomy" id="categories-section">Categories</h2>
+      <nav class="tags_nav">
+        <a href='https://idouba.com/categories/istio/' class="post_tag button button_translucent" title="istio">
+          ISTIO
+          <span class="button_tally">29</span>
+        </a>
+        
+        <a href='https://idouba.com/categories/%E9%9A%8F%E7%AC%94/' class="post_tag button button_translucent" title="随笔">
+          随笔
+          <span class="button_tally">14</span>
+        </a>
+        
+        <a href='https://idouba.com/categories/hadoop/' class="post_tag button button_translucent" title="hadoop">
+          HADOOP
+          <span class="button_tally">12</span>
+        </a>
+        
+        <a href='https://idouba.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/' class="post_tag button button_translucent" title="数据库">
+          数据库
+          <span class="button_tally">7</span>
+        </a>
+        
+        <a href='https://idouba.com/categories/%E5%8F%91%E8%A1%A8/' class="post_tag button button_translucent" title="发表">
+          发表
+          <span class="button_tally">5</span>
+        </a>
+        
+        <a href='https://idouba.com/categories/golang/' class="post_tag button button_translucent" title="golang">
+          GOLANG
+          <span class="button_tally">3</span>
+        </a>
+        
+        <a href='https://idouba.com/categories/%E5%B9%B6%E5%8F%91/' class="post_tag button button_translucent" title="并发">
+          并发
+          <span class="button_tally">3</span>
+        </a>
+        
+        <a href='https://idouba.com/categories/kubernetes/' class="post_tag button button_translucent" title="kubernetes">
+          KUBERNETES
+          <span class="button_tally">2</span>
+        </a>
+        
+        <a href='https://idouba.com/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/' class="post_tag button button_translucent" title="机器学习">
+          机器学习
+          <span class="button_tally">2</span>
+        </a>
+        
+        <a href='https://idouba.com/categories/jvm/' class="post_tag button button_translucent" title="jvm">
+          JVM
+          <span class="button_tally">1</span>
+        </a>
+        
+        
+      </nav>
+    </div>
+    <div>
+      <h2 class="mt-4 taxonomy" id="tags-section">Tags</h2>
+      <nav class="tags_nav">
+        <a href='https://idouba.com/tags/java/' class="post_tag button button_translucent" title="java">
+          JAVA
+          <span class="button_tally">17</span>
+        </a>
+        
+        <a href='https://idouba.com/tags/kubecon/' class="post_tag button button_translucent" title="kubecon">
+          KUBECON
+          <span class="button_tally">16</span>
+        </a>
+        
+        <a href='https://idouba.com/tags/%E8%AE%BF%E9%97%AE%E6%97%A5%E5%BF%97/' class="post_tag button button_translucent" title="访问日志">
+          访问日志
+          <span class="button_tally">16</span>
+        </a>
+        
+        <a href='https://idouba.com/tags/responseflags/' class="post_tag button button_translucent" title="responseflags">
+          RESPONSEFLAGS
+          <span class="button_tally">15</span>
+        </a>
+        
+        <a href='https://idouba.com/tags/istio/' class="post_tag button button_translucent" title="istio">
+          ISTIO
+          <span class="button_tally">12</span>
+        </a>
+        
+        <a href='https://idouba.com/tags/mapreduce/' class="post_tag button button_translucent" title="mapreduce">
+          MAPREDUCE
+          <span class="button_tally">12</span>
+        </a>
+        
+        <a href='https://idouba.com/tags/hadoop/' class="post_tag button button_translucent" title="hadoop">
+          HADOOP
+          <span class="button_tally">11</span>
+        </a>
+        
+        <a href='https://idouba.com/tags/%E4%BA%91%E5%8E%9F%E7%94%9F%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BCistio%E5%8E%9F%E7%90%86%E5%AE%9E%E8%B7%B5%E6%9E%B6%E6%9E%84%E4%B8%8E%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/' class="post_tag button button_translucent" title="云原生服务网格istio原理实践架构与源码解析">
+          云原生服务网格ISTIO原理实践架构与源码解析
+          <span class="button_tally">6</span>
+        </a>
+        
+        <a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' class="post_tag button button_translucent" title="演讲">
+          演讲
+          <span class="button_tally">6</span>
+        </a>
+        
+        <a href='https://idouba.com/tags/golang/' class="post_tag button button_translucent" title="golang">
+          GOLANG
+          <span class="button_tally">4</span>
+        </a>
+        
+        <a href='https://idouba.com/tags/doudou/' class="post_tag button button_translucent" title="doudou">
+          DOUDOU
+          <span class="button_tally">3</span>
+        </a>
+        
+        <a href='https://idouba.com/tags/infoq/' class="post_tag button button_translucent" title="infoq">
+          INFOQ
+          <span class="button_tally">3</span>
+        </a>
+        
+        <a href='https://idouba.com/tags/oracle/' class="post_tag button button_translucent" title="oracle">
+          ORACLE
+          <span class="button_tally">3</span>
+        </a>
+        
+        <a href='https://idouba.com/tags/%E7%A8%8B%E5%BA%8F%E5%91%98/' class="post_tag button button_translucent" title="程序员">
+          程序员
+          <span class="button_tally">3</span>
+        </a>
+        
+        
+        <br>
+        <div class="post_tags_toggle button">All Tags</div>
+        <div class="post_tags">
+          <div class="tags_list">
+            
+            <a href='https://idouba.com/tags/12306/' class=" post_tag button button_translucent" data-position=1 title="12306">12306<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/aqs/' class=" post_tag button button_translucent" data-position=1 title="aqs">AQS<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/dc/' class=" post_tag button button_translucent" data-position=1 title="dc">DC<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/di/' class=" post_tag button button_translucent" data-position=1 title="di">DI<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/doudou/' class=" post_tag button button_translucent" data-position=3 title="doudou">DOUDOU<span class="button_tally">3</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/dpe/' class=" post_tag button button_translucent" data-position=1 title="dpe">DPE<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/english/' class=" post_tag button button_translucent" data-position=1 title="english">ENGLISH<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/executor/' class=" post_tag button button_translucent" data-position=2 title="executor">EXECUTOR<span class="button_tally">2</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/fi/' class=" post_tag button button_translucent" data-position=1 title="fi">FI<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/g20/' class=" post_tag button button_translucent" data-position=1 title="g20">G20<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/golang/' class=" post_tag button button_translucent" data-position=4 title="golang">GOLANG<span class="button_tally">4</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/gre/' class=" post_tag button button_translucent" data-position=1 title="gre">GRE<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/hadoop/' class=" post_tag button button_translucent" data-position=11 title="hadoop">HADOOP<span class="button_tally">11</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/infoq/' class=" post_tag button button_translucent" data-position=3 title="infoq">INFOQ<span class="button_tally">3</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/istio/' class=" post_tag button button_translucent" data-position=12 title="istio">ISTIO<span class="button_tally">12</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/istiocon/' class=" post_tag button button_translucent" data-position=1 title="istiocon">ISTIOCON<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/istio%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/' class=" post_tag button button_translucent" data-position=1 title="istio权威指南">ISTIO权威指南<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/japanese/' class=" post_tag button button_translucent" data-position=1 title="japanese">JAPANESE<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/java/' class=" post_tag button button_translucent" data-position=17 title="java">JAVA<span class="button_tally">17</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/jvm/' class=" post_tag button button_translucent" data-position=1 title="jvm">JVM<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/k-medoids/' class=" post_tag button button_translucent" data-position=1 title="k-medoids">K-MEDOIDS<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/kubecon/' class=" post_tag button button_translucent" data-position=16 title="kubecon">KUBECON<span class="button_tally">16</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/kubernetes/' class=" post_tag button button_translucent" data-position=2 title="kubernetes">KUBERNETES<span class="button_tally">2</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/mapreduce/' class=" post_tag button button_translucent" data-position=12 title="mapreduce">MAPREDUCE<span class="button_tally">12</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/nc/' class=" post_tag button button_translucent" data-position=1 title="nc">NC<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/nr/' class=" post_tag button button_translucent" data-position=1 title="nr">NR<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/oracle/' class=" post_tag button button_translucent" data-position=3 title="oracle">ORACLE<span class="button_tally">3</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/pilot/' class=" post_tag button button_translucent" data-position=2 title="pilot">PILOT<span class="button_tally">2</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/responseflags/' class=" post_tag button button_translucent" data-position=15 title="responseflags">RESPONSEFLAGS<span class="button_tally">15</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/rl/' class=" post_tag button button_translucent" data-position=2 title="rl">RL<span class="button_tally">2</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/rpc/' class=" post_tag button button_translucent" data-position=1 title="rpc">RPC<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/source/' class=" post_tag button button_translucent" data-position=2 title="source">SOURCE<span class="button_tally">2</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/springcloud/' class=" post_tag button button_translucent" data-position=1 title="springcloud">SPRINGCLOUD<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/uc/' class=" post_tag button button_translucent" data-position=1 title="uc">UC<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/uf/' class=" post_tag button button_translucent" data-position=1 title="uf">UF<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/uh/' class=" post_tag button button_translucent" data-position=1 title="uh">UH<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/upe/' class=" post_tag button button_translucent" data-position=1 title="upe">UPE<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/urx/' class=" post_tag button button_translucent" data-position=1 title="urx">URX<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/ut/' class=" post_tag button button_translucent" data-position=1 title="ut">UT<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E3%81%AB%E3%81%BB%E3%82%93%E3%81%94/' class=" post_tag button button_translucent" data-position=1 title="にほんご">にほんご<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E4%BA%8B%E5%8A%A1/' class=" post_tag button button_translucent" data-position=1 title="事务">事务<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E4%BA%91%E5%8E%9F%E7%94%9F%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BCistio%E5%8E%9F%E7%90%86%E5%AE%9E%E8%B7%B5%E6%9E%B6%E6%9E%84%E4%B8%8E%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/' class=" post_tag button button_translucent" data-position=6 title="云原生服务网格istio原理实践架构与源码解析">云原生服务网格ISTIO原理实践架构与源码解析<span class="button_tally">6</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E4%BF%A1/' class=" post_tag button button_translucent" data-position=2 title="信">信<span class="button_tally">2</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E5%85%B3%E4%BA%8E/' class=" post_tag button button_translucent" data-position=1 title="关于">关于<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E5%88%86%E7%B1%BB/' class=" post_tag button button_translucent" data-position=1 title="分类">分类<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E5%8F%91%E8%A1%A8/' class=" post_tag button button_translucent" data-position=1 title="发表">发表<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E5%9B%BD%E9%99%85%E7%B1%B3%E5%85%B0/' class=" post_tag button button_translucent" data-position=1 title="国际米兰">国际米兰<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E5%9B%BE%E4%B9%A6/' class=" post_tag button button_translucent" data-position=1 title="图书">图书<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/' class=" post_tag button button_translucent" data-position=1 title="垃圾回收">垃圾回收<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E5%B9%B6%E5%8F%91/' class=" post_tag button button_translucent" data-position=1 title="并发">并发<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92/' class=" post_tag button button_translucent" data-position=1 title="执行计划">执行计划<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/' class=" post_tag button button_translucent" data-position=1 title="数据库">数据库<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BC/' class=" post_tag button button_translucent" data-position=2 title="服务网格">服务网格<span class="button_tally">2</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/' class=" post_tag button button_translucent" data-position=1 title="机器学习">机器学习<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' class=" post_tag button button_translucent" data-position=6 title="演讲">演讲<span class="button_tally">6</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E7%A5%96%E6%AF%8D/' class=" post_tag button button_translucent" data-position=2 title="祖母">祖母<span class="button_tally">2</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E7%A8%8B%E5%BA%8F%E5%91%98/' class=" post_tag button button_translucent" data-position=3 title="程序员">程序员<span class="button_tally">3</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E7%B4%A2%E5%BC%95/' class=" post_tag button button_translucent" data-position=3 title="索引">索引<span class="button_tally">3</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E8%81%9A%E7%B1%BB/' class=" post_tag button button_translucent" data-position=1 title="聚类">聚类<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E8%A1%A8%E8%BF%9E%E6%8E%A5/' class=" post_tag button button_translucent" data-position=1 title="表连接">表连接<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E8%A5%BF%E5%AE%89/' class=" post_tag button button_translucent" data-position=1 title="西安">西安<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E8%AE%BF%E9%97%AE%E6%97%A5%E5%BF%97/' class=" post_tag button button_translucent" data-position=16 title="访问日志">访问日志<span class="button_tally">16</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E8%B0%83%E7%94%A8%E9%93%BE/' class=" post_tag button button_translucent" data-position=2 title="调用链">调用链<span class="button_tally">2</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E8%B6%B3%E7%90%83/' class=" post_tag button button_translucent" data-position=1 title="足球">足球<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E9%9A%8F%E7%AC%94/' class=" post_tag button button_translucent" data-position=3 title="随笔">随笔<span class="button_tally">3</span>
+            </a>
+            
+            <div class="tags_sort"><span title="sort alphabetically">[A~Z]</span><span title="sort by count">[0~9]</span>
+            </div>
+            <span class="tags_hide"><svg class="icon">
+            <use xlink:href="#closeme"></use>
+          </svg></span>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </section>
+</aside>
+
+  
+</div>
+    </main><svg width="0" height="0" class="hidden">
+  <symbol viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" id="facebook">
+    <path d="M437 0H75C33.648 0 0 33.648 0 75v362c0 41.352 33.648 75 75 75h151V331h-60v-90h60v-61c0-49.629 40.371-90 90-90h91v90h-91v61h91l-15 90h-76v181h121c41.352 0 75-33.648 75-75V75c0-41.352-33.648-75-75-75zm0 0"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18.001 18.001" id="twitter">
+    <path d="M15.891 4.013c.808-.496 1.343-1.173 1.605-2.034a8.68 8.68 0 0 1-2.351.861c-.703-.756-1.593-1.14-2.66-1.14-1.043 0-1.924.366-2.643 1.078a3.56 3.56 0 0 0-1.076 2.605c0 .309.039.585.117.819-3.076-.105-5.622-1.381-7.628-3.837-.34.601-.51 1.213-.51 1.846 0 1.301.549 2.332 1.645 3.089-.625-.053-1.176-.211-1.645-.47 0 .929.273 1.705.82 2.388a3.623 3.623 0 0 0 2.115 1.291c-.312.08-.641.118-.979.118-.312 0-.533-.026-.664-.083.23.757.664 1.371 1.291 1.841a3.652 3.652 0 0 0 2.152.743C4.148 14.173 2.625 14.69.902 14.69c-.422 0-.721-.006-.902-.038 1.697 1.102 3.586 1.649 5.676 1.649 2.139 0 4.029-.542 5.674-1.626 1.645-1.078 2.859-2.408 3.639-3.974a10.77 10.77 0 0 0 1.172-4.892v-.468a7.788 7.788 0 0 0 1.84-1.921 8.142 8.142 0 0 1-2.11.593z"
+      ></path>
+  </symbol>
+  <symbol aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="mail">
+    <path  d="M502.3 190.8c3.9-3.1 9.7-.2 9.7 4.7V400c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V195.6c0-5 5.7-7.8 9.7-4.7 22.4 17.4 52.1 39.5 154.1 113.6 21.1 15.4 56.7 47.8 92.2 47.6 35.7.3 72-32.8 92.3-47.6 102-74.1 131.6-96.3 154-113.7zM256 320c23.2.4 56.6-29.2 73.4-41.4 132.7-96.3 142.8-104.7 173.4-128.7 5.8-4.5 9.2-11.5 9.2-18.9v-19c0-26.5-21.5-48-48-48H48C21.5 64 0 85.5 0 112v19c0 7.4 3.4 14.3 9.2 18.9 30.6 23.9 40.7 32.4 173.4 128.7 16.8 12.2 50.2 41.8 73.4 41.4z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="calendar">
+    <path d="M452 40h-24V0h-40v40H124V0H84v40H60C26.916 40 0 66.916 0 100v352c0 33.084 26.916 60 60 60h392c33.084 0 60-26.916 60-60V100c0-33.084-26.916-60-60-60zm20 412c0 11.028-8.972 20-20 20H60c-11.028 0-20-8.972-20-20V188h432v264zm0-304H40v-48c0-11.028 8.972-20 20-20h24v40h40V80h264v40h40V80h24c11.028 0 20 8.972 20 20v48z"></path>
+    <path d="M76 230h40v40H76zm80 0h40v40h-40zm80 0h40v40h-40zm80 0h40v40h-40zm80 0h40v40h-40zM76 310h40v40H76zm80 0h40v40h-40zm80 0h40v40h-40zm80 0h40v40h-40zM76 390h40v40H76zm80 0h40v40h-40zm80 0h40v40h-40zm80 0h40v40h-40zm80-80h40v40h-40z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="github">
+    <path d="M255.968 5.329C114.624 5.329 0 120.401 0 262.353c0 113.536 73.344 209.856 175.104 243.872 12.8 2.368 17.472-5.568 17.472-12.384 0-6.112-.224-22.272-.352-43.712-71.2 15.52-86.24-34.464-86.24-34.464-11.616-29.696-28.416-37.6-28.416-37.6-23.264-15.936 1.728-15.616 1.728-15.616 25.696 1.824 39.2 26.496 39.2 26.496 22.848 39.264 59.936 27.936 74.528 21.344 2.304-16.608 8.928-27.936 16.256-34.368-56.832-6.496-116.608-28.544-116.608-127.008 0-28.064 9.984-51.008 26.368-68.992-2.656-6.496-11.424-32.64 2.496-68 0 0 21.504-6.912 70.4 26.336 20.416-5.696 42.304-8.544 64.096-8.64 21.728.128 43.648 2.944 64.096 8.672 48.864-33.248 70.336-26.336 70.336-26.336 13.952 35.392 5.184 61.504 2.56 68 16.416 17.984 26.304 40.928 26.304 68.992 0 98.72-59.84 120.448-116.864 126.816 9.184 7.936 17.376 23.616 17.376 47.584 0 34.368-.32 62.08-.32 70.496 0 6.88 4.608 14.88 17.6 12.352C438.72 472.145 512 375.857 512 262.353 512 120.401 397.376 5.329 255.968 5.329z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 212 212" id="gitlab">
+    <path d="M12.3 74.7h54L43.3 3c-1-3.6-6.4-3.6-7.6 0L12.3 74.8z" />
+    <path d="M12.3 74.7L.5 111c-1 3.2 0 6.8 3 8.8l101.6 74-92.5-119z"/>
+    <path d="M105 193.7l-38.6-119h-54l92.7 119z"/>
+    <path d="M105 193.7l38.7-119H66.4l38.7 119z"/>
+    <path d="M105 193.7l38.7-119H198l-93 119z"/>
+    <path d="M198 74.7l11.6 36.2c1 3 0 6.6-3 8.6l-101.5 74 93-119z"/>
+    <path d="M198 74.7h-54.3L167 3c1.2-3.6 6.4-3.6 7.6 0L198 74.8z"/>
+  </symbol>
+  <symbol viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" id="rss">
+    <circle cx="3.429" cy="20.571" r="3.429"></circle>
+    <path d="M11.429 24h4.57C15.999 15.179 8.821 8.001 0 8v4.572c6.302.001 11.429 5.126 11.429 11.428z"></path>
+    <path d="M24 24C24 10.766 13.234 0 0 0v4.571c10.714 0 19.43 8.714 19.43 19.429z"></path>
+  </symbol>
+  <symbol viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" id="linkedin">
+    <path d="M437 0H75C33.648 0 0 33.648 0 75v362c0 41.352 33.648 75 75 75h362c41.352 0 75-33.648 75-75V75c0-41.352-33.648-75-75-75zM181 406h-60V196h60zm0-240h-60v-60h60zm210 240h-60V286c0-16.54-13.46-30-30-30s-30 13.46-30 30v120h-60V196h60v11.309C286.719 202.422 296.93 196 316 196c40.691.043 75 36.547 75 79.688zm0 0"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 612 612" id="to-top">
+    <path d="M604.501 440.509L325.398 134.956c-5.331-5.357-12.423-7.627-19.386-7.27-6.989-.357-14.056 1.913-19.387 7.27L7.499 440.509c-9.999 10.024-9.999 26.298 0 36.323s26.223 10.024 36.222 0l262.293-287.164L568.28 476.832c9.999 10.024 26.222 10.024 36.221 0 9.999-10.023 9.999-26.298 0-36.323z"></path>
+  </symbol>
+  <symbol viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" id="carly">
+    <path d="M504.971 239.029L448 182.059V84c0-46.317-37.682-84-84-84h-44c-13.255 0-24 10.745-24 24s10.745 24 24 24h44c19.851 0 36 16.149 36 36v108c0 6.365 2.529 12.47 7.029 16.971L454.059 256l-47.029 47.029A24.002 24.002 0 0 0 400 320v108c0 19.851-16.149 36-36 36h-44c-13.255 0-24 10.745-24 24s10.745 24 24 24h44c46.318 0 84-37.683 84-84v-98.059l56.971-56.971c9.372-9.372 9.372-24.568 0-33.941zM112 192V84c0-19.851 16.149-36 36-36h44c13.255 0 24-10.745 24-24S205.255 0 192 0h-44c-46.318 0-84 37.683-84 84v98.059l-56.971 56.97c-9.373 9.373-9.373 24.568 0 33.941L64 329.941V428c0 46.317 37.682 84 84 84h44c13.255 0 24-10.745 24-24s-10.745-24-24-24h-44c-19.851 0-36-16.149-36-36V320c0-6.365-2.529-12.47-7.029-16.971L57.941 256l47.029-47.029A24.002 24.002 0 0 0 112 192z"></path>
+  </symbol>
+  <symbol viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" id="copy">
+    <path d="M23 2.75A2.75 2.75 0 0 0 20.25 0H8.75A2.75 2.75 0 0 0 6 2.75v13.5A2.75 2.75 0 0 0 8.75 19h11.5A2.75 2.75 0 0 0 23 16.25zM18.25 14.5h-7.5a.75.75 0 0 1 0-1.5h7.5a.75.75 0 0 1 0 1.5zm0-3h-7.5a.75.75 0 0 1 0-1.5h7.5a.75.75 0 0 1 0 1.5zm0-3h-7.5a.75.75 0 0 1 0-1.5h7.5a.75.75 0 0 1 0 1.5z"></path>
+    <path d="M8.75 20.5a4.255 4.255 0 0 1-4.25-4.25V2.75c0-.086.02-.166.025-.25H3.75A2.752 2.752 0 0 0 1 5.25v16A2.752 2.752 0 0 0 3.75 24h12a2.752 2.752 0 0 0 2.75-2.75v-.75z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512.001 512.001" id="closeme">
+    <path d="M284.286 256.002L506.143 34.144c7.811-7.811 7.811-20.475 0-28.285-7.811-7.81-20.475-7.811-28.285 0L256 227.717 34.143 5.859c-7.811-7.811-20.475-7.811-28.285 0-7.81 7.811-7.811 20.475 0 28.285l221.857 221.857L5.858 477.859c-7.811 7.811-7.811 20.475 0 28.285a19.938 19.938 0 0 0 14.143 5.857 19.94 19.94 0 0 0 14.143-5.857L256 284.287l221.857 221.857c3.905 3.905 9.024 5.857 14.143 5.857s10.237-1.952 14.143-5.857c7.811-7.811 7.811-20.475 0-28.285L284.286 256.002z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="open-menu">
+    <path d="M492 236H20c-11.046 0-20 8.954-20 20s8.954 20 20 20h472c11.046 0 20-8.954 20-20s-8.954-20-20-20zm0-160H20C8.954 76 0 84.954 0 96s8.954 20 20 20h472c11.046 0 20-8.954 20-20s-8.954-20-20-20zm0 320H20c-11.046 0-20 8.954-20 20s8.954 20 20 20h472c11.046 0 20-8.954 20-20s-8.954-20-20-20z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="instagram">
+    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id=youtube>
+    <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="stackoverflow">
+    <path d="M21 27v-8h3v11H0V19h3v8h18z"></path><path d="M17.1.2L15 1.8l7.9 10.6 2.1-1.6L17.1.2zm3.7 14.7L10.6 6.4l1.7-2 10.2 8.5-1.7 2zM7.2 12.3l12 5.6 1.1-2.4-12-5.6-1.1 2.4zm-1.8 6.8l13.56 1.96.17-2.38-13.26-2.55-.47 2.97zM19 25H5v-3h14v3z"></path>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="xing">
+    <path d="M18.188 0c-.517 0-.741.325-.927.66 0 0-7.455 13.224-7.702 13.657.015.024 4.919 9.023 4.919 9.023.17.308.436.66.967.66h3.454c.211 0 .375-.078.463-.22.089-.151.089-.346-.009-.536l-4.879-8.916c-.004-.006-.004-.016 0-.022L22.139.756c.095-.191.097-.387.006-.535C22.056.078 21.894 0 21.686 0h-3.498zM3.648 4.74c-.211 0-.385.074-.473.216-.09.149-.078.339.02.531l2.34 4.05c.004.01.004.016 0 .021L1.86 16.051c-.099.188-.093.381 0 .529.085.142.239.234.45.234h3.461c.518 0 .766-.348.945-.667l3.734-6.609-2.378-4.155c-.172-.315-.434-.659-.962-.659H3.648v.016z"/>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 71 55" id="discord">
+    <path d="M60.1045 4.8978C55.5792 2.8214 50.7265 1.2916 45.6527 0.41542C45.5603 0.39851 45.468 0.440769 45.4204 0.525289C44.7963 1.6353 44.105 3.0834 43.6209 4.2216C38.1637 3.4046 32.7345 3.4046 27.3892 4.2216C26.905 3.0581 26.1886 1.6353 25.5617 0.525289C25.5141 0.443589 25.4218 0.40133 25.3294 0.41542C20.2584 1.2888 15.4057 2.8186 10.8776 4.8978C10.8384 4.9147 10.8048 4.9429 10.7825 4.9795C1.57795 18.7309 -0.943561 32.1443 0.293408 45.3914C0.299005 45.4562 0.335386 45.5182 0.385761 45.5576C6.45866 50.0174 12.3413 52.7249 18.1147 54.5195C18.2071 54.5477 18.305 54.5139 18.3638 54.4378C19.7295 52.5728 20.9469 50.6063 21.9907 48.5383C22.0523 48.4172 21.9935 48.2735 21.8676 48.2256C19.9366 47.4931 18.0979 46.6 16.3292 45.5858C16.1893 45.5041 16.1781 45.304 16.3068 45.2082C16.679 44.9293 17.0513 44.6391 17.4067 44.3461C17.471 44.2926 17.5606 44.2813 17.6362 44.3151C29.2558 49.6202 41.8354 49.6202 53.3179 44.3151C53.3935 44.2785 53.4831 44.2898 53.5502 44.3433C53.9057 44.6363 54.2779 44.9293 54.6529 45.2082C54.7816 45.304 54.7732 45.5041 54.6333 45.5858C52.8646 46.6197 51.0259 47.4931 49.0921 48.2228C48.9662 48.2707 48.9102 48.4172 48.9718 48.5383C50.038 50.6034 51.2554 52.5699 52.5959 54.435C52.6519 54.5139 52.7526 54.5477 52.845 54.5195C58.6464 52.7249 64.529 50.0174 70.6019 45.5576C70.6551 45.5182 70.6887 45.459 70.6943 45.3942C72.1747 30.0791 68.2147 16.7757 60.1968 4.9823C60.1772 4.9429 60.1437 4.9147 60.1045 4.8978ZM23.7259 37.3253C20.2276 37.3253 17.3451 34.1136 17.3451 30.1693C17.3451 26.225 20.1717 23.0133 23.7259 23.0133C27.308 23.0133 30.1626 26.2532 30.1066 30.1693C30.1066 34.1136 27.28 37.3253 23.7259 37.3253ZM47.3178 37.3253C43.8196 37.3253 40.9371 34.1136 40.9371 30.1693C40.9371 26.225 43.7636 23.0133 47.3178 23.0133C50.9 23.0133 53.7545 26.2532 53.6986 30.1693C53.6986 34.1136 50.9 37.3253 47.3178 37.3253Z"/>
+  </symbol>
+  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17 18" id="mastodon">
+    <path
+    fill="#ffffff"
+    d="m 15.054695,9.8859583 c -0.22611,1.1632697 -2.02517,2.4363497 -4.09138,2.6830797 -1.0774504,0.12856 -2.1382704,0.24673 -3.2694704,0.19484 -1.84996,-0.0848 -3.30971,-0.44157 -3.30971,-0.44157 0,0.1801 0.0111,0.35157 0.0333,0.51194 0.24051,1.82571 1.81034,1.93508 3.29737,1.98607 1.50088,0.0514 2.8373104,-0.37004 2.8373104,-0.37004 l 0.0617,1.35686 c 0,0 -1.0498104,0.56374 -2.9199404,0.66742 -1.03124,0.0567 -2.3117,-0.0259 -3.80308,-0.42069 -3.23454998,-0.85613 -3.79081998,-4.304 -3.87592998,-7.8024197 -0.026,-1.03871 -0.01,-2.01815 -0.01,-2.83732 0,-3.57732 2.34385998,-4.62587996 2.34385998,-4.62587996 1.18184,-0.54277 3.20976,-0.77101 5.318,-0.7882499985409 h 0.0518 C 9.8267646,0.01719834 11.856025,0.24547834 13.037775,0.78824834 c 0,0 2.34377,1.04855996 2.34377,4.62587996 0,0 0.0294,2.63937 -0.32687,4.47183"/>
+ <path
+    fill="#000000"
+    d="m 12.616925,5.6916583 v 4.3315297 h -1.71607 V 5.8189683 c 0,-0.88624 -0.37289,-1.33607 -1.1187604,-1.33607 -0.82467,0 -1.23799,0.53361 -1.23799,1.58875 v 2.30122 h -1.70594 v -2.30122 c 0,-1.05514 -0.4134,-1.58875 -1.23808,-1.58875 -0.74587,0 -1.11876,0.44983 -1.11876,1.33607 v 4.2042197 h -1.71607 V 5.6916583 c 0,-0.88527 0.22541,-1.58876 0.67817,-2.10922 0.46689,-0.52047 1.07833,-0.78727 1.83735,-0.78727 0.87816,0 1.54317,0.33752 1.98288,1.01267 l 0.42744,0.71655 0.42753,-0.71655 c 0.43961,-0.67515 1.10463,-1.01267 1.9828704,-1.01267 0.75893,0 1.37037,0.2668 1.83735,0.78727 0.45268,0.52046 0.67808,1.22395 0.67808,2.10922"/>
+  </symbol>
+</svg>
+
+<footer class="footer">
+  <div class="footer_inner wrap pale">
+    <img src='https://idouba.com/icons/apple-touch-icon.png' class="icon icon_2 transparent" alt="浙ICP备18050493号-1 浙公网安备 33010802006262号">
+    <p>Copyright&nbsp;<span class="year"></span>&nbsp;浙ICP备18050493号-1 浙公网安备 33010802006262号. All Rights Reserved</p><a class="to_top" href="#documentTop">
+  <svg class="icon">
+  <title>to-top</title>
+  <use xlink:href="#to-top"></use>
+</svg>
+
+</a>
+
+  </div>
+</footer>
+
+<script type="text/javascript" src="https://idouba.com/en/js/bundle.ff336aa3aa59d3b9ad38479bb59153d96581fbb501e8946475e657e5412e6b0ecfd0011520c158ce613db24190d23242c59813c62c23f9d902b693489bbdf52f.js" integrity="sha512-/zNqo6pZ07mtOEebtZFT2WWB&#43;7UB6JRkdeZX5UEuaw7P0AEVIMFYzmE9skGQ0jJCxZgTxiwj&#43;dkCtpNIm731Lw==" crossorigin="anonymous"></script>
+
+  <script src="https://idouba.com/js/search.min.786102b9f5b14ee0b60197dc064e532809aec49bcc43fea72e5a513113f04b44a7241d6683d3993d5b7a48582f4986e0b9a28c72ebc48a2072c52aad8f40a2b3.js"></script>
+
+  </body>
+</html>
