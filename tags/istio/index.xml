@@ -9,6 +9,55 @@
     <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
     <lastBuildDate>Thu, 01 Jun 2023 15:50:08 +0000</lastBuildDate><atom:link href="https://idouba.com/tags/istio/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>《Istio权威指南》推荐序一</title>
+      <link>https://idouba.com/the-definitive-guide-istio-ref1/</link>
+      <pubDate>Thu, 01 Jun 2023 15:50:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/the-definitive-guide-istio-ref1/</guid>
+      <description>
+        
+          
+            推荐序一
+随着企业数字化转型的全面深入，企业在生产、运营、创新方面都对基础设施提出了全新要求。为了保障业务的极致性能，资源需要被随时随地按需获取；为了实现对成本的精细化运营，需要实现对资源的细粒度管理；新兴的智能业务则要求基础设施能提供海量的多样化算力。为了支撑企业的数智升级，企业的基础设施需要不断进化、创新。如今，企业逐步进入深度云化时代，由关注资源上云转向关注云上业务创新，同时需要通过安全、运维、IT治理、成本等精益运营手段来深度用云、高效管云。云原生解决了企业以高效协同模式创新的本质问题，让企业的软件架构可以去模块化、标准化部署，极大提高了企业应用生产力。
+从技术发展的角度来看，我们可以把云原生理解为云计算的重心从“资源”逐渐转向“应用”的必然结果。以资源为中心的上一代云计算技术专注于物理设备如何虚拟化、池化、多租化，典型代表是计算、网络、存储三大基础设施的云化。以应用为中心的云原生技术则专注于应用如何更好地适应云环境。相对于传统应用通过迁移改造“上云”，云原生的目标是通过一系列的技术支撑，使用户在云环境下快速开发和运行、管理云原生应用，并更好地利用云资源和云技术。
+服务网格是CNCF（Cloud-Native Computing Foundation，云原生计算基金会）定义的云原生技术栈中的关键技术之一，和容器、微服务、不可变基础设施、声明式API等技术一起，帮助用户在动态环境下以弹性和分布式的方式构建并运行可扩展的应用。服务网格在云原生技术栈中，向上连接用户应用，向下连接多种计算资源，发挥着关键作用。
+◎ 向下，服务网格与底层资源、运行环境结合，构建了一个理解应用需求、对应用更友好的基础设施，而不只是提供一堆机器和资源。服务网格帮助用户打造“以应用为中心”的云原生基础设施，让基础设施能感知应用且更好地服务于应用，对应用进行细粒度管理，更有效地发挥资源的效能。服务网格向应用提供的这层基础设施也经常被称为“应用网络”。用户开发的应用程序像使用传统的网络协议栈一样使用服务网格提供的应用层协议。就像TCP/IP负责将字节码可靠地在网络节点间传递，服务网格负责将用户的应用层信息可靠地在服务间传递，并对服务间的访问进行管理。在实践中，包括华为云在内的越来越多的云厂商将七层应用流量管理能力和底层网络融合，在提供传统的底层连通性能力的同时，基于服务的语义模型，提供了应用层丰富的流量、安全和可观测性管理能力。
+◎ 向上，服务网格以非侵入的方式提供面向应用的韧性、安全、动态路由、调用链、拓扑等应用管理和运维能力。这些能力在传统应用开发模式下，需要在开发阶段由开发人员开发并持续维护。而在云原生开发模式下，基于服务网格的非侵入性特点，这些能力被从业务中解耦，无须由开发人员开发，由运维人员配置即可。这些能力包括：灵活的灰度分流；超时、重试、限流、熔断等；动态地对服务访问进行重写、重定向、头域修改、故障注入；自动收集应用访问的指标、访问日志、调用链等可观测性数据，进行故障定界、定位和洞察；自动提供完整的面向应用的零信任安全，比如自动进行服务身份认证、通道加密和细粒度授权管理。使用这些能力时，无须改动用户的代码，也无须使用基于特定语言的开发框架。
+作为服务网格技术中最具影响力的项目，Istio的平台化设计和良好扩展性使得其从诞生之初就获得了技术圈和产业界的极大关注。基于用户应用Istio时遇到的问题，Istio的版本在稳定迭代，功能在日益完善，易用性和运维能力在逐步增强，在大规模生产环境下的应用也越来越多。特别是，Istio于2022年9月被正式批准加入CNCF，作为在生产环境下使用最多的服务网格项目，Istio在加速成熟。
+华为云在2018年率先发布全球首个Istio商用服务：ASM（Application Service Mesh，应用服务网格）。ASM是一个拥有高性能、高可靠性和易用性的全托管服务网格。作为分布式云场景中面向应用的网络基础，ASM对多云、混合云环境下的容器、虚拟机、Serverless、传统微服务、Proxyless服务提供了应用健康、韧性、弹性、安全性等统一的全方位管理。
+作为最早一批投身云原生技术的厂商，华为云是CNCF在亚洲唯一的初创成员，社区代码贡献和Maintainer席位数均持续位居亚洲第一。华为云云原生团队从2018年开始积极参与Istio社区的活动，参与Istio社区的版本特性设计与开发，基于用户的共性需求开发了大量大颗粒特性，社区贡献位居全球第三、中国第一。华为云云原生团队成员入选了每届Istio社区指导委员会，参与了Istio社区的重大技术决策，持续引领了Istio项目和服务网格技术的发展。
+2021年4月，华为云联合中国信通院正式发布云原生2.0白皮书，全面诠释了云原生2.0的核心理念，分享了云原生产业洞察，引领了云原生产业的繁荣。此外，华为云联合CNCF、中国信通院及业界云原生技术精英们成立全球云原生交流平台——创原会，创原会当前已经在中国、东南亚、拉美、欧洲陆续成立分会，探索前沿云原生技术、共享产业落地实践经验，让云原生为数字经济发展和企业数字化转型贡献更多的价值。
+《Istio权威指南》来源于华为云云原生团队在云服务开发、客户解决方案构建、Istio社区特性开发、生产环境运维等日常工作中的实践、思考和总结，旨在帮助技术圈的更多朋友由浅入深且系统地理解Istio的原理、实践、架构与源码。书中内容在描述Istio的功能和机制的同时，运用了大量的图表总结，并深入解析其中的概念和技术点，可以帮助读者从多个维度理解云原生、服务网格等相关技术，掌握基于Istio实现应用流量管理、零信任安全、应用可观测性等能力的相关实践。无论是初学者，还是对服务网格有一定了解的用户，都可以通过本书获取自己需要的信息。
+华为云CTO 张宇昕
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>《Istio权威指南》推荐序二</title>
+      <link>https://idouba.com/the-definitive-guide-istio-ref2/</link>
+      <pubDate>Thu, 01 Jun 2023 15:50:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/the-definitive-guide-istio-ref2/</guid>
+      <description>
+        
+          
+            推荐序二
+我很高兴向大家介绍这本关于Istio服务网格技术的权威书籍。Istio是一种创新性的平台，在云原生计算领域迅速赢得人们的广泛关注。企业在向微服务和容器化架构转型的过程中，对强大且可扩展的服务发现、流量管理及安全平台的需求变得比以往更加迫切。Istio在2022年9月正式被CNCF接受为孵化项目，并成为一种领先的解决方案，为云原生应用提供了无缝连接、可观察性和控制等能力。
+本书提供了全面且实用的Istio指南，涵盖了Istio的核心概念、特性和对xDS协议等主题的深入探讨，还包括对Envoy和Istio项目源码的深入解析，这对潜在贡献者非常有用。无论您是软件工程师、SRE还是云原生开发人员，本书都将为您提供利用Envoy和Istio构建可扩展和安全的云原生应用所需的知识和技能。
+我要祝贺作者们完成了杰出的工作，并感谢他们在云原生社区分享自己的专业知识。我相信本书将成为对Envoy、Istio及现代云原生应用开发感兴趣的人不可或缺的资源。
+CNCF CTO Chris Aniszczyk
+（原文）
+I am thrilled to introduce this definitive book on Istio service mesh technology, a revolutionary platform that has been rapidly gaining popularity in the world of cloud-native computing. As businesses shift towards microservices and containerized architectures, the need for a robust and scalable platform for service discovery, traffic management, and security has become more critical than ever before. Istio was officially accepted in the CNCF as an incubation project in September 2022 and has emerged as a leading solution that provides seamless connectivity, observability, and control for cloud native applications.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
       <title>《Istio权威指南》结语</title>
       <link>https://idouba.com/conclusion-of-the-definitive-guide-istio/</link>
       <pubDate>Thu, 01 Jun 2023 15:50:08 +0000</pubDate>

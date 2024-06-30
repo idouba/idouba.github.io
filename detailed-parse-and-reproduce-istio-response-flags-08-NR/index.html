@@ -172,7 +172,7 @@
 <p>第八个关注的Response Flag是NR，全称是<strong>NoRouteFound</strong>，官方定义表示<strong>No <a href="https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/http/http_routing">route configured</a></strong> <strong>for a given request in addition to 404 response code or no matching filter chain for a downstream connection.</strong></p>
 <h4 id="含义"><strong>含义：</strong></h4>
 <p><strong>NR</strong>表示没有匹配的路由来处理请求的流量，一般伴随“404”状态码。比如实际的访问流量的特征不匹配VirtualService中定义的路由条件，因而没有找到匹配的路由处理请求，就会报404 NR。</p>
-<img src="../picture/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-08-NR/01.png" alt="NR服务访问" style="zoom:150%;" />
+<img src="../picture/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-08-NR/01.png" alt="NR服务访问" style="zoom:120%;" />
 <h4 id="重现环境"><strong>重现环境：</strong></h4>
 <ul>
 <li>客户端Pod，注入了Sidecar。</li>
@@ -199,31 +199,7 @@
 </span></span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="w">        </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l">nginx.accesslog.svc.cluster.local</span><span class="w">
 </span></span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="w">        </span><span class="nt">subset</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
 </span></span></span></code></pre></div><p><strong>第三步：</strong> .在客户端容器中还是使用原有方式访问目标服务，可以看到得到了一个404错误，表示请求的资源不存在。</p>
-<p><figure>
-  <picture>
-
-    
-      
-        
-        
-        
-        
-        
-        
-    <img
-      loading="lazy"
-      decoding="async"
-      alt="NR客户端访问"
-      
-        class="image_figure image_internal image_unprocessed"
-        src="../picture/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-08-NR/02.png"
-      
-      
-    />
-
-    </picture>
-</figure>
-</p>
+<img src="../picture/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-08-NR/02.png" alt="NR客户端访问" style="zoom:150%;" />
 <p>**第四步：**在客户端的访问日志会记录404 NR的应答标记，表示没有找到匹配的路由</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="ln">1</span><span class="cl"><span class="o">[</span>2023-08-19T11:13:06.484Z<span class="o">]</span> <span class="s2">&#34;GET / HTTP/1.1&#34;</span> <span class="m">404</span> NR route_not_found - <span class="s2">&#34;-&#34;</span> <span class="m">0</span> <span class="m">0</span> <span class="m">0</span> - <span class="s2">&#34;-&#34;</span> <span class="s2">&#34;curl/7.52.1&#34;</span> <span class="s2">&#34;d9e4d779-ee2f-4dab-8546-46d61e789d35&#34;</span> <span class="s2">&#34;nginx.accesslog&#34;</span> <span class="s2">&#34;-&#34;</span> - - 10.246.91.131:80 10.66.0.24:35016 - -
 </span></span></code></pre></div><p><strong>第五步：</strong> 观察服务端日志。客户端代理没有找到匹配的路由把流量发到对应的服务端实例，因此服务端没有流量，也没有日志输出。</p>
@@ -312,7 +288,7 @@
       <nav class="tags_nav">
         <a href='https://idouba.com/categories/istio/' class="post_tag button button_translucent" title="istio">
           ISTIO
-          <span class="button_tally">30</span>
+          <span class="button_tally">32</span>
         </a>
         
         <a href='https://idouba.com/categories/%E9%9A%8F%E7%AC%94/' class="post_tag button button_translucent" title="随笔">
@@ -386,14 +362,14 @@
           <span class="button_tally">16</span>
         </a>
         
-        <a href='https://idouba.com/tags/responseflags/' class="post_tag button button_translucent" title="responseflags">
-          RESPONSEFLAGS
+        <a href='https://idouba.com/tags/istio/' class="post_tag button button_translucent" title="istio">
+          ISTIO
           <span class="button_tally">15</span>
         </a>
         
-        <a href='https://idouba.com/tags/istio/' class="post_tag button button_translucent" title="istio">
-          ISTIO
-          <span class="button_tally">13</span>
+        <a href='https://idouba.com/tags/responseflags/' class="post_tag button button_translucent" title="responseflags">
+          RESPONSEFLAGS
+          <span class="button_tally">15</span>
         </a>
         
         <a href='https://idouba.com/tags/mapreduce/' class="post_tag button button_translucent" title="mapreduce">
@@ -431,13 +407,13 @@
           <span class="button_tally">3</span>
         </a>
         
-        <a href='https://idouba.com/tags/oracle/' class="post_tag button button_translucent" title="oracle">
-          ORACLE
+        <a href='https://idouba.com/tags/istio%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/' class="post_tag button button_translucent" title="istio权威指南">
+          ISTIO权威指南
           <span class="button_tally">3</span>
         </a>
         
-        <a href='https://idouba.com/tags/%E7%A8%8B%E5%BA%8F%E5%91%98/' class="post_tag button button_translucent" title="程序员">
-          程序员
+        <a href='https://idouba.com/tags/oracle/' class="post_tag button button_translucent" title="oracle">
+          ORACLE
           <span class="button_tally">3</span>
         </a>
         
@@ -503,7 +479,7 @@
             </a>
             
             
-            <a href='https://idouba.com/tags/istio/' class=" post_tag button button_translucent" data-position=13 title="istio">ISTIO<span class="button_tally">13</span>
+            <a href='https://idouba.com/tags/istio/' class=" post_tag button button_translucent" data-position=15 title="istio">ISTIO<span class="button_tally">15</span>
             </a>
             
             
@@ -511,7 +487,7 @@
             </a>
             
             
-            <a href='https://idouba.com/tags/istio%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/' class=" post_tag button button_translucent" data-position=1 title="istio权威指南">ISTIO权威指南<span class="button_tally">1</span>
+            <a href='https://idouba.com/tags/istio%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/' class=" post_tag button button_translucent" data-position=3 title="istio权威指南">ISTIO权威指南<span class="button_tally">3</span>
             </a>
             
             
@@ -639,7 +615,7 @@
             </a>
             
             
-            <a href='https://idouba.com/tags/%E5%9B%BE%E4%B9%A6/' class=" post_tag button button_translucent" data-position=1 title="图书">图书<span class="button_tally">1</span>
+            <a href='https://idouba.com/tags/%E5%9B%BE%E4%B9%A6/' class=" post_tag button button_translucent" data-position=3 title="图书">图书<span class="button_tally">3</span>
             </a>
             
             
