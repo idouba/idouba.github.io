@@ -120,6 +120,77 @@
   <div class="excerpt">
     <div class="excerpt_header">
       <h3 class="post_link">
+        <a href="https://idouba.com/kubernetes-liveness-probe/" title="kubernetes liveness probe 流程">kubernetes liveness probe 流程</a>
+      </h3>
+      
+  <div class="post_meta">
+    <span><svg class="icon">
+  <title>calendar</title>
+  <use xlink:href="#calendar"></use>
+</svg>
+</span>
+    <span class="post_date">
+      Sep 1, 2017</span>
+    <span class="post_time"> · 3 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/kubernetes/' title="Kubernetes" class="post_tag button button_translucent">Kubernetes
+        </a>
+    </span>
+    <span class="page_only">&nbsp;·
+  <div class="post_share">
+    Share on:
+    <a href="https://twitter.com/intent/tweet?text=kubernetes%20liveness%20probe%20%e6%b5%81%e7%a8%8b&url=https%3a%2f%2fidouba.com%2fkubernetes-liveness-probe%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>twitter</title>
+  <use xlink:href="#twitter"></use>
+</svg>
+
+    </a>
+    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fkubernetes-liveness-probe%2f&t=kubernetes%20liveness%20probe%20%e6%b5%81%e7%a8%8b" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>facebook</title>
+  <use xlink:href="#facebook"></use>
+</svg>
+
+    </a>
+    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
+      <svg class="icon">
+  <title>linkedin</title>
+  <use xlink:href="#linkedin"></use>
+</svg>
+
+    </a>
+    <a href="https://idouba.com/kubernetes-liveness-probe/" title="Copy Link" class="link link_yank">
+      <svg class="icon">
+  <title>copy</title>
+  <use xlink:href="#copy"></use>
+</svg>
+
+    </a>
+  </div>
+  </span>
+  </div>
+
+    </div>
+      <div class="excerpt_footer">
+        <div class="pale">
+          
+            <p>1 概述 kubernetes提供了的Probe可以进行健康检查。
+<a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/">https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/</a>
+对pod中的每个容器通过配置liveness或者readiness。
+当liveness probe failed后，该container会杀掉，并重新创建；而readinessProbe失败，则该pod ip 会从service的endpoints列表中删除，即隔离到该后端的请求。
+如liveness 配置如下：
+1livenessProbe: 2 httpGet: 3 …</p>
+          
+          <br>
+          <a href="https://idouba.com/kubernetes-liveness-probe/" title="Read More" class="excerpt_more button">Read More</a>
+        </div>
+      </div>
+    </div>
+  </li>
+
+        <li class="post_item">
+  <div class="excerpt">
+    <div class="excerpt_header">
+      <h3 class="post_link">
         <a href="https://idouba.com/kubernetes-federation-sync-accross-cluster/" title="kubernetes federation 工作机制之资源对象同步">kubernetes federation 工作机制之资源对象同步</a>
       </h3>
       
@@ -741,72 +812,6 @@
     </div>
   </li>
 
-        <li class="post_item">
-  <div class="excerpt">
-    <div class="excerpt_header">
-      <h3 class="post_link">
-        <a href="https://idouba.com/about-projects/" title="跨界看项目那些事儿">跨界看项目那些事儿</a>
-      </h3>
-      
-  <div class="post_meta">
-    <span><svg class="icon">
-  <title>calendar</title>
-  <use xlink:href="#calendar"></use>
-</svg>
-</span>
-    <span class="post_date">
-      Apr 10, 2015</span>
-    <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/%E9%9A%8F%E7%AC%94/' title="随笔" class="post_tag button button_translucent">随笔
-        </a>
-    </span>
-    <span class="page_only">&nbsp;·
-  <div class="post_share">
-    Share on:
-    <a href="https://twitter.com/intent/tweet?text=%e8%b7%a8%e7%95%8c%e7%9c%8b%e9%a1%b9%e7%9b%ae%e9%82%a3%e4%ba%9b%e4%ba%8b%e5%84%bf&url=https%3a%2f%2fidouba.com%2fabout-projects%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>twitter</title>
-  <use xlink:href="#twitter"></use>
-</svg>
-
-    </a>
-    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fabout-projects%2f&t=%e8%b7%a8%e7%95%8c%e7%9c%8b%e9%a1%b9%e7%9b%ae%e9%82%a3%e4%ba%9b%e4%ba%8b%e5%84%bf" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>facebook</title>
-  <use xlink:href="#facebook"></use>
-</svg>
-
-    </a>
-    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
-      <svg class="icon">
-  <title>linkedin</title>
-  <use xlink:href="#linkedin"></use>
-</svg>
-
-    </a>
-    <a href="https://idouba.com/about-projects/" title="Copy Link" class="link link_yank">
-      <svg class="icon">
-  <title>copy</title>
-  <use xlink:href="#copy"></use>
-</svg>
-
-    </a>
-  </div>
-  </span>
-  </div>
-
-    </div>
-      <div class="excerpt_footer">
-        <div class="pale">
-          
-            <p>年底了，该总结了。例行的招呼几个项目负责人对几个项目执行情况进行总结，项目上中实践比较成功的，记录细节，评估其他项目借鉴的可能性；项目上存在的问题，重点一起剖析下。由表面现象，到深层次的原因，力图通过讨论或争论都能有一致的认识，形成改进。但希望是理解了改进，而不是被要求改进。为了更生动的说明自己的观点，作为主持人的笔者准备了一个大家都比较熟悉的例子，公司附近的一个工地上项目。居然发现效果很好，新鲜，生动，容易被大家理解和引起共鸣。也是，在批判自己的过程中，肆无忌惮的给第三方挑毛病的确是很爽的一件事情！笔者在进入软件这个行当之前干的就是在[铁路工地上干活][1]的，经常不自觉的把这两种项目拿来比较。虽然看上去是有点跨界，其实也差别不 …</p>
-          
-          <br>
-          <a href="https://idouba.com/about-projects/" title="Read More" class="excerpt_more button">Read More</a>
-        </div>
-      </div>
-    </div>
-  </li>
-
       <li>
     <ul class="pagination pagination-default">
       <li class="page-item">
@@ -834,7 +839,7 @@
         <a href="/posts/page/6/" aria-label="Next" class="page-link" role="button"><span aria-hidden="true">&raquo;</span></a>
       </li>
       <li class="page-item">
-        <a href="/posts/page/8/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        <a href="/posts/page/9/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
       </li>
     </ul>
       </li>
@@ -892,7 +897,7 @@
       <nav class="tags_nav">
         <a href='https://idouba.com/categories/istio/' class="post_tag button button_translucent" title="istio">
           ISTIO
-          <span class="button_tally">36</span>
+          <span class="button_tally">37</span>
         </a>
         
         <a href='https://idouba.com/categories/%E9%9A%8F%E7%AC%94/' class="post_tag button button_translucent" title="随笔">
@@ -903,6 +908,11 @@
         <a href='https://idouba.com/categories/hadoop/' class="post_tag button button_translucent" title="hadoop">
           HADOOP
           <span class="button_tally">12</span>
+        </a>
+        
+        <a href='https://idouba.com/categories/istio%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/' class="post_tag button button_translucent" title="istio权威指南">
+          ISTIO权威指南
+          <span class="button_tally">8</span>
         </a>
         
         <a href='https://idouba.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/' class="post_tag button button_translucent" title="数据库">
@@ -953,7 +963,7 @@
       <nav class="tags_nav">
         <a href='https://idouba.com/tags/istio/' class="post_tag button button_translucent" title="istio">
           ISTIO
-          <span class="button_tally">19</span>
+          <span class="button_tally">20</span>
         </a>
         
         <a href='https://idouba.com/tags/java/' class="post_tag button button_translucent" title="java">
@@ -988,12 +998,12 @@
         
         <a href='https://idouba.com/tags/istio%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/' class="post_tag button button_translucent" title="istio权威指南">
           ISTIO权威指南
-          <span class="button_tally">7</span>
+          <span class="button_tally">8</span>
         </a>
         
         <a href='https://idouba.com/tags/%E5%9B%BE%E4%B9%A6/' class="post_tag button button_translucent" title="图书">
           图书
-          <span class="button_tally">7</span>
+          <span class="button_tally">8</span>
         </a>
         
         <a href='https://idouba.com/tags/%E4%BA%91%E5%8E%9F%E7%94%9F%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BCistio%E5%8E%9F%E7%90%86%E5%AE%9E%E8%B7%B5%E6%9E%B6%E6%9E%84%E4%B8%8E%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/' class="post_tag button button_translucent" title="云原生服务网格istio原理实践架构与源码解析">
@@ -1083,7 +1093,7 @@
             </a>
             
             
-            <a href='https://idouba.com/tags/istio/' class=" post_tag button button_translucent" data-position=19 title="istio">ISTIO<span class="button_tally">19</span>
+            <a href='https://idouba.com/tags/istio/' class=" post_tag button button_translucent" data-position=20 title="istio">ISTIO<span class="button_tally">20</span>
             </a>
             
             
@@ -1091,7 +1101,7 @@
             </a>
             
             
-            <a href='https://idouba.com/tags/istio%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/' class=" post_tag button button_translucent" data-position=7 title="istio权威指南">ISTIO权威指南<span class="button_tally">7</span>
+            <a href='https://idouba.com/tags/istio%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/' class=" post_tag button button_translucent" data-position=8 title="istio权威指南">ISTIO权威指南<span class="button_tally">8</span>
             </a>
             
             
@@ -1219,7 +1229,7 @@
             </a>
             
             
-            <a href='https://idouba.com/tags/%E5%9B%BE%E4%B9%A6/' class=" post_tag button button_translucent" data-position=7 title="图书">图书<span class="button_tally">7</span>
+            <a href='https://idouba.com/tags/%E5%9B%BE%E4%B9%A6/' class=" post_tag button button_translucent" data-position=8 title="图书">图书<span class="button_tally">8</span>
             </a>
             
             
