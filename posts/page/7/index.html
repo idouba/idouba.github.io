@@ -120,6 +120,292 @@
   <div class="excerpt">
     <div class="excerpt_header">
       <h3 class="post_link">
+        <a href="https://idouba.com/hadoop_mapreduce_shuffle_map_output/" title="【hadoop代码笔记】Mapreduce shuffle过程之Map输出过程">【hadoop代码笔记】Mapreduce shuffle过程之Map输出过程</a>
+      </h3>
+      
+  <div class="post_meta">
+    <span><svg class="icon">
+  <title>calendar</title>
+  <use xlink:href="#calendar"></use>
+</svg>
+</span>
+    <span class="post_date">
+      Feb 5, 2014</span>
+    <span class="post_time"> · 15 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/hadoop/' title="hadoop" class="post_tag button button_translucent">hadoop
+        </a><a href='https://idouba.com/tags/java/' title="java" class="post_tag button button_translucent">java
+        </a><a href='https://idouba.com/tags/mapreduce/' title="mapreduce" class="post_tag button button_translucent">mapreduce
+        </a>
+    </span>
+    <span class="page_only">&nbsp;·
+  <div class="post_share">
+    Share on:
+    <a href="https://twitter.com/intent/tweet?text=%e3%80%90hadoop%e4%bb%a3%e7%a0%81%e7%ac%94%e8%ae%b0%e3%80%91Mapreduce%20shuffle%e8%bf%87%e7%a8%8b%e4%b9%8bMap%e8%be%93%e5%87%ba%e8%bf%87%e7%a8%8b&url=https%3a%2f%2fidouba.com%2fhadoop_mapreduce_shuffle_map_output%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>twitter</title>
+  <use xlink:href="#twitter"></use>
+</svg>
+
+    </a>
+    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fhadoop_mapreduce_shuffle_map_output%2f&t=%e3%80%90hadoop%e4%bb%a3%e7%a0%81%e7%ac%94%e8%ae%b0%e3%80%91Mapreduce%20shuffle%e8%bf%87%e7%a8%8b%e4%b9%8bMap%e8%be%93%e5%87%ba%e8%bf%87%e7%a8%8b" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>facebook</title>
+  <use xlink:href="#facebook"></use>
+</svg>
+
+    </a>
+    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
+      <svg class="icon">
+  <title>linkedin</title>
+  <use xlink:href="#linkedin"></use>
+</svg>
+
+    </a>
+    <a href="https://idouba.com/hadoop_mapreduce_shuffle_map_output/" title="Copy Link" class="link link_yank">
+      <svg class="icon">
+  <title>copy</title>
+  <use xlink:href="#copy"></use>
+</svg>
+
+    </a>
+  </div>
+  </span>
+  </div>
+
+    </div>
+      <div class="excerpt_footer">
+        <div class="pale">
+          
+            <h3 id="一概要描述"><strong>一、概要描述</strong></h3>
+<p>shuffle是MapReduce的一个核心过程，因此没有在<a href="../hadoop_job_submit_conclusion/" title="【hadoop代码笔记】hadoop作业提交之汇总">前面的MapReduce作业提交的过程</a>中描述，而是单独拿出来比较详细的描述。 根据官方的流程图示如下：</p>
+<p><figure>
+  <picture>
+<pre><code>&lt;img
+  loading=&quot;lazy&quot;
+  decoding=&quot;async&quot;
+  alt=&quot;&quot;
+  
+    class=&quot;image_figure image_internal image_unprocessed&quot; …&lt;/picture&gt;&lt;/figure&gt;&lt;/p&gt;</code></pre>
+
+          
+          <br>
+          <a href="https://idouba.com/hadoop_mapreduce_shuffle_map_output/" title="Read More" class="excerpt_more button">Read More</a>
+        </div>
+      </div>
+    </div>
+  </li>
+
+        <li class="post_item">
+  <div class="excerpt">
+    <div class="excerpt_header">
+      <h3 class="post_link">
+        <a href="https://idouba.com/hadoop_job_submit_conclusion/" title="【hadoop代码笔记】hadoop作业提交之汇总">【hadoop代码笔记】hadoop作业提交之汇总</a>
+      </h3>
+      
+  <div class="post_meta">
+    <span><svg class="icon">
+  <title>calendar</title>
+  <use xlink:href="#calendar"></use>
+</svg>
+</span>
+    <span class="post_date">
+      Feb 1, 2014</span>
+    <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/hadoop/' title="hadoop" class="post_tag button button_translucent">hadoop
+        </a><a href='https://idouba.com/tags/java/' title="java" class="post_tag button button_translucent">java
+        </a><a href='https://idouba.com/tags/mapreduce/' title="mapreduce" class="post_tag button button_translucent">mapreduce
+        </a>
+    </span>
+    <span class="page_only">&nbsp;·
+  <div class="post_share">
+    Share on:
+    <a href="https://twitter.com/intent/tweet?text=%e3%80%90hadoop%e4%bb%a3%e7%a0%81%e7%ac%94%e8%ae%b0%e3%80%91hadoop%e4%bd%9c%e4%b8%9a%e6%8f%90%e4%ba%a4%e4%b9%8b%e6%b1%87%e6%80%bb&url=https%3a%2f%2fidouba.com%2fhadoop_job_submit_conclusion%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>twitter</title>
+  <use xlink:href="#twitter"></use>
+</svg>
+
+    </a>
+    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fhadoop_job_submit_conclusion%2f&t=%e3%80%90hadoop%e4%bb%a3%e7%a0%81%e7%ac%94%e8%ae%b0%e3%80%91hadoop%e4%bd%9c%e4%b8%9a%e6%8f%90%e4%ba%a4%e4%b9%8b%e6%b1%87%e6%80%bb" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>facebook</title>
+  <use xlink:href="#facebook"></use>
+</svg>
+
+    </a>
+    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
+      <svg class="icon">
+  <title>linkedin</title>
+  <use xlink:href="#linkedin"></use>
+</svg>
+
+    </a>
+    <a href="https://idouba.com/hadoop_job_submit_conclusion/" title="Copy Link" class="link link_yank">
+      <svg class="icon">
+  <title>copy</title>
+  <use xlink:href="#copy"></use>
+</svg>
+
+    </a>
+  </div>
+  </span>
+  </div>
+
+    </div>
+      <div class="excerpt_footer">
+        <div class="pale">
+          
+            <p>一、概述 在本篇博文中，试图通过代码了解hadoop job执行的整个流程。即用户提交的mapreduce的jar文件、输入提交到hadoop的集群，并在集群中运行。重点在代码的角度描述整个流程，有些细节描述的并不那么详细。 汇总的代码流程图附件:hadoop_mapreduce_jobsubmit
+二、主要流程 Jobclient通过RPC方式调用到jobtracker的submitJob方法提交作业，包括作业的jar、分片和作业描述。 JobTracker的submitJob方法吧job加入到内存队列中，由独立的线程取出每个JobInProgress的对象调用其initTasks方法，根据传入的作业分片创建对应数量 …</p>
+          
+          <br>
+          <a href="https://idouba.com/hadoop_job_submit_conclusion/" title="Read More" class="excerpt_more button">Read More</a>
+        </div>
+      </div>
+    </div>
+  </li>
+
+        <li class="post_item">
+  <div class="excerpt">
+    <div class="excerpt_header">
+      <h3 class="post_link">
+        <a href="https://idouba.com/hadoop_mapreduce_tasktracker_child_reduce/" title="【hadoop代码笔记】Hadoop作业提交之Child启动reduce任务">【hadoop代码笔记】Hadoop作业提交之Child启动reduce任务</a>
+      </h3>
+      
+  <div class="post_meta">
+    <span><svg class="icon">
+  <title>calendar</title>
+  <use xlink:href="#calendar"></use>
+</svg>
+</span>
+    <span class="post_date">
+      Jan 23, 2014</span>
+    <span class="post_time"> · 24 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/hadoop/' title="hadoop" class="post_tag button button_translucent">hadoop
+        </a><a href='https://idouba.com/tags/java/' title="java" class="post_tag button button_translucent">java
+        </a><a href='https://idouba.com/tags/mapreduce/' title="mapreduce" class="post_tag button button_translucent">mapreduce
+        </a>
+    </span>
+    <span class="page_only">&nbsp;·
+  <div class="post_share">
+    Share on:
+    <a href="https://twitter.com/intent/tweet?text=%e3%80%90hadoop%e4%bb%a3%e7%a0%81%e7%ac%94%e8%ae%b0%e3%80%91Hadoop%e4%bd%9c%e4%b8%9a%e6%8f%90%e4%ba%a4%e4%b9%8bChild%e5%90%af%e5%8a%a8reduce%e4%bb%bb%e5%8a%a1&url=https%3a%2f%2fidouba.com%2fhadoop_mapreduce_tasktracker_child_reduce%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>twitter</title>
+  <use xlink:href="#twitter"></use>
+</svg>
+
+    </a>
+    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fhadoop_mapreduce_tasktracker_child_reduce%2f&t=%e3%80%90hadoop%e4%bb%a3%e7%a0%81%e7%ac%94%e8%ae%b0%e3%80%91Hadoop%e4%bd%9c%e4%b8%9a%e6%8f%90%e4%ba%a4%e4%b9%8bChild%e5%90%af%e5%8a%a8reduce%e4%bb%bb%e5%8a%a1" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>facebook</title>
+  <use xlink:href="#facebook"></use>
+</svg>
+
+    </a>
+    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
+      <svg class="icon">
+  <title>linkedin</title>
+  <use xlink:href="#linkedin"></use>
+</svg>
+
+    </a>
+    <a href="https://idouba.com/hadoop_mapreduce_tasktracker_child_reduce/" title="Copy Link" class="link link_yank">
+      <svg class="icon">
+  <title>copy</title>
+  <use xlink:href="#copy"></use>
+</svg>
+
+    </a>
+  </div>
+  </span>
+  </div>
+
+    </div>
+      <div class="excerpt_footer">
+        <div class="pale">
+          
+            <p>一、概要描述
+在上篇博文描述了TaskTracker启动一个独立的java进程来执行Map任务。接上上篇文章，TaskRunner线程执行中，会构造一个java –D** Child address port tasked这样第一个java命令，单独启动一个java进程。在Child的main函数中通过TaskUmbilicalProtocol协议，从TaskTracker获得需要执行的Task，并调用Task的run方法来执行。在ReduceTask而Task的run方法会通过java反射机制构造Reducer，Reducer.Context，然后调用构造的Reducer的run方法执行reduce操作。不同于map任务，在执 …</p>
+          
+          <br>
+          <a href="https://idouba.com/hadoop_mapreduce_tasktracker_child_reduce/" title="Read More" class="excerpt_more button">Read More</a>
+        </div>
+      </div>
+    </div>
+  </li>
+
+        <li class="post_item">
+  <div class="excerpt">
+    <div class="excerpt_header">
+      <h3 class="post_link">
+        <a href="https://idouba.com/hadoop_mapreduce_tasktracker_child_map/" title="【hadoop代码笔记】hadoop作业提交之Child启动map任务">【hadoop代码笔记】hadoop作业提交之Child启动map任务</a>
+      </h3>
+      
+  <div class="post_meta">
+    <span><svg class="icon">
+  <title>calendar</title>
+  <use xlink:href="#calendar"></use>
+</svg>
+</span>
+    <span class="post_date">
+      Jan 22, 2014</span>
+    <span class="post_time"> · 7 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/hadoop/' title="hadoop" class="post_tag button button_translucent">hadoop
+        </a><a href='https://idouba.com/tags/java/' title="java" class="post_tag button button_translucent">java
+        </a><a href='https://idouba.com/tags/mapreduce/' title="mapreduce" class="post_tag button button_translucent">mapreduce
+        </a>
+    </span>
+    <span class="page_only">&nbsp;·
+  <div class="post_share">
+    Share on:
+    <a href="https://twitter.com/intent/tweet?text=%e3%80%90hadoop%e4%bb%a3%e7%a0%81%e7%ac%94%e8%ae%b0%e3%80%91hadoop%e4%bd%9c%e4%b8%9a%e6%8f%90%e4%ba%a4%e4%b9%8bChild%e5%90%af%e5%8a%a8map%e4%bb%bb%e5%8a%a1&url=https%3a%2f%2fidouba.com%2fhadoop_mapreduce_tasktracker_child_map%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>twitter</title>
+  <use xlink:href="#twitter"></use>
+</svg>
+
+    </a>
+    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fhadoop_mapreduce_tasktracker_child_map%2f&t=%e3%80%90hadoop%e4%bb%a3%e7%a0%81%e7%ac%94%e8%ae%b0%e3%80%91hadoop%e4%bd%9c%e4%b8%9a%e6%8f%90%e4%ba%a4%e4%b9%8bChild%e5%90%af%e5%8a%a8map%e4%bb%bb%e5%8a%a1" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>facebook</title>
+  <use xlink:href="#facebook"></use>
+</svg>
+
+    </a>
+    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
+      <svg class="icon">
+  <title>linkedin</title>
+  <use xlink:href="#linkedin"></use>
+</svg>
+
+    </a>
+    <a href="https://idouba.com/hadoop_mapreduce_tasktracker_child_map/" title="Copy Link" class="link link_yank">
+      <svg class="icon">
+  <title>copy</title>
+  <use xlink:href="#copy"></use>
+</svg>
+
+    </a>
+  </div>
+  </span>
+  </div>
+
+    </div>
+      <div class="excerpt_footer">
+        <div class="pale">
+          
+            <p>一、概要描述
+在上篇博文描述了TaskTracker启动一个独立的java进程来执行Map或Reduce任务。在本篇和下篇博文中我们会关注启动的那个入口是org.apache.hadoop.mapred.Child的这个Java进程是如何执行用户定义的map或Reduce任务的。
+接上篇文章，TaskRunner线程执行中，会构造一个_java –D** Child address port tasked_这 样第一个java命令，单独启动一个java进程。在Child的main函数中通过TaskUmbilicalProtocol协议，从 TaskTracker获得需要执行的Task，并调用Task的run方法来执行，而Task …</p>
+          
+          <br>
+          <a href="https://idouba.com/hadoop_mapreduce_tasktracker_child_map/" title="Read More" class="excerpt_more button">Read More</a>
+        </div>
+      </div>
+    </div>
+  </li>
+
+        <li class="post_item">
+  <div class="excerpt">
+    <div class="excerpt_header">
+      <h3 class="post_link">
         <a href="https://idouba.com/hadoop_mapreduce_tasktracker_launch_task/" title="【hadoop代码笔记】hadoop作业提交之TaskTracker 启动task">【hadoop代码笔记】hadoop作业提交之TaskTracker 启动task</a>
       </h3>
       
@@ -546,289 +832,6 @@ JobClient通过RPC的方式向JobTracker提交作业； 调用JobTracker的submi
     </div>
   </li>
 
-        <li class="post_item">
-  <div class="excerpt">
-    <div class="excerpt_header">
-      <h3 class="post_link">
-        <a href="https://idouba.com/eagertaskinitializationlistener/" title="【hadoop代码笔记】Hadoop作业提交中EagerTaskInitializationListener的作用">【hadoop代码笔记】Hadoop作业提交中EagerTaskInitializationListener的作用</a>
-      </h3>
-      
-  <div class="post_meta">
-    <span><svg class="icon">
-  <title>calendar</title>
-  <use xlink:href="#calendar"></use>
-</svg>
-</span>
-    <span class="post_date">
-      Jan 15, 2014</span>
-    <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/hadoop/' title="hadoop" class="post_tag button button_translucent">hadoop
-        </a><a href='https://idouba.com/tags/java/' title="java" class="post_tag button button_translucent">java
-        </a><a href='https://idouba.com/tags/mapreduce/' title="mapreduce" class="post_tag button button_translucent">mapreduce
-        </a>
-    </span>
-    <span class="page_only">&nbsp;·
-  <div class="post_share">
-    Share on:
-    <a href="https://twitter.com/intent/tweet?text=%e3%80%90hadoop%e4%bb%a3%e7%a0%81%e7%ac%94%e8%ae%b0%e3%80%91Hadoop%e4%bd%9c%e4%b8%9a%e6%8f%90%e4%ba%a4%e4%b8%adEagerTaskInitializationListener%e7%9a%84%e4%bd%9c%e7%94%a8&url=https%3a%2f%2fidouba.com%2feagertaskinitializationlistener%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>twitter</title>
-  <use xlink:href="#twitter"></use>
-</svg>
-
-    </a>
-    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2feagertaskinitializationlistener%2f&t=%e3%80%90hadoop%e4%bb%a3%e7%a0%81%e7%ac%94%e8%ae%b0%e3%80%91Hadoop%e4%bd%9c%e4%b8%9a%e6%8f%90%e4%ba%a4%e4%b8%adEagerTaskInitializationListener%e7%9a%84%e4%bd%9c%e7%94%a8" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>facebook</title>
-  <use xlink:href="#facebook"></use>
-</svg>
-
-    </a>
-    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
-      <svg class="icon">
-  <title>linkedin</title>
-  <use xlink:href="#linkedin"></use>
-</svg>
-
-    </a>
-    <a href="https://idouba.com/eagertaskinitializationlistener/" title="Copy Link" class="link link_yank">
-      <svg class="icon">
-  <title>copy</title>
-  <use xlink:href="#copy"></use>
-</svg>
-
-    </a>
-  </div>
-  </span>
-  </div>
-
-    </div>
-      <div class="excerpt_footer">
-        <div class="pale">
-          
-            <p>一、概述
-继承自JobInProgressListener，实现了jobAdded，jobRemoved，jobUpdated方法。哦，不能说实现，应该说继承，JobInProgressListener居然是个抽象类，看着怎么这样的listener也应该是个interface。
-在该listener被注册后，就响应jobAdded，jobRemoved，jobUpdated动作。在EagerTaskInitializationListener中，响应这三种动作来维护内部的一个job列表（List jobInitQueue），并启动线程对job列表中的job异步的进行初始化。
-二、主要代码逻辑
-在job被添加到JobTracker时， …</p>
-          
-          <br>
-          <a href="https://idouba.com/eagertaskinitializationlistener/" title="Read More" class="excerpt_more button">Read More</a>
-        </div>
-      </div>
-    </div>
-  </li>
-
-        <li class="post_item">
-  <div class="excerpt">
-    <div class="excerpt_header">
-      <h3 class="post_link">
-        <a href="https://idouba.com/haddoop_rpc_jobclient_jobtracker/" title="【hadoop代码笔记】通过JobClient对Jobtracker的调用详细了解Hadoop RPC">【hadoop代码笔记】通过JobClient对Jobtracker的调用详细了解Hadoop RPC</a>
-      </h3>
-      
-  <div class="post_meta">
-    <span><svg class="icon">
-  <title>calendar</title>
-  <use xlink:href="#calendar"></use>
-</svg>
-</span>
-    <span class="post_date">
-      Jan 11, 2014</span>
-    <span class="post_time"> · 6 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/mapreduce/' title="mapreduce" class="post_tag button button_translucent">mapreduce
-        </a><a href='https://idouba.com/tags/rpc/' title="RPC" class="post_tag button button_translucent">RPC
-        </a>
-    </span>
-    <span class="page_only">&nbsp;·
-  <div class="post_share">
-    Share on:
-    <a href="https://twitter.com/intent/tweet?text=%e3%80%90hadoop%e4%bb%a3%e7%a0%81%e7%ac%94%e8%ae%b0%e3%80%91%e9%80%9a%e8%bf%87JobClient%e5%af%b9Jobtracker%e7%9a%84%e8%b0%83%e7%94%a8%e8%af%a6%e7%bb%86%e4%ba%86%e8%a7%a3Hadoop%20RPC&url=https%3a%2f%2fidouba.com%2fhaddoop_rpc_jobclient_jobtracker%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>twitter</title>
-  <use xlink:href="#twitter"></use>
-</svg>
-
-    </a>
-    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fhaddoop_rpc_jobclient_jobtracker%2f&t=%e3%80%90hadoop%e4%bb%a3%e7%a0%81%e7%ac%94%e8%ae%b0%e3%80%91%e9%80%9a%e8%bf%87JobClient%e5%af%b9Jobtracker%e7%9a%84%e8%b0%83%e7%94%a8%e8%af%a6%e7%bb%86%e4%ba%86%e8%a7%a3Hadoop%20RPC" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>facebook</title>
-  <use xlink:href="#facebook"></use>
-</svg>
-
-    </a>
-    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
-      <svg class="icon">
-  <title>linkedin</title>
-  <use xlink:href="#linkedin"></use>
-</svg>
-
-    </a>
-    <a href="https://idouba.com/haddoop_rpc_jobclient_jobtracker/" title="Copy Link" class="link link_yank">
-      <svg class="icon">
-  <title>copy</title>
-  <use xlink:href="#copy"></use>
-</svg>
-
-    </a>
-  </div>
-  </span>
-  </div>
-
-    </div>
-      <div class="excerpt_footer">
-        <div class="pale">
-          
-            <p>Hadoop的各个服务间，客户端和服务间的交互采用RPC方式。关于这种机制介绍的资源很多，也不难理解，这里不做背景介绍。只是尝试从Jobclient向JobTracker提交作业这个最简单的客户端服务器交互的代码中，去跟踪和了解下RPC是怎么被使用的。不同于准备发表博客时搜索的几篇博文，试图通过一种具体的场景来介绍，属于比较初级。其他DataNode和Namenode之间，Tasktracker和JobTracker之间的交互基本也都一样。为了引用的代码篇幅尽可能少，忽略了代码中写日志（包括Metrics）、某些判断等辅助代码。
-1 RPC客户端请求（从JobClient的jobSubmitClient 入手） Jobclient包 …</p>
-          
-          <br>
-          <a href="https://idouba.com/haddoop_rpc_jobclient_jobtracker/" title="Read More" class="excerpt_more button">Read More</a>
-        </div>
-      </div>
-    </div>
-  </li>
-
-        <li class="post_item">
-  <div class="excerpt">
-    <div class="excerpt_header">
-      <h3 class="post_link">
-        <a href="https://idouba.com/wikipedia_isolation/" title="【译】数据库事务隔离级别">【译】数据库事务隔离级别</a>
-      </h3>
-      
-  <div class="post_meta">
-    <span><svg class="icon">
-  <title>calendar</title>
-  <use xlink:href="#calendar"></use>
-</svg>
-</span>
-    <span class="post_date">
-      Jan 5, 2014</span>
-    <span class="post_time"> · 2 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/' title="数据库" class="post_tag button button_translucent">数据库
-        </a><a href='https://idouba.com/tags/%E4%BA%8B%E5%8A%A1/' title="事务" class="post_tag button button_translucent">事务
-        </a>
-    </span>
-    <span class="page_only">&nbsp;·
-  <div class="post_share">
-    Share on:
-    <a href="https://twitter.com/intent/tweet?text=%e3%80%90%e8%af%91%e3%80%91%e6%95%b0%e6%8d%ae%e5%ba%93%e4%ba%8b%e5%8a%a1%e9%9a%94%e7%a6%bb%e7%ba%a7%e5%88%ab&url=https%3a%2f%2fidouba.com%2fwikipedia_isolation%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>twitter</title>
-  <use xlink:href="#twitter"></use>
-</svg>
-
-    </a>
-    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fwikipedia_isolation%2f&t=%e3%80%90%e8%af%91%e3%80%91%e6%95%b0%e6%8d%ae%e5%ba%93%e4%ba%8b%e5%8a%a1%e9%9a%94%e7%a6%bb%e7%ba%a7%e5%88%ab" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>facebook</title>
-  <use xlink:href="#facebook"></use>
-</svg>
-
-    </a>
-    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
-      <svg class="icon">
-  <title>linkedin</title>
-  <use xlink:href="#linkedin"></use>
-</svg>
-
-    </a>
-    <a href="https://idouba.com/wikipedia_isolation/" title="Copy Link" class="link link_yank">
-      <svg class="icon">
-  <title>copy</title>
-  <use xlink:href="#copy"></use>
-</svg>
-
-    </a>
-  </div>
-  </span>
-  </div>
-
-    </div>
-      <div class="excerpt_footer">
-        <div class="pale">
-          
-            <p>看到wikipedia中文关于数据库相关的几个经典条目有点老旧，尤其和英文条目相比。确定开始翻译其中几篇，先从事务隔离等级开始。格式采用维基Sandbox发布后的格式。翻译完后自己校对过几遍，质量还可以。:-)
-已经在中文维基发布。
-翻译的中文条目地址：事务隔离等级；
-对应的英文条目地址：Isolation (database systems)
-欢迎大家指正，可以直接在维基上对应条目更新的！。
-事务隔离（isolation）定义了数据库系统中一个操作产生的影响什么时候以哪种方式可以对其他并发操作可见。隔离是事务ACID (原子性、一致性性、隔离性、持久性)四大属性中的一个重要属性。
-并发控制(Concurrency control) …</p>
-          
-          <br>
-          <a href="https://idouba.com/wikipedia_isolation/" title="Read More" class="excerpt_more button">Read More</a>
-        </div>
-      </div>
-    </div>
-  </li>
-
-        <li class="post_item">
-  <div class="excerpt">
-    <div class="excerpt_header">
-      <h3 class="post_link">
-        <a href="https://idouba.com/notes-clustering-k-medoids/" title="Data Mining 笔记聚类k-medoids">Data Mining 笔记聚类k-medoids</a>
-      </h3>
-      
-  <div class="post_meta">
-    <span><svg class="icon">
-  <title>calendar</title>
-  <use xlink:href="#calendar"></use>
-</svg>
-</span>
-    <span class="post_date">
-      Sep 18, 2013</span>
-    <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/%E8%81%9A%E7%B1%BB/' title="聚类" class="post_tag button button_translucent">聚类
-        </a><a href='https://idouba.com/tags/k-medoids/' title="k-medoids" class="post_tag button button_translucent">k-medoids
-        </a>
-    </span>
-    <span class="page_only">&nbsp;·
-  <div class="post_share">
-    Share on:
-    <a href="https://twitter.com/intent/tweet?text=Data%20Mining%20%e7%ac%94%e8%ae%b0%e8%81%9a%e7%b1%bbk-medoids&url=https%3a%2f%2fidouba.com%2fnotes-clustering-k-medoids%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>twitter</title>
-  <use xlink:href="#twitter"></use>
-</svg>
-
-    </a>
-    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fnotes-clustering-k-medoids%2f&t=Data%20Mining%20%e7%ac%94%e8%ae%b0%e8%81%9a%e7%b1%bbk-medoids" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>facebook</title>
-  <use xlink:href="#facebook"></use>
-</svg>
-
-    </a>
-    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
-      <svg class="icon">
-  <title>linkedin</title>
-  <use xlink:href="#linkedin"></use>
-</svg>
-
-    </a>
-    <a href="https://idouba.com/notes-clustering-k-medoids/" title="Copy Link" class="link link_yank">
-      <svg class="icon">
-  <title>copy</title>
-  <use xlink:href="#copy"></use>
-</svg>
-
-    </a>
-  </div>
-  </span>
-  </div>
-
-    </div>
-      <div class="excerpt_footer">
-        <div class="pale">
-          
-            <p>一、概述 k-means利用簇内点的均值或加权平均值ci（质心）作为类Ci的代表点。对数值属性数据有较好的几何和统计意义。对孤立点是敏感的，如果具有极大值，就可能大幅度地扭曲数据的分布.
-k-medoids(k-中心点)算法是为消除这种敏感性提出的，它选择类中位置最接近类中心的对象(称为中心点)作为类的代表点，目标函数仍然可以采用平方误差准则。
-PAM（Partitioning Around Medoids，围绕中心点的划分）是最早提出的k中心点算法之一。
-二、算法思想： 随机选择k个对象作为初始的k个类的代表点，将其余对象按与代表点对象的距离分配到最近的类；反复用非代表点来代替代表点，以改进聚类质量。 即：算法将判定是否存在一个对 …</p>
-          
-          <br>
-          <a href="https://idouba.com/notes-clustering-k-medoids/" title="Read More" class="excerpt_more button">Read More</a>
-        </div>
-      </div>
-    </div>
-  </li>
-
       <li>
     <ul class="pagination pagination-default">
       <li class="page-item">
@@ -914,7 +917,7 @@ PAM（Partitioning Around Medoids，围绕中心点的划分）是最早提出�
       <nav class="tags_nav">
         <a href='https://idouba.com/categories/istio/' class="post_tag button button_translucent" title="istio">
           ISTIO
-          <span class="button_tally">32</span>
+          <span class="button_tally">36</span>
         </a>
         
         <a href='https://idouba.com/categories/%E9%9A%8F%E7%AC%94/' class="post_tag button button_translucent" title="随笔">
@@ -973,6 +976,11 @@ PAM（Partitioning Around Medoids，围绕中心点的划分）是最早提出�
     <div>
       <h2 class="mt-4 taxonomy" id="tags-section">Tags</h2>
       <nav class="tags_nav">
+        <a href='https://idouba.com/tags/istio/' class="post_tag button button_translucent" title="istio">
+          ISTIO
+          <span class="button_tally">19</span>
+        </a>
+        
         <a href='https://idouba.com/tags/java/' class="post_tag button button_translucent" title="java">
           JAVA
           <span class="button_tally">17</span>
@@ -988,11 +996,6 @@ PAM（Partitioning Around Medoids，围绕中心点的划分）是最早提出�
           <span class="button_tally">16</span>
         </a>
         
-        <a href='https://idouba.com/tags/istio/' class="post_tag button button_translucent" title="istio">
-          ISTIO
-          <span class="button_tally">15</span>
-        </a>
-        
         <a href='https://idouba.com/tags/responseflags/' class="post_tag button button_translucent" title="responseflags">
           RESPONSEFLAGS
           <span class="button_tally">15</span>
@@ -1006,6 +1009,16 @@ PAM（Partitioning Around Medoids，围绕中心点的划分）是最早提出�
         <a href='https://idouba.com/tags/hadoop/' class="post_tag button button_translucent" title="hadoop">
           HADOOP
           <span class="button_tally">11</span>
+        </a>
+        
+        <a href='https://idouba.com/tags/istio%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/' class="post_tag button button_translucent" title="istio权威指南">
+          ISTIO权威指南
+          <span class="button_tally">7</span>
+        </a>
+        
+        <a href='https://idouba.com/tags/%E5%9B%BE%E4%B9%A6/' class="post_tag button button_translucent" title="图书">
+          图书
+          <span class="button_tally">7</span>
         </a>
         
         <a href='https://idouba.com/tags/%E4%BA%91%E5%8E%9F%E7%94%9F%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BCistio%E5%8E%9F%E7%90%86%E5%AE%9E%E8%B7%B5%E6%9E%B6%E6%9E%84%E4%B8%8E%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/' class="post_tag button button_translucent" title="云原生服务网格istio原理实践架构与源码解析">
@@ -1030,16 +1043,6 @@ PAM（Partitioning Around Medoids，围绕中心点的划分）是最早提出�
         
         <a href='https://idouba.com/tags/infoq/' class="post_tag button button_translucent" title="infoq">
           INFOQ
-          <span class="button_tally">3</span>
-        </a>
-        
-        <a href='https://idouba.com/tags/istio%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/' class="post_tag button button_translucent" title="istio权威指南">
-          ISTIO权威指南
-          <span class="button_tally">3</span>
-        </a>
-        
-        <a href='https://idouba.com/tags/oracle/' class="post_tag button button_translucent" title="oracle">
-          ORACLE
           <span class="button_tally">3</span>
         </a>
         
@@ -1105,7 +1108,7 @@ PAM（Partitioning Around Medoids，围绕中心点的划分）是最早提出�
             </a>
             
             
-            <a href='https://idouba.com/tags/istio/' class=" post_tag button button_translucent" data-position=15 title="istio">ISTIO<span class="button_tally">15</span>
+            <a href='https://idouba.com/tags/istio/' class=" post_tag button button_translucent" data-position=19 title="istio">ISTIO<span class="button_tally">19</span>
             </a>
             
             
@@ -1113,7 +1116,7 @@ PAM（Partitioning Around Medoids，围绕中心点的划分）是最早提出�
             </a>
             
             
-            <a href='https://idouba.com/tags/istio%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/' class=" post_tag button button_translucent" data-position=3 title="istio权威指南">ISTIO权威指南<span class="button_tally">3</span>
+            <a href='https://idouba.com/tags/istio%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/' class=" post_tag button button_translucent" data-position=7 title="istio权威指南">ISTIO权威指南<span class="button_tally">7</span>
             </a>
             
             
@@ -1241,7 +1244,7 @@ PAM（Partitioning Around Medoids，围绕中心点的划分）是最早提出�
             </a>
             
             
-            <a href='https://idouba.com/tags/%E5%9B%BE%E4%B9%A6/' class=" post_tag button button_translucent" data-position=3 title="图书">图书<span class="button_tally">3</span>
+            <a href='https://idouba.com/tags/%E5%9B%BE%E4%B9%A6/' class=" post_tag button button_translucent" data-position=7 title="图书">图书<span class="button_tally">7</span>
             </a>
             
             
