@@ -7,7 +7,28 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
-    <lastBuildDate>Sun, 12 Dec 2021 15:50:08 +0000</lastBuildDate><atom:link href="https://idouba.com/categories/%E6%BC%94%E8%AE%B2/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 15 Oct 2023 15:50:08 +0000</lastBuildDate><atom:link href="https://idouba.com/categories/%E6%BC%94%E8%AE%B2/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>基于实际案例解析Istio访问日志ResponseFlag系列</title>
+      <link>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-index/</link>
+      <pubDate>Sun, 15 Oct 2023 15:50:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-index/</guid>
+      <description>
+        
+          
+            背景： 访问日志是应用系统运维的重要手段，可以有效地帮助我们进行问题的定位定界。
+在服务网格中，访问日志也是可观测性能力的一块重要内容。不同于指标提供访问的统计信息，访问日志记录了每一次访问的详细信息。不管是作为安全审计，还是做系统运维，访问日志都是最得力的手段。
+访问日志记录了每次访问的时间、请求、应答、耗时、源服务和目标服务等信息。帮助运维人员进行有效的故障定位定界。生产中我们也经常会检索分析一批日志看特点，如是否慢的请求的应答体都比较大，来自某个特定服务的服务接口总出错，或者来自某个特定源服务的访问不正常等，帮助我们发现系统问题。
+对于七层的访问日志一般我们会通过HTTP响应码了解请求的状况，如503、502、404、403等。Envoy在访问日志中引入了应答标记Response Flag，辅助HTTP响应码，进一步描述访问或连接的细节问题。如发生 了503错误后，通过503 UH、 503 UF、 503 UC、 503 NC 等区分各种不同的503产生的原因，提供线索让运维人员针对性地解决问题。
+但是Envoy 和Istio社区的访问日志对于Response Flag的信息非常少，所有的内容也只是如下非常干巴的把组合的单词展开，没有解释清楚每个标记的含义，更没有说明哪种情况下会出现这个标记。身边的同事，还有我们的客户经常在生产中碰到了这些应Response Flag不知道如何处理。有客户的工程师反馈说，看到了Response Code里那几个奇怪UC、UH等字符比看见503还让人抓狂。
+Long name Short name Description DownstreamConnectionTermination DC Downstream connection termination. FailedLocalHealthCheck LH Local service failed health check request in addition to 503 response code. UpstreamRequestTimeout UT Upstream request timeout in addition to 504 response code. LocalReset LR Connection local reset in addition to 503 response code. UpstreamRemoteReset UR Upstream remote reset in addition to 503 response code.
+          
+          
+        
+      </description>
+    </item>
+    
     <item>
       <title>服务网格替代 Hystrix 提升在线视频服务韧性的生产实践</title>
       <link>https://idouba.com/online-video-upgrades-resilience-from-sc-circuit-breaker-to-service-mesh-kubecon2021/</link>
