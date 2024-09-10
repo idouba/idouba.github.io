@@ -9,7 +9,7 @@
     <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
     <lastBuildDate>Tue, 26 Sep 2023 15:32:08 +0000</lastBuildDate><atom:link href="https://idouba.com/tags/istiocon/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>IstioCon2023演讲：Cert-manager帮助增强Istio证书管理的安全性和灵活性</title>
+      <title>IstioCon2023：Cert-manager帮助增强Istio证书管理的安全性和灵活性</title>
       <link>https://idouba.com/istiocon2023-cert-manager-help-enhance-security-and-flexibility-of-istio-certificate-management/</link>
       <pubDate>Tue, 26 Sep 2023 15:32:08 +0000</pubDate>
       
@@ -46,6 +46,23 @@ mTLS是Istio自动签发证书，自动加载到网格数据面的Sidecar上，S
 这是摘自cert manager官方的介绍。是一个作用于k8s的强大的可扩展的x509证书控制器。可以从多种包括公有和私有CA的不同的证书签发者获取证书，保证证书满足有效期要求，基于证书配置的时间，在过期前自动续签。
 社区描述的能力我们这里就不挨着过了，基于后面的实践会有体会。
 这里的cert就是certificate，翻译成中文我们一般指数字证书，简称证书。数字证书的基本概念这里不完全介绍，我们这里一句话补充下：根据非对称密码学的原理，每个证书持有人都有一对公钥和私钥，这两把密钥可以互为加解密。数字证书就是经过CA认证过的公钥，因此数字证书和公钥一样是公开的。
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>IstioCon2022：Istio 多集群流量管理加速汽车公司新业务开发、部署和运营</title>
+      <link>https://idouba.com/istiocon2022-istio-multi-cluster-traffic-management-speed-up-automobile-company-new-business-dev-deploy-and-ops/</link>
+      <pubDate>Thu, 28 Apr 2022 15:32:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/istiocon2022-istio-multi-cluster-traffic-management-speed-up-automobile-company-new-business-dev-deploy-and-ops/</guid>
+      <description>
+        
+          
+             记录在2022年4月28日在IstioCon上发表的技术演讲《Istio multi-cluster traffic management speed up automobile company new business dev,deploy and ops》，和Smart的研发总监Kexing一起介绍了Istio多集群在Smart的实践。希望为Smart新车的大卖贡献了一点力量。
+附： 演讲材料(官方Slides) 官方Sched主页 
           
           
         

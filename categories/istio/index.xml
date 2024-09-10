@@ -407,7 +407,7 @@ Long name Short name Description DownstreamConnectionTermination DC Downstream c
     </item>
     
     <item>
-      <title>IstioCon2023演讲：Cert-manager帮助增强Istio证书管理的安全性和灵活性</title>
+      <title>IstioCon2023：Cert-manager帮助增强Istio证书管理的安全性和灵活性</title>
       <link>https://idouba.com/istiocon2023-cert-manager-help-enhance-security-and-flexibility-of-istio-certificate-management/</link>
       <pubDate>Tue, 26 Sep 2023 15:32:08 +0000</pubDate>
       
@@ -667,6 +667,23 @@ I am thrilled to introduce this definitive book on Istio service mesh technology
 再次，Proxyless模式从诞生时期开始就引发了较大的争论。一种观点认为其是服务网格的正常演进，是代理模式的有益补充；也有一种观点认为其是向开发框架模式的妥协，更有甚者批评其是技术倒车。笔者若干年前做过微服务框架的设计开发工作（项目后来开源并从Apache毕业），近些年一直聚焦于服务网格相关技术和产品，认为没必要太纠结技术形态细节。在为用户提供产品和解决方案的过程中，近距离深入了解各类用户的实际业务需求和痛点，我们认为几乎所有技术呈现的变化都是适应用户实际业务的自我调整。具体到网格数据面的这些变化，说明服务网格技术正进入了快速发展时期。在这个过程中，希望我们这些有幸参与其中的技术人员能够以更开放的心态接纳和参与这些变化，深刻洞察用户碰到的问题，并以更开阔的技术视野解决用户问题，避免各种无休止的技术形态空洞之争。我们认为技术唯一的价值就是解决用户问题，产生有用性。正是不断涌现的用户业务需求，推动了技术的进步和发展，也提供给我们参与其中的机会和发挥作用的空间。
 最后，再次感谢各位读者阅读本书，也很期待将来有机会就其中的内容和您进行技术交流。假如您需要更深入地学习服务网格及云原生相关技术，欢迎关注我们的“容器魔方”公众号，一起学习并讨论服务网格及云原生领域内的最新技术进展。
 ​ 张超盟
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>IstioCon2022：Istio 多集群流量管理加速汽车公司新业务开发、部署和运营</title>
+      <link>https://idouba.com/istiocon2022-istio-multi-cluster-traffic-management-speed-up-automobile-company-new-business-dev-deploy-and-ops/</link>
+      <pubDate>Thu, 28 Apr 2022 15:32:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/istiocon2022-istio-multi-cluster-traffic-management-speed-up-automobile-company-new-business-dev-deploy-and-ops/</guid>
+      <description>
+        
+          
+             记录在2022年4月28日在IstioCon上发表的技术演讲《Istio multi-cluster traffic management speed up automobile company new business dev,deploy and ops》，和Smart的研发总监Kexing一起介绍了Istio多集群在Smart的实践。希望为Smart新车的大卖贡献了一点力量。
+附： 演讲材料(官方Slides) 官方Sched主页 
           
           
         

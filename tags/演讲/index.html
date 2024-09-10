@@ -268,6 +268,515 @@
   <div class="excerpt">
     <div class="excerpt_header">
       <h3 class="post_link">
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-14-RL/" title="RL(服务限流)--Istio访问日志ResponseFlag重现与解析14">RL(服务限流)--Istio访问日志ResponseFlag重现与解析14</a>
+      </h3>
+      
+  <div class="post_meta">
+    <span><svg class="icon">
+  <title>calendar</title>
+  <use xlink:href="#calendar"></use>
+</svg>
+</span>
+    <span class="post_date">
+      Oct 11, 2023</span>
+    <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/kubecon/' title="KubeCon" class="post_tag button button_translucent">KubeCon
+        </a><a href='https://idouba.com/tags/%E8%AE%BF%E9%97%AE%E6%97%A5%E5%BF%97/' title="访问日志" class="post_tag button button_translucent">访问日志
+        </a><a href='https://idouba.com/tags/responseflags/' title="ResponseFlags" class="post_tag button button_translucent">ResponseFlags
+        </a><a href='https://idouba.com/tags/rl/' title="RL" class="post_tag button button_translucent">RL
+        </a><a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' title="演讲" class="post_tag button button_translucent">演讲
+        </a>
+    </span>
+    <span class="page_only">&nbsp;·
+  <div class="post_share">
+    Share on:
+    <a href="https://twitter.com/intent/tweet?text=RL%28%e6%9c%8d%e5%8a%a1%e9%99%90%e6%b5%81%29--Istio%e8%ae%bf%e9%97%ae%e6%97%a5%e5%bf%97ResponseFlag%e9%87%8d%e7%8e%b0%e4%b8%8e%e8%a7%a3%e6%9e%9014&url=https%3a%2f%2fidouba.com%2fdetailed-parse-and-reproduce-istio-response-flags-14-RL%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>twitter</title>
+  <use xlink:href="#twitter"></use>
+</svg>
+
+    </a>
+    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fdetailed-parse-and-reproduce-istio-response-flags-14-RL%2f&t=RL%28%e6%9c%8d%e5%8a%a1%e9%99%90%e6%b5%81%29--Istio%e8%ae%bf%e9%97%ae%e6%97%a5%e5%bf%97ResponseFlag%e9%87%8d%e7%8e%b0%e4%b8%8e%e8%a7%a3%e6%9e%9014" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>facebook</title>
+  <use xlink:href="#facebook"></use>
+</svg>
+
+    </a>
+    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
+      <svg class="icon">
+  <title>linkedin</title>
+  <use xlink:href="#linkedin"></use>
+</svg>
+
+    </a>
+    <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-14-RL/" title="Copy Link" class="link link_yank">
+      <svg class="icon">
+  <title>copy</title>
+  <use xlink:href="#copy"></use>
+</svg>
+
+    </a>
+  </div>
+  </span>
+  </div>
+
+    </div>
+      <div class="excerpt_footer">
+        <div class="pale">
+          
+            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第14个关注的Response Flag还是RL，全称是RateLimited，官方定义表示The request was ratelimited locally by the HTTP rate limit filter in addition to 429 response code. 不同于前一个RL的重现了服务端限流，本文将聚焦基于客户端限流重现RL。
+含义： **RL **表示触发服务限流。限流是保障服务韧性的重要手段，防止系统过载，保障服务总体的可用性。在网格中配置了本地限流或者全局限流策略，若在单位 …</p>
+          
+          <br>
+          <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-14-RL/" title="Read More" class="excerpt_more button">Read More</a>
+        </div>
+      </div>
+    </div>
+  </li>
+
+        <li class="post_item">
+  <div class="excerpt">
+    <div class="excerpt_header">
+      <h3 class="post_link">
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-13-RL/" title="RL(服务限流)--Istio访问日志ResponseFlag重现与解析13">RL(服务限流)--Istio访问日志ResponseFlag重现与解析13</a>
+      </h3>
+      
+  <div class="post_meta">
+    <span><svg class="icon">
+  <title>calendar</title>
+  <use xlink:href="#calendar"></use>
+</svg>
+</span>
+    <span class="post_date">
+      Oct 10, 2023</span>
+    <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/kubecon/' title="KubeCon" class="post_tag button button_translucent">KubeCon
+        </a><a href='https://idouba.com/tags/%E8%AE%BF%E9%97%AE%E6%97%A5%E5%BF%97/' title="访问日志" class="post_tag button button_translucent">访问日志
+        </a><a href='https://idouba.com/tags/responseflags/' title="ResponseFlags" class="post_tag button button_translucent">ResponseFlags
+        </a><a href='https://idouba.com/tags/rl/' title="RL" class="post_tag button button_translucent">RL
+        </a><a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' title="演讲" class="post_tag button button_translucent">演讲
+        </a>
+    </span>
+    <span class="page_only">&nbsp;·
+  <div class="post_share">
+    Share on:
+    <a href="https://twitter.com/intent/tweet?text=RL%28%e6%9c%8d%e5%8a%a1%e9%99%90%e6%b5%81%29--Istio%e8%ae%bf%e9%97%ae%e6%97%a5%e5%bf%97ResponseFlag%e9%87%8d%e7%8e%b0%e4%b8%8e%e8%a7%a3%e6%9e%9013&url=https%3a%2f%2fidouba.com%2fdetailed-parse-and-reproduce-istio-response-flags-13-RL%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>twitter</title>
+  <use xlink:href="#twitter"></use>
+</svg>
+
+    </a>
+    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fdetailed-parse-and-reproduce-istio-response-flags-13-RL%2f&t=RL%28%e6%9c%8d%e5%8a%a1%e9%99%90%e6%b5%81%29--Istio%e8%ae%bf%e9%97%ae%e6%97%a5%e5%bf%97ResponseFlag%e9%87%8d%e7%8e%b0%e4%b8%8e%e8%a7%a3%e6%9e%9013" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>facebook</title>
+  <use xlink:href="#facebook"></use>
+</svg>
+
+    </a>
+    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
+      <svg class="icon">
+  <title>linkedin</title>
+  <use xlink:href="#linkedin"></use>
+</svg>
+
+    </a>
+    <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-13-RL/" title="Copy Link" class="link link_yank">
+      <svg class="icon">
+  <title>copy</title>
+  <use xlink:href="#copy"></use>
+</svg>
+
+    </a>
+  </div>
+  </span>
+  </div>
+
+    </div>
+      <div class="excerpt_footer">
+        <div class="pale">
+          
+            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第13个关注的Response Flag是RL，全称是RateLimited，官方定义表示The request was ratelimited locally by the HTTP rate limit filter in addition to 429 response code.
+含义： **RL **表示触发服务限流。限流是保障服务韧性的重要手段，防止系统过载，保障服务总体的可用性。在网格中配置了本地限流或者全局限流策略，若在单位时间内请求数超过配置的阈值，则触发限流。访问日志记录RL，一般会伴随返 …</p>
+          
+          <br>
+          <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-13-RL/" title="Read More" class="excerpt_more button">Read More</a>
+        </div>
+      </div>
+    </div>
+  </li>
+
+        <li class="post_item">
+  <div class="excerpt">
+    <div class="excerpt_header">
+      <h3 class="post_link">
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-12-UC/" title="UC(上游连接中断)--Istio访问日志ResponseFlag重现与解析12">UC(上游连接中断)--Istio访问日志ResponseFlag重现与解析12</a>
+      </h3>
+      
+  <div class="post_meta">
+    <span><svg class="icon">
+  <title>calendar</title>
+  <use xlink:href="#calendar"></use>
+</svg>
+</span>
+    <span class="post_date">
+      Oct 9, 2023</span>
+    <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/kubecon/' title="KubeCon" class="post_tag button button_translucent">KubeCon
+        </a><a href='https://idouba.com/tags/%E8%AE%BF%E9%97%AE%E6%97%A5%E5%BF%97/' title="访问日志" class="post_tag button button_translucent">访问日志
+        </a><a href='https://idouba.com/tags/responseflags/' title="ResponseFlags" class="post_tag button button_translucent">ResponseFlags
+        </a><a href='https://idouba.com/tags/uc/' title="UC" class="post_tag button button_translucent">UC
+        </a><a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' title="演讲" class="post_tag button button_translucent">演讲
+        </a>
+    </span>
+    <span class="page_only">&nbsp;·
+  <div class="post_share">
+    Share on:
+    <a href="https://twitter.com/intent/tweet?text=UC%28%e4%b8%8a%e6%b8%b8%e8%bf%9e%e6%8e%a5%e4%b8%ad%e6%96%ad%29--Istio%e8%ae%bf%e9%97%ae%e6%97%a5%e5%bf%97ResponseFlag%e9%87%8d%e7%8e%b0%e4%b8%8e%e8%a7%a3%e6%9e%9012&url=https%3a%2f%2fidouba.com%2fdetailed-parse-and-reproduce-istio-response-flags-12-UC%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>twitter</title>
+  <use xlink:href="#twitter"></use>
+</svg>
+
+    </a>
+    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fdetailed-parse-and-reproduce-istio-response-flags-12-UC%2f&t=UC%28%e4%b8%8a%e6%b8%b8%e8%bf%9e%e6%8e%a5%e4%b8%ad%e6%96%ad%29--Istio%e8%ae%bf%e9%97%ae%e6%97%a5%e5%bf%97ResponseFlag%e9%87%8d%e7%8e%b0%e4%b8%8e%e8%a7%a3%e6%9e%9012" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>facebook</title>
+  <use xlink:href="#facebook"></use>
+</svg>
+
+    </a>
+    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
+      <svg class="icon">
+  <title>linkedin</title>
+  <use xlink:href="#linkedin"></use>
+</svg>
+
+    </a>
+    <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-12-UC/" title="Copy Link" class="link link_yank">
+      <svg class="icon">
+  <title>copy</title>
+  <use xlink:href="#copy"></use>
+</svg>
+
+    </a>
+  </div>
+  </span>
+  </div>
+
+    </div>
+      <div class="excerpt_footer">
+        <div class="pale">
+          
+            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第12个关注的Response Flag是UC，全称是UpstreamConnectionTermination，官方定义表示Upstream connection termination in addition to 503 response code.
+含义： UC表示上游连接中断，常见的一种现象是上游连接在返回应答前已经关闭。
+重现环境： UC是一个不太好构建的场景，环境和前面的大多数略有不同。
+客户端Pod，这里是特别写了一个Python程序。因为观测点在服务端代理，客户端是否注入Sidecar都可以。  …</p>
+          
+          <br>
+          <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-12-UC/" title="Read More" class="excerpt_more button">Read More</a>
+        </div>
+      </div>
+    </div>
+  </li>
+
+        <li class="post_item">
+  <div class="excerpt">
+    <div class="excerpt_header">
+      <h3 class="post_link">
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-11-UT/" title="UT(上游请求超时)--Istio访问日志ResponseFlag重现与解析11">UT(上游请求超时)--Istio访问日志ResponseFlag重现与解析11</a>
+      </h3>
+      
+  <div class="post_meta">
+    <span><svg class="icon">
+  <title>calendar</title>
+  <use xlink:href="#calendar"></use>
+</svg>
+</span>
+    <span class="post_date">
+      Oct 8, 2023</span>
+    <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/kubecon/' title="KubeCon" class="post_tag button button_translucent">KubeCon
+        </a><a href='https://idouba.com/tags/%E8%AE%BF%E9%97%AE%E6%97%A5%E5%BF%97/' title="访问日志" class="post_tag button button_translucent">访问日志
+        </a><a href='https://idouba.com/tags/responseflags/' title="ResponseFlags" class="post_tag button button_translucent">ResponseFlags
+        </a><a href='https://idouba.com/tags/ut/' title="UT" class="post_tag button button_translucent">UT
+        </a><a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' title="演讲" class="post_tag button button_translucent">演讲
+        </a>
+    </span>
+    <span class="page_only">&nbsp;·
+  <div class="post_share">
+    Share on:
+    <a href="https://twitter.com/intent/tweet?text=UT%28%e4%b8%8a%e6%b8%b8%e8%af%b7%e6%b1%82%e8%b6%85%e6%97%b6%29--Istio%e8%ae%bf%e9%97%ae%e6%97%a5%e5%bf%97ResponseFlag%e9%87%8d%e7%8e%b0%e4%b8%8e%e8%a7%a3%e6%9e%9011&url=https%3a%2f%2fidouba.com%2fdetailed-parse-and-reproduce-istio-response-flags-11-UT%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>twitter</title>
+  <use xlink:href="#twitter"></use>
+</svg>
+
+    </a>
+    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fdetailed-parse-and-reproduce-istio-response-flags-11-UT%2f&t=UT%28%e4%b8%8a%e6%b8%b8%e8%af%b7%e6%b1%82%e8%b6%85%e6%97%b6%29--Istio%e8%ae%bf%e9%97%ae%e6%97%a5%e5%bf%97ResponseFlag%e9%87%8d%e7%8e%b0%e4%b8%8e%e8%a7%a3%e6%9e%9011" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>facebook</title>
+  <use xlink:href="#facebook"></use>
+</svg>
+
+    </a>
+    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
+      <svg class="icon">
+  <title>linkedin</title>
+  <use xlink:href="#linkedin"></use>
+</svg>
+
+    </a>
+    <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-11-UT/" title="Copy Link" class="link link_yank">
+      <svg class="icon">
+  <title>copy</title>
+  <use xlink:href="#copy"></use>
+</svg>
+
+    </a>
+  </div>
+  </span>
+  </div>
+
+    </div>
+      <div class="excerpt_footer">
+        <div class="pale">
+          
+            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第11个关注的Response Flag是UT，全称是UpstreamRequestTimeout，官方定义表示Upstream request timeout in addition to 504 response code.
+含义： UT表示表示上游请求超时，一般伴随返回“504”的HTTP状态码。如典型场景在VirtualService中给目标服务配置了超时时间，当服务请求超过配置的超时时间，客户端代理自动超时，取消请求。
+重现环境： 客户端Pod，注入了Sidecar。 目标服务，为了模拟一个慢的服务，我 …</p>
+          
+          <br>
+          <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-11-UT/" title="Read More" class="excerpt_more button">Read More</a>
+        </div>
+      </div>
+    </div>
+  </li>
+
+        <li class="post_item">
+  <div class="excerpt">
+    <div class="excerpt_header">
+      <h3 class="post_link">
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-10-FI/" title="FI(注入错误故障)--Istio访问日志ResponseFlag重现与解析10">FI(注入错误故障)--Istio访问日志ResponseFlag重现与解析10</a>
+      </h3>
+      
+  <div class="post_meta">
+    <span><svg class="icon">
+  <title>calendar</title>
+  <use xlink:href="#calendar"></use>
+</svg>
+</span>
+    <span class="post_date">
+      Oct 7, 2023</span>
+    <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/kubecon/' title="KubeCon" class="post_tag button button_translucent">KubeCon
+        </a><a href='https://idouba.com/tags/%E8%AE%BF%E9%97%AE%E6%97%A5%E5%BF%97/' title="访问日志" class="post_tag button button_translucent">访问日志
+        </a><a href='https://idouba.com/tags/responseflags/' title="ResponseFlags" class="post_tag button button_translucent">ResponseFlags
+        </a><a href='https://idouba.com/tags/fi/' title="FI" class="post_tag button button_translucent">FI
+        </a><a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' title="演讲" class="post_tag button button_translucent">演讲
+        </a>
+    </span>
+    <span class="page_only">&nbsp;·
+  <div class="post_share">
+    Share on:
+    <a href="https://twitter.com/intent/tweet?text=FI%28%e6%b3%a8%e5%85%a5%e9%94%99%e8%af%af%e6%95%85%e9%9a%9c%29--Istio%e8%ae%bf%e9%97%ae%e6%97%a5%e5%bf%97ResponseFlag%e9%87%8d%e7%8e%b0%e4%b8%8e%e8%a7%a3%e6%9e%9010&url=https%3a%2f%2fidouba.com%2fdetailed-parse-and-reproduce-istio-response-flags-10-FI%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>twitter</title>
+  <use xlink:href="#twitter"></use>
+</svg>
+
+    </a>
+    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fdetailed-parse-and-reproduce-istio-response-flags-10-FI%2f&t=FI%28%e6%b3%a8%e5%85%a5%e9%94%99%e8%af%af%e6%95%85%e9%9a%9c%29--Istio%e8%ae%bf%e9%97%ae%e6%97%a5%e5%bf%97ResponseFlag%e9%87%8d%e7%8e%b0%e4%b8%8e%e8%a7%a3%e6%9e%9010" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>facebook</title>
+  <use xlink:href="#facebook"></use>
+</svg>
+
+    </a>
+    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
+      <svg class="icon">
+  <title>linkedin</title>
+  <use xlink:href="#linkedin"></use>
+</svg>
+
+    </a>
+    <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-10-FI/" title="Copy Link" class="link link_yank">
+      <svg class="icon">
+  <title>copy</title>
+  <use xlink:href="#copy"></use>
+</svg>
+
+    </a>
+  </div>
+  </span>
+  </div>
+
+    </div>
+      <div class="excerpt_footer">
+        <div class="pale">
+          
+            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第10个关注的Response Flag是DI，全称是FaultInjected，官方定义表示The request was aborted with a response code specified via fault injection.
+含义： FI 表示故障注入错误。通过VirtualService给目标服务注入了一个特定状态码的故障。在客户端的访问日志中会返回配置的HTTP状态码，并记录FI。
+重现环境： 客户端Pod，注入了Sidecar。 目标服务，一个Cluster类型的Kubernetes服 …</p>
+          
+          <br>
+          <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-10-FI/" title="Read More" class="excerpt_more button">Read More</a>
+        </div>
+      </div>
+    </div>
+  </li>
+
+        <li class="post_item">
+  <div class="excerpt">
+    <div class="excerpt_header">
+      <h3 class="post_link">
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-09-DI/" title="DI(注入延时故障)--Istio访问日志ResponseFlag重现与解析09">DI(注入延时故障)--Istio访问日志ResponseFlag重现与解析09</a>
+      </h3>
+      
+  <div class="post_meta">
+    <span><svg class="icon">
+  <title>calendar</title>
+  <use xlink:href="#calendar"></use>
+</svg>
+</span>
+    <span class="post_date">
+      Oct 6, 2023</span>
+    <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/kubecon/' title="KubeCon" class="post_tag button button_translucent">KubeCon
+        </a><a href='https://idouba.com/tags/%E8%AE%BF%E9%97%AE%E6%97%A5%E5%BF%97/' title="访问日志" class="post_tag button button_translucent">访问日志
+        </a><a href='https://idouba.com/tags/responseflags/' title="ResponseFlags" class="post_tag button button_translucent">ResponseFlags
+        </a><a href='https://idouba.com/tags/di/' title="DI" class="post_tag button button_translucent">DI
+        </a><a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' title="演讲" class="post_tag button button_translucent">演讲
+        </a>
+    </span>
+    <span class="page_only">&nbsp;·
+  <div class="post_share">
+    Share on:
+    <a href="https://twitter.com/intent/tweet?text=DI%28%e6%b3%a8%e5%85%a5%e5%bb%b6%e6%97%b6%e6%95%85%e9%9a%9c%29--Istio%e8%ae%bf%e9%97%ae%e6%97%a5%e5%bf%97ResponseFlag%e9%87%8d%e7%8e%b0%e4%b8%8e%e8%a7%a3%e6%9e%9009&url=https%3a%2f%2fidouba.com%2fdetailed-parse-and-reproduce-istio-response-flags-09-DI%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>twitter</title>
+  <use xlink:href="#twitter"></use>
+</svg>
+
+    </a>
+    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fdetailed-parse-and-reproduce-istio-response-flags-09-DI%2f&t=DI%28%e6%b3%a8%e5%85%a5%e5%bb%b6%e6%97%b6%e6%95%85%e9%9a%9c%29--Istio%e8%ae%bf%e9%97%ae%e6%97%a5%e5%bf%97ResponseFlag%e9%87%8d%e7%8e%b0%e4%b8%8e%e8%a7%a3%e6%9e%9009" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>facebook</title>
+  <use xlink:href="#facebook"></use>
+</svg>
+
+    </a>
+    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
+      <svg class="icon">
+  <title>linkedin</title>
+  <use xlink:href="#linkedin"></use>
+</svg>
+
+    </a>
+    <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-09-DI/" title="Copy Link" class="link link_yank">
+      <svg class="icon">
+  <title>copy</title>
+  <use xlink:href="#copy"></use>
+</svg>
+
+    </a>
+  </div>
+  </span>
+  </div>
+
+    </div>
+      <div class="excerpt_footer">
+        <div class="pale">
+          
+            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第九个关注的Response Flag是DI，全称是DelayInjected，官方定义表示The request processing was delayed for a period specified via fault injection.
+含义： DI表示请求中注入了一个延时故障。在VirtualService中配置了延时故障注入时，会在服务请求时产生配置的延时，并在访问日志中会记录DI的应答标记。
+重现环境： 客户端Pod，注入了Sidecar。 目标服务，一个Cluster类型的Kubernetes …</p>
+          
+          <br>
+          <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-09-DI/" title="Read More" class="excerpt_more button">Read More</a>
+        </div>
+      </div>
+    </div>
+  </li>
+
+        <li class="post_item">
+  <div class="excerpt">
+    <div class="excerpt_header">
+      <h3 class="post_link">
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-08-NR/" title="NR(没有匹配的路由)--Istio访问日志ResponseFlag重现与解析08">NR(没有匹配的路由)--Istio访问日志ResponseFlag重现与解析08</a>
+      </h3>
+      
+  <div class="post_meta">
+    <span><svg class="icon">
+  <title>calendar</title>
+  <use xlink:href="#calendar"></use>
+</svg>
+</span>
+    <span class="post_date">
+      Oct 5, 2023</span>
+    <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/kubecon/' title="KubeCon" class="post_tag button button_translucent">KubeCon
+        </a><a href='https://idouba.com/tags/%E8%AE%BF%E9%97%AE%E6%97%A5%E5%BF%97/' title="访问日志" class="post_tag button button_translucent">访问日志
+        </a><a href='https://idouba.com/tags/responseflags/' title="ResponseFlags" class="post_tag button button_translucent">ResponseFlags
+        </a><a href='https://idouba.com/tags/nr/' title="NR" class="post_tag button button_translucent">NR
+        </a><a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' title="演讲" class="post_tag button button_translucent">演讲
+        </a>
+    </span>
+    <span class="page_only">&nbsp;·
+  <div class="post_share">
+    Share on:
+    <a href="https://twitter.com/intent/tweet?text=NR%28%e6%b2%a1%e6%9c%89%e5%8c%b9%e9%85%8d%e7%9a%84%e8%b7%af%e7%94%b1%29--Istio%e8%ae%bf%e9%97%ae%e6%97%a5%e5%bf%97ResponseFlag%e9%87%8d%e7%8e%b0%e4%b8%8e%e8%a7%a3%e6%9e%9008&url=https%3a%2f%2fidouba.com%2fdetailed-parse-and-reproduce-istio-response-flags-08-NR%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>twitter</title>
+  <use xlink:href="#twitter"></use>
+</svg>
+
+    </a>
+    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fdetailed-parse-and-reproduce-istio-response-flags-08-NR%2f&t=NR%28%e6%b2%a1%e6%9c%89%e5%8c%b9%e9%85%8d%e7%9a%84%e8%b7%af%e7%94%b1%29--Istio%e8%ae%bf%e9%97%ae%e6%97%a5%e5%bf%97ResponseFlag%e9%87%8d%e7%8e%b0%e4%b8%8e%e8%a7%a3%e6%9e%9008" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>facebook</title>
+  <use xlink:href="#facebook"></use>
+</svg>
+
+    </a>
+    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
+      <svg class="icon">
+  <title>linkedin</title>
+  <use xlink:href="#linkedin"></use>
+</svg>
+
+    </a>
+    <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-08-NR/" title="Copy Link" class="link link_yank">
+      <svg class="icon">
+  <title>copy</title>
+  <use xlink:href="#copy"></use>
+</svg>
+
+    </a>
+  </div>
+  </span>
+  </div>
+
+    </div>
+      <div class="excerpt_footer">
+        <div class="pale">
+          
+            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第八个关注的Response Flag是NR，全称是NoRouteFound，官方定义表示No route configured for a given request in addition to 404 response code or no matching filter chain for a downstream connection.
+含义： NR表示没有匹配的路由来处理请求的流量，一般伴随“404”状态码。比如实际的访问流量的特征不匹配VirtualService中定义的路由条件，因而没有找到匹配的 …</p>
+          
+          <br>
+          <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-08-NR/" title="Read More" class="excerpt_more button">Read More</a>
+        </div>
+      </div>
+    </div>
+  </li>
+
+        <li class="post_item">
+  <div class="excerpt">
+    <div class="excerpt_header">
+      <h3 class="post_link">
         <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-07-NC/" title="NC(没有上游集群)--Istio访问日志ResponseFlag重现与解析07">NC(没有上游集群)--Istio访问日志ResponseFlag重现与解析07</a>
       </h3>
       
@@ -337,362 +846,30 @@
     </div>
   </li>
 
-        <li class="post_item">
-  <div class="excerpt">
-    <div class="excerpt_header">
-      <h3 class="post_link">
-        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-02-UH/" title="UH(上游没有健康的后端实例)--Istio访问日志ResponseFlag重现与解析02">UH(上游没有健康的后端实例)--Istio访问日志ResponseFlag重现与解析02</a>
-      </h3>
-      
-  <div class="post_meta">
-    <span><svg class="icon">
-  <title>calendar</title>
-  <use xlink:href="#calendar"></use>
-</svg>
-</span>
-    <span class="post_date">
-      Sep 29, 2023</span>
-    <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/kubecon/' title="KubeCon" class="post_tag button button_translucent">KubeCon
-        </a><a href='https://idouba.com/tags/%E8%AE%BF%E9%97%AE%E6%97%A5%E5%BF%97/' title="访问日志" class="post_tag button button_translucent">访问日志
-        </a><a href='https://idouba.com/tags/responseflags/' title="ResponseFlags" class="post_tag button button_translucent">ResponseFlags
-        </a><a href='https://idouba.com/tags/uh/' title="UH" class="post_tag button button_translucent">UH
-        </a><a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' title="演讲" class="post_tag button button_translucent">演讲
-        </a>
-    </span>
-    <span class="page_only">&nbsp;·
-  <div class="post_share">
-    Share on:
-    <a href="https://twitter.com/intent/tweet?text=UH%28%e4%b8%8a%e6%b8%b8%e6%b2%a1%e6%9c%89%e5%81%a5%e5%ba%b7%e7%9a%84%e5%90%8e%e7%ab%af%e5%ae%9e%e4%be%8b%29--Istio%e8%ae%bf%e9%97%ae%e6%97%a5%e5%bf%97ResponseFlag%e9%87%8d%e7%8e%b0%e4%b8%8e%e8%a7%a3%e6%9e%9002&url=https%3a%2f%2fidouba.com%2fdetailed-parse-and-reproduce-istio-response-flags-02-UH%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>twitter</title>
-  <use xlink:href="#twitter"></use>
-</svg>
-
-    </a>
-    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fdetailed-parse-and-reproduce-istio-response-flags-02-UH%2f&t=UH%28%e4%b8%8a%e6%b8%b8%e6%b2%a1%e6%9c%89%e5%81%a5%e5%ba%b7%e7%9a%84%e5%90%8e%e7%ab%af%e5%ae%9e%e4%be%8b%29--Istio%e8%ae%bf%e9%97%ae%e6%97%a5%e5%bf%97ResponseFlag%e9%87%8d%e7%8e%b0%e4%b8%8e%e8%a7%a3%e6%9e%9002" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>facebook</title>
-  <use xlink:href="#facebook"></use>
-</svg>
-
-    </a>
-    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
-      <svg class="icon">
-  <title>linkedin</title>
-  <use xlink:href="#linkedin"></use>
-</svg>
-
-    </a>
-    <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-02-UH/" title="Copy Link" class="link link_yank">
-      <svg class="icon">
-  <title>copy</title>
-  <use xlink:href="#copy"></use>
-</svg>
-
-    </a>
-  </div>
-  </span>
-  </div>
-
-    </div>
-      <div class="excerpt_footer">
-        <div class="pale">
-          
-            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
-第二个关注的Response Flag是UH，UH的全称是NoHealthyUpstream，官方定义表示&quot;No healthy upstream hosts in upstream cluster in addition to 503 response code.&quot;
-含义： 表示上游服务没有健康的后端实例。典型场景如目标服务的后端实例不可用，比如在Kubernetes中目标服务的实例数设置为0.。
-重现环境： 客户端Pod，注入了Sidecar。 目标服务，一个Cluster类型 …</p>
-          
-          <br>
-          <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-02-UH/" title="Read More" class="excerpt_more button">Read More</a>
-        </div>
-      </div>
-    </div>
-  </li>
-
-        <li class="post_item">
-  <div class="excerpt">
-    <div class="excerpt_header">
-      <h3 class="post_link">
-        <a href="https://idouba.com/istiocon2023-cert-manager-help-enhance-security-and-flexibility-of-istio-certificate-management/" title="IstioCon2023演讲：Cert-manager帮助增强Istio证书管理的安全性和灵活性">IstioCon2023演讲：Cert-manager帮助增强Istio证书管理的安全性和灵活性</a>
-      </h3>
-      
-  <div class="post_meta">
-    <span><svg class="icon">
-  <title>calendar</title>
-  <use xlink:href="#calendar"></use>
-</svg>
-</span>
-    <span class="post_date">
-      Sep 26, 2023</span>
-    <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/istio/' title="Istio" class="post_tag button button_translucent">Istio
-        </a><a href='https://idouba.com/tags/istiocon/' title="IstioCon" class="post_tag button button_translucent">IstioCon
-        </a><a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' title="演讲" class="post_tag button button_translucent">演讲
-        </a><a href='https://idouba.com/tags/%E5%AE%89%E5%85%A8/' title="安全" class="post_tag button button_translucent">安全
-        </a>
-    </span>
-    <span class="page_only">&nbsp;·
-  <div class="post_share">
-    Share on:
-    <a href="https://twitter.com/intent/tweet?text=IstioCon2023%e6%bc%94%e8%ae%b2%ef%bc%9aCert-manager%e5%b8%ae%e5%8a%a9%e5%a2%9e%e5%bc%baIstio%e8%af%81%e4%b9%a6%e7%ae%a1%e7%90%86%e7%9a%84%e5%ae%89%e5%85%a8%e6%80%a7%e5%92%8c%e7%81%b5%e6%b4%bb%e6%80%a7&url=https%3a%2f%2fidouba.com%2fistiocon2023-cert-manager-help-enhance-security-and-flexibility-of-istio-certificate-management%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>twitter</title>
-  <use xlink:href="#twitter"></use>
-</svg>
-
-    </a>
-    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fistiocon2023-cert-manager-help-enhance-security-and-flexibility-of-istio-certificate-management%2f&t=IstioCon2023%e6%bc%94%e8%ae%b2%ef%bc%9aCert-manager%e5%b8%ae%e5%8a%a9%e5%a2%9e%e5%bc%baIstio%e8%af%81%e4%b9%a6%e7%ae%a1%e7%90%86%e7%9a%84%e5%ae%89%e5%85%a8%e6%80%a7%e5%92%8c%e7%81%b5%e6%b4%bb%e6%80%a7" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>facebook</title>
-  <use xlink:href="#facebook"></use>
-</svg>
-
-    </a>
-    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
-      <svg class="icon">
-  <title>linkedin</title>
-  <use xlink:href="#linkedin"></use>
-</svg>
-
-    </a>
-    <a href="https://idouba.com/istiocon2023-cert-manager-help-enhance-security-and-flexibility-of-istio-certificate-management/" title="Copy Link" class="link link_yank">
-      <svg class="icon">
-  <title>copy</title>
-  <use xlink:href="#copy"></use>
-</svg>
-
-    </a>
-  </div>
-  </span>
-  </div>
-
-    </div>
-      <div class="excerpt_footer">
-        <div class="pale">
-          
-            <p>记录在2023年9月26日在上海IstioCon上发表的技术演讲《cert-manager Help Enhance Security and Flexibility of Istio Certificate Management》
-大家好，我是张超盟，来自华为云。今天我分享主题是istio安全的相关内容。 大家使用istio最常见的是非侵入的流量和可观测性能力，如方便的灰度分流策略。实际上，随着使用深入，会感受到istio强大的安全能力。 实际上与其说istio提供了非侵入的认证、授权等安全能力，不如说提供了一个完备的安全模型。我们一般称为零信任安全网络。 在这个安全模型中，证书是非常基础的一块能力。今天的分享中我们将了 …</p>
-          
-          <br>
-          <a href="https://idouba.com/istiocon2023-cert-manager-help-enhance-security-and-flexibility-of-istio-certificate-management/" title="Read More" class="excerpt_more button">Read More</a>
-        </div>
-      </div>
-    </div>
-  </li>
-
-        <li class="post_item">
-  <div class="excerpt">
-    <div class="excerpt_header">
-      <h3 class="post_link">
-        <a href="https://idouba.com/istiocon2021-best-practice-from-spring-cloud-to-istio/" title="IstioCon2021：SpringClod到Istio最佳实践">IstioCon2021：SpringClod到Istio最佳实践</a>
-      </h3>
-      
-  <div class="post_meta">
-    <span><svg class="icon">
-  <title>calendar</title>
-  <use xlink:href="#calendar"></use>
-</svg>
-</span>
-    <span class="post_date">
-      Feb 23, 2021</span>
-    <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/istiocon/' title="IstioCon" class="post_tag button button_translucent">IstioCon
-        </a><a href='https://idouba.com/tags/springcloud/' title="SpringCloud" class="post_tag button button_translucent">SpringCloud
-        </a><a href='https://idouba.com/tags/%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BC/' title="服务网格" class="post_tag button button_translucent">服务网格
-        </a><a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' title="演讲" class="post_tag button button_translucent">演讲
-        </a><a href='https://idouba.com/tags/%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/' title="最佳实践" class="post_tag button button_translucent">最佳实践
-        </a>
-    </span>
-    <span class="page_only">&nbsp;·
-  <div class="post_share">
-    Share on:
-    <a href="https://twitter.com/intent/tweet?text=IstioCon2021%ef%bc%9aSpringClod%e5%88%b0Istio%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5&url=https%3a%2f%2fidouba.com%2fistiocon2021-best-practice-from-spring-cloud-to-istio%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>twitter</title>
-  <use xlink:href="#twitter"></use>
-</svg>
-
-    </a>
-    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fistiocon2021-best-practice-from-spring-cloud-to-istio%2f&t=IstioCon2021%ef%bc%9aSpringClod%e5%88%b0Istio%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>facebook</title>
-  <use xlink:href="#facebook"></use>
-</svg>
-
-    </a>
-    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
-      <svg class="icon">
-  <title>linkedin</title>
-  <use xlink:href="#linkedin"></use>
-</svg>
-
-    </a>
-    <a href="https://idouba.com/istiocon2021-best-practice-from-spring-cloud-to-istio/" title="Copy Link" class="link link_yank">
-      <svg class="icon">
-  <title>copy</title>
-  <use xlink:href="#copy"></use>
-</svg>
-
-    </a>
-  </div>
-  </span>
-  </div>
-
-    </div>
-      <div class="excerpt_footer">
-        <div class="pale">
-          
-            <p>记录在北京时间2月23日，在全球首届社区峰会IstioCon 2021中，发表的《Best practice:from Spring Cloud to Istio》技术演讲。回答经常被客户和同事们问到的一个问题，SpringCloud和Istio的关系，如何演进。
-以下为演讲全文: 大家好，我是来自华为云的工程师。很荣幸有机会和大家分享Istio在生产中使用的实际案例。
-华为云应用服务网格从2018年在公有云上线， 作为全球最早的几个网格服务之一，经历和见证了从早期对网格的了解、尝试到当前大规模使用的过程。服务的客户越来越多，场景也越来越复杂。这其中的通用功能作为feature大都贡献到Istio社区，解决方案层面的实践也希望通过这 …</p>
-          
-          <br>
-          <a href="https://idouba.com/istiocon2021-best-practice-from-spring-cloud-to-istio/" title="Read More" class="excerpt_more button">Read More</a>
-        </div>
-      </div>
-    </div>
-  </li>
-
-        <li class="post_item">
-  <div class="excerpt">
-    <div class="excerpt_header">
-      <h3 class="post_link">
-        <a href="https://idouba.com/istio-tracing-meetup-02/" title="Istio调用链埋点原理剖析—是否真的“零修改”分享实录（下）">Istio调用链埋点原理剖析—是否真的“零修改”分享实录（下）</a>
-      </h3>
-      
-  <div class="post_meta">
-    <span><svg class="icon">
-  <title>calendar</title>
-  <use xlink:href="#calendar"></use>
-</svg>
-</span>
-    <span class="post_date">
-      Nov 10, 2018</span>
-    <span class="post_time"> · 2 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/%E8%B0%83%E7%94%A8%E9%93%BE/' title="调用链" class="post_tag button button_translucent">调用链
-        </a><a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' title="演讲" class="post_tag button button_translucent">演讲
-        </a><a href='https://idouba.com/tags/istio/' title="Istio" class="post_tag button button_translucent">Istio
-        </a>
-    </span>
-    <span class="page_only">&nbsp;·
-  <div class="post_share">
-    Share on:
-    <a href="https://twitter.com/intent/tweet?text=Istio%e8%b0%83%e7%94%a8%e9%93%be%e5%9f%8b%e7%82%b9%e5%8e%9f%e7%90%86%e5%89%96%e6%9e%90%e2%80%94%e6%98%af%e5%90%a6%e7%9c%9f%e7%9a%84%e2%80%9c%e9%9b%b6%e4%bf%ae%e6%94%b9%e2%80%9d%e5%88%86%e4%ba%ab%e5%ae%9e%e5%bd%95%ef%bc%88%e4%b8%8b%ef%bc%89&url=https%3a%2f%2fidouba.com%2fistio-tracing-meetup-02%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>twitter</title>
-  <use xlink:href="#twitter"></use>
-</svg>
-
-    </a>
-    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fistio-tracing-meetup-02%2f&t=Istio%e8%b0%83%e7%94%a8%e9%93%be%e5%9f%8b%e7%82%b9%e5%8e%9f%e7%90%86%e5%89%96%e6%9e%90%e2%80%94%e6%98%af%e5%90%a6%e7%9c%9f%e7%9a%84%e2%80%9c%e9%9b%b6%e4%bf%ae%e6%94%b9%e2%80%9d%e5%88%86%e4%ba%ab%e5%ae%9e%e5%bd%95%ef%bc%88%e4%b8%8b%ef%bc%89" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>facebook</title>
-  <use xlink:href="#facebook"></use>
-</svg>
-
-    </a>
-    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
-      <svg class="icon">
-  <title>linkedin</title>
-  <use xlink:href="#linkedin"></use>
-</svg>
-
-    </a>
-    <a href="https://idouba.com/istio-tracing-meetup-02/" title="Copy Link" class="link link_yank">
-      <svg class="icon">
-  <title>copy</title>
-  <use xlink:href="#copy"></use>
-</svg>
-
-    </a>
-  </div>
-  </span>
-  </div>
-
-    </div>
-      <div class="excerpt_footer">
-        <div class="pale">
-          
-            <p>接上文Istio调用链埋点原理剖析—是否真的“零修改”分享实录（上）
-Isito调用链 调用链原理和场景 正如Service Mesh的诞生是为了解决大规模分布式服务访问的治理问题，调用链的出现也是为了对应于大规模的复杂的分布式系统运行中碰到的故障定位定界问题。大量的服务调用、跨进程、跨服务器，可能还会跨多个物理机房。无论是服务自身问题还是网络环境的问题导致调用上链路上出现问题都比较复杂，如何定位就比单进程的一个服务打印一个异常栈来找出某个方法要困难的多。需要有一个类似的调用链路的跟踪，经一次请求的逻辑规矩完整的表达出来，可以观察到每个阶段的调用关系，并能看到每个阶段的耗时和调用详细情况。Dapper, a Large-Scale …</p>
-          
-          <br>
-          <a href="https://idouba.com/istio-tracing-meetup-02/" title="Read More" class="excerpt_more button">Read More</a>
-        </div>
-      </div>
-    </div>
-  </li>
-
-        <li class="post_item">
-  <div class="excerpt">
-    <div class="excerpt_header">
-      <h3 class="post_link">
-        <a href="https://idouba.com/istio-tracing-meetup-01/" title="Istio调用链埋点原理剖析—是否真的“零修改”分享实录（上）">Istio调用链埋点原理剖析—是否真的“零修改”分享实录（上）</a>
-      </h3>
-      
-  <div class="post_meta">
-    <span><svg class="icon">
-  <title>calendar</title>
-  <use xlink:href="#calendar"></use>
-</svg>
-</span>
-    <span class="post_date">
-      Nov 10, 2018</span>
-    <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/%E8%B0%83%E7%94%A8%E9%93%BE/' title="调用链" class="post_tag button button_translucent">调用链
-        </a><a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' title="演讲" class="post_tag button button_translucent">演讲
-        </a><a href='https://idouba.com/tags/istio/' title="Istio" class="post_tag button button_translucent">Istio
-        </a>
-    </span>
-    <span class="page_only">&nbsp;·
-  <div class="post_share">
-    Share on:
-    <a href="https://twitter.com/intent/tweet?text=Istio%e8%b0%83%e7%94%a8%e9%93%be%e5%9f%8b%e7%82%b9%e5%8e%9f%e7%90%86%e5%89%96%e6%9e%90%e2%80%94%e6%98%af%e5%90%a6%e7%9c%9f%e7%9a%84%e2%80%9c%e9%9b%b6%e4%bf%ae%e6%94%b9%e2%80%9d%e5%88%86%e4%ba%ab%e5%ae%9e%e5%bd%95%ef%bc%88%e4%b8%8a%ef%bc%89&url=https%3a%2f%2fidouba.com%2fistio-tracing-meetup-01%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>twitter</title>
-  <use xlink:href="#twitter"></use>
-</svg>
-
-    </a>
-    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fistio-tracing-meetup-01%2f&t=Istio%e8%b0%83%e7%94%a8%e9%93%be%e5%9f%8b%e7%82%b9%e5%8e%9f%e7%90%86%e5%89%96%e6%9e%90%e2%80%94%e6%98%af%e5%90%a6%e7%9c%9f%e7%9a%84%e2%80%9c%e9%9b%b6%e4%bf%ae%e6%94%b9%e2%80%9d%e5%88%86%e4%ba%ab%e5%ae%9e%e5%bd%95%ef%bc%88%e4%b8%8a%ef%bc%89" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>facebook</title>
-  <use xlink:href="#facebook"></use>
-</svg>
-
-    </a>
-    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
-      <svg class="icon">
-  <title>linkedin</title>
-  <use xlink:href="#linkedin"></use>
-</svg>
-
-    </a>
-    <a href="https://idouba.com/istio-tracing-meetup-01/" title="Copy Link" class="link link_yank">
-      <svg class="icon">
-  <title>copy</title>
-  <use xlink:href="#copy"></use>
-</svg>
-
-    </a>
-  </div>
-  </span>
-  </div>
-
-    </div>
-      <div class="excerpt_footer">
-        <div class="pale">
-          
-            <p>整理自2018年在K8S技术社区在腾讯大厦关于Istio调用链的分享。
-前言 大家好，我是zhangchaomeng，来自华为Cloud BU，当前在做华为云应用服务网格。今天跟大家分享的主题是Istio调用链相关内容。通过剖析Istio的架构机制与Istio中调用链的工作原理来解答一个大家经常问道的一个问题：Istio是否像其官方文档中宣传的一样，对业务代码完全的无侵入，无需用做任何修改就可以完成所有的治理能力，包括调用链的埋点？
-关于这个问题，可以提前透漏下，答案是让人有点沮丧的，得改点。在Isito中你不用在自己的代码里使用各种埋点的SDK来做埋点的逻辑，但是必须要有适当的配合的修改。
-为什么本来无侵入的Service …</p>
-          
-          <br>
-          <a href="https://idouba.com/istio-tracing-meetup-01/" title="Read More" class="excerpt_more button">Read More</a>
-        </div>
-      </div>
-    </div>
-  </li>
-
       <li>
+    <ul class="pagination pagination-default">
+      <li class="page-item disabled">
+        <a aria-disabled="true" aria-label="First" class="page-link" role="button" tabindex="-1"><span aria-hidden="true">&laquo;&laquo;</span></a>
+      </li>
+      <li class="page-item disabled">
+        <a aria-disabled="true" aria-label="Previous" class="page-link" role="button" tabindex="-1"><span aria-hidden="true">&laquo;</span></a>
+      </li>
+      <li class="page-item active">
+        <a aria-current="page" aria-label="Page 1" class="page-link" role="button">1</a>
+      </li>
+      <li class="page-item">
+        <a href="/tags/%E6%BC%94%E8%AE%B2/page/2/" aria-label="Page 2" class="page-link" role="button">2</a>
+      </li>
+      <li class="page-item">
+        <a href="/tags/%E6%BC%94%E8%AE%B2/page/3/" aria-label="Page 3" class="page-link" role="button">3</a>
+      </li>
+      <li class="page-item">
+        <a href="/tags/%E6%BC%94%E8%AE%B2/page/2/" aria-label="Next" class="page-link" role="button"><span aria-hidden="true">&raquo;</span></a>
+      </li>
+      <li class="page-item">
+        <a href="/tags/%E6%BC%94%E8%AE%B2/page/3/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
+      </li>
+    </ul>
       </li>
     </ul>
   </div>
@@ -748,7 +925,7 @@ Isito调用链 调用链原理和场景 正如Service Mesh的诞生是为了解�
       <nav class="tags_nav">
         <a href='https://idouba.com/categories/istio/' class="post_tag button button_translucent" title="istio">
           ISTIO
-          <span class="button_tally">38</span>
+          <span class="button_tally">39</span>
         </a>
         
         <a href='https://idouba.com/categories/%E9%9A%8F%E7%AC%94/' class="post_tag button button_translucent" title="随笔">
@@ -771,18 +948,23 @@ Isito调用链 调用链原理和场景 正如Service Mesh的诞生是为了解�
           <span class="button_tally">7</span>
         </a>
         
+        <a href='https://idouba.com/categories/%E6%BC%94%E8%AE%B2/' class="post_tag button button_translucent" title="演讲">
+          演讲
+          <span class="button_tally">7</span>
+        </a>
+        
         <a href='https://idouba.com/categories/%E5%8F%91%E8%A1%A8/' class="post_tag button button_translucent" title="发表">
           发表
           <span class="button_tally">6</span>
         </a>
         
-        <a href='https://idouba.com/categories/%E6%BC%94%E8%AE%B2/' class="post_tag button button_translucent" title="演讲">
-          演讲
-          <span class="button_tally">6</span>
-        </a>
-        
         <a href='https://idouba.com/categories/golang/' class="post_tag button button_translucent" title="golang">
           GOLANG
+          <span class="button_tally">3</span>
+        </a>
+        
+        <a href='https://idouba.com/categories/istiocon/' class="post_tag button button_translucent" title="istiocon">
+          ISTIOCON
           <span class="button_tally">3</span>
         </a>
         
@@ -799,11 +981,6 @@ Isito调用链 调用链原理和场景 正如Service Mesh的诞生是为了解�
         <a href='https://idouba.com/categories/%E5%B9%B6%E5%8F%91/' class="post_tag button button_translucent" title="并发">
           并发
           <span class="button_tally">3</span>
-        </a>
-        
-        <a href='https://idouba.com/categories/istiocon/' class="post_tag button button_translucent" title="istiocon">
-          ISTIOCON
-          <span class="button_tally">2</span>
         </a>
         
         <a href='https://idouba.com/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/' class="post_tag button button_translucent" title="机器学习">
@@ -830,11 +1007,11 @@ Isito调用链 调用链原理和场景 正如Service Mesh的诞生是为了解�
             </a>
             
             
-            <a href='https://idouba.com/categories/istio/' class=" post_tag button button_translucent" data-position=38 title="istio">ISTIO<span class="button_tally">38</span>
+            <a href='https://idouba.com/categories/istio/' class=" post_tag button button_translucent" data-position=39 title="istio">ISTIO<span class="button_tally">39</span>
             </a>
             
             
-            <a href='https://idouba.com/categories/istiocon/' class=" post_tag button button_translucent" data-position=2 title="istiocon">ISTIOCON<span class="button_tally">2</span>
+            <a href='https://idouba.com/categories/istiocon/' class=" post_tag button button_translucent" data-position=3 title="istiocon">ISTIOCON<span class="button_tally">3</span>
             </a>
             
             
@@ -874,7 +1051,7 @@ Isito调用链 调用链原理和场景 正如Service Mesh的诞生是为了解�
             </a>
             
             
-            <a href='https://idouba.com/categories/%E6%BC%94%E8%AE%B2/' class=" post_tag button button_translucent" data-position=6 title="演讲">演讲<span class="button_tally">6</span>
+            <a href='https://idouba.com/categories/%E6%BC%94%E8%AE%B2/' class=" post_tag button button_translucent" data-position=7 title="演讲">演讲<span class="button_tally">7</span>
             </a>
             
             
@@ -899,6 +1076,11 @@ Isito调用链 调用链原理和场景 正如Service Mesh的诞生是为了解�
       <nav class="tags_nav">
         <a href='https://idouba.com/tags/istio/' class="post_tag button button_translucent" title="istio">
           ISTIO
+          <span class="button_tally">22</span>
+        </a>
+        
+        <a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' class="post_tag button button_translucent" title="演讲">
+          演讲
           <span class="button_tally">21</span>
         </a>
         
@@ -930,11 +1112,6 @@ Isito调用链 调用链原理和场景 正如Service Mesh的诞生是为了解�
         <a href='https://idouba.com/tags/hadoop/' class="post_tag button button_translucent" title="hadoop">
           HADOOP
           <span class="button_tally">11</span>
-        </a>
-        
-        <a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' class="post_tag button button_translucent" title="演讲">
-          演讲
-          <span class="button_tally">8</span>
         </a>
         
         <a href='https://idouba.com/tags/istio%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/' class="post_tag button button_translucent" title="istio权威指南">
@@ -1029,11 +1206,11 @@ Isito调用链 调用链原理和场景 正如Service Mesh的诞生是为了解�
             </a>
             
             
-            <a href='https://idouba.com/tags/istio/' class=" post_tag button button_translucent" data-position=21 title="istio">ISTIO<span class="button_tally">21</span>
+            <a href='https://idouba.com/tags/istio/' class=" post_tag button button_translucent" data-position=22 title="istio">ISTIO<span class="button_tally">22</span>
             </a>
             
             
-            <a href='https://idouba.com/tags/istiocon/' class=" post_tag button button_translucent" data-position=2 title="istiocon">ISTIOCON<span class="button_tally">2</span>
+            <a href='https://idouba.com/tags/istiocon/' class=" post_tag button button_translucent" data-position=3 title="istiocon">ISTIOCON<span class="button_tally">3</span>
             </a>
             
             
@@ -1177,6 +1354,10 @@ Isito调用链 调用链原理和场景 正如Service Mesh的诞生是为了解�
             </a>
             
             
+            <a href='https://idouba.com/tags/%E5%A4%9A%E9%9B%86%E7%BE%A4/' class=" post_tag button button_translucent" data-position=1 title="多集群">多集群<span class="button_tally">1</span>
+            </a>
+            
+            
             <a href='https://idouba.com/tags/%E5%AE%89%E5%85%A8/' class=" post_tag button button_translucent" data-position=1 title="安全">安全<span class="button_tally">1</span>
             </a>
             
@@ -1213,7 +1394,7 @@ Isito调用链 调用链原理和场景 正如Service Mesh的诞生是为了解�
             </a>
             
             
-            <a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' class=" post_tag button button_translucent" data-position=8 title="演讲">演讲<span class="button_tally">8</span>
+            <a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' class=" post_tag button button_translucent" data-position=21 title="演讲">演讲<span class="button_tally">21</span>
             </a>
             
             

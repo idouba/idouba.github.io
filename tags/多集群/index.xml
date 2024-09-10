@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>多集群 on 爱豆吧！</title>
+    <link>https://idouba.com/tags/%E5%A4%9A%E9%9B%86%E7%BE%A4/</link>
+    <description>Recent content in 多集群 on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Thu, 28 Apr 2022 15:32:08 +0000</lastBuildDate><atom:link href="https://idouba.com/tags/%E5%A4%9A%E9%9B%86%E7%BE%A4/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>IstioCon2022：Istio 多集群流量管理加速汽车公司新业务开发、部署和运营</title>
+      <link>https://idouba.com/istiocon2022-istio-multi-cluster-traffic-management-speed-up-automobile-company-new-business-dev-deploy-and-ops/</link>
+      <pubDate>Thu, 28 Apr 2022 15:32:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/istiocon2022-istio-multi-cluster-traffic-management-speed-up-automobile-company-new-business-dev-deploy-and-ops/</guid>
+      <description>
+        
+          
+             记录在2022年4月28日在IstioCon上发表的技术演讲《Istio multi-cluster traffic management speed up automobile company new business dev,deploy and ops》，和Smart的研发总监Kexing一起介绍了Istio多集群在Smart的实践。希望为Smart新车的大卖贡献了一点力量。
+附： 演讲材料(官方Slides) 官方Sched主页 
+          
+          
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>
