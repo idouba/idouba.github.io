@@ -53,11 +53,11 @@ mTLS是Istio自动签发证书，自动加载到网格数据面的Sidecar上，S
     </item>
     
     <item>
-      <title>SpringClod到Istio最佳实践</title>
-      <link>https://idouba.com/best-practice-from-spring-cloud-to-istio/</link>
+      <title>IstioCon2021：SpringClod到Istio最佳实践</title>
+      <link>https://idouba.com/istiocon2021-best-practice-from-spring-cloud-to-istio/</link>
       <pubDate>Tue, 23 Feb 2021 15:32:08 +0000</pubDate>
       
-      <guid>https://idouba.com/best-practice-from-spring-cloud-to-istio/</guid>
+      <guid>https://idouba.com/istiocon2021-best-practice-from-spring-cloud-to-istio/</guid>
       <description>
         
           

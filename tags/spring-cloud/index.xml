@@ -9,11 +9,11 @@
     <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
     <lastBuildDate>Sun, 12 Dec 2021 15:50:08 +0000</lastBuildDate><atom:link href="https://idouba.com/tags/spring-cloud/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>服务网格替代 Hystrix 提升在线视频服务韧性的生产实践</title>
-      <link>https://idouba.com/online-video-upgrades-resilience-from-sc-circuit-breaker-to-service-mesh-kubecon2021/</link>
+      <title>KubeCon2021：服务网格替代 Hystrix 提升在线视频服务韧性的生产实践</title>
+      <link>https://idouba.com/kubecon2021-online-video-upgrades-resilience-from-sc-circuit-breaker-to-service-mesh-kubecon2021/</link>
       <pubDate>Sun, 12 Dec 2021 15:50:08 +0000</pubDate>
       
-      <guid>https://idouba.com/online-video-upgrades-resilience-from-sc-circuit-breaker-to-service-mesh-kubecon2021/</guid>
+      <guid>https://idouba.com/kubecon2021-online-video-upgrades-resilience-from-sc-circuit-breaker-to-service-mesh-kubecon2021/</guid>
       <description>
         
           

@@ -9,11 +9,11 @@
     <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
     <lastBuildDate>Wed, 21 Aug 2024 15:32:08 +0000</lastBuildDate><atom:link href="https://idouba.com/categories/%E6%BC%94%E8%AE%B2/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>最佳实践：Karmda和Istio提高分布式云的负载与流量韧性</title>
-      <link>https://idouba.com/best-practice-karmada-and-istio-improve-workload-traffic-resilience-of-production-distributed-cloud/</link>
+      <title>KubeCon2024：Karmda和Istio提高分布式云的负载与流量韧性的最佳实践</title>
+      <link>https://idouba.com/kubecon2024-best-practice-karmada-and-istio-improve-workload-traffic-resilience-of-production-distributed-cloud/</link>
       <pubDate>Wed, 21 Aug 2024 15:32:08 +0000</pubDate>
       
-      <guid>https://idouba.com/best-practice-karmada-and-istio-improve-workload-traffic-resilience-of-production-distributed-cloud/</guid>
+      <guid>https://idouba.com/kubecon2024-best-practice-karmada-and-istio-improve-workload-traffic-resilience-of-production-distributed-cloud/</guid>
       <description>
         
           
@@ -46,11 +46,11 @@ Istio的机制大家也比较熟悉，通过透明代理拦截流量，代替应
     </item>
     
     <item>
-      <title>基于实际案例解析Istio访问日志ResponseFlag系列</title>
-      <link>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-index/</link>
+      <title>KubeCon2023：基于实际案例解析Istio访问日志ResponseFlag系列</title>
+      <link>https://idouba.com/kubecon2023-detailed-parse-and-reproduce-istio-response-flags-index/</link>
       <pubDate>Sun, 15 Oct 2023 15:50:08 +0000</pubDate>
       
-      <guid>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-index/</guid>
+      <guid>https://idouba.com/kubecon2023-detailed-parse-and-reproduce-istio-response-flags-index/</guid>
       <description>
         
           
@@ -111,11 +111,11 @@ mTLS是Istio自动签发证书，自动加载到网格数据面的Sidecar上，S
     </item>
     
     <item>
-      <title>服务网格替代 Hystrix 提升在线视频服务韧性的生产实践</title>
-      <link>https://idouba.com/online-video-upgrades-resilience-from-sc-circuit-breaker-to-service-mesh-kubecon2021/</link>
+      <title>KubeCon2021：服务网格替代 Hystrix 提升在线视频服务韧性的生产实践</title>
+      <link>https://idouba.com/kubecon2021-online-video-upgrades-resilience-from-sc-circuit-breaker-to-service-mesh-kubecon2021/</link>
       <pubDate>Sun, 12 Dec 2021 15:50:08 +0000</pubDate>
       
-      <guid>https://idouba.com/online-video-upgrades-resilience-from-sc-circuit-breaker-to-service-mesh-kubecon2021/</guid>
+      <guid>https://idouba.com/kubecon2021-online-video-upgrades-resilience-from-sc-circuit-breaker-to-service-mesh-kubecon2021/</guid>
       <description>
         
           
@@ -151,6 +151,89 @@ mTLS是Istio自动签发证书，自动加载到网格数据面的Sidecar上，S
 这样，所有访问流量只会分发到两个健康实例上，通过这种熔断保护保障服务整体访问的成功率。
 **除了隔离外，韧性中另外有一个非常重要的要求是系统的故障自愈能力。这里三个流量拓扑演示了从刚才的故障中恢复的过程。**可以看到：初始状态这个故障实例被隔离中，没有流量；当实例自身正常后，网格数据面在将其隔离配置的间隔后，重新尝试分配流量，当满足阈值要求则该实例会被认为是正常实例，可以和其他两个实例一样接收请求。最终可以看到三个实例上均衡的处理请求。即实现了故障恢复。
 网格熔断提供的另外一组保护机制是非侵入的连接池管理。可以对四层的连接，七层的请求进行限制。当实际的连接和请求超过配置的阈值时，则断路连接，从而保护上游的服务。
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>IstioCon2021：SpringClod到Istio最佳实践</title>
+      <link>https://idouba.com/istiocon2021-best-practice-from-spring-cloud-to-istio/</link>
+      <pubDate>Tue, 23 Feb 2021 15:32:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/istiocon2021-best-practice-from-spring-cloud-to-istio/</guid>
+      <description>
+        
+          
+            记录在北京时间2月23日，在全球首届社区峰会IstioCon 2021中，发表的《Best practice:from Spring Cloud to Istio》技术演讲。回答经常被客户和同事们问到的一个问题，SpringCloud和Istio的关系，如何演进。
+以下为演讲全文: 大家好，我是来自华为云的工程师。很荣幸有机会和大家分享Istio在生产中使用的实际案例。
+华为云应用服务网格从2018年在公有云上线， 作为全球最早的几个网格服务之一，经历和见证了从早期对网格的了解、尝试到当前大规模使用的过程。服务的客户越来越多，场景也越来越复杂。这其中的通用功能作为feature大都贡献到Istio社区，解决方案层面的实践也希望通过这样的机会和大家交流。
+本次我选取的主题是Spring Cloud to Istio。来自我们客户的Spring cloud的项目和Istio的结合与迁移案例。
+演讲主要包含四部分的内容： 1）背景介绍
+2）使用Spring cloud微服务框架遇到的问题
+3）解决方案
+4）通过示例来描述方案的实践细节
+背景介绍 还是以微服务为切入点，微服务的诸多优势非常明显，但相应给整个系统带来的复杂度也非常显著。单体的系统变成了分布式后，网络问题，服务如何找到并访问到对端的服务发现问题，网络访问的容错保护问题等。连当年最简单的通过日志中的调用栈就能实现的问题定位，微服务化后必须要通过分布式调用链才能支持。怎样解决微服务带来的这些挑战？
+微服务SDK曾经是一个常用的解决方案。将微服务化后通用的能力封装在一个开发框架中，开发者使用这个框架开发写自己的业务代码，生成的微服务自然就内置了这些能力。在很长的一段时间内，这种形态是微服务治理的标配，以至于初学者以为只有这些SDK才是微服务。
+服务网格则通过另一种形态提供治理能力。不同于SDK方式，服务治理的能力在一个独立的代理进程中提供，完全和开发解耦。虽然从图上看两者差异非常小，后面我们将会从架构和实际案例来分析两者在设计理念上的差异，来体会前者是一个开发框架，而后者是一个基础设施。
+SDK形态中Spring cloud是最有影响力的代表项目。Spring cloud提供了构建分布式应用的开发工具集，如列表所示。其中被大部分开发者熟知的是微服务相关项目，如：服务注册发现eureka、配置管理 config、负载均衡ribbon、熔断容错Hystrix、调用链埋点sleuth、网关zuul或Spring cloud gateway等项目。在本次分享中提到的Spring cloud也特指Spring cloud的微服务开发套件。
+而网格形态中，最有影响力的项目当属Istio。Istio的这张架构图在这次演讲中会高频出现。作为本次分享的背景，我们只要知道架构上由控制面和数据面组成，控制面管理网格里面的服务和对服务配置的各种规则。数据面上每个服务间的出流量和入流量都会被和服务同POD的数据面代理拦截和执行流量管理的动作。
+除了架构外，作为背景的另外一个部分，我们挑两个基础功能稍微打开看下两者的设计和实现上的相同和不同。首先是服务发现和负载均衡。
+左边是Spring cloud，所有的微服务都会先注册中心，一般是Eureka进行服务注册，然后在服务访问时，consumer去注册中心进行服务发现得到待访问的目标服务的实例列表，使用客户端负载均衡ribbon选择一个服务实例发起访问。
+右边Istio不需要服务注册的过程，只需要从运行平台k8s中获取服务和实例的关系，在服务访问时，数据面代理Envoy拦截到流量，选择一个目标实例发送请求。可以看到都是基于服务发现数据进行客户端负载均衡，差别是服务发现数据来源不同，负载均衡的执行体不同。
+下面比较下熔断：
+左边为经典的Hystrix的状态迁移图。一段时间内实例连续的错误次数超过阈值则进入熔断开启状态，不接受请求；隔离一段时间后，会从熔断状态迁移到半熔断状态，如果正常则进入熔断关闭状态，可以接收请求；如果不正常则还是进入熔断开启状态。
+Istio中虽然没有显示的提供这样一个状态图，但是大家熟悉Istio规则和行为应该会发现，Istio中OutlierDection的阈值规则也都是这样设计的。两者的不同是Spring cloud的熔断是在SDK中Hystrix执行，Istio中是数据面proxy执行。Hystrix因为在业务代码中，允许用户通过编程做一些控制。
+以上分析可以看到服务发现、负载均衡和熔断，能力和机制都是类似的。如果忽略图上的某些细节，粗的看框图模型都是完全一样的，对比表格中也一般只有一项就是执行位置不同，这一点不同在实际应用中带来非常大的差异。
+使用Spring cloud微服务框架遇到的问题 本次演讲的重点是实践。以下是我们客户找到我们TOP的几个的问题，剖析下用户使用传统微服务框架碰到了哪些问题，这些大部分也是他们选择网格的最大动力。
+1）多语言问题 在企业应用开发下，一个业务使用统一的开发框架是非常合理常见的，很多开发团队为了提升效率，经常还会维护有自己公司或者团队的通用开发框架。当然因为大部分业务系统都是基于Java开发，所以Spring cloud开发框架，或者衍生于Spring cloud的各种开发框架使用的尤其广泛。
+但是在云原生场景下，业务一般更加复杂多样，特别是涉及到很多即存的老系统。我们不能要求为了微服务化将在用的一组成熟服务用Spring cloud重写下。用户非常希望有一种方式不重写原来的系统也能对其进行应用层服务访问管理。
+2）将Spring cloud的微服务运行在K8s上会有很大的概率出现服务发现不及时 前面介绍过Spring cloud服务发现是基于各个微服务先向注册中心进行服务注册的数据来实现的，在传统Spring cloud场景下，当微服务部署在VM上，服务动态变化要求没有那么高，顶多个别实例运行不正常，通过服务发现的健康检查就足够了。但是在k8s场景下，服务实例动态迁移是非常正常场景。如图示，producer的某个Pod已经从一个节点迁移到另外一个节点了，这时需要新的pod2的producer实例向eureka注册，老实例Pod1要去注册。
+如果该情况频繁发生，会出现注册中心数据维护不及时，导致服务发现和负载均衡到旧的实例pod1上，从而引起访问失败的情况。
+3）升级所有应用以应对服务管理需求变化 第三个问题是一个比较典型的问题。客户有一个公共团队专门维护了一套基于Spring cloud的自有开发框架，在每次升级开发框架时，不得不求着业务团队来升级自己的服务。经常会SDK自身修改测试工作量不大，但却要制定很长周期的升级计划，来对上千个基于这个SDK开发的服务分组重新编译，打包，升级，而且经常要陪着业务团队在夜间变更。业务团队因为自身没有什么改动，考虑到这个升级带来的工作量和线上风险，一般也没有什么动力。
+4）从单体式架构向微服务架构迁移 这是一个比较普遍的问题，就是渐进的微服务化。马丁福勒在著名的文章单体到微服务的拆分中（https://martinfowler.com/articles/break-monolith-into-microservices.html ）也提到了对渐进微服务化的倡议，如何能从业务上将一个大的业务分割，解耦，然后逐步微服务化。马丁福勒强调 “解耦的是业务能力不是代码” ，大神将代码的解耦留给了开发者。
+但是站在开发者的角度讲渐进的微服务不是一个容易的事情。以基于Spring cloud框架进行微服务开发为例，为了所有的微服务间进行统一的服务发现、负载均衡，消费和执行同样的治理策略，必须要求所有的微服务基于同样的，甚至是统一版本的SDK来开发。
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>Istio调用链埋点原理剖析—是否真的“零修改”分享实录（上）</title>
+      <link>https://idouba.com/istio-tracing-meetup-01/</link>
+      <pubDate>Sat, 10 Nov 2018 15:07:36 +0000</pubDate>
+      
+      <guid>https://idouba.com/istio-tracing-meetup-01/</guid>
+      <description>
+        
+          
+            整理自2018年在K8S技术社区在腾讯大厦关于Istio调用链的分享。
+前言 大家好，我是zhangchaomeng，来自华为Cloud BU，当前在做华为云应用服务网格。今天跟大家分享的主题是Istio调用链相关内容。通过剖析Istio的架构机制与Istio中调用链的工作原理来解答一个大家经常问道的一个问题：Istio是否像其官方文档中宣传的一样，对业务代码完全的无侵入，无需用做任何修改就可以完成所有的治理能力，包括调用链的埋点？
+关于这个问题，可以提前透漏下，答案是让人有点沮丧的，得改点。在Isito中你不用在自己的代码里使用各种埋点的SDK来做埋点的逻辑，但是必须要有适当的配合的修改。
+为什么本来无侵入的Service Mesh形态的技术却要求我们开发者修改些代码，到底要做哪些修改？Istio中调用链到底是怎么工作的？在下面的内容中将逐个回答这些问题。
+本次分享的主题包括两部分: 第一部分作为背景和基础，介绍Istio的架构和机制；第二部分将重点介绍Istio调用链的相关内容，解答前面提出的几个问题。
+Isito的架构和机制 Service Mesh 如官方介绍，Istio是一个用于连接、控制、保护和观测服务的一个开放平台。即：智能控制服务间的流量和API调用；提供授权、认证和通信加密机制自动保护服务安全；并使用各种策略来控制调用者对服务的访问；另外可以扩展丰富的调用链、监控、日志等手段来对服务的与性能进行观测。
+Istio是Google继Kubernetes之后的又一重要项目，提供了Service Mesh方式服务治理的完整的解决方案。2017年5月发布第一个版本 0.1， 2018年6月1日发布了0.8版本，第一个LTS版本，当前在使用的1.0版本是今年7.31发布，对外宣传可用于生产。最新的1.1版本将2018.11中旬最近发布(当时规划实际已延迟，作者注)。
+Istio属于Service Mesh的一种实现。通过一张典型图来了解下Service Mesh。如图示深色是Proxy，浅色的是服务，所有流入流出服务的都通过Proxy。Service Mesh正是由这一组轻量代理组成，和应用程序部署在一起，但是应用程序感知不到他的存在。特别对于云原生应用，服务间的应用访问拓扑都比较复杂，可以通过Service Mesh来保证服务间的调用请求在可靠、安全的传递。在实现上一般会有一个统一的控制面，对这些代理有个统一的管理，所有的代理都接入一个控制面。对代理进行生命期管理和统一的治理规则的配置。 这里是对Service Mesh特点的一个一般性描述，后面结合Isito的架构和机制可以看下在Istio中对应的实现。
+可以看到Service Mesh最核心的特点是在Proxy中实现治理逻辑，从而做到应用程序无感知。其实这个形态也是经过一个演变的过程的：
+最早的治理逻辑直接由业务代码开发人员设计和实现，对服务间的访问进行管理，在代码里其实也不分治理和业务，治理本身就是业务的一部分。这种形态的缺点非常明显就是业务代码和治理的耦合，同时公共的治理逻辑有大量的重复。
+很容易想到封装一个公共库，就是所谓的SDK，使用特定的SDK开发业务，则所有治理能力就内置了。Spring Cloud和Netflix都是此类的工具，使用比较广泛，除了治理能力外，SDK本身是个开发框架，基于一个语言统一、风格统一的开发框架开发新的项目非常好用。但这种形态语言相关，当前Java版本的SDK比较多。另外对于开发人员有一定的学习成本，必须熟悉这个SDK才能基于他开发。最重要的是推动已经在用的成熟的系统使用SDK重写下也不是个容易的事情。比如我们客户中就有用C开发的系统，运行稳定，基本不可能重写。对这类服务的治理就需要一个服务外面的治理方式。
+于是考虑是否可以继续封装，将治理能力提到进程外面来，作为独立进程。即Sidecar方式，也就是广泛关注的Service Mesh 的。真正可以做到对业务代码和进程0侵入，这对于原来的系统完全不用改造，直接使用Sidecar进行治理。
+用一段伪代码来表示以上形态的演变：
+可以看到随着封装越来越加强，从公共库级别，到进程级别。对业务的侵入越来越少，SDK的公共库从业务代码中解耦，Sidecar方式直接从业务进程解耦了。对应的治理位置越来越低，即生效的位置更加基础了。尤其是Service Mesh方式下面访问通过 Proxy执行治理，所以Service Mesh的方式也已被称为一种应用的基础设施层，和TCP/IP的协议栈一样。TCP/IP负责将字节流可靠地在网络节点间传递；而应用基础设施则保证服务间的请求在安全、可靠、可被管控的传递。这也对应了前面Istio作为Service Mesh一种实现的定位。 Istio 关键能力 Istio官方介绍自己的关键能力如上所示，我把它分为两部分：一部分是功能，另有一部分提供的扩展能力。
+功能上包括流量管理、策略执行、安全和可观察性。也正好应对了首页的连接、保护、控制和观测四大功能。
+流量管理：是Istio中最常用的功能。可以通过配置规则和访问路由，来控制服务间的流量和API调用。从而实现负载均衡、熔断、故障注入、重试、重定向等服务治理功能，并且可以通过配置流量规则来对将流量切分到不同版本上从而实现灰度发布的流程。 策略执行：指Istio支持支持访问控制、速率限制、配额管理的能力。这些能力都是通过可动态插入的策略控制后端实现。 安全：Istio提供的底层的安全通道、管理服务通信的认证、授权，使得开发任务只用关注业务代码中的安全相关即可。 可观察性：较之其他系统和平台，Istio比较明显的一个特点是服务运行的监控数据都可以动态获取和输出，提供了强大的调用链、监控和调用日志收集输出的能力。配合可视化工具，运维人员可以方便的看到系统的运行状况，并发现问题进而解决问题。我们这次分享的主题调用链也正是Isito可观察性的一个核心能力。 后面分析可以看到以上四个特性从管理面看，正好对应Istio的三个重要组件。
+扩展性：主要是指Istio从系统设计上对运行平台、交互的相关系统都尽可能的解耦，可扩展。这里列出的特性：
+平台支持：指Istio可以部署在各种环境上，支持Kubernetes、Consul等上部署的服务，在之前版本上还支持注册到Eureka上的Service，新版本对Eureka的支持被干掉了；
+集成和定制：指的Istio可以动态的对接各种如访问控制、配额管理等策略执行的后端和日志监控等客观性的后端。支持用户根据需要按照模板开发自己的后端方便的集成进来。
+其实这两个扩展性的能力正好也对应了Istio的两个核心组件Pilot和Mixer，后面Isito架构时一起看下。
+Istio 总体架构 以上是Isito的总体架构。上面是数据面，下半部分是控制面。 数据面Envoy是一个C++写的轻量代理，可以看到所有流入流出服务的流量都经过Proxy转发和处理，前面Istio中列出的所有的治理逻辑都是在Envoy上执行，正是拦截到服务访问间的流量才能进行各种治理；另外可以看到Sidecar都连到了一个统一的控制面。
+Istio其实专指控制面的几个服务组件：
+Pilot：Pilot干两个事情，一个是配置，就是前面功能介绍的智能路由和流量管理功能都是通过Pilot进行配置，并下发到Sidecar上去执行；另外一个是服务发现，可以对接不同的服务发现平台维护服务名和实例地址的关系并动态提供给Sidecar在服务请求时使用。Pilot的详细功能和机制见后面组件介绍。 Mixer：Mixer是Istio中比较特殊，当前甚至有点争议的组件。前面Isito核心功能中介绍的遥测和策略执行两个大特性均是Mixer提供。而Istio官方强调的集成和定制也是Mixer提供。即可以动态的配置和开发策略执行与遥测的后端，来实现对应的功能。Mixer的详细功能和机制见后面组件介绍。 Citadel：主要对应Istio核心功能中的安全部分。配合Pilot和Mixer实现秘钥和证书的管理、管理授权和审计，保证客户端和服务端的安全通信，通过内置的身份和凭证提供服务间的身份验证，并进而该通基于服务表示的策略执行。 Isito主要组件Pilot 如Istio架构中简介，Pilot实现服务发现和配置管理的功能。 作为服务发现，Pilot中定义了一个抽象的服务模型，包括服务、服务实例、版本等。并且只定义的服务发现的接口，并未实现服务发现的功能，而是通过Adapter机制以一种可扩展的方式来集成各种不同的服务发现，并转换成Istio通用的抽象模型。 如在Kubernetes中，Pilot中的Kubernetes适配器通过Kube-APIServer服务器得到Kubernetes中对应的资源信息。而对于像Eureka这种服务注册表，则是使用一个Eureka的HTTP Client去访问Eureka的名字服务的集群，获取服务实例的列表。不管哪种方式最终都转换成Pilot的标准服务发现定义，进而通过标准接口提供给Sidecar使用。
+而配置管理，则是定义并维护各种的流量规则，来实现负载均衡、熔断、故障注入、流量拆分等功能。并转换成Envoy中标准格式推送给Envoy，从而实现治理功能。所有的这些功能用户均不用修改代码接口完成。详细的配置方式可以参照Istio Traffic Routing中的规则定义。重点关注：VirtualService、 DestinationRule、 Gateway等规则定义。如可以使用流量规则来配置各种灰度发布，也可以通过注入一个故障来测试故障场景；可以配置熔断来进行故障恢复；并且可以对HTTP请求根据我们的需要进行重定向、重写，重试等操作。
+Istio主要组件Mixer Mixer是Isito特有的一个组件。主要做两个功能Check和Report，分别对应Istio官方宣传的两个重大特性策略执行和遥测功能。逻辑上理解每次服务间的请求都会通过proxy连接Mixer来进行处理，由Mixer来将请求派发到对应的后端上处理。通过扩展不同的后端来增强Mixer的能力。如可以做访问控制、配额等这样的控制，也可以对接不同的监控后端来做监控数据的收集，进而提供网格运行的可观察性能力。 Mixer通过使用通用插件模型实现的对接不同后端，避免了proxy为了完成不同的功能而去对接各种不同的后端。每个插件都被称为Adapter。对于每个请求Sidecar会从每一次请求中收集相关信息，如请求的路径，时间，源IP，目地服务，tracing头，日志等，并请这些属性上报给Mixer。Mixer和后端服务之间是通过适配器进行连接的，Mixer将Sidecar上报的内容通过适配器发送给后端服务。可以在不停止应用服务的情况下动态切换后台服务。
           
           
         

@@ -74,10 +74,13 @@
     <loc>https://idouba.com/categories/karmada/</loc>
     <lastmod>2024-08-21T15:32:08+00:00</lastmod>
   </url><url>
+    <loc>https://idouba.com/tags/kubecon/</loc>
+    <lastmod>2024-08-21T15:32:08+00:00</lastmod>
+  </url><url>
     <loc>https://idouba.com/categories/kubecon/</loc>
     <lastmod>2024-08-21T15:32:08+00:00</lastmod>
   </url><url>
-    <loc>https://idouba.com/tags/kubecon/</loc>
+    <loc>https://idouba.com/kubecon2024-best-practice-karmada-and-istio-improve-workload-traffic-resilience-of-production-distributed-cloud/</loc>
     <lastmod>2024-08-21T15:32:08+00:00</lastmod>
   </url><url>
     <loc>https://idouba.com/tags/kubernetes/</loc>
@@ -89,9 +92,6 @@
     <loc>https://idouba.com/tags/%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/</loc>
     <lastmod>2024-08-21T15:32:08+00:00</lastmod>
   </url><url>
-    <loc>https://idouba.com/best-practice-karmada-and-istio-improve-workload-traffic-resilience-of-production-distributed-cloud/</loc>
-    <lastmod>2024-08-21T15:32:08+00:00</lastmod>
-  </url><url>
     <loc>https://idouba.com/tags/%E6%BC%94%E8%AE%B2/</loc>
     <lastmod>2024-08-21T15:32:08+00:00</lastmod>
   </url><url>
@@ -101,7 +101,7 @@
     <loc>https://idouba.com/tags/%E9%9F%A7%E6%80%A7/</loc>
     <lastmod>2024-08-21T15:32:08+00:00</lastmod>
   </url><url>
-    <loc>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-index/</loc>
+    <loc>https://idouba.com/kubecon2023-detailed-parse-and-reproduce-istio-response-flags-index/</loc>
     <lastmod>2023-10-15T15:50:08+00:00</lastmod>
   </url><url>
     <loc>https://idouba.com/tags/%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BC/</loc>
@@ -239,6 +239,9 @@
     <loc>https://idouba.com/tags/%E5%9B%BE%E4%B9%A6/</loc>
     <lastmod>2023-06-01T15:50:08+00:00</lastmod>
   </url><url>
+    <loc>https://idouba.com/kubecon2021-online-video-upgrades-resilience-from-sc-circuit-breaker-to-service-mesh-kubecon2021/</loc>
+    <lastmod>2021-12-12T15:50:08+00:00</lastmod>
+  </url><url>
     <loc>https://idouba.com/tags/spring-cloud/</loc>
     <lastmod>2021-12-12T15:50:08+00:00</lastmod>
   </url><url>
@@ -248,10 +251,7 @@
     <loc>https://idouba.com/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/</loc>
     <lastmod>2021-12-12T15:50:08+00:00</lastmod>
   </url><url>
-    <loc>https://idouba.com/online-video-upgrades-resilience-from-sc-circuit-breaker-to-service-mesh-kubecon2021/</loc>
-    <lastmod>2021-12-12T15:50:08+00:00</lastmod>
-  </url><url>
-    <loc>https://idouba.com/best-practice-from-spring-cloud-to-istio/</loc>
+    <loc>https://idouba.com/istiocon2021-best-practice-from-spring-cloud-to-istio/</loc>
     <lastmod>2021-02-23T15:32:08+00:00</lastmod>
   </url><url>
     <loc>https://idouba.com/tags/springcloud/</loc>
@@ -291,6 +291,9 @@
     <lastmod>2018-11-29T15:23:04+00:00</lastmod>
   </url><url>
     <loc>https://idouba.com/tags/%E5%8F%91%E8%A1%A8/</loc>
+    <lastmod>2018-11-29T15:23:04+00:00</lastmod>
+  </url><url>
+    <loc>https://idouba.com/categories/%E5%8F%91%E8%A1%A8/</loc>
     <lastmod>2018-11-29T15:23:04+00:00</lastmod>
   </url><url>
     <loc>https://idouba.com/istio-tracing-meetup-02/</loc>
@@ -357,9 +360,6 @@
     <lastmod>2015-12-01T05:11:15+00:00</lastmod>
   </url><url>
     <loc>https://idouba.com/tags/executor/</loc>
-    <lastmod>2015-06-05T16:02:43+00:00</lastmod>
-  </url><url>
-    <loc>https://idouba.com/categories/%E5%8F%91%E8%A1%A8/</loc>
     <lastmod>2015-06-05T16:02:43+00:00</lastmod>
   </url><url>
     <loc>https://idouba.com/categories/%E5%B9%B6%E5%8F%91/</loc>

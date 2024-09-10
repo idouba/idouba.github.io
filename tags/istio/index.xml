@@ -9,11 +9,11 @@
     <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
     <lastBuildDate>Wed, 21 Aug 2024 15:32:08 +0000</lastBuildDate><atom:link href="https://idouba.com/tags/istio/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>最佳实践：Karmda和Istio提高分布式云的负载与流量韧性</title>
-      <link>https://idouba.com/best-practice-karmada-and-istio-improve-workload-traffic-resilience-of-production-distributed-cloud/</link>
+      <title>KubeCon2024：Karmda和Istio提高分布式云的负载与流量韧性的最佳实践</title>
+      <link>https://idouba.com/kubecon2024-best-practice-karmada-and-istio-improve-workload-traffic-resilience-of-production-distributed-cloud/</link>
       <pubDate>Wed, 21 Aug 2024 15:32:08 +0000</pubDate>
       
-      <guid>https://idouba.com/best-practice-karmada-and-istio-improve-workload-traffic-resilience-of-production-distributed-cloud/</guid>
+      <guid>https://idouba.com/kubecon2024-best-practice-karmada-and-istio-improve-workload-traffic-resilience-of-production-distributed-cloud/</guid>
       <description>
         
           
@@ -313,11 +313,11 @@ I am thrilled to introduce this definitive book on Istio service mesh technology
     </item>
     
     <item>
-      <title>服务网格替代 Hystrix 提升在线视频服务韧性的生产实践</title>
-      <link>https://idouba.com/online-video-upgrades-resilience-from-sc-circuit-breaker-to-service-mesh-kubecon2021/</link>
+      <title>KubeCon2021：服务网格替代 Hystrix 提升在线视频服务韧性的生产实践</title>
+      <link>https://idouba.com/kubecon2021-online-video-upgrades-resilience-from-sc-circuit-breaker-to-service-mesh-kubecon2021/</link>
       <pubDate>Sun, 12 Dec 2021 15:50:08 +0000</pubDate>
       
-      <guid>https://idouba.com/online-video-upgrades-resilience-from-sc-circuit-breaker-to-service-mesh-kubecon2021/</guid>
+      <guid>https://idouba.com/kubecon2021-online-video-upgrades-resilience-from-sc-circuit-breaker-to-service-mesh-kubecon2021/</guid>
       <description>
         
           
@@ -589,7 +589,7 @@ Istio 本身的内容在这里不多介绍，作为 Google 继 Kubernetes 之后
         
           
             接上文Istio调用链埋点原理剖析—是否真的“零修改”分享实录（上）
-Isito调用链** 调用链原理和场景 正如Service Mesh的诞生是为了解决大规模分布式服务访问的治理问题，调用链的出现也是为了对应于大规模的复杂的分布式系统运行中碰到的故障定位定界问题。大量的服务调用、跨进程、跨服务器，可能还会跨多个物理机房。无论是服务自身问题还是网络环境的问题导致调用上链路上出现问题都比较复杂，如何定位就比单进程的一个服务打印一个异常栈来找出某个方法要困难的多。需要有一个类似的调用链路的跟踪，经一次请求的逻辑规矩完整的表达出来，可以观察到每个阶段的调用关系，并能看到每个阶段的耗时和调用详细情况。Dapper, a Large-Scale Distributed Systems Tracing Infrastructure 描述了其中的原理和一般性的机制。模型中包含的术语也很多，理解最主要的两个即可：
+Isito调用链 调用链原理和场景 正如Service Mesh的诞生是为了解决大规模分布式服务访问的治理问题，调用链的出现也是为了对应于大规模的复杂的分布式系统运行中碰到的故障定位定界问题。大量的服务调用、跨进程、跨服务器，可能还会跨多个物理机房。无论是服务自身问题还是网络环境的问题导致调用上链路上出现问题都比较复杂，如何定位就比单进程的一个服务打印一个异常栈来找出某个方法要困难的多。需要有一个类似的调用链路的跟踪，经一次请求的逻辑规矩完整的表达出来，可以观察到每个阶段的调用关系，并能看到每个阶段的耗时和调用详细情况。Dapper, a Large-Scale Distributed Systems Tracing Infrastructure 描述了其中的原理和一般性的机制。模型中包含的术语也很多，理解最主要的两个即可：
 Trace：一次完整的分布式调用跟踪链路。 Span：跨服务的一次调用； 多个Span组合成一次Trace追踪记录。 上图是Dapper论文中的经典图示，左表示一个分布式调用关系。前端（A），两个中间层（B和C），以及两个后端（D和E）。用户发起一个请求时，先到达前端，再发送两个服务B和C。B直接应答，C服务调用后端D和E交互之后给A应答，A进而返回最终应答。要使用调用链跟踪，就是给每次调用添加TraceId、SpanId这样的跟踪标识和时间戳。
 右表示对应Span的管理关系。每个节点是一个Span，表示一个调用。至少包含Span的名、父SpanId和SpanId。节点间的连线下表示Span和父Span的关系。所有的Span属于一个跟踪，共用一个TraceId。从图上可以看到对前端A的调用Span的两个子Span分别是对B和C调用的Span，D和E两个后端服务调用的Span则都是C的子Span。
 调用链系统有很多实现，用的比较多的如zipkin，还有已经加入CNCF基金会并且的用的越来越多的Jaeger，满足Opentracing语义标准的就有这么多。
@@ -618,7 +618,8 @@ Inbound流量：对于经过Sidecar流入应用程序的流量，如果经过Sid
       <description>
         
           
-            **整理自在K8S技术社****关于Istio调用链的分享。** 前言 大家好，我是zhangchaomeng，来自华为Cloud BU，当前在做华为云应用服务网格。今天跟大家分享的主题是Istio调用链相关内容。通过剖析Istio的架构机制与Istio中调用链的工作原理来解答一个大家经常问道的一个问题：Istio是否像其官方文档中宣传的一样，对业务代码完全的无侵入，无需用做任何修改就可以完成所有的治理能力，包括调用链的埋点？
+            整理自2018年在K8S技术社区在腾讯大厦关于Istio调用链的分享。
+前言 大家好，我是zhangchaomeng，来自华为Cloud BU，当前在做华为云应用服务网格。今天跟大家分享的主题是Istio调用链相关内容。通过剖析Istio的架构机制与Istio中调用链的工作原理来解答一个大家经常问道的一个问题：Istio是否像其官方文档中宣传的一样，对业务代码完全的无侵入，无需用做任何修改就可以完成所有的治理能力，包括调用链的埋点？
 关于这个问题，可以提前透漏下，答案是让人有点沮丧的，得改点。在Isito中你不用在自己的代码里使用各种埋点的SDK来做埋点的逻辑，但是必须要有适当的配合的修改。
 为什么本来无侵入的Service Mesh形态的技术却要求我们开发者修改些代码，到底要做哪些修改？Istio中调用链到底是怎么工作的？在下面的内容中将逐个回答这些问题。
 本次分享的主题包括两部分: 第一部分作为背景和基础，介绍Istio的架构和机制；第二部分将重点介绍Istio调用链的相关内容，解答前面提出的几个问题。
@@ -641,6 +642,7 @@ Istio 总体架构 以上是Isito的总体架构。上面是数据面，下半�
 Istio其实专指控制面的几个服务组件：
 Pilot：Pilot干两个事情，一个是配置，就是前面功能介绍的智能路由和流量管理功能都是通过Pilot进行配置，并下发到Sidecar上去执行；另外一个是服务发现，可以对接不同的服务发现平台维护服务名和实例地址的关系并动态提供给Sidecar在服务请求时使用。Pilot的详细功能和机制见后面组件介绍。 Mixer：Mixer是Istio中比较特殊，当前甚至有点争议的组件。前面Isito核心功能中介绍的遥测和策略执行两个大特性均是Mixer提供。而Istio官方强调的集成和定制也是Mixer提供。即可以动态的配置和开发策略执行与遥测的后端，来实现对应的功能。Mixer的详细功能和机制见后面组件介绍。 Citadel：主要对应Istio核心功能中的安全部分。配合Pilot和Mixer实现秘钥和证书的管理、管理授权和审计，保证客户端和服务端的安全通信，通过内置的身份和凭证提供服务间的身份验证，并进而该通基于服务表示的策略执行。 Isito主要组件Pilot 如Istio架构中简介，Pilot实现服务发现和配置管理的功能。 作为服务发现，Pilot中定义了一个抽象的服务模型，包括服务、服务实例、版本等。并且只定义的服务发现的接口，并未实现服务发现的功能，而是通过Adapter机制以一种可扩展的方式来集成各种不同的服务发现，并转换成Istio通用的抽象模型。 如在Kubernetes中，Pilot中的Kubernetes适配器通过Kube-APIServer服务器得到Kubernetes中对应的资源信息。而对于像Eureka这种服务注册表，则是使用一个Eureka的HTTP Client去访问Eureka的名字服务的集群，获取服务实例的列表。不管哪种方式最终都转换成Pilot的标准服务发现定义，进而通过标准接口提供给Sidecar使用。
 而配置管理，则是定义并维护各种的流量规则，来实现负载均衡、熔断、故障注入、流量拆分等功能。并转换成Envoy中标准格式推送给Envoy，从而实现治理功能。所有的这些功能用户均不用修改代码接口完成。详细的配置方式可以参照Istio Traffic Routing中的规则定义。重点关注：VirtualService、 DestinationRule、 Gateway等规则定义。如可以使用流量规则来配置各种灰度发布，也可以通过注入一个故障来测试故障场景；可以配置熔断来进行故障恢复；并且可以对HTTP请求根据我们的需要进行重定向、重写，重试等操作。
+Istio主要组件Mixer Mixer是Isito特有的一个组件。主要做两个功能Check和Report，分别对应Istio官方宣传的两个重大特性策略执行和遥测功能。逻辑上理解每次服务间的请求都会通过proxy连接Mixer来进行处理，由Mixer来将请求派发到对应的后端上处理。通过扩展不同的后端来增强Mixer的能力。如可以做访问控制、配额等这样的控制，也可以对接不同的监控后端来做监控数据的收集，进而提供网格运行的可观察性能力。 Mixer通过使用通用插件模型实现的对接不同后端，避免了proxy为了完成不同的功能而去对接各种不同的后端。每个插件都被称为Adapter。对于每个请求Sidecar会从每一次请求中收集相关信息，如请求的路径，时间，源IP，目地服务，tracing头，日志等，并请这些属性上报给Mixer。Mixer和后端服务之间是通过适配器进行连接的，Mixer将Sidecar上报的内容通过适配器发送给后端服务。可以在不停止应用服务的情况下动态切换后台服务。
           
           
         
