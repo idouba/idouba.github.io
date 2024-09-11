@@ -30,6 +30,23 @@ Long name Short name Description DownstreamConnectionTermination DC Downstream c
     </item>
     
     <item>
+      <title>ServiceMeshCon2021：Kubernetes 和 Service Mesh 升级汽车公司的 IT 基础设施</title>
+      <link>https://idouba.com/servicemeshcon2021-kubernetes-and-service-mesh-upgrade-automobile-company%E2%80%99s-it-infrastructure/</link>
+      <pubDate>Tue, 04 May 2021 12:40:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/servicemeshcon2021-kubernetes-and-service-mesh-upgrade-automobile-company%E2%80%99s-it-infrastructure/</guid>
+      <description>
+        
+          
+            记录在2021年5月4日在欧洲ServiceCon上发表的技术演讲《Kubernetes and Service Mesh Upgrade Automobile Company’s IT Infrastructure》，分享了一个服务网格在一个客户的实践案例。
+议题简介： Rapid business development brings a great challenge to automobile manufacturing company’s IT platforms. In this presentation, Chaomeng will share a practice of upgrading the traditional IT built microservice platform to cloud native infrastructure. That is gradually transforming the self-developed inner DNS plus ELB for service discovery and load balance, per VM nginx for inbound traffic management, metric, and access log, to Kubernetes and service mesh.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
       <title>IstioCon2021：SpringClod到Istio最佳实践</title>
       <link>https://idouba.com/istiocon2021-best-practice-from-spring-cloud-to-istio/</link>
       <pubDate>Tue, 23 Feb 2021 15:32:08 +0000</pubDate>

@@ -769,6 +769,23 @@ I am thrilled to introduce this definitive book on Istio service mesh technology
     </item>
     
     <item>
+      <title>ServiceMeshCon2021：Kubernetes 和 Service Mesh 升级汽车公司的 IT 基础设施</title>
+      <link>https://idouba.com/servicemeshcon2021-kubernetes-and-service-mesh-upgrade-automobile-company%E2%80%99s-it-infrastructure/</link>
+      <pubDate>Tue, 04 May 2021 12:40:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/servicemeshcon2021-kubernetes-and-service-mesh-upgrade-automobile-company%E2%80%99s-it-infrastructure/</guid>
+      <description>
+        
+          
+            记录在2021年5月4日在欧洲ServiceCon上发表的技术演讲《Kubernetes and Service Mesh Upgrade Automobile Company’s IT Infrastructure》，分享了一个服务网格在一个客户的实践案例。
+议题简介： Rapid business development brings a great challenge to automobile manufacturing company’s IT platforms. In this presentation, Chaomeng will share a practice of upgrading the traditional IT built microservice platform to cloud native infrastructure. That is gradually transforming the self-developed inner DNS plus ELB for service discovery and load balance, per VM nginx for inbound traffic management, metric, and access log, to Kubernetes and service mesh.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
       <title>IstioCon2021：SpringClod到Istio最佳实践</title>
       <link>https://idouba.com/istiocon2021-best-practice-from-spring-cloud-to-istio/</link>
       <pubDate>Tue, 23 Feb 2021 15:32:08 +0000</pubDate>
@@ -805,6 +822,25 @@ Istio中虽然没有显示的提供这样一个状态图，但是大家熟悉Ist
 3）升级所有应用以应对服务管理需求变化 第三个问题是一个比较典型的问题。客户有一个公共团队专门维护了一套基于Spring cloud的自有开发框架，在每次升级开发框架时，不得不求着业务团队来升级自己的服务。经常会SDK自身修改测试工作量不大，但却要制定很长周期的升级计划，来对上千个基于这个SDK开发的服务分组重新编译，打包，升级，而且经常要陪着业务团队在夜间变更。业务团队因为自身没有什么改动，考虑到这个升级带来的工作量和线上风险，一般也没有什么动力。
 4）从单体式架构向微服务架构迁移 这是一个比较普遍的问题，就是渐进的微服务化。马丁福勒在著名的文章单体到微服务的拆分中（https://martinfowler.com/articles/break-monolith-into-microservices.html ）也提到了对渐进微服务化的倡议，如何能从业务上将一个大的业务分割，解耦，然后逐步微服务化。马丁福勒强调 “解耦的是业务能力不是代码” ，大神将代码的解耦留给了开发者。
 但是站在开发者的角度讲渐进的微服务不是一个容易的事情。以基于Spring cloud框架进行微服务开发为例，为了所有的微服务间进行统一的服务发现、负载均衡，消费和执行同样的治理策略，必须要求所有的微服务基于同样的，甚至是统一版本的SDK来开发。
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>KubeCon2020：Kubernetes和服务网格在冠状病毒期间助力在线协作</title>
+      <link>https://idouba.com/kubeco2020-kubernetes-and-service-mesh-helps-online-collaboration-during-coronavirus-time/</link>
+      <pubDate>Sat, 01 Aug 2020 16:20:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/kubeco2020-kubernetes-and-service-mesh-helps-online-collaboration-during-coronavirus-time/</guid>
+      <description>
+        
+          
+            记录在2020年8月1日在KubeCon上发表的技术演讲《Kubernetes &amp;amp; Service Mesh Helps Online Collaboration During Coronavirus Time》，和来自云会议的同事谢飞一起分享了2019年新冠疫情期间Istio在云会议的应用。
+新冠疫情在2019年底爆发后，远程办公需求指数增长。云会议的业务快速扩展，给下层基础设施带来了强烈的挑战，就包括刚上线不久的服务网格。
+不会忘记和少东、佳青三人组打仗一样长时间高强度支撑会议的同时解决现网问题的哪些日日夜夜。记得当时都隔离在家里办公，早上起床坐在床上没有洗漱就开始了，中午吃饭时少东和佳青好几次是边做饭边在会上看问题。而自悲催的是他们的老大哥我，春节回老家了，初二一起严重紧急返杭。从此就被豆妈隔离在隔壁儿子的小房间，房间里儿子的学习桌也给搬走了。于是这个月里常规的姿势是这样：坐在一个小板凳上，笔记本放在比它面积还小的一个落地小米空气净化器上，带着大耳机，鼠标在大腿上摩擦。更悲催的是，没过几天小房间的灯坏掉了，于是这个画面又增加了一份昏暗的色调，特别是从傍晚到沈阳，就是一个电脑屏幕前趴着一个鬼影，看着滚动的控制台日志，对着耳机喊叫。
+简介： During the period of coronavirus, lots of people required stay at home or different office, use Welink, an online collaboration platform, work together. The exponentially increased online users bring great performance and capacity challenges. In this Session, Chaomeng and Fei will share their technical experience of Kubernetes&amp;amp;Istio in Welink supporting large traffic from large amount of users’ meeting, mailing and other online collaborations.
           
           
         
