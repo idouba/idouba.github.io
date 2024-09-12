@@ -23,7 +23,7 @@
 
 <meta property="og:type" content="article">
 <meta name="description" content="记录在北京时间2月23日，在全球首届社区峰会IstioCon 2021中，发表的《Best practice:from Spring Cloud to Istio》技术演讲。回答经常被客户和同事们问到的一个问题，SpringCloud和Istio的关系，如何演进。
-以下为演讲全文: 大家好，我是来自华为云的工程师。很荣 …" />
+议题： 正文: 大家好，我是来自华为云的工程师。很荣幸 …" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="">
 <meta name="twitter:title" content="IstioCon2021：SpringClod到Istio最佳实践" />
@@ -31,7 +31,7 @@
 <meta property="og:url" content="https://idouba.com/istiocon2021-best-practice-from-spring-cloud-to-istio/" />
 <meta property="og:title" content="IstioCon2021：SpringClod到Istio最佳实践" />
 <meta property="og:description" content="记录在北京时间2月23日，在全球首届社区峰会IstioCon 2021中，发表的《Best practice:from Spring Cloud to Istio》技术演讲。回答经常被客户和同事们问到的一个问题，SpringCloud和Istio的关系，如何演进。
-以下为演讲全文: 大家好，我是来自华为云的工程师。很荣 …" />
+议题： 正文: 大家好，我是来自华为云的工程师。很荣幸 …" />
 <meta property="og:image" content="https://idouba.com/images/thumbnail.png" />
 
 <link rel="apple-touch-icon" sizes="180x180" href="https://idouba.com/icons/apple-touch-icon.png">
@@ -170,6 +170,7 @@
 
     <div class="post_body"><hr>
 <p>记录在北京时间2月23日，在全球首届社区峰会IstioCon 2021中，发表的<a href="https://events.istio.io/istiocon-2021/sessions/best-practice%EF%BC%9Afrom-spring-cloud-to-istio/">《Best practice:from Spring Cloud to Istio》</a>技术演讲。回答经常被客户和同事们问到的一个问题，SpringCloud和Istio的关系，如何演进。</p>
+<h3 id="议题"><strong>议题：</strong></h3>
 <p><figure>
   <picture>
 
@@ -195,16 +196,16 @@
     </picture>
 </figure>
 </p>
-<h4 id="以下为演讲全文">以下为演讲全文:</h4>
+<h3 id="正文"><strong>正文:</strong></h3>
 <p>大家好，我是来自华为云的工程师。很荣幸有机会和大家分享Istio在生产中使用的实际案例。</p>
 <p>华为云应用服务网格从2018年在公有云上线， 作为全球最早的几个网格服务之一，经历和见证了从早期对网格的了解、尝试到当前大规模使用的过程。服务的客户越来越多，场景也越来越复杂。这其中的通用功能作为feature大都贡献到Istio社区，解决方案层面的实践也希望通过这样的机会和大家交流。</p>
 <p>本次我选取的主题是Spring Cloud to Istio。来自我们客户的Spring cloud的项目和Istio的结合与迁移案例。</p>
-<h3 id="演讲主要包含四部分的内容"><strong>演讲主要包含四部分的内容：</strong></h3>
+<h4 id="演讲主要包含四部分的内容"><strong>演讲主要包含四部分的内容：</strong></h4>
 <p>1）背景介绍</p>
 <p>2）使用Spring cloud微服务框架遇到的问题</p>
 <p>3）解决方案</p>
 <p>4）通过示例来描述方案的实践细节</p>
-<h3 id="背景介绍">背景介绍</h3>
+<h4 id="背景介绍">背景介绍</h4>
 <p><figure>
   <picture>
 
@@ -392,9 +393,9 @@
 <p>左边为经典的Hystrix的状态迁移图。一段时间内实例连续的错误次数超过阈值则进入熔断开启状态，不接受请求；隔离一段时间后，会从熔断状态迁移到半熔断状态，如果正常则进入熔断关闭状态，可以接收请求；如果不正常则还是进入熔断开启状态。</p>
 <p>Istio中虽然没有显示的提供这样一个状态图，但是大家熟悉Istio规则和行为应该会发现，Istio中OutlierDection的阈值规则也都是这样设计的。两者的不同是Spring cloud的熔断是在SDK中Hystrix执行，Istio中是数据面proxy执行。Hystrix因为在业务代码中，允许用户通过编程做一些控制。</p>
 <p>以上分析可以看到服务发现、负载均衡和熔断，能力和机制都是类似的。如果忽略图上的某些细节，粗的看框图模型都是完全一样的，对比表格中也一般只有一项就是执行位置不同，这一点不同在实际应用中带来非常大的差异。</p>
-<h3 id="使用spring-cloud微服务框架遇到的问题">使用Spring cloud微服务框架遇到的问题</h3>
+<h4 id="使用spring-cloud微服务框架遇到的问题">使用Spring cloud微服务框架遇到的问题</h4>
 <p>本次演讲的重点是实践。以下是我们客户找到我们TOP的几个的问题，剖析下用户使用传统微服务框架碰到了哪些问题，这些大部分也是他们选择网格的最大动力。</p>
-<h4 id="1多语言问题"><strong>1）多语言问题</strong></h4>
+<h5 id="1多语言问题"><strong>1）多语言问题</strong></h5>
 <p><figure>
   <picture>
 
@@ -422,7 +423,7 @@
 </p>
 <p>在企业应用开发下，一个业务使用统一的开发框架是非常合理常见的，很多开发团队为了提升效率，经常还会维护有自己公司或者团队的通用开发框架。当然因为大部分业务系统都是基于Java开发，所以Spring cloud开发框架，或者衍生于Spring cloud的各种开发框架使用的尤其广泛。</p>
 <p>但是在云原生场景下，业务一般更加复杂多样，特别是涉及到很多即存的老系统。我们不能要求为了微服务化将在用的一组成熟服务用Spring cloud重写下。用户非常希望有一种方式不重写原来的系统也能对其进行应用层服务访问管理。</p>
-<h4 id="2将spring-cloud的微服务运行在k8s上会有很大的概率出现服务发现不及时"><strong>2）将Spring cloud的微服务运行在K8s上会有很大的概率出现服务发现不及时</strong></h4>
+<h5 id="2将spring-cloud的微服务运行在k8s上会有很大的概率出现服务发现不及时"><strong>2）将Spring cloud的微服务运行在K8s上会有很大的概率出现服务发现不及时</strong></h5>
 <p><figure>
   <picture>
 
@@ -450,7 +451,7 @@
 </p>
 <p>前面介绍过Spring cloud服务发现是基于各个微服务先向注册中心进行服务注册的数据来实现的，在传统Spring cloud场景下，当微服务部署在VM上，服务动态变化要求没有那么高，顶多个别实例运行不正常，通过服务发现的健康检查就足够了。但是在k8s场景下，服务实例动态迁移是非常正常场景。如图示，producer的某个Pod已经从一个节点迁移到另外一个节点了，这时需要新的pod2的producer实例向eureka注册，老实例Pod1要去注册。</p>
 <p>如果该情况频繁发生，会出现注册中心数据维护不及时，导致服务发现和负载均衡到旧的实例pod1上，从而引起访问失败的情况。</p>
-<h4 id="3升级所有应用以应对服务管理需求变化"><strong>3）升级所有应用以应对服务管理需求变化</strong></h4>
+<h5 id="3升级所有应用以应对服务管理需求变化"><strong>3）升级所有应用以应对服务管理需求变化</strong></h5>
 <p><figure>
   <picture>
 
@@ -477,7 +478,7 @@
 </figure>
 </p>
 <p>第三个问题是一个比较典型的问题。客户有一个公共团队专门维护了一套基于Spring cloud的自有开发框架，在每次升级开发框架时，不得不求着业务团队来升级自己的服务。经常会SDK自身修改测试工作量不大，但却要制定很长周期的升级计划，来对上千个基于这个SDK开发的服务分组重新编译，打包，升级，而且经常要陪着业务团队在夜间变更。业务团队因为自身没有什么改动，考虑到这个升级带来的工作量和线上风险，一般也没有什么动力。</p>
-<h4 id="4从单体式架构向微服务架构迁移"><strong>4）从单体式架构向微服务架构迁移</strong></h4>
+<h5 id="4从单体式架构向微服务架构迁移"><strong>4）从单体式架构向微服务架构迁移</strong></h5>
 <p><figure>
   <picture>
 
@@ -507,7 +508,7 @@
 <p>但是站在开发者的角度讲渐进的微服务不是一个容易的事情。以基于Spring cloud框架进行微服务开发为例，为了所有的微服务间进行统一的服务发现、负载均衡，消费和执行同样的治理策略，必须要求所有的微服务基于同样的，甚至是统一版本的SDK来开发。</p>
 <p>当然我们客户在这种情况下也有基于API层面做适配，将原有的未微服务化的和已微服务化的并存，使用这种类似于灰度方式，实际操作非常麻烦。</p>
 <p>曾经有客户问过有没有不用费劲搞两套，是否可以直接有些大的单体微服务化，另外一些单体很长时间内完全不动，直到有时间或者认为安全想动它的时候去动。</p>
-<h3 id="解决方案">解决方案</h3>
+<h4 id="解决方案">解决方案</h4>
 <p>对于客户实际碰到的4个典型的微服务框架的问题，我们推荐的解决方案都是服务网格。下面我们分别看下Istio如何解决上面的几个问题。</p>
 <p><figure>
   <picture>
@@ -617,7 +618,7 @@
 </p>
 <p>关于渐进微服务化的问题，使用Isito服务网格可以非常完美的解决。Istio治理的是服务间的访问，只要一个服务被其他服务访问，就可以通过Istio来进行管理，不管是微服务还是单体。Istio接管了服务的流量后，单体和微服务都可以接收统一的规则进行统一的管理。</p>
 <p>如图中，在微服务化的过程中，可以对某个单体应用svc1根据业务拆分优先进行微服务化，拆分成三个微服务svc11、svc12和svc13，svc1服务依赖的另外一个单体应用svc2不用做任何变更，在网格中运行起来就可以和另外三个微服务一样的被管理。同样在运行一段时间后，svc2服务可以根据自身的业务需要再进行微服务化。从而尽量避免一次大的重构带来的工作量和业务迁移的风险，真正做到马丁富勒倡导的渐进微服务化的实践。</p>
-<h3 id="实践">实践</h3>
+<h4 id="实践">实践</h4>
 <p>以上是对实际工作中客户的几个典型问题的解决方案。在实践中，怎么把这些解决方案落地呢？下面基于实际客户案例总结，分享具体的实践。</p>
 <p><figure>
   <picture>
@@ -880,8 +881,8 @@
 <p>即实现了故障恢复。</p>
 </li>
 </ul>
-<h3 id="结语">结语</h3>
-<p><strong>最后，通过微服务、容器、k8s和Istio的关系图来总结今天的内容：</strong></p>
+<h4 id="结语">结语</h4>
+<p>最后，通过微服务、容器、k8s和Istio的关系图来总结今天的内容：</p>
 <p><figure>
   <picture>
 
@@ -913,7 +914,13 @@
 <p>4）也是我们推荐的方案，使用Istio进行微服务治理正在成为越来越多用户的技术选择。</p>
 <p>以上四个关系顺时针结合在一起为我们的解决方案构造一个完整的闭环。</p>
 <p>完。</p>
-<p>附：<a href="https://events.istio.io/istiocon-2021/slides/b5p-SpringCloud-ZhangChaomeng.pdf">演讲稿</a></p>
+<h3 id="附"><strong>附：</strong></h3>
+<ul>
+<li><a href="https://events.istio.io/istiocon-2021/slides/b5p-SpringCloud-ZhangChaomeng.pdf">演讲材料(官方Slides)</a></li>
+<li><a href="https://www.youtube.com/embed/YAF2ViSCcZY">Video(YouTube)</a></li>
+<li><a href="https://www.bilibili.com/video/BV1Kh411X72R/">视频(国内)</a></li>
+<li><a href="https://events.istio.io/istiocon-2021/sessions/best-practice%EF%BC%9Afrom-spring-cloud-to-istio/">官方Sched主页</a></li>
+</ul>
 
     </div>
 <div class="post_comments">

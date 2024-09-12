@@ -23,7 +23,7 @@
 
 <meta property="og:type" content="article">
 <meta name="description" content="记录在2024年8月21日在香港Kubecon上发表的技术演讲《Best Practice: Karmada &amp; Istio Improve Workload &amp; Traffic Resilience of Production Distributed Cloud》
-大家好，我是张超盟，来自华为云 ，我 …" />
+议题： The …" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="">
 <meta name="twitter:title" content="KubeCon2024：Karmda和Istio提高分布式云的负载与流量韧性的最佳实践" />
@@ -31,7 +31,7 @@
 <meta property="og:url" content="https://idouba.com/kubecon2024-best-practice-karmada-and-istio-improve-workload-traffic-resilience-of-production-distributed-cloud/" />
 <meta property="og:title" content="KubeCon2024：Karmda和Istio提高分布式云的负载与流量韧性的最佳实践" />
 <meta property="og:description" content="记录在2024年8月21日在香港Kubecon上发表的技术演讲《Best Practice: Karmada &amp; Istio Improve Workload &amp; Traffic Resilience of Production Distributed Cloud》
-大家好，我是张超盟，来自华为云 ，我 …" />
+议题： The …" />
 <meta property="og:image" content="https://idouba.com/images/thumbnail.png" />
 
 <link rel="apple-touch-icon" sizes="180x180" href="https://idouba.com/icons/apple-touch-icon.png">
@@ -126,7 +126,7 @@
 </span>
     <span class="post_date">
       Aug 21, 2024</span>
-    <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/kubecon/' title="Kubecon" class="post_tag button button_translucent">Kubecon
+    <span class="post_time"> · 2 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/kubecon/' title="Kubecon" class="post_tag button button_translucent">Kubecon
         </a><a href='https://idouba.com/tags/istio/' title="Istio" class="post_tag button button_translucent">Istio
         </a><a href='https://idouba.com/tags/karmada/' title="Karmada" class="post_tag button button_translucent">Karmada
         </a><a href='https://idouba.com/tags/kubernetes/' title="Kubernetes" class="post_tag button button_translucent">Kubernetes
@@ -172,6 +172,35 @@
 
     <div class="post_body"><hr>
 <p>记录在2024年8月21日在香港Kubecon上发表的技术演讲《<a href="https://kccncossaidevchn2024.sched.com/event/910468c6cadcce3597d63634a1ab4635">Best Practice: Karmada &amp; Istio Improve Workload &amp; Traffic Resilience of Production Distributed Cloud</a>》</p>
+<h3 id="议题"><strong>议题：</strong></h3>
+<p><figure>
+  <picture>
+
+    
+      
+        
+        
+        
+        
+        
+        
+    <img
+      loading="lazy"
+      decoding="async"
+      alt=""
+      
+        class="image_figure image_internal image_unprocessed"
+        src="../picture/2024-08-21-karmada-istio-resilience/desc.png"
+      
+      
+    />
+
+    </picture>
+</figure>
+</p>
+<p>The Distributed cloud offers better resilience by providing redundancy, scalability and flexibility, especially for cloud native applications. However the complexity of multi-cluster workload and traffic management in hybrid or multi-cloud environment brings huge challenges in practice, such as the number of overall multi-cluster workload instances serve for customer request decreased when some unhealthy ones isolated in case of failures. In this speech, Chaomeng introduces a production practice of Karmada and Istio work together to promote resilience of multi-cluster application. How Karmada and Istio policies configured in a centralized control plane controls both replica and traffic distribution across cluster automatically. In case of failures, how Istio’s failover acts to remove unhealthy endpoints from global load balancing pool, and how Karmada rebuild the according number of instance in other healthy clusters, ensure multi-cluster instances always meet the capacity design.</p>
+<p>分布式云通过提供冗余、可伸缩性和灵活性，特别是对于云原生应用程序，提供了更好的弹性。然而，在混合或多云环境中的多集群工作负载和流量管理的复杂性在实践中带来了巨大挑战，例如当一些不健康的实例在故障情况下被隔离时，为客户请求提供服务的整体多集群工作负载实例数量减少。 在这次演讲中，Chaomeng介绍了Karmada和Istio共同推动多集群应用程序弹性的生产实践。Karmada和Istio策略如何在集中控制平面中配置，自动控制跨集群的副本和流量分发。在发生故障时，Istio的故障转移如何从全局负载均衡池中移除不健康的端点，以及Karmada如何在其他健康集群中重新构建相应数量的实例，确保多集群实例始终满足容量设计。</p>
+<h3 id="正文">正文：</h3>
 <img src="../picture/2024-08-21-karmada-istio-resilience/01.png" style="zoom:80%;" />
 <p>大家好，我是张超盟，来自华为云 ，我今天带来的是一个有关服务韧性的话题。将介绍在分布式云场景下，Karmada和Istio相互配合，管理多K8s集群的负载和流量，改善服务韧性的实践。</p>
 <img src="../picture/2024-08-21-karmada-istio-resilience/02.png"  style="zoom:80%;" />
@@ -253,7 +282,7 @@
 <img src="../picture/2024-08-21-karmada-istio-resilience/26.png"  style="zoom:80%;" />
 <p>以上是今天分享的全部内容，但只是我们在生产中解决的部分问题。我就将继续努力，在UCS中以云平台的方式保证应用韧性，帮助用户守护好业务下限，用户可以专注构建竞争力，不断冲击业务上限，从而取得商业成功。</p>
 <p>谢谢大家。</p>
-<h4 id="附">附：</h4>
+<h3 id="附">附：</h3>
 <ul>
 <li><a href="https://static.sched.com/hosted_files/kccncossaidevchn2024/e6/Best%20Practice%20Karmada%20%26%20Istio%20Improve%20Workload%20%26%20Traffic%20Resilience%20of%20Production%20Distributed%20Cloud%28zhangchaomeng%40huawei%29.pdf?_gl=1*e6r00s*_gcl_au*MTE5MjYzOTE3Mi4xNzI1NTQ2MTAw*FPAU*MTE5MjYzOTE3Mi4xNzI1NTQ2MTAw">演讲材料(官方Slides)</a></li>
 <li><a href="https://www.bilibili.com/video/BV1TQHVewEj3/">视频（国内）</a></li>

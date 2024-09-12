@@ -22,18 +22,16 @@
 <meta property="og:locale" content="en" />
 
 <meta property="og:type" content="article">
-<meta name="description" content="KubeCon2021 和世宇做的一个技术实践分享，总结了下一起把网格在人人视频中落地的部分经验。
-摘要： 作为中国领先的在线视频共享平台，人人视频业务的快速发展给其 IT 基础设施带来了巨大挑战。日益增长的复杂性、容量和韧性要求给当前基于 Spring Cloud 熔断器的微服务带来了新的问题。
- …" />
+<meta name="description" content="记录在KubeCon2021上发表的技术演讲《Online Video upgrades resilience from SC Circuit Breaker to Service Mesh》，和世宇做的一个技术实践分享，总结了下一起把网格在人人视频中落地的部分经验。。
+议题： 作为中国领先的在线视频共享平台，人人视频 …" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="">
 <meta name="twitter:title" content="KubeCon2021：服务网格替代 Hystrix 提升在线视频服务韧性的生产实践" />
 <meta name="twitter:image" content="https://idouba.com/images/thumbnail.png"/>
 <meta property="og:url" content="https://idouba.com/kubecon2021-online-video-upgrades-resilience-from-sc-circuit-breaker-to-service-mesh-kubecon2021/" />
 <meta property="og:title" content="KubeCon2021：服务网格替代 Hystrix 提升在线视频服务韧性的生产实践" />
-<meta property="og:description" content="KubeCon2021 和世宇做的一个技术实践分享，总结了下一起把网格在人人视频中落地的部分经验。
-摘要： 作为中国领先的在线视频共享平台，人人视频业务的快速发展给其 IT 基础设施带来了巨大挑战。日益增长的复杂性、容量和韧性要求给当前基于 Spring Cloud 熔断器的微服务带来了新的问题。
- …" />
+<meta property="og:description" content="记录在KubeCon2021上发表的技术演讲《Online Video upgrades resilience from SC Circuit Breaker to Service Mesh》，和世宇做的一个技术实践分享，总结了下一起把网格在人人视频中落地的部分经验。。
+议题： 作为中国领先的在线视频共享平台，人人视频 …" />
 <meta property="og:image" content="https://idouba.com/images/thumbnail.png" />
 
 <link rel="apple-touch-icon" sizes="180x180" href="https://idouba.com/icons/apple-touch-icon.png">
@@ -128,7 +126,7 @@
 </span>
     <span class="post_date">
       Dec 12, 2021</span>
-    <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/kubecon/' title="KubeCon" class="post_tag button button_translucent">KubeCon
+    <span class="post_time"> · 2 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/kubecon/' title="KubeCon" class="post_tag button button_translucent">KubeCon
         </a><a href='https://idouba.com/tags/istio/' title="Istio" class="post_tag button button_translucent">Istio
         </a><a href='https://idouba.com/tags/spring-cloud/' title="Spring Cloud" class="post_tag button button_translucent">Spring Cloud
         </a><a href='https://idouba.com/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/' title="微服务" class="post_tag button button_translucent">微服务
@@ -171,10 +169,38 @@
   </div>
 
     <div class="post_body"><hr>
-<p><a href="https://kccncosschn21.sched.com/event/pcbn/nanokui-pei-wu-yao-spring-cloud-j-wa-jie-online-video-upgrades-resilience-from-sc-circuit-breaker-to-service-mesh-xu-shiyu-rr-video-zhang-cahomeng-huawei">KubeCon2021</a> 和世宇做的一个技术实践分享，总结了下一起把网格在人人视频中落地的部分经验。</p>
-<h3 id="摘要"><strong>摘要：</strong></h3>
+<p>记录在KubeCon2021上发表的技术演讲《<a href="https://kccncosschn21.sched.com/event/pcbn/nanokui-pei-wu-yao-spring-cloud-j-wa-jie-online-video-upgrades-resilience-from-sc-circuit-breaker-to-service-mesh-xu-shiyu-rr-video-zhang-cahomeng-huawei">Online Video upgrades resilience from SC Circuit Breaker to Service Mesh</a>》，和世宇做的一个技术实践分享，总结了下一起把网格在人人视频中落地的部分经验。。</p>
+<h3 id="议题"><strong>议题：</strong></h3>
+<p><figure>
+  <picture>
+
+    
+      
+        
+        
+        
+        
+        
+        
+    <img
+      loading="lazy"
+      decoding="async"
+      alt=""
+      
+        class="image_figure image_internal image_unprocessed"
+        src="../picture/2021-12-12-online-video-upgrades-resilience-from-sc-circuit-breaker-to-service-mesh-kubecon2021/desc.png"
+      
+      
+    />
+
+    </picture>
+</figure>
+</p>
 <p>作为中国领先的在线视频共享平台，人人视频业务的快速发展给其 IT 基础设施带来了巨大挑战。日益增长的复杂性、容量和韧性要求给当前基于 Spring Cloud 熔断器的微服务带来了新的问题。</p>
 <p>在KubeCon2021上，华为云应用服务网格架构师张超盟和人人视频技术主管徐世宇介绍了大规模生产环境中的服务网格韧性实践，包括不健康实例的透明自动隔离、故障自动恢复和自我修复、连接池管理、重试、限流、超时和分布式跟踪等。通过分析熔断器模式和比较 Spring Cloud 熔断器与服务网格在各自生产实践中不同的实现方式，结果表明优化不只是改善了系统的可靠性和可用性，还使得开发和操作工作更简单便捷。</p>
+<p>As one leading Online Video sharing platform in China, RR's rapid business development introduce great challenge on its IT infrastructure. The increasing complexity, capacity and resilience requirement brings new problems to current Spring Cloud circuit breaker based micro services.</p>
+<p>In this presentation, Chaomeng and Shiyu will focus on service mesh resilience practice in large scale production environment, including transparent auto-isolation of the unhealthy instance, auto-recovery and self-healing, connection pool management, retry, fine gained rate limit and distributed tracing, latency metrics. By analyzing circuit breaker pattern and comparing the different implementation of Spring Cloud circuit breaker and service mesh in their production practice, they show that the optimization not only improves system reliability and availability but also makes dev and ops works simpler and easier.</p>
+<h3 id="正文"><strong>正文：</strong></h3>
 <p><figure>
   <picture>
 
@@ -200,7 +226,6 @@
     </picture>
 </figure>
 </p>
-<h3 id="正文">正文：</h3>
 <p>我是张超盟，来自华为云。本次大会我和人人视频的架构师徐世宇带来关于服务韧性的分享。结合一个生产中的实际案例，介绍网格等云原生解决方案替换原有基于Spring Cloud Hystrix在提升服务韧性的实践细节。</p>
 <p><figure>
   <picture>
@@ -959,7 +984,7 @@
     </picture>
 </figure>
 以上就是本次大会分享的主要内容，谢谢大家。</p>
-<h3 id="附">附：</h3>
+<h3 id="附"><strong>附：</strong></h3>
 <ul>
 <li><a href="https://static.sched.com/hosted_files/kccncosschn21/23/Online%20Video%20upgrades%20resilience%20from%20SC%20Circuit%20Breaker%20to%20ServiceMesh....pdf">演讲材料(官方Slides)</a></li>
 <li><a href="https://www.youtube.com/watch?v=K16sFwAjwus">Video(YouTube)</a></li>

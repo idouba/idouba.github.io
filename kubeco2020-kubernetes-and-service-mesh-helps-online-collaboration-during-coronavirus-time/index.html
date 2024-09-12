@@ -23,7 +23,7 @@
 
 <meta property="og:type" content="article">
 <meta name="description" content="记录在2020年8月1日在KubeCon上发表的技术演讲《Kubernetes &amp; Service Mesh Helps Online Collaboration During Coronavirus Time》，和来自云会议的同事谢飞一起分享了2019年新冠疫情期间Istio在云会议的应用。
-新冠疫情 …" />
+议题： …" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="">
 <meta name="twitter:title" content="KubeCon2020：Kubernetes和服务网格在冠状病毒期间助力在线协作" />
@@ -31,7 +31,7 @@
 <meta property="og:url" content="https://idouba.com/kubeco2020-kubernetes-and-service-mesh-helps-online-collaboration-during-coronavirus-time/" />
 <meta property="og:title" content="KubeCon2020：Kubernetes和服务网格在冠状病毒期间助力在线协作" />
 <meta property="og:description" content="记录在2020年8月1日在KubeCon上发表的技术演讲《Kubernetes &amp; Service Mesh Helps Online Collaboration During Coronavirus Time》，和来自云会议的同事谢飞一起分享了2019年新冠疫情期间Istio在云会议的应用。
-新冠疫情 …" />
+议题： …" />
 <meta property="og:image" content="https://idouba.com/images/thumbnail.png" />
 
 <link rel="apple-touch-icon" sizes="180x180" href="https://idouba.com/icons/apple-touch-icon.png">
@@ -194,16 +194,7 @@
 </figure>
 </p>
 <p>记录在2020年8月1日在KubeCon上发表的技术演讲《<a href="https://cnosvschina20eng.sched.com/event/cp9m/kubernetes-service-mesh-helps-online-collaboration-during-coronavirus-time-chaomeng-zhang-xie-fei-huawei">Kubernetes &amp; Service Mesh Helps Online Collaboration During Coronavirus Time</a>》，和来自云会议的同事谢飞一起分享了2019年新冠疫情期间Istio在云会议的应用。</p>
-<p>新冠疫情在2019年底爆发后，远程办公需求指数增长。云会议的业务快速扩展，给下层基础设施带来了强烈的挑战，就包括刚上线不久的服务网格。</p>
-<p>不会忘记和少东、佳青三人组打仗一样长时间高强度支撑会议的同时解决现网问题的哪些日日夜夜。记得当时都隔离在家里办公，早上起床坐在床上没有洗漱就开始了，中午吃饭时少东和佳青好几次是边做饭边在会上看问题。而自悲催的是他们的老大哥我，春节回老家了，初二一起严重紧急返杭。从此就被豆妈隔离在隔壁儿子的小房间，房间里儿子的学习桌也给搬走了。于是这个月里常规的姿势是这样：坐在一个小板凳上，笔记本放在比它面积还小的一个落地小米空气净化器上，带着大耳机，鼠标在大腿上摩擦。更悲催的是，没过几天小房间的灯坏掉了，于是这个画面又增加了一份昏暗的色调，特别是从傍晚到沈阳，就是一个电脑屏幕前趴着一个鬼影，看着滚动的控制台日志，对着耳机喊叫。</p>
-<h4 id="简介">简介：</h4>
-<p>During the period of coronavirus, lots of people required stay at home or different office, use Welink, an online collaboration platform, work together. The exponentially increased online users bring great performance and capacity challenges. In this Session, Chaomeng and Fei will share their technical experience of Kubernetes&amp;Istio in Welink supporting large traffic from large amount of users’ meeting, mailing and other online collaborations.
-The talk focus on practice in large scale productive environment with heavy traffic. Includes:</p>
-<ol>
-<li>Implement a predictive scaling algorithm to improve the scaling efficiency.</li>
-<li>Propose a more flexible route chain to decouple configuration complexity (ready to contribute to community)</li>
-<li>Adopt microservice level canary release, non-intrusive monitoring, interface level rate limiting and transparent service security.</li>
-</ol>
+<h3 id="议题"><strong>议题：</strong></h3>
 <p><figure>
   <picture>
 
@@ -229,7 +220,17 @@ The talk focus on practice in large scale productive environment with heavy traf
     </picture>
 </figure>
 </p>
-<h4 id="附">附：</h4>
+<p>During the period of coronavirus, lots of people required stay at home or different office, use Welink, an online collaboration platform, work together. The exponentially increased online users bring great performance and capacity challenges. In this Session, Chaomeng and Fei will share their technical experience of Kubernetes&amp;Istio in Welink supporting large traffic from large amount of users’ meeting, mailing and other online collaborations.
+The talk focus on practice in large scale productive environment with heavy traffic. Includes:</p>
+<ol>
+<li>Implement a predictive scaling algorithm to improve the scaling efficiency.</li>
+<li>Propose a more flexible route chain to decouple configuration complexity (ready to contribute to community)</li>
+<li>Adopt microservice level canary release, non-intrusive monitoring, interface level rate limiting and transparent service security.</li>
+</ol>
+<h3 id="正文"><strong>正文：</strong></h3>
+<p>新冠疫情在2019年底爆发后，远程办公需求指数增长。云会议的业务快速扩展，给下层基础设施带来了强烈的挑战，就包括刚上线不久的服务网格。</p>
+<p>不会忘记和少东、佳青三人组打仗一样长时间高强度支撑会议的同时解决现网问题的哪些日日夜夜。记得当时都隔离在家里办公，早上起床坐在床上没有洗漱就开始了，中午吃饭时少东和佳青好几次是边做饭边在会上看问题。而自悲催的是他们的老大哥我，春节回老家了，初二一起严重紧急返杭。从此就被豆妈隔离在隔壁儿子的小房间，房间里儿子的学习桌也给搬走了。于是这个月里常规的姿势是这样：坐在一个小板凳上，笔记本放在比它面积还小的一个落地小米空气净化器上，带着大耳机，鼠标在大腿上摩擦。更悲催的是，没过几天小房间的灯坏掉了，于是这个画面又增加了一份昏暗的色调，特别是从傍晚到沈阳，就是一个电脑屏幕前趴着一个鬼影，看着滚动的控制台日志，对着耳机喊叫。</p>
+<h3 id="附"><strong>附：</strong></h3>
 <ul>
 <li><a href="">演讲材料(官方Slides)</a></li>
 <li><a href="https://cnosvschina20eng.sched.com/event/cp9m/kubernetes-service-mesh-helps-online-collaboration-during-coronavirus-time-chaomeng-zhang-xie-fei-huawei">官方Sched主页</a></li>

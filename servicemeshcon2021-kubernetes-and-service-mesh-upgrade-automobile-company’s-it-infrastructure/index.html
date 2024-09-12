@@ -23,7 +23,7 @@
 
 <meta property="og:type" content="article">
 <meta name="description" content="记录在2021年5月4日在欧洲ServiceCon上发表的技术演讲《Kubernetes and Service Mesh Upgrade Automobile Company’s IT Infrastructure》，分享了一个服务网格在一个客户的实践案例。
-议题简介： Rapid business …" />
+议题： Rapid business …" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="">
 <meta name="twitter:title" content="ServiceMeshCon2021：Kubernetes 和 Service Mesh 升级汽车公司的 IT 基础设施" />
@@ -31,7 +31,7 @@
 <meta property="og:url" content="https://idouba.com/servicemeshcon2021-kubernetes-and-service-mesh-upgrade-automobile-company%E2%80%99s-it-infrastructure/" />
 <meta property="og:title" content="ServiceMeshCon2021：Kubernetes 和 Service Mesh 升级汽车公司的 IT 基础设施" />
 <meta property="og:description" content="记录在2021年5月4日在欧洲ServiceCon上发表的技术演讲《Kubernetes and Service Mesh Upgrade Automobile Company’s IT Infrastructure》，分享了一个服务网格在一个客户的实践案例。
-议题简介： Rapid business …" />
+议题： Rapid business …" />
 <meta property="og:image" content="https://idouba.com/images/thumbnail.png" />
 
 <link rel="apple-touch-icon" sizes="180x180" href="https://idouba.com/icons/apple-touch-icon.png">
@@ -194,9 +194,7 @@
 </figure>
 </p>
 <p>记录在2021年5月4日在欧洲ServiceCon上发表的技术演讲《<a href="https://servicemeshconeu21.sched.com/event/iSBQ/kubernetes-and-service-mesh-upgrade-automobile-companys-it-infrastructure-chaomeng-zhang-huawei">Kubernetes and Service Mesh Upgrade Automobile Company’s IT Infrastructure</a>》，分享了一个服务网格在一个客户的实践案例。</p>
-<h4 id="议题简介">议题简介：</h4>
-<p>Rapid business development brings a great challenge to automobile manufacturing company’s IT platforms. In this presentation, Chaomeng will share a practice of upgrading the traditional IT built microservice platform to cloud native infrastructure. That is gradually transforming the self-developed inner DNS plus ELB for service discovery and load balance, per VM nginx for inbound traffic management, metric, and access log, to Kubernetes and service mesh.</p>
-<p>The practice solves the problems that every service request crosses too many heterogeneous middleware and proxies, and turns out to provide lightweight resource management, auto-scaling, canary, non-intrusive and transparent traffic management, security and observability on a consistent infrastructure, and thus improve ops efficiency, makes ops work simpler and easier.</p>
+<h3 id="议题"><strong>议题：</strong></h3>
 <p><figure>
   <picture>
 
@@ -211,7 +209,7 @@
     <img
       loading="lazy"
       decoding="async"
-      alt="image-20240911230626112"
+      alt=""
       
         class="image_figure image_internal image_unprocessed"
         src="../picture/2021-05-04-servicemeshcon2021-kubernetes-and-service-mesh-upgrade-automobile-company%e2%80%99s-it-infrastructure/desc.png"
@@ -222,7 +220,9 @@
     </picture>
 </figure>
 </p>
-<h4 id="正文">正文：</h4>
+<p>Rapid business development brings a great challenge to automobile manufacturing company’s IT platforms. In this presentation, Chaomeng will share a practice of upgrading the traditional IT built microservice platform to cloud native infrastructure. That is gradually transforming the self-developed inner DNS plus ELB for service discovery and load balance, per VM nginx for inbound traffic management, metric, and access log, to Kubernetes and service mesh.</p>
+<p>The practice solves the problems that every service request crosses too many heterogeneous middleware and proxies, and turns out to provide lightweight resource management, auto-scaling, canary, non-intrusive and transparent traffic management, security and observability on a consistent infrastructure, and thus improve ops efficiency, makes ops work simpler and easier.</p>
+<h3 id="正文"><strong>正文：</strong></h3>
 <p>Hello everyone, I'm chaomeng from HUAWEI.
 My topic today  is &quot;Kubernetes and Service mesh upgrade automobile Company IT infrastructure&quot;. I will introduce a service mesh practice in production environment.
 Since launched in 2018,HUAWEI Application Service Mesh  ASM has served a large-number of customers. The practice is about one of them, a leading automobile manufacture in China.
@@ -346,7 +346,7 @@ And our solution is Istio locality load balancing, split a small part of traffic
 As show in the table, even half of container instances are unhealthy, they still get seventy percent traffic.
 It is required to make sure both primary container instances and secondary VM instance meet traffic capacity requirement.</p>
 <p>That is all of the practice,  thank you, for your time.</p>
-<h4 id="附">附：</h4>
+<h3 id="附"><strong>附：</strong></h3>
 <ul>
 <li><a href="https://static.sched.com/hosted_files/servicemeshconeu21/b4/Updated_Plain_Text_Transcript_73_FQJR-2068.txt">演讲材料(scripts)</a></li>
 <li><a href="https://servicemeshconeu21.sched.com/event/iSBQ/kubernetes-and-service-mesh-upgrade-automobile-companys-it-infrastructure-chaomeng-zhang-huawei">官方Sched主页</a></li>

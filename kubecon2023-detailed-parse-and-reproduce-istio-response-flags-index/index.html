@@ -22,18 +22,16 @@
 <meta property="og:locale" content="en" />
 
 <meta property="og:type" content="article">
-<meta name="description" content="背景： 访问日志是应用系统运维的重要手段，可以有效地帮助我们进行问题的定位定界。
-在服务网格中，访问日志也是可观测性能力的一块重要内容。不同于指标提供访问的统计信息，访问日志记录了每一次访问的详细信息。不管是作为安全审计，还是做系统运维，访问日志都是最得力的手段。
-访问日志记录了每次访问的时间、请求、应答、耗时、源服务 …" />
+<meta name="description" content="记录在2023年9月27日在上海Kubecon上发表的技术演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case 》
+议题： 服务网格的访问日志在运维工作中发挥着非常关键的作用。特别是 …" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="">
 <meta name="twitter:title" content="KubeCon2023：基于实际案例解析Istio访问日志ResponseFlag系列" />
 <meta name="twitter:image" content="https://idouba.com/images/thumbnail.png"/>
 <meta property="og:url" content="https://idouba.com/kubecon2023-detailed-parse-and-reproduce-istio-response-flags-index/" />
 <meta property="og:title" content="KubeCon2023：基于实际案例解析Istio访问日志ResponseFlag系列" />
-<meta property="og:description" content="背景： 访问日志是应用系统运维的重要手段，可以有效地帮助我们进行问题的定位定界。
-在服务网格中，访问日志也是可观测性能力的一块重要内容。不同于指标提供访问的统计信息，访问日志记录了每一次访问的详细信息。不管是作为安全审计，还是做系统运维，访问日志都是最得力的手段。
-访问日志记录了每次访问的时间、请求、应答、耗时、源服务 …" />
+<meta property="og:description" content="记录在2023年9月27日在上海Kubecon上发表的技术演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case 》
+议题： 服务网格的访问日志在运维工作中发挥着非常关键的作用。特别是 …" />
 <meta property="og:image" content="https://idouba.com/images/thumbnail.png" />
 
 <link rel="apple-touch-icon" sizes="180x180" href="https://idouba.com/icons/apple-touch-icon.png">
@@ -128,7 +126,7 @@
 </span>
     <span class="post_date">
       Oct 15, 2023</span>
-    <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/kubecon/' title="KubeCon" class="post_tag button button_translucent">KubeCon
+    <span class="post_time"> · 2 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/kubecon/' title="KubeCon" class="post_tag button button_translucent">KubeCon
         </a><a href='https://idouba.com/tags/%E8%AE%BF%E9%97%AE%E6%97%A5%E5%BF%97/' title="访问日志" class="post_tag button button_translucent">访问日志
         </a><a href='https://idouba.com/tags/%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BC/' title="服务网格" class="post_tag button button_translucent">服务网格
         </a><a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' title="演讲" class="post_tag button button_translucent">演讲
@@ -171,6 +169,37 @@
   </div>
 
     <div class="post_body"><hr>
+<p>记录在2023年9月27日在上海Kubecon上发表的技术演讲《<a href="https://kccncosschn2023.sched.com/event/b34cdc5babaf550b06b72c5aeb5ab21e">Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case</a> 》</p>
+<h3 id="议题"><strong>议题：</strong></h3>
+<p><figure>
+  <picture>
+
+    
+      
+        
+        
+        
+        
+        
+        
+    <img
+      loading="lazy"
+      decoding="async"
+      alt=""
+      
+        class="image_figure image_internal image_unprocessed"
+        src="../picture/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-index/desc.png"
+      
+      
+    />
+
+    </picture>
+</figure>
+</p>
+<p>服务网格的访问日志在运维工作中发挥着非常关键的作用。特别是访问日志在HTTP响应码外提供应答标记Response Flags，通过针对性的标记提供有用的额外信息，帮助运维人员提高故障诊断的效率。但是Envoy社区官方文档中对应答标记的介绍非常简单，Istio社区也没有资料介绍这部分内容。在实际使用中当用户遇到包含DC、UF、UH等应答标记的日志时，很难找到权威材料参考来解决具体问题。
+在本次演讲中，超盟将重现10多种生产中常碰到的应答标记的实践案例，解析每个标记的含义、产生场景，并介绍如何基于这些应答标记进行故障诊断和问题定界，进而解决案例中这些应答标记表示的问题。此外，还将解析生产用例中访问日志的6个有用的时间字段的含义，并介绍如何基于这些时间字段定界服务网格的延时相关问题。</p>
+<p>Access logs of service mesh is practically important in ops work. Especially, Response Flags in each log help improve fault diagnosis efficiency by providing additional details of request. But the simple and brief definition of Response Flags in Envoy and Istio community makes it hard to refer to it to effectively find the real problem and root cause when running into logs containing “DC, UF, UH” like flags in practice.
+In this session, Chaomeng will introduce how Istio Access Log promote fault diagnosis efficiency in micro service Ops practice. He will reproduce 10+ different Response Flags cases of customer’s practice, analyze what each flags indicates and when such logs generated, and demonstrate how to perform fault diagnosis and problem demarcation based on the Flags, and how to solve the problem of each case. Additionally he will parse the meaning of 6 useful time information of access log, and introduce how to figure out the most time-consuming period.</p>
 <h3 id="背景"><strong>背景：</strong></h3>
 <p>访问日志是应用系统运维的重要手段，可以有效地帮助我们进行问题的定位定界。</p>
 <p>在服务网格中，访问日志也是可观测性能力的一块重要内容。不同于指标提供访问的统计信息，访问日志记录了每一次访问的详细信息。不管是作为安全审计，还是做系统运维，访问日志都是最得力的手段。</p>

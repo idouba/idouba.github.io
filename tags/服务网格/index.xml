@@ -17,12 +17,9 @@
       <description>
         
           
-            背景： 访问日志是应用系统运维的重要手段，可以有效地帮助我们进行问题的定位定界。
-在服务网格中，访问日志也是可观测性能力的一块重要内容。不同于指标提供访问的统计信息，访问日志记录了每一次访问的详细信息。不管是作为安全审计，还是做系统运维，访问日志都是最得力的手段。
-访问日志记录了每次访问的时间、请求、应答、耗时、源服务和目标服务等信息。帮助运维人员进行有效的故障定位定界。生产中我们也经常会检索分析一批日志看特点，如是否慢的请求的应答体都比较大，来自某个特定服务的服务接口总出错，或者来自某个特定源服务的访问不正常等，帮助我们发现系统问题。
-对于七层的访问日志一般我们会通过HTTP响应码了解请求的状况，如503、502、404、403等。Envoy在访问日志中引入了应答标记Response Flag，辅助HTTP响应码，进一步描述访问或连接的细节问题。如发生 了503错误后，通过503 UH、 503 UF、 503 UC、 503 NC 等区分各种不同的503产生的原因，提供线索让运维人员针对性地解决问题。
-但是Envoy 和Istio社区的访问日志对于Response Flag的信息非常少，所有的内容也只是如下非常干巴的把组合的单词展开，没有解释清楚每个标记的含义，更没有说明哪种情况下会出现这个标记。身边的同事，还有我们的客户经常在生产中碰到了这些应Response Flag不知道如何处理。有客户的工程师反馈说，看到了Response Code里那几个奇怪UC、UH等字符比看见503还让人抓狂。
-Long name Short name Description DownstreamConnectionTermination DC Downstream connection termination. FailedLocalHealthCheck LH Local service failed health check request in addition to 503 response code. UpstreamRequestTimeout UT Upstream request timeout in addition to 504 response code. LocalReset LR Connection local reset in addition to 503 response code. UpstreamRemoteReset UR Upstream remote reset in addition to 503 response code.
+            记录在2023年9月27日在上海Kubecon上发表的技术演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case 》
+议题： 服务网格的访问日志在运维工作中发挥着非常关键的作用。特别是访问日志在HTTP响应码外提供应答标记Response Flags，通过针对性的标记提供有用的额外信息，帮助运维人员提高故障诊断的效率。但是Envoy社区官方文档中对应答标记的介绍非常简单，Istio社区也没有资料介绍这部分内容。在实际使用中当用户遇到包含DC、UF、UH等应答标记的日志时，很难找到权威材料参考来解决具体问题。 在本次演讲中，超盟将重现10多种生产中常碰到的应答标记的实践案例，解析每个标记的含义、产生场景，并介绍如何基于这些应答标记进行故障诊断和问题定界，进而解决案例中这些应答标记表示的问题。此外，还将解析生产用例中访问日志的6个有用的时间字段的含义，并介绍如何基于这些时间字段定界服务网格的延时相关问题。
+Access logs of service mesh is practically important in ops work. Especially, Response Flags in each log help improve fault diagnosis efficiency by providing additional details of request. But the simple and brief definition of Response Flags in Envoy and Istio community makes it hard to refer to it to effectively find the real problem and root cause when running into logs containing “DC, UF, UH” like flags in practice.
           
           
         
@@ -39,7 +36,7 @@ Long name Short name Description DownstreamConnectionTermination DC Downstream c
         
           
             记录在2021年5月4日在欧洲ServiceCon上发表的技术演讲《Kubernetes and Service Mesh Upgrade Automobile Company’s IT Infrastructure》，分享了一个服务网格在一个客户的实践案例。
-议题简介： Rapid business development brings a great challenge to automobile manufacturing company’s IT platforms. In this presentation, Chaomeng will share a practice of upgrading the traditional IT built microservice platform to cloud native infrastructure. That is gradually transforming the self-developed inner DNS plus ELB for service discovery and load balance, per VM nginx for inbound traffic management, metric, and access log, to Kubernetes and service mesh.
+议题： Rapid business development brings a great challenge to automobile manufacturing company’s IT platforms. In this presentation, Chaomeng will share a practice of upgrading the traditional IT built microservice platform to cloud native infrastructure. That is gradually transforming the self-developed inner DNS plus ELB for service discovery and load balance, per VM nginx for inbound traffic management, metric, and access log, to Kubernetes and service mesh.
           
           
         
@@ -56,7 +53,7 @@ Long name Short name Description DownstreamConnectionTermination DC Downstream c
         
           
             记录在北京时间2月23日，在全球首届社区峰会IstioCon 2021中，发表的《Best practice:from Spring Cloud to Istio》技术演讲。回答经常被客户和同事们问到的一个问题，SpringCloud和Istio的关系，如何演进。
-以下为演讲全文: 大家好，我是来自华为云的工程师。很荣幸有机会和大家分享Istio在生产中使用的实际案例。
+议题： 正文: 大家好，我是来自华为云的工程师。很荣幸有机会和大家分享Istio在生产中使用的实际案例。
 华为云应用服务网格从2018年在公有云上线， 作为全球最早的几个网格服务之一，经历和见证了从早期对网格的了解、尝试到当前大规模使用的过程。服务的客户越来越多，场景也越来越复杂。这其中的通用功能作为feature大都贡献到Istio社区，解决方案层面的实践也希望通过这样的机会和大家交流。
 本次我选取的主题是Spring Cloud to Istio。来自我们客户的Spring cloud的项目和Istio的结合与迁移案例。
 演讲主要包含四部分的内容： 1）背景介绍

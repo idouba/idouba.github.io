@@ -18,27 +18,7 @@
         
           
             记录在2024年8月21日在香港Kubecon上发表的技术演讲《Best Practice: Karmada &amp;amp; Istio Improve Workload &amp;amp; Traffic Resilience of Production Distributed Cloud》
-大家好，我是张超盟，来自华为云 ，我今天带来的是一个有关服务韧性的话题。将介绍在分布式云场景下，Karmada和Istio相互配合，管理多K8s集群的负载和流量，改善服务韧性的实践。
-我是华为云分布式云原生的架构师，在过去的近十年里在华为云从事云原生相关的设计开发工作，包括过去几年里一直负责华为云应用服务网格产品。
-演讲的内容包括：韧性的背景，K8s和Istio作为云原生领域的基座技术，能力很丰富也很强大，我们从韧性角度简单审视下相关能力。然后介绍分布式云如何改善单云的韧性，又引入了哪些新的挑战。 重点是实践的内容，介绍在分布式云环境下：Karmada如何提高多集群的负载韧性，Istio如何提高多集群的流量韧性；以及Karmada和Istio相互配合提供完整的多集群应用韧性的最佳实践。
-简单讲，韧性描述了这样一种能力，系统在过载、故障或在遭受攻击的时候还能够完成基本功能。韧性告诉我们，①虽然我们不想要失败，但是我们得承认失败总是会发生。因而我们需要为失败而设计系统，减少故障对系统的影响。有个著名的说法，韧性不能保证你多挣到钱，但是可以保证你少赔钱。竞争力可能决定产品的上线，韧性才能保证产品的下线。韧性应用于工程世界的所有系统。计算机世界里韧性是系统设计需要考虑的关键因素。
-下面简单看下K8s和Istio提供的韧性能力。K8s大家都非常熟悉，K8s提供了Deployment，Replica Set和Service三个核心对象。 Deployment和Replica Set声明式控制负载实例的副本数和配置。 Service让为每个服务器提供了统一的访问入口，自动在多个实例间负载均衡。k8s基于这三种关键机制实现了应用部署、升级、访问的自动化。较之传统虚拟机方式，除了带来了轻量、敏捷、弹性的特点外，同时也提供了丰富的平台能力，提高应用的韧性。
-我们尝试通过韧性角度认识下这些我们熟悉的能力。首先K8s自动控制负载实例数，通过多实例提供冗余容错能力，提高可用性。特别是提供了节点、AZ的反亲和部署，保证局部资源故障时服务总体仍然可用。另外滚动升级，交替创建新Pod、停止老Pod。通过平滑升级减少了升级的停机时间。水平扩缩容 HPA快速自动弹性扩缩容实例，避免了业务量大资源不足导致的系统过载。Liveness和Readiness的健康检查，实现应用故障自动检测和自愈。
-此外k8s还提供了其他能力，间接改善韧性。如： 提供RBAC，保护应用和数据的安全。内置的日志、事件和监控，通过平台方式提供了应用运维和Troubleshooting的关键能力。ConfigMap和Secret，方便用户把配置从代码中独立处理，避免了重新部署带来的变更风险。CICD，对接流水线自动化提高上线变更效率，也减小了人工风险。
-可以看到大量我们平时用到并且非常熟悉的k8s能力，都是基于韧性目标设计的。
-Istio的机制大家也比较熟悉，通过透明代理拦截流量，代替应用执行流量动作，从而以非侵入方式提供了七层的流量能力。.Istio提供的能力非常丰富，这里我们也同样从韧性的视角审视Istio提供的众多能力。可能会发现原来我们经常用到的Istio能力很多都和韧性相关。
-我们都说Istio在k8s基础设能力之上，提供了面向应用的上层能力增强，这种增强的配合关系同样适用于韧性方面。Istio提供的不只是四层负载均衡，而是基于七层的流量提供了更多的能力。包括：访问亲和性、故障倒换等能力。通过自动重试提高访问成功率；通过限流防止系统过载。基于七层流量特征的灰度分流策略，在不同版本间分配流量，降低版本升级引起的风险。不同于k8s的的Readiness，Istio提供了基于熔断器的故障隔离和故障恢复能力。 另外非侵入的调用链、访问日志，跟踪服务间调用细节，方便故障定位定界。通过非侵入故障注入，提前发现产品缺陷。可以看到，Istio以非侵入方式提供了大量面向应用的韧性。
-如前面总结Kubernetes提供了负载多实例，并支持基于节点、AZ的反亲和部署提高应用韧性。但这些能力仅局限于一个Kubernetes集群内部，不能在更大范围提供应用的韧性。这样对于Kubernetes集群自身的故障无能为力。当客户业务都集中在一个集群时，集群异常引发了全局的业务断服宕机。生产中这种事故频繁发生在集群升级时。
-这种现象的根本原因是故障半径的问题。就像把所有的鸡蛋放在一个篮子里，一旦篮子有问题，没有一个鸡蛋能幸存下来。解决这类问题直观的思路就是减小故障半径，把鸡蛋分开放到多个篮子里。
-有一种分布式云的架构可以在一定程度上解决这个问题。
-分布式云是一种基础设施架构；可以在多个物理位置，包括公有云自己的数据中心、其他云提供商的数据中心、用户本地或者第三方数据中心、边缘，运行公有云的基础设施。并且从单个控制平面统一管理这些云资源。
-对于云原生场景的分布式云，我们称为分布式云原生。华为云分布式云原生服务UCS，将云原生基础设施分发到各种物理位置，使得用户可以在业务期望的任意位置运行云原生应用，并且通过公有云上集中的云原生控制面统一管理。
-可以看到，较之单云架构，分布式云提供的优势包括：
-分布式部署的数据和应用可以更接近用户，使得响应时间更短。Less latency, closer to end users. 数据和应用可以限定在规定的范围内，更容易满足合规性要求。Increased regulatory compliance 可以结合分布式的资源快速构建业务，扩展性更强 Better scalability 此外还可以通过统一的控制台，监控运维分布式环境部署的应用。Improved visibility 当然我们关注的韧性改善也包括在内。天然分布式环境部署，提供了冗余和容错，一个地域或者某个云环境故障，其他环境的可以故障倒换，接管业务。
-当然,分布式云也引入了众多挑战：
-复杂性(Complexity)：管理地理上可能跨越多个云提供商和本地数据中心分散的云资源，会带来新的复杂性。 安全性(Security)：在分布式环境中，保护数据和应用程序安全会更加困难。 异质性(Heterogeneity)：分布式云环境通常涉及不同硬件、软件、操作系统和云提供商的服务。 延时(Latency and Network Performance)分布式云在某些情况下有助于减少延迟，但如果使用不当，会引入新的网络延时 在云原生场景下，k8s本身定义了标准统一的接口，一定程度简化了其中复杂性和异构资源问题。.但是如何将分布式在不同物理位置，不同的k8s管理起来，并且提供和单个k8s集群类似的体验，还是有很大的挑战。Karmada可能是一个答案。
-简单介绍下Karmada。Karmada的设计目标，是使开发人员能够像使用单个 Kubernetes 集群一样使用多集群能力，管理跨集群的资源；对用户提供一个可以不断扩展的容器资源池；并通过多集群方式进一步提高云原生应用的韧性。
-这里简单列举了Karmada提供的关键功能。包括：多集群管理、跨集群负载分发、全局资源视图、多集群服务发现等。 我们重点关注两个与今天分享主题密切相关的特征： 一个是Karmada怎样解决前面讲到的分布式云的管理复杂性问题。另外一个是Karmada的分布式云多集群管理，具体怎么实践多集群韧性目标的。
+议题： The Distributed cloud offers better resilience by providing redundancy, scalability and flexibility, especially for cloud native applications. However the complexity of multi-cluster workload and traffic management in hybrid or multi-cloud environment brings huge challenges in practice, such as the number of overall multi-cluster workload instances serve for customer request decreased when some unhealthy ones isolated in case of failures.
           
           
         
@@ -54,12 +34,9 @@ Istio的机制大家也比较熟悉，通过透明代理拦截流量，代替应
       <description>
         
           
-            背景： 访问日志是应用系统运维的重要手段，可以有效地帮助我们进行问题的定位定界。
-在服务网格中，访问日志也是可观测性能力的一块重要内容。不同于指标提供访问的统计信息，访问日志记录了每一次访问的详细信息。不管是作为安全审计，还是做系统运维，访问日志都是最得力的手段。
-访问日志记录了每次访问的时间、请求、应答、耗时、源服务和目标服务等信息。帮助运维人员进行有效的故障定位定界。生产中我们也经常会检索分析一批日志看特点，如是否慢的请求的应答体都比较大，来自某个特定服务的服务接口总出错，或者来自某个特定源服务的访问不正常等，帮助我们发现系统问题。
-对于七层的访问日志一般我们会通过HTTP响应码了解请求的状况，如503、502、404、403等。Envoy在访问日志中引入了应答标记Response Flag，辅助HTTP响应码，进一步描述访问或连接的细节问题。如发生 了503错误后，通过503 UH、 503 UF、 503 UC、 503 NC 等区分各种不同的503产生的原因，提供线索让运维人员针对性地解决问题。
-但是Envoy 和Istio社区的访问日志对于Response Flag的信息非常少，所有的内容也只是如下非常干巴的把组合的单词展开，没有解释清楚每个标记的含义，更没有说明哪种情况下会出现这个标记。身边的同事，还有我们的客户经常在生产中碰到了这些应Response Flag不知道如何处理。有客户的工程师反馈说，看到了Response Code里那几个奇怪UC、UH等字符比看见503还让人抓狂。
-Long name Short name Description DownstreamConnectionTermination DC Downstream connection termination. FailedLocalHealthCheck LH Local service failed health check request in addition to 503 response code. UpstreamRequestTimeout UT Upstream request timeout in addition to 504 response code. LocalReset LR Connection local reset in addition to 503 response code. UpstreamRemoteReset UR Upstream remote reset in addition to 503 response code.
+            记录在2023年9月27日在上海Kubecon上发表的技术演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case 》
+议题： 服务网格的访问日志在运维工作中发挥着非常关键的作用。特别是访问日志在HTTP响应码外提供应答标记Response Flags，通过针对性的标记提供有用的额外信息，帮助运维人员提高故障诊断的效率。但是Envoy社区官方文档中对应答标记的介绍非常简单，Istio社区也没有资料介绍这部分内容。在实际使用中当用户遇到包含DC、UF、UH等应答标记的日志时，很难找到权威材料参考来解决具体问题。 在本次演讲中，超盟将重现10多种生产中常碰到的应答标记的实践案例，解析每个标记的含义、产生场景，并介绍如何基于这些应答标记进行故障诊断和问题定界，进而解决案例中这些应答标记表示的问题。此外，还将解析生产用例中访问日志的6个有用的时间字段的含义，并介绍如何基于这些时间字段定界服务网格的延时相关问题。
+Access logs of service mesh is practically important in ops work. Especially, Response Flags in each log help improve fault diagnosis efficiency by providing additional details of request. But the simple and brief definition of Response Flags in Envoy and Istio community makes it hard to refer to it to effectively find the real problem and root cause when running into logs containing “DC, UF, UH” like flags in practice.
           
           
         
@@ -75,38 +52,11 @@ Long name Short name Description DownstreamConnectionTermination DC Downstream c
       <description>
         
           
-            KubeCon2021 和世宇做的一个技术实践分享，总结了下一起把网格在人人视频中落地的部分经验。
-摘要： 作为中国领先的在线视频共享平台，人人视频业务的快速发展给其 IT 基础设施带来了巨大挑战。日益增长的复杂性、容量和韧性要求给当前基于 Spring Cloud 熔断器的微服务带来了新的问题。
+            记录在KubeCon2021上发表的技术演讲《Online Video upgrades resilience from SC Circuit Breaker to Service Mesh》，和世宇做的一个技术实践分享，总结了下一起把网格在人人视频中落地的部分经验。。
+议题： 作为中国领先的在线视频共享平台，人人视频业务的快速发展给其 IT 基础设施带来了巨大挑战。日益增长的复杂性、容量和韧性要求给当前基于 Spring Cloud 熔断器的微服务带来了新的问题。
 在KubeCon2021上，华为云应用服务网格架构师张超盟和人人视频技术主管徐世宇介绍了大规模生产环境中的服务网格韧性实践，包括不健康实例的透明自动隔离、故障自动恢复和自我修复、连接池管理、重试、限流、超时和分布式跟踪等。通过分析熔断器模式和比较 Spring Cloud 熔断器与服务网格在各自生产实践中不同的实现方式，结果表明优化不只是改善了系统的可靠性和可用性，还使得开发和操作工作更简单便捷。
-正文： 我是张超盟，来自华为云。本次大会我和人人视频的架构师徐世宇带来关于服务韧性的分享。结合一个生产中的实际案例，介绍网格等云原生解决方案替换原有基于Spring Cloud Hystrix在提升服务韧性的实践细节。
-我是华为云应用服务网格的架构师，在华为云主要从事容器、网格等云原生相关设计开发工作；世宇是人人视频的架构师，负责人人视频后台服务云原生落地的架构、方案和实施工作。
-演讲主要包含三部分的内容：
-首先，概要的介绍韧性的背景； 第二部分，案例的业务背景和架构，包括原有Spring Cloud框架中基于Hystrix的韧性能力的使用细节； 第三部分是本次演讲的重点内容，介绍服务网格等云原生技术全面提升服务韧性的实践。 关于韧性 “任何事物任何时候都可能故障”，这是AWS的沃纳关于故障的经典描述。在系统架构设计，特别是韧性、可靠性可用性设计中被广泛引用。因为不断的经验教训告诉我们，对于一个系统，我们所面临的不是是否失败，而是什么时候失败的问题。
-不管前期我们投入多少财力、精力和资源去加固系统，失败总不可避免。预防失败是一方面，更重要的是接受失败，在失败时候保证业务影响小，并尽快的从失败中恢复。
-韧性正是描述了这样一种能力，韧性强调的是系统在过载、故障或在遭受攻击的时候还能够使用。韧性告诉我们，虽然我们并不想要失败，但是我们承认失败会发生的现实。因而我们需要为失败而设计系统，在故障发生时，减少故障对系统的影响，进而减小对用户业务的影响，特别是核心业务的影响。即构建能处理这些故障并自我修复的系统。有个著名的说法，韧性不能保证你多挣到钱，但是可以保证你少赔钱。套用当前一个流行的说法是，产品的竞争力或者业务能力能帮我们冲击更高的上线，但是韧性能帮助我们守住我们的下线。
-韧性应用于工程世界的所有系统。计算机世界里韧性设计一直是一个非常重要的研究方向。不管是自研的传统服务，还是现网上运行的云服务。
-在本次分享中我们将聚焦服务间访问的韧性，主要是客户场景中微服务的服务间访问比较频繁的场景。
-以上关于故障的观点在规模小的系统里体现可能不明显，在规模比较大的系统里尤其是微服务场景下体现的非常明显。局部的访问影响整个系统，进而影响最终业务。
-如Hystrix关于韧性的理论模型中描述了：对于依赖 30 个服务的应用程序，即使每个服务的正常运行时间为 99.99%，系统总的正常运行也只有99.7%，每个月会引入超过2个小时的停机。考虑到微服务分布式系统的网络带宽、延时、可靠性、安全、业务自身问题、资源等情况会变的更加复杂。
-业务场景和挑战 接下来由人人视频的架构师徐世宇介绍实践的实际场景、系统架构，和早期基于Spring Cloud的熔断器Hystrix提供微服务韧性保护的实践细节以及遇到的挑战。
-人人视频是以美日韩泰视频内容为主的在线视频点播APP。当前拥有2亿+注册用户，日活最高达到1000万，月活用户5500万，并且近日人人视频迎来了第七个周年纪念日。作为中国领先的在线视频共享平台，人人视频业务的快速发展给其 IT 基础设施带来了巨大挑战。
-人人视频主要业务架构如上图所示，该业务架构主要分为四层：网关层、业务聚合BFF层、基础服务层、中间件层。其中基础服务层由用户中心、内容中心、市场变现中心、数据中心五大中心构成：
-用户中心主要以用户信息、用户标签鉴权构成； 内容中心主要以视频基础信息、视频解析、视频分发、视频标签等媒资处理构成； 社区中心主要包含评论、弹幕交互、社区广场； 市场变现中心主要包含活动、任务、广告、商城、支付等内容； 数据中心以智能推荐、海量数据搜索、业务风控等构成； 中间件层主要包含kafka、redis等高并发场景组件，并且采用了mysql、mongoDB、Elasticsearch、Hbase等多元化数据存储方案。整个业务容器由CCE进行托管编排，并且采用了ASM进行服务的韧性保护。
-随着人人视频业务蓬勃发展，其架构模式也进行了多次迭代调整。早期由于业务量级不够大，架构上也缺乏相应的容错机制保护，比如未采用熔断机制进行微服务治理。此架构模式下，当下游服务出现故障时会积压阻塞上游服务的请求，从而使得上游服务进行级联性的崩溃，最终导致服务集群的雪崩而完全不可用。
-为解决此致命性问题，我们在架构中引入了hystrix熔断保护机制。此保护模式下，当下游服务出现故障时，上游服务能快速的对下游服务采用熔断降级的措施，从而使得该服务不会受到下游异常服务的影响。
-下面主要介绍hystrix配置在人人视频的实践，例如在updateUser场景主要设置coreSize为20，maximumSize为40，maxQueueSize为1000，queueSizeRejectionThreshold为800；此设置和基本的线程池原理一致，当业务请求创建的线程数还未达到coreSize时会新建线程去处理，当创建的线程数达到coreSize之后的业务请求会放入队列等待处理，当队列里等待的业务数达到maxQueueSize时会再新建线程处理，直到达到maximumSize。这是hystrix的一个线程池设置，此时我们又该如何设置熔断触发的参数。熔断触发主要由断路器参数进行控制，比如我们在默认的时间窗10s内至少有200个请求（requestVolumeThreshold：200）并且错误率达到了50%（errorThresholdPercentage：50）即触发熔断，触发熔断10000ms（sleepWindowInMilliseconds：10000）后会释放少量请求去探测下游服务是否正常，如果正常则断路器关闭，后面的所有请求则正常请求下游服务，如果不正常断路器则继续打开直到下一个休眠时间后继续探测下游服务正常与否。
-但随着业务架构的不断迭代调整，使用hystrix进行熔断保护的弊端也随之产生。当前人人视频正在利用go语言的优势将BFF层服务采用go进行重构，但由于hystrix组件的语言限制，并不能在go的框架中进行使用，并且hystrix的使用代码侵入性强，比如需要引入相应的jar包，使用相关的注解，开启相关的配置等。并且当我们需要使用限流方案时，hystrix也不能直接提供成熟的解决方案。当我们使用混沌工程来进行正常业务的故障注入以便更早的暴露出问题时，hystrix也将无能为力。针对这些问题，我们也在探索一些新的方案来解决，实践证明网格等云原生技术能很好地解决业务中碰到的这些问题。
-服务网格韧性实践 下面我们介绍服务网格的云原生解决方案中，如何提供完整的韧性能力，在实践中帮助用户商业成功。
-在基于云原生的韧性方案中，我们不只提供了面向应用的熔断器，而是提供了从开发、测试到基础设施，到应用运行的整个韧性保证。也包括运行期的Ops，保证快速发现问题，进而解决问题。从而做到故障模拟与测试、隔离与恢复、定界与定位等全纬度的处理。进而避免故障蔓延与故障影响业务，特别是对核心业务的影响。
-熔断 Circuit Breaker 左图是项目中之前实施的经典的Hystrix的状态迁移图。一段时间内实例连续的错误次数超过阈值则进入熔断开启状态，不接受请求；隔离一段时间后，会从熔断状态迁移到半熔断状态，如果正常则进入熔断关闭状态，可以接收请求；如果不正常则仍然进入熔断开启状态。
-网格中虽然没有显式提供这样一个状态图，但是Istio中异常点检查的阈值规则也都是这样设计的。两者的不同是Spring Cloud的熔断是在SDK中Hystrix执行，Istio中是数据面proxy执行。Hystrix因为在业务代码中，允许用户通过编程做一些控制。
-下面看下网格的熔断实施的效果。这是一个典型的故障场景。其中一个服务实例故障，当没有进行任何故障处理措施时，流量还是均衡的分发到三个实例上，对于服务访问者而言，将会有三分之一的几率得到失败的应答，影响最终用户的业务。
-**韧性的重要一点要求是故障发生时不影响用户最终业务。**对于这种部分实例故障，基于网格的异常点检查，隔离故障实例使得请求只发到健康的实例上。具体规则是：考察服务实例的访问情况，在一段时间内如果连续失败次数达到阈值条件，则该实例会被隔离，得不到流量。
-如图配置：当一个实例在4分钟内，连续5次502 503 或504故障，将会被隔离10分钟；在这10分钟里，隔离的实例会被标记为不健康，不能得到流量。在10分钟后，这个实例会被自动加回来，尝试重新接收流量。如果继续检测出是故障，则隔离时间会加倍。如这个例子中，第二次连续故障会被隔离20分钟，下次30分钟，从而使得一直故障的实例一直被隔离，减少对业务的影响。
-**隔离故障的详细过程如下：**从拓扑图上可以看到第一个实例异常满足熔断阈值，触发了熔断，网格数据面向这个故障实例上分发的流量逐渐减少，直到完全没有流量，即故障实例被隔离。
-这样，所有访问流量只会分发到两个健康实例上，通过这种熔断保护保障服务整体访问的成功率。
-**除了隔离外，韧性中另外有一个非常重要的要求是系统的故障自愈能力。这里三个流量拓扑演示了从刚才的故障中恢复的过程。**可以看到：初始状态这个故障实例被隔离中，没有流量；当实例自身正常后，网格数据面在将其隔离配置的间隔后，重新尝试分配流量，当满足阈值要求则该实例会被认为是正常实例，可以和其他两个实例一样接收请求。最终可以看到三个实例上均衡的处理请求。即实现了故障恢复。
-网格熔断提供的另外一组保护机制是非侵入的连接池管理。可以对四层的连接，七层的请求进行限制。当实际的连接和请求超过配置的阈值时，则断路连接，从而保护上游的服务。
+As one leading Online Video sharing platform in China, RR&#39;s rapid business development introduce great challenge on its IT infrastructure. The increasing complexity, capacity and resilience requirement brings new problems to current Spring Cloud circuit breaker based micro services.
+In this presentation, Chaomeng and Shiyu will focus on service mesh resilience practice in large scale production environment, including transparent auto-isolation of the unhealthy instance, auto-recovery and self-healing, connection pool management, retry, fine gained rate limit and distributed tracing, latency metrics.
           
           
         
@@ -123,9 +73,7 @@ Long name Short name Description DownstreamConnectionTermination DC Downstream c
         
           
             记录在2020年8月1日在KubeCon上发表的技术演讲《Kubernetes &amp;amp; Service Mesh Helps Online Collaboration During Coronavirus Time》，和来自云会议的同事谢飞一起分享了2019年新冠疫情期间Istio在云会议的应用。
-新冠疫情在2019年底爆发后，远程办公需求指数增长。云会议的业务快速扩展，给下层基础设施带来了强烈的挑战，就包括刚上线不久的服务网格。
-不会忘记和少东、佳青三人组打仗一样长时间高强度支撑会议的同时解决现网问题的哪些日日夜夜。记得当时都隔离在家里办公，早上起床坐在床上没有洗漱就开始了，中午吃饭时少东和佳青好几次是边做饭边在会上看问题。而自悲催的是他们的老大哥我，春节回老家了，初二一起严重紧急返杭。从此就被豆妈隔离在隔壁儿子的小房间，房间里儿子的学习桌也给搬走了。于是这个月里常规的姿势是这样：坐在一个小板凳上，笔记本放在比它面积还小的一个落地小米空气净化器上，带着大耳机，鼠标在大腿上摩擦。更悲催的是，没过几天小房间的灯坏掉了，于是这个画面又增加了一份昏暗的色调，特别是从傍晚到沈阳，就是一个电脑屏幕前趴着一个鬼影，看着滚动的控制台日志，对着耳机喊叫。
-简介： During the period of coronavirus, lots of people required stay at home or different office, use Welink, an online collaboration platform, work together. The exponentially increased online users bring great performance and capacity challenges. In this Session, Chaomeng and Fei will share their technical experience of Kubernetes&amp;amp;Istio in Welink supporting large traffic from large amount of users’ meeting, mailing and other online collaborations.
+议题： During the period of coronavirus, lots of people required stay at home or different office, use Welink, an online collaboration platform, work together. The exponentially increased online users bring great performance and capacity challenges. In this Session, Chaomeng and Fei will share their technical experience of Kubernetes&amp;amp;Istio in Welink supporting large traffic from large amount of users’ meeting, mailing and other online collaborations.
           
           
         
