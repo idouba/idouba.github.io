@@ -3,7 +3,7 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://idouba.com/categories/</loc>
-    <lastmod>2024-08-31T15:32:08+00:00</lastmod>
+    <lastmod>2024-09-09T15:32:08+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="pt"
@@ -16,10 +16,10 @@
                 />
   </url><url>
     <loc>https://idouba.com/posts/</loc>
-    <lastmod>2024-08-31T15:32:08+00:00</lastmod>
+    <lastmod>2024-09-09T15:32:08+00:00</lastmod>
   </url><url>
     <loc>https://idouba.com/tags/</loc>
-    <lastmod>2024-08-31T15:32:08+00:00</lastmod>
+    <lastmod>2024-09-09T15:32:08+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="pt"
@@ -31,14 +31,11 @@
                 href="https://idouba.com/tags/"
                 />
   </url><url>
-    <loc>https://idouba.com/one-week-with-douge/</loc>
-    <lastmod>2024-08-31T15:32:08+00:00</lastmod>
-  </url><url>
-    <loc>https://idouba.com/tags/%E7%88%B1/</loc>
-    <lastmod>2024-08-31T15:32:08+00:00</lastmod>
+    <loc>https://idouba.com/tags/%E5%86%9B%E8%AE%AD/</loc>
+    <lastmod>2024-09-09T15:32:08+00:00</lastmod>
   </url><url>
     <loc>https://idouba.com/</loc>
-    <lastmod>2024-08-31T15:32:08+00:00</lastmod>
+    <lastmod>2024-09-09T15:32:08+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="pt"
@@ -51,15 +48,21 @@
                 />
   </url><url>
     <loc>https://idouba.com/tags/%E8%B1%86%E5%93%A5/</loc>
-    <lastmod>2024-08-31T15:32:08+00:00</lastmod>
+    <lastmod>2024-09-09T15:32:08+00:00</lastmod>
   </url><url>
     <loc>https://idouba.com/categories/%E8%B1%86%E5%93%A5/</loc>
-    <lastmod>2024-08-31T15:32:08+00:00</lastmod>
+    <lastmod>2024-09-09T15:32:08+00:00</lastmod>
+  </url><url>
+    <loc>https://idouba.com/doudou-military-training/</loc>
+    <lastmod>2024-09-09T15:32:08+00:00</lastmod>
   </url><url>
     <loc>https://idouba.com/tags/%E9%9A%8F%E7%AC%94/</loc>
-    <lastmod>2024-08-31T15:32:08+00:00</lastmod>
+    <lastmod>2024-09-09T15:32:08+00:00</lastmod>
   </url><url>
     <loc>https://idouba.com/categories/%E9%9A%8F%E7%AC%94/</loc>
+    <lastmod>2024-09-09T15:32:08+00:00</lastmod>
+  </url><url>
+    <loc>https://idouba.com/doudou-first-day-of-new-term/</loc>
     <lastmod>2024-08-31T15:32:08+00:00</lastmod>
   </url><url>
     <loc>https://idouba.com/tags/istio/</loc>
