@@ -128,6 +128,75 @@
   <div class="excerpt">
     <div class="excerpt_header">
       <h3 class="post_link">
+        <a href="https://idouba.com/hadoop_mapreduce_tasktracker_child_reduce/" title="【hadoop代码笔记】Hadoop作业提交之Child启动reduce任务">【hadoop代码笔记】Hadoop作业提交之Child启动reduce任务</a>
+      </h3>
+      
+  <div class="post_meta">
+    <span><svg class="icon">
+  <title>calendar</title>
+  <use xlink:href="#calendar"></use>
+</svg>
+</span>
+    <span class="post_date">
+      Jan 23, 2014</span>
+    <span class="post_time"> · 24 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/hadoop/' title="hadoop" class="post_tag button button_translucent">hadoop
+        </a><a href='https://idouba.com/tags/java/' title="java" class="post_tag button button_translucent">java
+        </a><a href='https://idouba.com/tags/mapreduce/' title="mapreduce" class="post_tag button button_translucent">mapreduce
+        </a>
+    </span>
+    <span class="page_only">&nbsp;·
+  <div class="post_share">
+    Share on:
+    <a href="https://twitter.com/intent/tweet?text=%e3%80%90hadoop%e4%bb%a3%e7%a0%81%e7%ac%94%e8%ae%b0%e3%80%91Hadoop%e4%bd%9c%e4%b8%9a%e6%8f%90%e4%ba%a4%e4%b9%8bChild%e5%90%af%e5%8a%a8reduce%e4%bb%bb%e5%8a%a1&url=https%3a%2f%2fidouba.com%2fhadoop_mapreduce_tasktracker_child_reduce%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>twitter</title>
+  <use xlink:href="#twitter"></use>
+</svg>
+
+    </a>
+    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fhadoop_mapreduce_tasktracker_child_reduce%2f&t=%e3%80%90hadoop%e4%bb%a3%e7%a0%81%e7%ac%94%e8%ae%b0%e3%80%91Hadoop%e4%bd%9c%e4%b8%9a%e6%8f%90%e4%ba%a4%e4%b9%8bChild%e5%90%af%e5%8a%a8reduce%e4%bb%bb%e5%8a%a1" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>facebook</title>
+  <use xlink:href="#facebook"></use>
+</svg>
+
+    </a>
+    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
+      <svg class="icon">
+  <title>linkedin</title>
+  <use xlink:href="#linkedin"></use>
+</svg>
+
+    </a>
+    <a href="https://idouba.com/hadoop_mapreduce_tasktracker_child_reduce/" title="Copy Link" class="link link_yank">
+      <svg class="icon">
+  <title>copy</title>
+  <use xlink:href="#copy"></use>
+</svg>
+
+    </a>
+  </div>
+  </span>
+  </div>
+
+    </div>
+      <div class="excerpt_footer">
+        <div class="pale">
+          
+            <p>一、概要描述
+在上篇博文描述了TaskTracker启动一个独立的java进程来执行Map任务。接上上篇文章，TaskRunner线程执行中，会构造一个java –D** Child address port tasked这样第一个java命令，单独启动一个java进程。在Child的main函数中通过TaskUmbilicalProtocol协议，从TaskTracker获得需要执行的Task，并调用Task的run方法来执行。在ReduceTask而Task的run方法会通过java反射机制构造Reducer，Reducer.Context，然后调用构造的Reducer的run方法执行reduce操作。不同于map任务，在执 …</p>
+          
+          <br>
+          <a href="https://idouba.com/hadoop_mapreduce_tasktracker_child_reduce/" title="Read More" class="excerpt_more button">Read More</a>
+        </div>
+      </div>
+    </div>
+  </li>
+
+        <li class="post_item">
+  <div class="excerpt">
+    <div class="excerpt_header">
+      <h3 class="post_link">
         <a href="https://idouba.com/hadoop_mapreduce_tasktracker_child_map/" title="【hadoop代码笔记】hadoop作业提交之Child启动map任务">【hadoop代码笔记】hadoop作业提交之Child启动map任务</a>
       </h3>
       
@@ -764,79 +833,6 @@ JobClient通过RPC的方式向JobTracker提交作业； 调用JobTracker的submi
     </div>
   </li>
 
-        <li class="post_item">
-  <div class="excerpt">
-    <div class="excerpt_header">
-      <h3 class="post_link">
-        <a href="https://idouba.com/wikipedia_isolation/" title="【译】数据库事务隔离级别">【译】数据库事务隔离级别</a>
-      </h3>
-      
-  <div class="post_meta">
-    <span><svg class="icon">
-  <title>calendar</title>
-  <use xlink:href="#calendar"></use>
-</svg>
-</span>
-    <span class="post_date">
-      Jan 5, 2014</span>
-    <span class="post_time"> · 2 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/' title="数据库" class="post_tag button button_translucent">数据库
-        </a><a href='https://idouba.com/tags/%E4%BA%8B%E5%8A%A1/' title="事务" class="post_tag button button_translucent">事务
-        </a>
-    </span>
-    <span class="page_only">&nbsp;·
-  <div class="post_share">
-    Share on:
-    <a href="https://twitter.com/intent/tweet?text=%e3%80%90%e8%af%91%e3%80%91%e6%95%b0%e6%8d%ae%e5%ba%93%e4%ba%8b%e5%8a%a1%e9%9a%94%e7%a6%bb%e7%ba%a7%e5%88%ab&url=https%3a%2f%2fidouba.com%2fwikipedia_isolation%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>twitter</title>
-  <use xlink:href="#twitter"></use>
-</svg>
-
-    </a>
-    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fwikipedia_isolation%2f&t=%e3%80%90%e8%af%91%e3%80%91%e6%95%b0%e6%8d%ae%e5%ba%93%e4%ba%8b%e5%8a%a1%e9%9a%94%e7%a6%bb%e7%ba%a7%e5%88%ab" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>facebook</title>
-  <use xlink:href="#facebook"></use>
-</svg>
-
-    </a>
-    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
-      <svg class="icon">
-  <title>linkedin</title>
-  <use xlink:href="#linkedin"></use>
-</svg>
-
-    </a>
-    <a href="https://idouba.com/wikipedia_isolation/" title="Copy Link" class="link link_yank">
-      <svg class="icon">
-  <title>copy</title>
-  <use xlink:href="#copy"></use>
-</svg>
-
-    </a>
-  </div>
-  </span>
-  </div>
-
-    </div>
-      <div class="excerpt_footer">
-        <div class="pale">
-          
-            <p>看到wikipedia中文关于数据库相关的几个经典条目有点老旧，尤其和英文条目相比。确定开始翻译其中几篇，先从事务隔离等级开始。格式采用维基Sandbox发布后的格式。翻译完后自己校对过几遍，质量还可以。:-)
-已经在中文维基发布。
-翻译的中文条目地址：事务隔离等级；
-对应的英文条目地址：Isolation (database systems)
-欢迎大家指正，可以直接在维基上对应条目更新的！。
-事务隔离（isolation）定义了数据库系统中一个操作产生的影响什么时候以哪种方式可以对其他并发操作可见。隔离是事务ACID (原子性、一致性性、隔离性、持久性)四大属性中的一个重要属性。
-并发控制(Concurrency control) …</p>
-          
-          <br>
-          <a href="https://idouba.com/wikipedia_isolation/" title="Read More" class="excerpt_more button">Read More</a>
-        </div>
-      </div>
-    </div>
-  </li>
-
       <li>
     <ul class="pagination pagination-default">
       <li class="page-item">
@@ -927,7 +923,7 @@ JobClient通过RPC的方式向JobTracker提交作业； 调用JobTracker的submi
         
         <a href='https://idouba.com/categories/%E9%9A%8F%E7%AC%94/' class="post_tag button button_translucent" title="随笔">
           随笔
-          <span class="button_tally">16</span>
+          <span class="button_tally">17</span>
         </a>
         
         <a href='https://idouba.com/categories/hadoop/' class="post_tag button button_translucent" title="hadoop">
@@ -1060,7 +1056,7 @@ JobClient通过RPC的方式向JobTracker提交作业； 调用JobTracker的submi
             </a>
             
             
-            <a href='https://idouba.com/categories/%E9%9A%8F%E7%AC%94/' class=" post_tag button button_translucent" data-position=16 title="随笔">随笔<span class="button_tally">16</span>
+            <a href='https://idouba.com/categories/%E9%9A%8F%E7%AC%94/' class=" post_tag button button_translucent" data-position=17 title="随笔">随笔<span class="button_tally">17</span>
             </a>
             
             <div class="tags_sort"><span title="sort alphabetically">[A~Z]</span><span title="sort by count">[0~9]</span>
@@ -1132,7 +1128,7 @@ JobClient通过RPC的方式向JobTracker提交作业； 调用JobTracker的submi
         
         <a href='https://idouba.com/tags/%E9%9A%8F%E7%AC%94/' class="post_tag button button_translucent" title="随笔">
           随笔
-          <span class="button_tally">5</span>
+          <span class="button_tally">6</span>
         </a>
         
         <a href='https://idouba.com/tags/golang/' class="post_tag button button_translucent" title="golang">
@@ -1451,7 +1447,11 @@ JobClient通过RPC的方式向JobTracker提交作业； 调用JobTracker的submi
             </a>
             
             
-            <a href='https://idouba.com/tags/%E9%9A%8F%E7%AC%94/' class=" post_tag button button_translucent" data-position=5 title="随笔">随笔<span class="button_tally">5</span>
+            <a href='https://idouba.com/tags/%E9%93%81%E8%B7%AF/' class=" post_tag button button_translucent" data-position=1 title="铁路">铁路<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E9%9A%8F%E7%AC%94/' class=" post_tag button button_translucent" data-position=6 title="随笔">随笔<span class="button_tally">6</span>
             </a>
             
             
