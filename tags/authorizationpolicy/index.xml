@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>AuthorizationPolicy on 爱豆吧！</title>
+    <link>https://idouba.com/tags/authorizationpolicy/</link>
+    <description>Recent content in AuthorizationPolicy on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Sat, 03 Jun 2023 15:22:57 +0000</lastBuildDate><atom:link href="https://idouba.com/tags/authorizationpolicy/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Istio服务授权策略AuthorizationPolicy详解 –《Istio权威指南》书摘</title>
+      <link>https://idouba.com/authorization-policy-of-the-definitive-guide-istio/</link>
+      <pubDate>Sat, 03 Jun 2023 15:22:57 +0000</pubDate>
+      
+      <guid>https://idouba.com/authorization-policy-of-the-definitive-guide-istio/</guid>
+      <description>
+        
+          
+            本节书摘来自华为云原生技术丛书《Istio权威指南（上）：云原生服务网格Istio原理与实践》一书原理篇的第5章 服务安全的原理，5.4节AuthorizationPolicy（服务授权策略），更多内容请参照原书。
+第5章 服务安全的原理 Istio以非侵入方式透明地提供面向应用的安全基础设施。在Istio中有两种不同的认证方式：①基于mTLS的对等身份认证；②基于JWT（JSON Web Token）令牌的服务请求认证。本章重点介绍这两种认证方式，以及基于这两种认证方式的细粒度的服务访问授权，会详细介绍其中认证、授权的通用原理、模型，以及Istio基于服务网格形态的实现原理和机制。本章还会详细介绍如何通过配置PeerAuthentication、RequestAuthentication和AuthorizationPolicy使用这些认证、授权能力。
+5.4 AuthorizationPolicy（服务授权策略） 认证的大部分应用场景最终是基于授权的访问控制，以上两种认证策略也大多配套本节的授权策略使用。从Istio 1.4开始引入的AuthorizationPolicy替代了之前ClusterRbacConfig、ServiceRole和ServiceRoleBinding三个对象来进行授权配置，避免了配置多个API的麻烦，AuthorizationPolicy的自身功能也非常丰富。
+5.4.1 入门示例 在如下示例中定义了作用于forecast负载v2版本的AuthorizationPolicy：来自cluster.local/ns/weather/sa/frontend的服务，当其携带的请求头域group是admin，并且通过PUT和POST方法访问目标服务才被允许时，其他条件的访问都会被拒绝：
+1apiVersion: security.istio.io/v1beta1 2kind: AuthorizationPolicy 3metadata: 4 name: forecast 5 namespace: weather 6spec: 7 selector: 8 matchLabels: 9 app: forecast 10 version: v2 11 rules: 12 - from: 13 - source: 14 principals: [&amp;#34;cluster.local/ns/weather/sa/frontend&amp;#34;] 15 to: 16 - operation: 17 methods: [&amp;#34;PUT&amp;#34;,&amp;#34;POST&amp;#34;] 18 when: 19 - key: request.headers[group] 20 values: [&amp;#34;admin&amp;#34;] 5.4.2 配置模型 AuthorizationPolicy的配置模型如图5-16所示，主要包括以下三部分。
+◎ selector：描述策略应用的目标对象。
+◎ rules：描述详细的访问控制规则。
+          
+          
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>
