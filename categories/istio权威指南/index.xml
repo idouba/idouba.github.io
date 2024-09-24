@@ -7,7 +7,33 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
-    <lastBuildDate>Sun, 04 Jun 2023 15:22:57 +0000</lastBuildDate><atom:link href="https://idouba.com/categories/istio%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 25 Sep 2023 15:22:57 +0000</lastBuildDate><atom:link href="https://idouba.com/categories/istio%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【MeetTheAuthors】Istio社区指导委员会成员携新书《Istio权威指南》和6场技术演讲亮相KubeCon</title>
+      <link>https://idouba.com/meet-the-authors-in-shanghai-kubecon.md/</link>
+      <pubDate>Mon, 25 Sep 2023 15:22:57 +0000</pubDate>
+      
+      <guid>https://idouba.com/meet-the-authors-in-shanghai-kubecon.md/</guid>
+      <description>
+        
+          
+            9 月 26-28 日，由 Linux 基金会、云原生计算基金会（CNCF）主办的 KubeCon + CloudNativeCon + Open Source Summit China 2023 将在上海跨国采购会展中心隆重召开。作为全球顶级的开源和云原生盛会，本届大会以“云赋创新，无处不在”为主题，聚焦可观测、安全、平台工程、数据库、运维+性能等技术热点，邀请全球顶级技术专家、开源社区领袖和企业代表，共同探讨最新的开源云原生技术洞见、最佳实践以及来自全球的创新案例。
+作为 7月份Istio从CNCF正式毕业后云原生领域的第一次全球顶级技术盛会，全球服务网格的爱好者们除了可以参加KubeCon + CloudNativeCon + Open Source Summit China上丰富的议题外，还可以参与同场活动IstioCon 2023，业界最受欢迎的服务网格的第三届社区会议。您将在会上找到在生产环境中运行 Istio 的经验教训、实践经验，以及来自整个 Istio 生态系统的维护人员。其中就包括华为云云原生团队的两位资深技术专家，他们同时也是Istio社区成员、Istio社区指导委员会成员（Istio Steering Committee Member）。
+他们将在本期IstioCon和KubeCon上带来6场精彩的演讲。其中即包括《基于生产案例详细解析和重现Istio访问日志的各种应答标记（Response Flags）》、《cert-Manager 帮助增强 Istio 证书管理的安全性和灵活性》这种基于生产实践的技术干货，也包括《Istio数据平面的新选择：架构创新带来的全新性能体验》，《重新思考服务网格负载均衡》这样的深入技术研讨，还有《Istio毕业后的下一步发展》、《服务网格正在逐渐见证云计算更高的崛起》这些Istio和服务网格发展的讨论。
+同时作为今年5月年上市图书《Istio权威指南（上）：原理与实践》和《Istio权威指南（下）：架构与源码》的核心作者，他们也期望在会议期间和广大读者就本次演讲的服务网格相关议题、《Istio权威指南》图书中的内容、服务网格领域社区、业界和生产实践的各类问题与广大读者听众近距离交流。
+IstioCon议题分享 Istio数据平面的新选择：架构创新带来的全新性能体验 演讲嘉宾：Zhonghu Xu, Principal Engineer, Huawei Cloud
+Songyang Xie, Senior Software Engineer, Huawei Cloud
+时间：9月26号，周二 9:55-10:20
+地点：3夹层 3M3会议室
+议题简介：在像Istio这样的服务网格技术的部署中，减少数据平面代理架构引起的延迟开销已经成为网格提供者的关键问题。在本次会议中，徐中虎和谢颂杨将从操作系统的角度提出一种全新的服务网格数据平面解决方案。通过利用eBPF +内核增强，他们在操作系统中实现了原生的流量治理能力。与其他解决方案不同，这种方法显著简化了网格数据平面的转发路径，从而使数据平面转发延迟降低了60%以上。此外，它具有低资源开销和安全隔离的特点。该项目重新定义了网格数据平面，以Istiod作为控制平面，目前华为正在进行内部验证。此外，他们还将讨论服务网格的未来演变，并在不同部署场景中探索无Sidecar架构的潜力。
+听众受益：
+架构创新：从操作系统的角度引入一种新的方法来应对服务网格挑战，为基础架构之间的协作创新提供了一个很好的例子和灵感。 为 Istio 提供一个新的数据平面选项，以满足高性能应用场景的需求。 cert-Manager 帮助增强 Istio 证书管理的安全性和灵活性** 演讲嘉宾：Chaomeng Zhang, Architect, Huawei Cloud
+          
+          
+        
+      </description>
+    </item>
+    
     <item>
       <title>Istio多集群关键技术 –《Istio权威指南》书摘</title>
       <link>https://idouba.com/multi-cluster-of-the-definitive-guide-istio/</link>
