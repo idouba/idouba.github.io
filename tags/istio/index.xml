@@ -44,6 +44,44 @@ Peer authentication is fundamental part of Istio’s zero-trust security model. 
     </item>
     
     <item>
+      <title>Istio多集群关键技术 –《Istio权威指南》书摘</title>
+      <link>https://idouba.com/multi-cluster-of-the-definitive-guide-istio/</link>
+      <pubDate>Sun, 04 Jun 2023 15:22:57 +0000</pubDate>
+      
+      <guid>https://idouba.com/multi-cluster-of-the-definitive-guide-istio/</guid>
+      <description>
+        
+          
+            本节书摘来自华为云原生技术丛书《Istio权威指南（上）：云原生服务网格Istio原理与实践》一书原理篇的第7章 异构基础设施，7.3节多集群的关键技术，更多内容请参照原书。
+第7章 异构基础设施 对多云、混合云、虚拟机等异构基础设施的服务治理是Istio重点支持的场景之一。为了提高服务的可用性，避免厂商锁定，多云、混合云甚至虚拟机和容器混合部署都成为常态，因此Istio社区将多集群、混合服务治理作为了重点发展方向。根据Flexera 2022 State of the Cloud Report，89%的组织选择了多云，随着越来越多的组织寻求使用最佳解决方案，混合云和多云有望实现持续增长，跨云的服务通信、服务治理将成为困扰开发人员的主要问题。本章从Istio的角度，重点解读Istio针对多集群服务治理提供的能力及实现原理。
+7.3 多集群的关键技术 多集群相对于单集群，其服务在跨集群互访时比较复杂，其中最棘手的问题有以下两个。
+◎ 异构环境下的DNS解析：如何解析多集群的服务域名。
+◎ 多网络环境下的服务跨网络访问：东西向网关如何转发跨网络的服务访问。
+7.3.1 异构环境DNS 如图7-9所示为多集群、虚拟机异构服务网格典型的服务访问拓扑。
+​ 图7-9 多集群、虚拟机异构服务网格典型的服务访问拓扑
+在Kubernetes中，Kube-dns只负责集群内的服务域名解析，对其他集群或者传统虚拟机服务的域名解析束手无策。为此，我们必须借助其他技术方案，通过级联DNS的方式向集群内的应用提供服务域名DNS解析的能力。级联DNS一般通过级联上游中心式的DNS服务器实现，但是如何向级联DNS服务器注册服务的DNS记录（DNS SRV）依然比较困难。
+另外，Istio依赖名为“istio-coredns”的CoreDns扩展插件，进行Remote集群服务的域名解析。这强制要求用户创建ServiceEntry以向istio-coredns注册服务，其中ServiceEntry中服务域名的表示形式被约定为..global，同时需要修改Kube-dns的配置，使其级联到istio-coredns。除此之外，还需要用户自己管理服务IP地址的分配。由此可见，在生产中使用这种方案非常困难。
+为降低在多集群、虚拟机等异构环境下使用Istio的难度，Istio在1.8版本中实现了DNS代理的功能。DNS代理的用法更加简单，无须用户额外创建任何配置。因此，Istio彻底废除了istio-coredns插件，不再需要为其他Kubernetes集群里面的服务在本地集群中创建影子服务。
+DNS代理完全是Istio内部实现的一个DNS服务器，负责解析所有应用程序发送的DNS解析请求。它的上游级联DNS默认为Kube-dns。DNS代理在提供服务时所需的DNS Records由Istiod通过NDS（NameTable Discovery Service）发送，其中NDS完全是基于xDS协议实现的。Istiod负责监听服务网格内部所有的服务（既包括Kubernetes服务，也包括ServiceEntry服务），然后根据服务的地址及域名等信息构建DNS记录。NDS配置的发送采用异步通知的机制，任何服务的更新都会及时触发NDS配置的发送。从功能上来讲，DNS代理完全分担了Kube-dns的压力，而且支持远端集群及ServiceEntry服务的域名解析。
+总之，本地DNS代理有三种优势：①由于DNS代理是Pilot-Agent中的子模块，所以Sidecar自动包含此功能，无须单独部署；②它与应用被部署在同一Pod中，属于同一网络空间，因此可以大大降低应用的DNS解析时延；③DNS代理属于分布式部署，可以分担中心式Kube-dns服务器的压力，避免因为Kube-dns过载而导致整个集群的可用性下降。
+DNS代理的基本工作原理如图7-10所示，流程如下。
+（1）应用程序在访问目标服务时，首先发起DNS解析。Istio通过Iptables规则拦截应用的DNS解析请求，并将其转发到本地15053端口，15053端口正是DNS代理监听的端口。
+（2）DNS代理在接收到DNS解析请求后，首先检索本地的DNS记录，如果本地存在，则直接返回DNS响应，否则继续向上游级联DNS服务器（Kube-dns）发起解析请求。
+（3）本集群的Kube-dns首先在本地查找DNS记录，如果找到，则直接返回DNS响应，否则会遵循标准的DNS配置（/etc/resolv.conf），将DNS请求转发到上游级联DNS服务器。这里的上游级联DNS服务器可能是公有云厂商自有的DNS服务器。
+​ 图7-10 DNS代理的基本工作原理
+DNS域名与IP地址映射表
+如图7-11所示，Istiod通过监听所有集群的Kube-apiserver，获取整个服务网格中的所有Service/ServiceEntry，并且为ServiceEntry自动分配IP地址。DNS代理通过NDS（Istio扩展的xDS协议）从Istiod中获取所有服务的DNS域名与IP地址的映射关系表，并将其缓存在本地。
+​ 图7-11 DNS代理NDS的发现原理
+对于Kubernetes原生的Service来说，DNS解析直接使用其ClusterIP。当然存在这么一种情况，Service B在集群1和集群2中均存在，但是具有不同的ClusterIP地址，这时应该选择哪个地址作为服务的地址呢？答案是：Istiod选择与DNS Proxy在同一集群服务中的ClusterIP作为Service B的IP地址。如果DNS Proxy在集群1中，则Istiod选择集群1的ClusterIP 10.96.0.10作为Service B的地址；如果DNS Proxy在集群2中，则Istiod选择集群2的ClusterIP 10.10.0.10作为Service B的地址。也就是说，在多集群场景中，同一个服务名在不同的集群中可能被解析成不同的IP地址，当然这里完全不影响服务的访问，因为Istiod在生成监听器及路由匹配条件时，也遵循优先选择代理所在集群的服务ClusterIP的原则。
+ServiceEntry一般用来表示虚拟机上或者服务网格外部的服务，DNS或STATIC解析类型的ServiceEntry本身并没有IP地址，Istiod会从保留的E类地址（240.0.0.1～255.255.255.254）中为其随机分配一个假的IP地址，并发送给DNS代理。当应用访问如下ServiceEntry指定的mymongodb.somedomain域名时，实际上DNS代理会返回一个240.240.x.x的IP地址。STATIC类型的服务在Envoy中的Cluster类型为EDS，因此Envoy会将请求发往2.2.2.2或者3.3.3.3中的任意一个目标实例。
+1apiVersion: networking.istio.io/v1beta1 2kind: ServiceEntry 3 metadata: 4 name: external-svc-mongocluster 5 spec: 6 hosts: 7 - mymongodb.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
       <title>Istio服务授权策略AuthorizationPolicy详解 –《Istio权威指南》书摘</title>
       <link>https://idouba.com/authorization-policy-of-the-definitive-guide-istio/</link>
       <pubDate>Sat, 03 Jun 2023 15:22:57 +0000</pubDate>

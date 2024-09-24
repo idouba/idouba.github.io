@@ -128,6 +128,78 @@
   <div class="excerpt">
     <div class="excerpt_header">
       <h3 class="post_link">
+        <a href="https://idouba.com/hadoop_mapreduce_jobadded/" title="【hadoop代码笔记】hadoop作业提交之JobTracker接收作业提交">【hadoop代码笔记】hadoop作业提交之JobTracker接收作业提交</a>
+      </h3>
+      
+  <div class="post_meta">
+    <span><svg class="icon">
+  <title>calendar</title>
+  <use xlink:href="#calendar"></use>
+</svg>
+</span>
+    <span class="post_date">
+      Jan 16, 2014</span>
+    <span class="post_time"> · 3 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/hadoop/' title="hadoop" class="post_tag button button_translucent">hadoop
+        </a><a href='https://idouba.com/tags/java/' title="java" class="post_tag button button_translucent">java
+        </a><a href='https://idouba.com/tags/mapreduce/' title="mapreduce" class="post_tag button button_translucent">mapreduce
+        </a><a href='https://idouba.com/tags/source/' title="source" class="post_tag button button_translucent">source
+        </a>
+    </span>
+    <span class="page_only">&nbsp;·
+  <div class="post_share">
+    Share on:
+    <a href="https://twitter.com/intent/tweet?text=%e3%80%90hadoop%e4%bb%a3%e7%a0%81%e7%ac%94%e8%ae%b0%e3%80%91hadoop%e4%bd%9c%e4%b8%9a%e6%8f%90%e4%ba%a4%e4%b9%8bJobTracker%e6%8e%a5%e6%94%b6%e4%bd%9c%e4%b8%9a%e6%8f%90%e4%ba%a4&url=https%3a%2f%2fidouba.com%2fhadoop_mapreduce_jobadded%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>twitter</title>
+  <use xlink:href="#twitter"></use>
+</svg>
+
+    </a>
+    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fhadoop_mapreduce_jobadded%2f&t=%e3%80%90hadoop%e4%bb%a3%e7%a0%81%e7%ac%94%e8%ae%b0%e3%80%91hadoop%e4%bd%9c%e4%b8%9a%e6%8f%90%e4%ba%a4%e4%b9%8bJobTracker%e6%8e%a5%e6%94%b6%e4%bd%9c%e4%b8%9a%e6%8f%90%e4%ba%a4" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>facebook</title>
+  <use xlink:href="#facebook"></use>
+</svg>
+
+    </a>
+    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
+      <svg class="icon">
+  <title>linkedin</title>
+  <use xlink:href="#linkedin"></use>
+</svg>
+
+    </a>
+    <a href="https://idouba.com/hadoop_mapreduce_jobadded/" title="Copy Link" class="link link_yank">
+      <svg class="icon">
+  <title>copy</title>
+  <use xlink:href="#copy"></use>
+</svg>
+
+    </a>
+  </div>
+  </span>
+  </div>
+
+    </div>
+      <div class="excerpt_footer">
+        <div class="pale">
+          
+            <p>一、概要描述
+在上一篇博文中主要描述了JobTracker接收作业的几个服务（或功能）模块的初始化过程。本节将介绍这些服务（或功能）是如何接收到提交的job。本来作业的初始化也可以在本节内描述，但是涉及到JobInProgress的初始化过程放在一张图上太拥挤，就分开到下一篇文章中描述。
+二、 流程描述
+JobClient通过RPC的方式向JobTracker提交作业； 调用JobTracker的submitJob方法。该方法是JobTracker向外提供的供调用的提交作业的接口。 submit方法中调用JobTracker的addJob方法。 在addJob方法中会把作业加入到集合中供调度，并会触发注册 …</p>
+          
+          <br>
+          <a href="https://idouba.com/hadoop_mapreduce_jobadded/" title="Read More" class="excerpt_more button">Read More</a>
+        </div>
+      </div>
+    </div>
+  </li>
+
+        <li class="post_item">
+  <div class="excerpt">
+    <div class="excerpt_header">
+      <h3 class="post_link">
         <a href="https://idouba.com/eagertaskinitializationlistener/" title="【hadoop代码笔记】Hadoop作业提交中EagerTaskInitializationListener的作用">【hadoop代码笔记】Hadoop作业提交中EagerTaskInitializationListener的作用</a>
       </h3>
       
@@ -752,74 +824,6 @@ I am an Inter fan of China, a postgraduate student of a University in the Northw
     </div>
   </li>
 
-        <li class="post_item">
-  <div class="excerpt">
-    <div class="excerpt_header">
-      <h3 class="post_link">
-        <a href="https://idouba.com/daily-japanese-speak-in-office-in-chinese/" title="一次日语朝礼">一次日语朝礼</a>
-      </h3>
-      
-  <div class="post_meta">
-    <span><svg class="icon">
-  <title>calendar</title>
-  <use xlink:href="#calendar"></use>
-</svg>
-</span>
-    <span class="post_date">
-      Dec 13, 2004</span>
-    <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/japanese/' title="japanese" class="post_tag button button_translucent">japanese
-        </a><a href='https://idouba.com/tags/%E3%81%AB%E3%81%BB%E3%82%93%E3%81%94/' title="にほんご" class="post_tag button button_translucent">にほんご
-        </a>
-    </span>
-    <span class="page_only">&nbsp;·
-  <div class="post_share">
-    Share on:
-    <a href="https://twitter.com/intent/tweet?text=%e4%b8%80%e6%ac%a1%e6%97%a5%e8%af%ad%e6%9c%9d%e7%a4%bc&url=https%3a%2f%2fidouba.com%2fdaily-japanese-speak-in-office-in-chinese%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>twitter</title>
-  <use xlink:href="#twitter"></use>
-</svg>
-
-    </a>
-    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fdaily-japanese-speak-in-office-in-chinese%2f&t=%e4%b8%80%e6%ac%a1%e6%97%a5%e8%af%ad%e6%9c%9d%e7%a4%bc" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>facebook</title>
-  <use xlink:href="#facebook"></use>
-</svg>
-
-    </a>
-    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
-      <svg class="icon">
-  <title>linkedin</title>
-  <use xlink:href="#linkedin"></use>
-</svg>
-
-    </a>
-    <a href="https://idouba.com/daily-japanese-speak-in-office-in-chinese/" title="Copy Link" class="link link_yank">
-      <svg class="icon">
-  <title>copy</title>
-  <use xlink:href="#copy"></use>
-</svg>
-
-    </a>
-  </div>
-  </span>
-  </div>
-
-    </div>
-      <div class="excerpt_footer">
-        <div class="pale">
-          
-            <p>那时候每天早上都要在办公室用日语朗读一篇文章(后来我们小组要求背诵了)，对学习日语确实有很大帮助。平时也就和合作的日本team那边的人写邮件讨论功能，开始大部分句式也都是从senior的人那儿拷贝来，替换中间的词汇来表达。包括入职才一个多月就写的几十页的功能文档，都是这么干的。每天轮流一个人来朗读一篇文章倒确实对大家的口语锻炼有挺多好处的，尽管我们这些当时年龄资历都很不够的人，一般在两周多的项目总结会上，一般也就只是听，没有说的份。做多每次会前，逐个自我介绍，用日语自我介绍下，我叫什么，负责那个模块的，请多指教云云。大组十几个人，有二十个吗？好像有二十个人。一般也就两三周轮到一次。
-在第三次，还是第二次轮到我的时候，发表了这篇文章。 …</p>
-          
-          <br>
-          <a href="https://idouba.com/daily-japanese-speak-in-office-in-chinese/" title="Read More" class="excerpt_more button">Read More</a>
-        </div>
-      </div>
-    </div>
-  </li>
-
       <li>
     <ul class="pagination pagination-default">
       <li class="page-item">
@@ -827,9 +831,6 @@ I am an Inter fan of China, a postgraduate student of a University in the Northw
       </li>
       <li class="page-item">
         <a href="/page/8/" aria-label="Previous" class="page-link" role="button"><span aria-hidden="true">&laquo;</span></a>
-      </li>
-      <li class="page-item">
-        <a href="/page/5/" aria-label="Page 5" class="page-link" role="button">5</a>
       </li>
       <li class="page-item">
         <a href="/page/6/" aria-label="Page 6" class="page-link" role="button">6</a>
@@ -843,11 +844,14 @@ I am an Inter fan of China, a postgraduate student of a University in the Northw
       <li class="page-item active">
         <a aria-current="page" aria-label="Page 9" class="page-link" role="button">9</a>
       </li>
-      <li class="page-item disabled">
-        <a aria-disabled="true" aria-label="Next" class="page-link" role="button" tabindex="-1"><span aria-hidden="true">&raquo;</span></a>
+      <li class="page-item">
+        <a href="/page/10/" aria-label="Page 10" class="page-link" role="button">10</a>
       </li>
-      <li class="page-item disabled">
-        <a aria-disabled="true" aria-label="Last" class="page-link" role="button" tabindex="-1"><span aria-hidden="true">&raquo;&raquo;</span></a>
+      <li class="page-item">
+        <a href="/page/10/" aria-label="Next" class="page-link" role="button"><span aria-hidden="true">&raquo;</span></a>
+      </li>
+      <li class="page-item">
+        <a href="/page/10/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
       </li>
     </ul>
       </li>
@@ -905,7 +909,7 @@ I am an Inter fan of China, a postgraduate student of a University in the Northw
       <nav class="tags_nav">
         <a href='https://idouba.com/categories/istio/' class="post_tag button button_translucent" title="istio">
           ISTIO
-          <span class="button_tally">43</span>
+          <span class="button_tally">44</span>
         </a>
         
         <a href='https://idouba.com/categories/%E9%9A%8F%E7%AC%94/' class="post_tag button button_translucent" title="随笔">
@@ -920,7 +924,7 @@ I am an Inter fan of China, a postgraduate student of a University in the Northw
         
         <a href='https://idouba.com/categories/istio%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/' class="post_tag button button_translucent" title="istio权威指南">
           ISTIO权威指南
-          <span class="button_tally">9</span>
+          <span class="button_tally">10</span>
         </a>
         
         <a href='https://idouba.com/categories/%E6%BC%94%E8%AE%B2/' class="post_tag button button_translucent" title="演讲">
@@ -958,14 +962,14 @@ I am an Inter fan of China, a postgraduate student of a University in the Northw
           <span class="button_tally">3</span>
         </a>
         
-        <a href='https://idouba.com/categories/%E5%B9%B6%E5%8F%91/' class="post_tag button button_translucent" title="并发">
-          并发
+        <a href='https://idouba.com/categories/%E5%9B%BE%E4%B9%A6/' class="post_tag button button_translucent" title="图书">
+          图书
           <span class="button_tally">3</span>
         </a>
         
-        <a href='https://idouba.com/categories/%E5%9B%BE%E4%B9%A6/' class="post_tag button button_translucent" title="图书">
-          图书
-          <span class="button_tally">2</span>
+        <a href='https://idouba.com/categories/%E5%B9%B6%E5%8F%91/' class="post_tag button button_translucent" title="并发">
+          并发
+          <span class="button_tally">3</span>
         </a>
         
         <a href='https://idouba.com/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/' class="post_tag button button_translucent" title="机器学习">
@@ -987,7 +991,7 @@ I am an Inter fan of China, a postgraduate student of a University in the Northw
             </a>
             
             
-            <a href='https://idouba.com/categories/istio/' class=" post_tag button button_translucent" data-position=43 title="istio">ISTIO<span class="button_tally">43</span>
+            <a href='https://idouba.com/categories/istio/' class=" post_tag button button_translucent" data-position=44 title="istio">ISTIO<span class="button_tally">44</span>
             </a>
             
             
@@ -995,7 +999,7 @@ I am an Inter fan of China, a postgraduate student of a University in the Northw
             </a>
             
             
-            <a href='https://idouba.com/categories/istio%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/' class=" post_tag button button_translucent" data-position=9 title="istio权威指南">ISTIO权威指南<span class="button_tally">9</span>
+            <a href='https://idouba.com/categories/istio%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/' class=" post_tag button button_translucent" data-position=10 title="istio权威指南">ISTIO权威指南<span class="button_tally">10</span>
             </a>
             
             
@@ -1023,7 +1027,7 @@ I am an Inter fan of China, a postgraduate student of a University in the Northw
             </a>
             
             
-            <a href='https://idouba.com/categories/%E5%9B%BE%E4%B9%A6/' class=" post_tag button button_translucent" data-position=2 title="图书">图书<span class="button_tally">2</span>
+            <a href='https://idouba.com/categories/%E5%9B%BE%E4%B9%A6/' class=" post_tag button button_translucent" data-position=3 title="图书">图书<span class="button_tally">3</span>
             </a>
             
             
@@ -1064,7 +1068,7 @@ I am an Inter fan of China, a postgraduate student of a University in the Northw
       <nav class="tags_nav">
         <a href='https://idouba.com/tags/istio/' class="post_tag button button_translucent" title="istio">
           ISTIO
-          <span class="button_tally">26</span>
+          <span class="button_tally">27</span>
         </a>
         
         <a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' class="post_tag button button_translucent" title="演讲">
@@ -1104,12 +1108,12 @@ I am an Inter fan of China, a postgraduate student of a University in the Northw
         
         <a href='https://idouba.com/tags/istio%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/' class="post_tag button button_translucent" title="istio权威指南">
           ISTIO权威指南
-          <span class="button_tally">9</span>
+          <span class="button_tally">10</span>
         </a>
         
         <a href='https://idouba.com/tags/%E5%9B%BE%E4%B9%A6/' class="post_tag button button_translucent" title="图书">
           图书
-          <span class="button_tally">9</span>
+          <span class="button_tally">10</span>
         </a>
         
         <a href='https://idouba.com/tags/%E4%BA%91%E5%8E%9F%E7%94%9F%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BCistio%E5%8E%9F%E7%90%86%E5%AE%9E%E8%B7%B5%E6%9E%B6%E6%9E%84%E4%B8%8E%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/' class="post_tag button button_translucent" title="云原生服务网格istio原理实践架构与源码解析">
@@ -1198,7 +1202,7 @@ I am an Inter fan of China, a postgraduate student of a University in the Northw
             </a>
             
             
-            <a href='https://idouba.com/tags/istio/' class=" post_tag button button_translucent" data-position=26 title="istio">ISTIO<span class="button_tally">26</span>
+            <a href='https://idouba.com/tags/istio/' class=" post_tag button button_translucent" data-position=27 title="istio">ISTIO<span class="button_tally">27</span>
             </a>
             
             
@@ -1206,7 +1210,7 @@ I am an Inter fan of China, a postgraduate student of a University in the Northw
             </a>
             
             
-            <a href='https://idouba.com/tags/istio%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/' class=" post_tag button button_translucent" data-position=9 title="istio权威指南">ISTIO权威指南<span class="button_tally">9</span>
+            <a href='https://idouba.com/tags/istio%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/' class=" post_tag button button_translucent" data-position=10 title="istio权威指南">ISTIO权威指南<span class="button_tally">10</span>
             </a>
             
             
@@ -1350,7 +1354,7 @@ I am an Inter fan of China, a postgraduate student of a University in the Northw
             </a>
             
             
-            <a href='https://idouba.com/tags/%E5%9B%BE%E4%B9%A6/' class=" post_tag button button_translucent" data-position=9 title="图书">图书<span class="button_tally">9</span>
+            <a href='https://idouba.com/tags/%E5%9B%BE%E4%B9%A6/' class=" post_tag button button_translucent" data-position=10 title="图书">图书<span class="button_tally">10</span>
             </a>
             
             
@@ -1358,7 +1362,7 @@ I am an Inter fan of China, a postgraduate student of a University in the Northw
             </a>
             
             
-            <a href='https://idouba.com/tags/%E5%A4%9A%E9%9B%86%E7%BE%A4/' class=" post_tag button button_translucent" data-position=1 title="多集群">多集群<span class="button_tally">1</span>
+            <a href='https://idouba.com/tags/%E5%A4%9A%E9%9B%86%E7%BE%A4/' class=" post_tag button button_translucent" data-position=2 title="多集群">多集群<span class="button_tally">2</span>
             </a>
             
             
