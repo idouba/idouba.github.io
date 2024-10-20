@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>hadoop on 爱豆吧！</title>
+    <link>https://idouba.com/categories/hadoop/</link>
+    <description>Recent content in hadoop on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Wed, 05 Feb 2014 15:58:39 +0000</lastBuildDate><atom:link href="https://idouba.com/categories/hadoop/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【hadoop代码笔记】Mapreduce shuffle过程之Map输出过程</title>
+      <link>https://idouba.com/hadoop_mapreduce_shuffle_map_output/</link>
+      <pubDate>Wed, 05 Feb 2014 15:58:39 +0000</pubDate>
+      
+      <guid>https://idouba.com/hadoop_mapreduce_shuffle_map_output/</guid>
+      <description>
+        
+          
+            &lt;h3 id=&#34;一概要描述&#34;&gt;&lt;strong&gt;一、概要描述&lt;/strong&gt;&lt;/h3&gt;
+&lt;p&gt;shuffle是MapReduce的一个核心过程，因此没有在&lt;a href=&#34;../hadoop_job_submit_conclusion/&#34; title=&#34;【hadoop代码笔记】hadoop作业提交之汇总&#34;&gt;前面的MapReduce作业提交的过程&lt;/a&gt;中描述，而是单独拿出来比较详细的描述。 根据官方的流程图示如下：&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+  &lt;picture&gt;
+
+    
+      
+        
+        
+        
+        
+        
+        
+    &lt;img
+      loading=&#34;lazy&#34;
+      decoding=&#34;async&#34;
+      alt=&#34;&#34;
+      
+        class=&#34;image_figure image_internal image_unprocessed&#34;
+        src=&#34;../wp-content/uploads/2014/02/shuffle.png&#34;
+      
+      
+    /&gt;
+
+    &lt;/picture&gt;
+&lt;/figure&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;本篇文章中只是想尝试从代码分析来说明在map端是如何将map的输出保存下来等待reduce来取&lt;/strong&gt;。 在执行每个map task时，无论map方法中执行什么逻辑，最终都是要把输出写到磁盘上。如果没有reduce阶段，则直接输出到hdfs上，如果有有reduce作业，则每个map方法的输出在写磁盘前线在内存中缓存。每个map task都有一个环状的内存缓冲区，存储着map的输出结果，默认100m，在每次当缓冲区快满的时候由一个独立的线程将缓冲区的数据以一个溢出文件的方式存放到磁盘，当整个map task结束后再对磁盘中这个map task产生的所有溢出文件做合并，被合并成已分区且已排序的输出文件。然后等待reduce task来拉数据。&lt;/p&gt;
+&lt;h3 id=&#34;二-流程描述&#34;&gt;&lt;strong&gt;二、 流程描述&lt;/strong&gt;&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;在child进程调用到runNewMapper时，会设置output为NewOutputCollector，来负责map的输出。&lt;/li&gt;
+&lt;li&gt;在map方法的最后，不管经过什么逻辑的map处理，最终一般都要调用到TaskInputOutputContext的write方法，进而调用到设置的output即NewOutputCollector的write方法&lt;/li&gt;
+&lt;li&gt;NewOutputCollector其实只是对MapOutputBuffer的一个封装，其write方法调用的是MapOutputBuffer的collect方法。&lt;/li&gt;
+&lt;li&gt;MapOutputBuffer的collect方法中把key和value序列化后存储在一个环形缓存中，如果缓存满了则会调用startspill方法设置信号量，使得一个独立的线程SpillThread可以对缓存中的数据进行处理。&lt;/li&gt;
+&lt;li&gt;SpillThread线程的run方法中调用sortAndSpill方法对缓存中的数据进行排序后写溢出文件。&lt;/li&gt;
+&lt;li&gt;当map输出完成后，会调用output的close方法。&lt;/li&gt;
+&lt;li&gt;在close方法中调用flush方法，对剩余的缓存进行处理，最后调用mergeParts方法，将前面过程的多个溢出文件合并为一个。&lt;/li&gt;
+&lt;/ol&gt;
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>【hadoop代码笔记】hadoop作业提交之汇总</title>
+      <link>https://idouba.com/hadoop_job_submit_conclusion/</link>
+      <pubDate>Sat, 01 Feb 2014 13:25:44 +0000</pubDate>
+      
+      <guid>https://idouba.com/hadoop_job_submit_conclusion/</guid>
+      <description>
+        
+          
+            一、概述 在本篇博文中，试图通过代码了解hadoop job执行的整个流程。即用户提交的mapreduce的jar文件、输入提交到hadoop的集群，并在集群中运行。重点在代码的角度描述整个流程，有些细节描述的并不那么详细。 汇总的代码流程图附件:hadoop_mapreduce_jobsubmit
+二、主要流程 Jobclient通过RPC方式调用到jobtracker的submitJob方法提交作业，包括作业的jar、分片和作业描述。 JobTracker的submitJob方法吧job加入到内存队列中，由独立的线程取出每个JobInProgress的对象调用其initTasks方法，根据传入的作业分片创建对应数量的TaskInProgress类型的maptask和指定数量的Reduce task。 Tasktracker的offerService定时调用jobTracker的heartbeat发心跳给jobtracker报告状态并获取要执行的task。在haeartbeat中其实是通过配置的Taskscheduler来分配task的。 TaskTracker初始化时，会初始化并启动两个TaskLauncher类型的线程，mapLauncher，reduceLauncher。在TaskTracker从JobTracher获取到任务后，对应的会把任务添加到两个TaskLauncher的Queue中。TaskLauncher线程一直会定时检查TaskTracher上面有slot可以运行新的Task，则启动Task。 先把task运行需要的文件解压到本地，并创建根据Task类型（Map或者Reduce）创建一个TaskRunner线程，在TaskRunner中JvmManager调用JvmManagerForType、JvmRunner来启动一个java进程来执行Map或Reduce任务。在TaskRunner线程执行中，会构造一个_java –D Child address port tasked_这 样第一个java命令，单独启动一个java进程。在Child的main函数中通过TaskUmbilicalProtocol协议，从 TaskTracker获得需要执行的Task，并调用Task的run方法来执行。 对于MapTask的的run方法会通过java反射机制构造根据配置 Mapper，InputFormat，mapperContext等对象，然后调用构造的mapper的run方法执行mapper操作。 对于ReduceTask，由ReduceCopier对象的不同线程来获取map输出地址，拷贝输出，merge输出等操作。并利用反射机制根据配置的Reducer类构造一个Reducer实例和运行的上下文。并调用reducer的run方法来执行到用户定义的reduce操作。 三、详细流程 一）JobTracker等相关功能模块初始化(详细) 本来按照流程，第一步骤应该是Jobclient向Jobtracker发起作业提交的请求。为了更好的理解jobtracker是如何接收从jobclient提交的作业，有必要了解jobtracker相关的服务（和功能模块）的初始化过程。即Jobtracker作为一个服务启动起来，包括其附属的其他服务（和功能模块）。以接受jobclient的作业提交，初始化作业，向tasktracker分配任务。
+JobTracker 的main函数中调用其startTracker方法。 在main函数中调用offerService，启动各个子服务项（大部分形态都是线程，有些是其他的初始化，如taskScheduler） ?在startTracker中调用其构造函数，在构造函数中对其中重要的属性根据配置进行初始化。(个人感觉再构造中设置scheduler，在statTracker调用构造的下一句有给Scheduler传JobTracker的引用，有点不自然)。Scheduler和JobTracker实例间，Scheduler包含JobTracker（实际上就是TaskTrackerManager）对象，通过TaskTrackerManager对象获取Hadoop集群的一些信息，如slot总数，QueueManager对象，这些都是调度器中调度算法输入的指标；JobTracker中要包含Scheduler对象，使用Scheduler来为TaskTracker分配task。 在offerService()中启动taskSchedulerexpireTrackersThread retireJobsThread expireLaunchingTaskThread completedJobsStoreThread interTrackerServer等几个线程来共同完成服务。同时调用TaskScheduler的start方法进行初始化。 在FairScheduler调度器的start方法中调用EagerTaskInitializationListenerr的start方法来初始化EagerTaskInitializationListener 在FairScheduler调度器的start方法中调用DefaultTaskSelector的start方法来初始化DefaultTaskSelector，因为该类实现的TaskSelector太简单，start方法里也没有做任何事情。 二）客户端作业提交(详细) Jobclient使用内置的JobSubmissionProtocol 实例jobSubmitClient 和JobTracker交互。向jobtracker请求一个新的作业ID，计算作业的输入分片，并将运行作业所需的资源（包括作业jar文件，配置文件和计算所得的输入分片）复制到jobtracker的文件系统中一个以作业ID命名的目录下。
+通过调用JobTracker的getNewJobId()向jobtracker请求一个新的作业ID 获取job的jar、输入分片、作业描述等几个路径信息，以jobId命名。 其中getSystemDir()是返回jobtracker的系统目录，来放置job相关的文件。包括：mapreduce的jar文件submitJarFile、分片文件submitSplitFile、作业描述文件submitJobFile 检查作业的输出说明，如果没有指定输出目录或输出目录以及存在，则作业不提交。参照org.apache.hadoop.mapreduce.lib.output.FileOutputFormat的checkOutputSpecs方法。如果没有指定，则抛出InvalidJobConfException，文件已经存在则抛出FileAlreadyExistsException 计算作业的输入分片。通过InputFormat的getSplits(job)方法获得作业的split并将split序列化封装为RawSplit。返回split数目，也即代表有多个分片有多少个map。详细参见InputFormat获取Split的方法。 writeNewSplits 方法把输入分片写到JobTracker的job目录下。 将运行作业所需的资源（包括作业jar文件，配置文件和计算所得的输入分片）复制到jobtracker的文件系统中一个以作业ID命名的目录下。 使用句柄JobSubmissionProtocol通过RPC远程调用的submitJob()方法，向JobTracker提交作业。JobTracker作业放入到内存队列中，由作业调度器进行调度。并初始化作业实例。JobTracker创建job成功后会给JobClient传回一个JobStatus对象用于记录job的状态信息，如执行时间、Map和Reduce任务完成的比例等。JobClient会根据这个JobStatus对象创建一个 NetworkedJob的RunningJob对象，用于定时从JobTracker获得执行过程的统计数据来监控并打印到用户的控制台。 三）JobTracker接收作业(详细) JobTracker根据接收到的submitJob()方法调用后，把调用放入到内存队列中，由作业调度器进行调度。并初始化作业实例，从共享文件系统中获取JobClient计算好的输入分片信息，为每个分片创建一个map任务，根据mapred.reduce.task设置来创建指定数量的reduce任务。
+JobClient通过RPC的方式向JobTracker提交作业； 调用JobTracker的submitJob方法。该方法是JobTracker向外提供的供调用的提交作业的接口。 submit方法中调用JobTracker的addJob方法。 在addJob方法中会把作业加入到集合中供调度，并会触发注册的JobInProgressListener的jobAdded事件。由上篇博文的jobtracker相关服务和功能的初始化的FairScheduler的start方法中看到，这里注册的是两个JobInProgressListener。分别是FairScheduler的内部类JobListener和EagerTaskInitializationListener。 FairScheduler的内部类JobListener响应jobAdded事件事件。只是为每个加入的Job创建一个用于FairScheduler调度用的JobInfo对象，并将其和job的对应的存储在Map&amp;lt;JobInProgress, JobInfo&amp;gt; infos集合中。 EagerTaskInitializationListener响应jobAdded事件事件。jobAdded 只是简单的把job加入到一个List类型的 jobInitQueue中。并不直接对其进行初始化，对其中的job的处理由另外线程JobInitManager来做。该线程，一直检查 jobInitQueue是否有作业，有则拿出来从线程池中取一个线程InitJob处理。关于作业的初始化过程专门在下一篇文章中介绍。 四）Job初始化(详细) Jobtracker响应作业提交请求，将提交的作业加入到一个列表中，由单独的线程来对列表中的job进行初始化。至此在Jobtracker一端对提交的job的准备工作就完毕了。
+EagerTaskInitializationListener的 jobAdded方法把JobInProgress类型的job放到List类型的 jobInitQueue中，有个单独的线程会对新加入的每个job进行初始化，其初始化调用的方法就是JobInProgress的方法 initTasks。 在JobInProgress的方法initTasks方法中，会根据传入的作业分片创建对应数量的TaskInProgress类型的maptask，同时会创建TaskInProgress类型的指定数量的reducetask。 TaskInProgress的初始化是由其构造函数和构造函数中调用的init方法完成的。有构造MapTask的构造函数和构造ReduceTask的构造函数。分别是如下。其主要区别在于构造mapTask是要传入输入分片信息的RawSplit，而Reduce Task则不需要。两个构造函数都要调用init方法，进行其他的初始化。 五） TaskTracker获取Task，即jobtracker派发task（详细） tasktracker定时发心跳给jobtracker，并从jobtracker获取要执行的task。jobtracker在分配map任务会考虑数据本地化，对于reduce任务不用考虑本地化。
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>【hadoop代码笔记】Hadoop作业提交之Child启动reduce任务</title>
+      <link>https://idouba.com/hadoop_mapreduce_tasktracker_child_reduce/</link>
+      <pubDate>Thu, 23 Jan 2014 14:54:46 +0000</pubDate>
+      
+      <guid>https://idouba.com/hadoop_mapreduce_tasktracker_child_reduce/</guid>
+      <description>
+        
+          
+            一、概要描述
+在上篇博文描述了TaskTracker启动一个独立的java进程来执行Map任务。接上上篇文章，TaskRunner线程执行中，会构造一个java –D** Child address port tasked这样第一个java命令，单独启动一个java进程。在Child的main函数中通过TaskUmbilicalProtocol协议，从TaskTracker获得需要执行的Task，并调用Task的run方法来执行。在ReduceTask而Task的run方法会通过java反射机制构造Reducer，Reducer.Context，然后调用构造的Reducer的run方法执行reduce操作。不同于map任务，在执行reduce任务前，需要把map的输出从map运行的tasktracker上拷贝到reducer运行的tasktracker上。
+Reduce需要集群上若干个map任务的输出作为其特殊的分区文件。每个map任务完成的时间可能不同，因此只要有一个任务完成，reduce任务就开始复制其输出。这就是reduce任务的**复制阶段。**其实是启动若干个MapOutputCopier线程来复制完所有map输出。在复制完成后reduce任务进入排序阶段。这个阶段将由LocalFSMerger或InMemFSMergeThread合并map输出，维持其顺序排序。【即对有序的几个文件进行归并，采用归并排序】在reduce阶段，对已排序输出的每个键都要调用reduce函数，此阶段的输出直接写到文件系统，一般为HDFS上。（如果采用HDFS，由于tasktracker节点也是DataNoe，所以第一个块副本将被写到本地磁盘。 即数据本地化）
+Map 任务完成后，会通知其父tasktracker状态更新，然后tasktracker通知jobtracker。通过心跳机制来完成。因此jobtracker知道map输出和tasktracker之间的映射关系。Reducer的一个getMapCompletionEvents线程定期询问jobtracker以便获取map输出位置。
+二、 流程描述
+在ReduceTak中 构建ReduceCopier对象，调用其fetchOutputs方法。
+在ReduceCopier的fetchOutputs方法中分别构造几个独立的线程。相互配合，并分别独立的完成任务。
+2.1 GetMapEventsThread线程通过RPC询问TaskTracker，对每个完成的Event，获取maptask所在的服务器地址，即MapTask输出的地址，构造URL，加入到mapLocations，供copier线程获取。
+2.2构造并启动若干个MapOutputCopier线程，通过http协议，把map的输出从远端服务器拷贝的本地，如果可以放在内存中，则存储在内存中调用，否则保存在本地文件。
+2.3LocalFSMerger对磁盘上的map 输出进行归并。
+2.4nMemFSMergeThread对内存中的map输出进行归并。
+3.根据拷贝到的map输出构造一个raw keyvalue的迭代器，作为reduce的输入。
+调用runNewReducer方法中根据配置的Reducer类构造一个Reducer实例和运行的上下文。并调用reducer的run方法来执行到用户定义的reduce操作。。
+在Reducer的run方法中从上下文中取出一个key和该key对应的Value集合（Iterable类型），调用reducer的reduce方法进行处理。
+Recuer的reduce方法是用户定义的处理数据的方法，也是用户唯一需要定义的方法。
+三、代码详细
+1. Child的main方法每个task进程都会被在单独的进程中执行，这个方法就是这些进程的入口方法。Reduce和map一样都是由该main函数调用。所以此处不做描述，详细见上节Child启动map任务。
+**2. ReduceTask的run方法。**在Child子进程中被调用，执行用户定义的Reduce操作。前面代码逻辑和MapTask类似。通过TaskUmbilicalProtocol向tasktracker上报执行进度。开启线程向TaskTracker上报进度，根据task的不同动作要求执行不同的方法，如jobClean，jobsetup，taskCleanup。对于部分的了解可以产看taskTracker获取Task文章中的 JobTracker的 heartbeat方法处的详细解释。不同于map任务，在执行reduce任务前，需要把map的输出从map运行的tasktracker上拷贝到reducer运行的tasktracker上。
+1@SuppressWarnings(&amp;#34;unchecked&amp;#34;) 2 public void run(JobConf job, final TaskUmbilicalProtocol umbilical) 3 throws IOException, InterruptedException, ClassNotFoundException { 4 job.setBoolean(&amp;#34;mapred.skip.on&amp;#34;, isSkipping()); 5 6 if (isMapOrReduce()) { 7 copyPhase = getProgress().addPhase(&amp;#34;copy&amp;#34;); 8 sortPhase = getProgress().addPhase(&amp;#34;sort&amp;#34;); 9 reducePhase = getProgress().addPhase(&amp;#34;reduce&amp;#34;); 10 } 11 // start thread that will handle communication with parent 12 TaskReporter reporter = new TaskReporter(getProgress(), umbilical); 13 reporter.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>【hadoop代码笔记】hadoop作业提交之Child启动map任务</title>
+      <link>https://idouba.com/hadoop_mapreduce_tasktracker_child_map/</link>
+      <pubDate>Wed, 22 Jan 2014 07:00:53 +0000</pubDate>
+      
+      <guid>https://idouba.com/hadoop_mapreduce_tasktracker_child_map/</guid>
+      <description>
+        
+          
+            一、概要描述
+在上篇博文描述了TaskTracker启动一个独立的java进程来执行Map或Reduce任务。在本篇和下篇博文中我们会关注启动的那个入口是org.apache.hadoop.mapred.Child的这个Java进程是如何执行用户定义的map或Reduce任务的。
+接上篇文章，TaskRunner线程执行中，会构造一个_java –D** Child address port tasked_这 样第一个java命令，单独启动一个java进程。在Child的main函数中通过TaskUmbilicalProtocol协议，从 TaskTracker获得需要执行的Task，并调用Task的run方法来执行，而Task的run方法会通过java反射机制构造 Mapper，InputFormat，mapperContext，然后调用构造的mapper的run方法执行mapper操作。
+二、 流程描述
+Child类根据前面输入的三个参数，即tasktracher的地址、端口、taskid。通过TaskUmbilicalProtocol协议，从TaskTracker获得需要执行的Task，在Child的main函数中调用执行。 在Chilld中，执行Task的run方法。Task 的run方法。是真正执行用户定义的map或者reduce任务的入口，通过TaskUmbilicalProtocol向tasktracker上报执行进度。 在MapTask的run中执行runMapper方法来调用mapper定义的方法。 在runNewMapper方法中构造mapper实例和mapper执行的配置信息。并执行mapper.run方法来调用到用户定义的mapper的方法。 mapper的run方法中，从输入数据中逐一取出调用map方法来处理每一条数据 mapper的map方法是真正用户定义的处理数据的类。也是用户唯一需要定义的方法。 三、代码详细
+Child的main方法每个task进程都会被在单独的进程中执行，这个方法就是这些进程的入口方法。观察下载在这个方法中做了哪些事情？ 1)从传入的参数中获得tasktracker的地址、从传入的参数中获得tasktracker的地址
+根据获取的taskTracker的地址和端口通过RPC方式和tasktracker通信，umbilical是作为tasktracker的代理来执行操作。
+根据JvmId从taskTracker查询获取到JvmTask
+执行任务
+1public static void main(String[] args) throws Throwable { 2 LOG.debug(&amp;#34;Child starting&amp;#34;); 3JobConf defaultConf = new JobConf(); 4 5//从传入的参数中获得taskTracker的地址 6String host = args[0]; 7//从传入的参数中获得taskTracker的响应请求的端口。 8 int port = Integer.parseInt(args[1]); 9 InetSocketAddress address = new InetSocketAddress(host, port); 10 final TaskAttemptID firstTaskid = TaskAttemptID.forName(args[2]); 11 final int SLEEP_LONGER_COUNT = 5; 12 int jvmIdInt = Integer.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>【hadoop代码笔记】hadoop作业提交之TaskTracker 启动task</title>
+      <link>https://idouba.com/hadoop_mapreduce_tasktracker_launch_task/</link>
+      <pubDate>Tue, 21 Jan 2014 13:58:12 +0000</pubDate>
+      
+      <guid>https://idouba.com/hadoop_mapreduce_tasktracker_launch_task/</guid>
+      <description>
+        
+          
+            一、概要描述
+在上篇博文描 述了TaskTracker从Jobtracker如何从JobTracker获取到要执行的Task。在从JobTracker获取到 LaunchTaskAction后，执行addToTaskQueue方法来把要执行的Task加入到queue。在本篇博文中，我们来关注下该方法 后，TaskTracker怎么来处理这些Task。
+实际上，TaskTracker初始化时，会初始化并启动两个TaskLauncher类型的线程，mapLauncher，reduceLauncher。在TaskTracker从JobTracher获取到任务后，对应的会把任务添加到两个 TaskLauncher的Queue中，其实是TaskLauncher维护的一个列表List tasksToLaunch。
+TaskLauncher线程一直会定时检查TaskTracher上面有slot开业运行新的Task，则启动 Task。在这个过程中，先把task运行需要的文件解压到本地，并创建根据Task类型（Map或者Reduce）创建一个TaskRunner线程， 在TaskRunner中JvmManager调用JvmManagerForType、JvmRunner来启动一个java进程来执行Map或Reduce任务。
+本文只是介绍到启动一个java进程，至于是什么样的java进程，对于maptask和reducetask分别是怎么执行的，在后面的child启动maptask，和child启动reducetask 会比较详细的介绍。
+二、 流程描述
+tasktracker的offerService方法获取到要执行的task后调用addToTaskQueue方法，其实是调用taskrunner的addToTaskQueue方法 TaskLauncher内部维护了一个List tasksToLaunch，只是把task加入到该 taskLauncher是一个线程，在其run方法中从tasksToLaunch集合中取出task来执行，调用Tasktracker的startNewTask方法启动task。 startNewtask方法中调用localizeJob方法把job相关的配置信息和要运行的jar拷贝到tasktracker本地，然后调用taskInProgress的launchTask方法来启动task。 TaskInProgress的launchTask方法先调用localizeTask(task把task相关的配置信息获取到本地。然后创建一个TaskRunner线程来启动task。 在TaskRunner的run方法中构建一个java命令的执行的条件，包括引用类，执行目录等，入口类是Child。然后调用JvmManager 的launchJvm方法来调用。 JvmManager 进而调用 JvmManagerForType的reapJvm，和spawnNewJvm 方法，发起调用. 在JvmManagerForType的spawnNewJvm 方法中创建了一个JvmRunner线程类执行调用. JvmRunner线程的run反复调用runChild方法来执行 一个命令行的调用。 三、代码详细
+TaskTracker的 addToTaskQueue方法。 接上文的最后一个方法的在heartbeat中把根据jobtracker的指令把需要launch的task调用addToTaskQueue方法加入task queue。
+1//根据task的类型不同加入到不同的launcher中。 2private void addToTaskQueue(LaunchTaskAction action) { 3if (action.getTask().isMapTask()) { 4mapLauncher.addToTaskQueue(action); 5}else { 6reduceLauncher.addToTaskQueue(action); 7} 8} TaskLauncher 的addToTaskQueue方法，即把要launch的task加入到TaskLauncher内维护的一个列表List tasksToLaunch;中。 1public void addToTaskQueue(LaunchTaskAction action) { 2 synchronized (tasksToLaunch) { 3 TaskInProgress tip = registerTask(action, this); 4 tasksToLaunch.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>【hadoop代码笔记】hadoop作业提交之Job初始化</title>
+      <link>https://idouba.com/hadoop_mapreduce_job_init/</link>
+      <pubDate>Sun, 19 Jan 2014 14:54:46 +0000</pubDate>
+      
+      <guid>https://idouba.com/hadoop_mapreduce_job_init/</guid>
+      <description>
+        
+          
+            一、概要描述
+在上一篇博文中主要描述了JobTracker和其几个服务（或功能）模块的接收到提交的job后的一些处理。其中很重要的一部分就作业的初始化。因为代码片段图的表达问题，本应该在上篇描述的内容，分开在本篇描述。
+二、 流程描述
+代码也接上文的最后一个方法EagerTaskInitializationListener的 jobAdded方法把JobInProgress类型的job放到List类型的 jobInitQueue中，有个单独的线程会对新加入的每个job进行初始化，其初始化调用的方法就是JobInProgress的方法 initTasks。
+在JobInProgress的方法initTasks方法中，会根据传入的作业分片创建对应数量的TaskInProgress类型的maptask，同时会创建TaskInProgress类型的指定数量的reducetask。
+TaskInProgress的初始化是由其构造函数和构造函数中调用的init方法完成的。
+三、代码详细
+1. EagerTaskInitializationListener的内部InitJob线程的run方法。调用JobInProgress的初始化方法。
+1static class InitJob implements Runnable { 2 private JobInProgress job; 3 public InitJob(JobInProgress job) { 4 this.job = job; 5 } 6public void run() 7 { 8 job.initTasks(); 9 } 10 } 2. JobInProgress 类的initTasks方法。
+主要流程：
+1）根据读入的split确定map的数量，每个split一个map
+2）如果Task数大于该jobTracker支持的最大task数，则抛出异常。
+3）根据split的数量初始化maps
+4）如果没有split，表示job已经成功结束。
+根据指定的reduce数量numReduceTasks创建reduce task 6）计算并且最少剩下多少map task ，才可以开始Reduce task。默认是总的map task的5%，即大部分Map task完成后，就可以开始reduce task了。
+//1） 根据读入的split确定map的数量，每个split一个map
+1String jobFile = profile.getJobFile(); 2 Path sysDir = new Path(this.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>【hadoop代码笔记】hadoop作业提交之TaskTracker获取Task</title>
+      <link>https://idouba.com/hadoop_mapreduce_tasktracker_retrieve_task/</link>
+      <pubDate>Sat, 18 Jan 2014 14:50:50 +0000</pubDate>
+      
+      <guid>https://idouba.com/hadoop_mapreduce_tasktracker_retrieve_task/</guid>
+      <description>
+        
+          
+            一、概要描述
+在上上一篇博文和上一篇博文中 分别描述了jobTracker和其服务（功能）模块初始化完成后，接收JobClient提交的作业，并进行初始化。本文着重描 述，JobTracker如何选择作业的Task分发到TaskTracker。本文只是描述一个TaskTracker如何从JobTracker获取 Task任务。Task任务在TaskTracker如何执行将在后面博文中描述。
+二、 流程描述
+TaskTracker在run中调用offerService()方法一直死循环的去连接Jobtracker，先Jobtracker发送心跳，发送自身状态，并从Jobtracker获取任务指令来执行。 在JobTracker的heartbeat方法中，对于来自每一个TaskTracker的心跳请求，根据一定的作业调度策略调用assignTasks方法选择一定Task Scheduler调用对应的LoadManager的canAssignMap方法和canAssignReduce方法以决定是否可以给 tasktracker分配任务。默认的是CapBasedLoad，全局平均分配。即根据全局的任务槽数，全局的map任务数的比值得到一个load系 数，该系数乘以待分配任务的tasktracker的最大map任务数，即是该tasktracker能分配得到的任务数。如果太tracker当前运行 的任务数小于可运行的任务数，则任务可以分配新作业给他。（图中缺失了LoadManager的表达，也画不下了，就不加了。在代码详细分析中有） Scheduler的调用TaskSelector的obtainNewMapTask或者obtainNewReduceTask选择Task。 在DefaultTaskSelector中选择Task的方法其实只是封装了JobInProgress的对应方法。 JobTracker根据得到的Task构造TaskTrackerAction设置到到HeartbeatResponse返回给TaskTracker。 TaskTracker中将来自JobTracker的任务加入到TaskQueue中等待执行。 三、代码详细
+1. TaskTracker的入口函数main
+1JobConf conf=new JobConf(); 2 // enable the server to track time spent waiting on locks 3 ReflectionUtils.setContentionTracing 4 (conf.getBoolean(&amp;#34;tasktracker.contention.tracking&amp;#34;, false)); 5 new TaskTracker(conf).run(); TaskTracker的构造函数 1maxCurrentMapTasks = conf.getInt( 2 &amp;#34;mapred.tasktracker.map.tasks.maximum&amp;#34;, 2); 3maxCurrentReduceTasks = conf.getInt( 4 &amp;#34;mapred.tasktracker.reduce.tasks.maximum&amp;#34;, 2); 5this.jobTrackAddr = JobTracker.getAddress(conf); 6 7//启动httpserver 展示tasktracker状态。 8this.server = new HttpServer(&amp;#34;task&amp;#34;, httpBindAddress, httpPort, 9 httpPort == 0, conf); 10server.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>【hadoop代码笔记hadoop作业提交之JobTracker等相关功能模块初始化</title>
+      <link>https://idouba.com/hadoop_job_submit_service_init/</link>
+      <pubDate>Fri, 17 Jan 2014 14:36:20 +0000</pubDate>
+      
+      <guid>https://idouba.com/hadoop_job_submit_service_init/</guid>
+      <description>
+        
+          
+            一、概要描述
+本文重点描述在JobTracker一端接收作业、调度作业等几个模块的初始化工作。想过模块的介绍会在其他文章中比较详细的描述。受理作业提交在下一篇文章中会进行描述。
+为了表达的尽可能清晰一点只是摘录出影响逻辑流转的主要代码。重点强调直接的协作调用，每个内部完成的逻辑（一直可以更细的说明、有些细节可能自己也理解并不深刻:-(）在后续会描述。
+主要包括JobTracker、TaskScheduler（此处以FairScheduler为例）、JobInProgressListener（以用的较多的EagerTaskInitializationListener为例）、TaskSelector(以最简单的DefaultTaskSelector为例)等。
+二、 流程描述
+JobTracker 的main函数中调用其startTracker方法。 在mai函数中调用offerService，启动各个子服务项（大部分形态都是线程，有些是其他的初始化，如taskScheduler） 在startTracker中调用其构造函数，在构造函数中对其中重要的属性根据配置进行初始化。()个人感觉再构造中设置scheduler，在statTracker调用构造的下一句有给Scheduler传JobTracker的引用，有点不自然) 在offerService()中启动taskSchedulerexpireTrackersThread retireJobsThread expireLaunchingTaskThread completedJobsStoreThread interTrackerServer等几个线程来共同完成服务。同时调用TaskScheduler的start方法进行初始化。 在FairScheduler调度器的start方法中调用EagerTaskInitializationListenerr的start方法来初始化EagerTaskInitializationListener 在FairScheduler调度器的start方法中调用DefaultTaskSelector的start方法来初始化DefaultTaskSelector，因为该类实现的TaskSelector太简单，start方法里也没有做任何事情。 JobTracker等相关功能模块初始化
+三、 代码详述
+1. JobTracker 的入口main函数。主要是实例化一个JobTracker类，然后调用offerService方法做事情。
+在Jobtracker的main函数中去掉记日志和异常捕获外关键代码就一下两行。
+1 JobTracker tracker = startTracker(new JobConf()); 2 tracker.offerService(); 2. JobTracker 的startTracker方法。 调用JobTracker的构造函数，完成初始化工作。
+1JobTracker result = null; 2 while (true) { 3 try { 4 result = new JobTracker(conf); 5 result.taskScheduler.setTaskTrackerManager(result); 6 Thread.sleep(1000); 7 } 8 9 JobEndNotifier.startNotifier(); 10 return result; 3. JobTracker的构造方法JobTracker(JobConf conf)。是一个有两三屏的长的方法。值得关注下，当然jobtracker服务运维的有些部分会适当忽略，着重看处理作业的部分。(其实这样的说法也 不太对，Jobtracker的主要甚至是唯一的作用就是处理提交的job)
+主要的工作有：
+1)创建一个初始化一个队列管理器，一个HadoopMapReduce作业可以配置一个或者多个Queue，依赖于其使用的作业调度器Scheduler 2)根据配置创建一个调度器 3)创建一个RPC Server,其中handlerCount是RPC server服务端处理请求的Handler线程的数量，默认是10。详细机制参照RPC机制描述。 4)创建一个创建一个HttpServer，用于JobTracker的信息发布。 5)创建一个RecoveryManager，用于JobTracker重启时候恢复 6)创建一个CompletedJobStatusStore，用户持久化作业状态。
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>【hadoop代码笔记】Hadoop作业提交之客户端作业提交</title>
+      <link>https://idouba.com/hadoop_jobclient_submit/</link>
+      <pubDate>Thu, 16 Jan 2014 14:54:46 +0000</pubDate>
+      
+      <guid>https://idouba.com/hadoop_jobclient_submit/</guid>
+      <description>
+        
+          
+            一、概要描述
+仅仅描述向Hadoop提交作业的第一步，即调用Jobclient的submitJob方法，向Hadoop提交作业。
+二、 流程描述
+Jobclient使用内置的JobSubmissionProtocol 实例jobSubmitClient 和JobTracker交互，最主要是提交作业、获取作业执行信息等。
+在JobClient中作业提交的主要过程如下：
+1）通过调用JobTracker的getNewJobId()向jobtracker请求一个新的作业ID 2）获取job的jar、输入分片、作业描述等几个路径信息，以jobId命名。 3）其中getSystemDir()是返回jobtracker的系统目录，来放置job相关的文件。包括：mapreduce的jar文件submitJarFile、分片文件submitSplitFile、作业描述文件submitJobFile 4）检查作业的输出说明，如果没有指定输出目录或输出目录以及存在，则作业不提交。参照org.apache.hadoop.mapreduce.lib.output.FileOutputFormat的checkOutputSpecs方法。如果没有指定，则抛出InvalidJobConfException，文件已经存在则抛出FileAlreadyExistsException 5）计算作业的输入分片。通过InputFormat的getSplits(job)方法获得作业的split并将split序列化封装为RawSplit。返回split数目，也即代表有多个分片有多少个map。详细参见InputFormat获取Split的方法。 6）writeNewSplits 方法把输入分片写到JobTracker的job目录下。 7）将运行作业所需的资源（包括作业jar文件，配置文件和计算所得的输入分片）复制到jobtracker的文件系统中一个以作业ID命名的目录下。 8）使用句柄JobSubmissionProtocol通过RPC远程调用的submitJob()方法，向JobTracker提交作业。JobTracker作业放入到内存队列中，由作业调度器进行调度。并初始化作业实例。JobTracker创建job成功后会给JobClient传回一个JobStatus对象 用于记录job的状态信息，如执行时间、Map和Reduce任务完成的比例等。JobClient会根据这个JobStatus对象创建一个 NetworkedJob的RunningJob对象，用于定时从JobTracker获得执行过程的统计数据来监控并打印到用户的控制台。
+三、代码详细
+Jobclient ：JobClient是向JobTracker提交作业的接口，可以理解为Hadoop的Mapreduce作业框架向用户开放的作业提交入口。可以提交作业，监视作业状态等
+JobSubmissionProtocol（为什么0.20.1的javadoc中找不到这个接口，虽然0.20.1 0.20.2代码中都是相同的用法，知道2.2.0貌似重命名为被ClientProtocol替换）：JobClient和JobTracker进行通信的一个协议。JobClient实际上是用这个句柄来提交锁业并且监视作业的执行状况。
+这个接口有两个实现：LocalJobRunner(conf)当mapred-site.xml中的mapred.job.tracker值为local是为此对象。表示在单机上执行；如果为一个地址的话则是 JobTracker的对象，表示分布式执 行。
+详细可参照JobClient中 的初始化代码：
+1 /** 2 *如果是非local的就会 连接到指定的JobTracker 3 */ 4 public void init(JobConf conf) throws IOException { 5 String tracker = conf.get(&amp;#34;mapred.job.tracker&amp;#34;, &amp;#34;local&amp;#34;); 6 if (&amp;#34;local&amp;#34;.equals(tracker)) { 7 this.jobSubmitClient = new LocalJobRunner(conf); 8 } else { 9 this.jobSubmitClient = createRPCProxy(JobTracker.getAddress(conf), conf); 10 } 11 } 12 13 /* 14 * RPC不是本次主题重点，可参照后续发表的专题内容 15 */ 16 private JobSubmissionProtocol createRPCProxy(InetSocketAddress addr, 17 Configuration conf) throws IOException { 18 return (JobSubmissionProtocol) RPC.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>【hadoop代码笔记】hadoop作业提交之JobTracker接收作业提交</title>
+      <link>https://idouba.com/hadoop_mapreduce_jobadded/</link>
+      <pubDate>Thu, 16 Jan 2014 13:39:25 +0000</pubDate>
+      
+      <guid>https://idouba.com/hadoop_mapreduce_jobadded/</guid>
+      <description>
+        
+          
+            一、概要描述
+在上一篇博文中主要描述了JobTracker接收作业的几个服务（或功能）模块的初始化过程。本节将介绍这些服务（或功能）是如何接收到提交的job。本来作业的初始化也可以在本节内描述，但是涉及到JobInProgress的初始化过程放在一张图上太拥挤，就分开到下一篇文章中描述。
+二、 流程描述
+JobClient通过RPC的方式向JobTracker提交作业； 调用JobTracker的submitJob方法。该方法是JobTracker向外提供的供调用的提交作业的接口。 submit方法中调用JobTracker的addJob方法。 在addJob方法中会把作业加入到集合中供调度，并会触发注册的JobInProgressListener的jobAdded事件。由上篇博文的jobtracker相关服务和功能的初始化的FairScheduler的start方法中看到，这里注册的是两个JobInProgressListener。分别是FairScheduler的内部类JobListener和EagerTaskInitializationListener。 FairScheduler的内部类JobListener响应jobAdded事件事件。只是为每个加入的Job创建一个用于FairScheduler调度用的JobInfo对象，并将其和job的对应的存储在Map&amp;lt;JobInProgress, JobInfo&amp;gt; infos集合中。 EagerTaskInitializationListener响应jobAdded事件事件。jobAdded 只是简单的把job加入到一个List类型的 jobInitQueue中。并不直接对其进行初始化，对其中的job的处理由另外线程JobInitManager来做。该线程，一直检查 jobInitQueue是否有作业，有则拿出来从线程池中取一个线程InitJob处理。关于作业的初始化过程专门在下一篇文章中介绍。 JobTracker接收作业提交
+三、代码详细
+1. JobClient的submitJob方法，调用submitJobInternal方法。
+主要流程：
+1）通过调用JobTracker的getNewJobId()向jobtracker请求一个新的作业ID
+2）获取job的jar、输入分片、作业描述等几个路径信息，以jobId命名。
+3）其中getSystemDir()是返回jobtracker的系统目录，来放置job相关的文件。包括：mapreduce的jar文件submitJarFile、分片文件submitSplitFile、作业描述文件submitJobFile
+4）检查作业的输出说明，如果没有指定输出目录或输出目录以及存在，则作业不提交。参照org.apache.hadoop.mapreduce.lib.output.FileOutputFormat的checkOutputSpecs方法。如果没有指定，则抛出InvalidJobConfException，文件已经存在则抛出FileAlreadyExistsException
+5）计算作业的输入分片。通过InputFormat的getSplits(job)方法获得作业的split并将split序列化封装为RawSplit。返回split数目，也即代表有多个分片有多少个map。详细参见InputFormat获取Split的方法。
+6）writeNewSplits 方法把输入分片写到JobTracker的job目录下。
+7）将运行作业所需的资源（包括作业jar文件，配置文件和计算所得的输入分片）复制到jobtracker的文件系统中一个以作业ID命名的目录下。
+8） 使用句柄JobSubmissionProtocol通过RPC远程调用的submitJob()方法，向JobTracker提交作业。 JobTracker作业放入到内存队列中，由作业调度器进行调度。并初始化作业实例。JobTracker创建job成功后会给JobClient传回 一个JobStatus对象用于记录job的状态信息，如执行时间、Map和Reduce任务完成的比例等。JobClient会根据这个 JobStatus对象创建一个 NetworkedJob的RunningJob对象，用于定时从JobTracker获得执行过程的统计数据来监控并打印到用户的控制台。
+1 public RunningJob submitJobInternal(JobConf job) 2 throws FileNotFoundException, ClassNotFoundException, 3 InterruptedException, IOException { 4 5 // 1）通过调用JobTracker的getNewJobId()向jobtracker请求一个新的作业ID 6 JobID jobId = jobSubmitClient.getNewJobId(); 7 // 2）获取job的jar、输入分片、作业描述等几个路径信息，以jobId命名。 8 // 3）其中getSystemDir()是返回jobtracker的系统目录，来放置job相关的文件。包括：mapreduce的jar文件submitJarFile、分片文件submitSplitFile、作业描述文件submitJobFile 9 10 Path submitJobDir = new Path(getSystemDir(), jobId.toString()); 11 Path submitJarFile = new Path(submitJobDir, &amp;#34;job.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>【hadoop代码笔记】Hadoop作业提交中EagerTaskInitializationListener的作用</title>
+      <link>https://idouba.com/eagertaskinitializationlistener/</link>
+      <pubDate>Wed, 15 Jan 2014 14:05:42 +0000</pubDate>
+      
+      <guid>https://idouba.com/eagertaskinitializationlistener/</guid>
+      <description>
+        
+          
+            一、概述
+继承自JobInProgressListener，实现了jobAdded，jobRemoved，jobUpdated方法。哦，不能说实现，应该说继承，JobInProgressListener居然是个抽象类，看着怎么这样的listener也应该是个interface。
+在该listener被注册后，就响应jobAdded，jobRemoved，jobUpdated动作。在EagerTaskInitializationListener中，响应这三种动作来维护内部的一个job列表（List jobInitQueue），并启动线程对job列表中的job异步的进行初始化。
+二、主要代码逻辑
+在job被添加到JobTracker时，注册的Lister会响应该方法。即当有作业提交到JobTracker时，该方法会把JIP加到jobInitQueue列表中，并且根据作业优先级和启动时间来调整其顺序。 jobInitManagerThread会一直产看jobInitManagerThread列表中的job，逐一取出来初始化其task。 三、主要成员
+1 private JobInitManager jobInitManager = new JobInitManager(); //一个job初始化线程，关注job队列jobInitQueue，取出进行初始化 2 private Thread jobInitManagerThread; // JobInitManager线程 3 private List&amp;lt;JobInProgress&amp;gt; jobInitQueue = new ArrayList&amp;lt;JobInProgress&amp;gt;(); //响应lister的几种方法，维护的job队列 4 private ExecutorService threadPool; //一个线程池，里面的一个线程取一个job进行初始化 5 private int numThreads; //线程池的线程数，可配置 四、主要方法
+1. EagerTaskInitializationListener的jobAdded方法：
+首先关注的代码片段是该listener的jobAdded方法，前面说过，在FairScheduler的start方法中（taskTrackerManager.addJobInProgressListener(eagerInitListener)）会把EagerTaskInitializationListener注册到JobTracker，在jobTracker中加入job的时候（addJob被调用），触发其上所有的jobListener的jobAdded方法。
+在EagerTaskInitializationListener中，jobAdded只是简单的把job加入到一个List类型的 jobInitQueue中。并不直接对其进行初始化，对其中的job的处理由另外线程来做。
+1@Override 2 public void jobAdded(JobInProgress job) { 3 synchronized (jobInitQueue) { 4 jobInitQueue.add(job); 5 resortInitQueue(); 6 jobInitQueue.notifyAll(); 7 } 8 9 } 2. JobInitManager类：
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>【hadoop代码笔记】通过JobClient对Jobtracker的调用详细了解Hadoop RPC</title>
+      <link>https://idouba.com/haddoop_rpc_jobclient_jobtracker/</link>
+      <pubDate>Sat, 11 Jan 2014 12:02:36 +0000</pubDate>
+      
+      <guid>https://idouba.com/haddoop_rpc_jobclient_jobtracker/</guid>
+      <description>
+        
+          
+            Hadoop的各个服务间，客户端和服务间的交互采用RPC方式。关于这种机制介绍的资源很多，也不难理解，这里不做背景介绍。只是尝试从Jobclient向JobTracker提交作业这个最简单的客户端服务器交互的代码中，去跟踪和了解下RPC是怎么被使用的。不同于准备发表博客时搜索的几篇博文，试图通过一种具体的场景来介绍，属于比较初级。其他DataNode和Namenode之间，Tasktracker和JobTracker之间的交互基本也都一样。为了引用的代码篇幅尽可能少，忽略了代码中写日志（包括Metrics）、某些判断等辅助代码。
+1 RPC客户端请求（从JobClient的jobSubmitClient 入手） Jobclient包含一个JobSubmissionProtocol jobSubmitClient类型的句柄，从作业提交一节的介绍中看到Jobclient的计划所有重要操作都是通过jobSubmitClient来完成的。包括
+JobSubmissionProtocol Outline
+所有这些方法都在JobSubmissionProtocol接口中定义。在0.20.1的时候已经到Version 20了，在2.2.0好像到了Version 40了,说明功能一直在增强。 客户端的某个方法调用如何会调用到服务端的方法呢？在客户端机器上调用JobClient的getAllJobs(),怎么调用到了服务端JobTracker的getAllJobs()。这也是我尝试讲明白的核心内容。为了体现代码的一步一步分析总结在最后。可能循序渐进的作用没起到，还会笔记读起来笔记乱，感受有点不太好可能:-(。 首先看客户端JobClient中的jobSubmitClient初始化方法。在JobClient的init方法中判断不是local的方式则会调用createRPCProxy方法，进而调用RPC的getProxy方法。方法连接对应IP的服务器。比较客户端和服务端的RPC版本一致，返回一个JobSubmissionProtocol类型的句柄，抛出VersionMismatch异常。
+1private JobSubmissionProtocol createRPCProxy(InetSocketAddress addr, 2 Configuration conf) throws IOException { 3 return (JobSubmissionProtocol) RPC.getProxy(JobSubmissionProtocol.class, 4 JobSubmissionProtocol.versionID, addr, getUGI(conf), conf, 5 NetUtils.getSocketFactory(conf, JobSubmissionProtocol.class)); 6 } 7 public static VersionedProtocol getProxy(Class&amp;lt; &amp;gt; protocol, 8 long clientVersion, InetSocketAddress addr, UserGroupInformation ticket, 9 Configuration conf, SocketFactory factory) throws IOException { 10 11 VersionedProtocol proxy = 12 (VersionedProtocol) Proxy.newProxyInstance( 13 protocol.getClassLoader(), new Class[] { protocol }, 14 new Invoker(addr, ticket, conf, factory)); 15 long serverVersion = proxy.
+          
+          
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>

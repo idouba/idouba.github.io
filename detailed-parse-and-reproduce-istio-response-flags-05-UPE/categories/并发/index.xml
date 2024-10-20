@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>并发 on 爱豆吧！</title>
+    <link>https://idouba.com/categories/%E5%B9%B6%E5%8F%91/</link>
+    <description>Recent content in 并发 on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Fri, 05 Jun 2015 16:02:43 +0000</lastBuildDate><atom:link href="https://idouba.com/categories/%E5%B9%B6%E5%8F%91/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>戏（细）说Executor框架线程池任务执行全过程（下）</title>
+      <link>https://idouba.com/executor-framework-thread-pool-task-execution-part-02/</link>
+      <pubDate>Fri, 05 Jun 2015 16:02:43 +0000</pubDate>
+      
+      <guid>https://idouba.com/executor-framework-thread-pool-task-execution-part-02/</guid>
+      <description>
+        
+          
+            归档下发表于infoq.com 2015年6月的两篇文章。本来是一篇文章，经过Infoq编辑Alice Ding建议，拆分为&amp;lt;上&amp;gt;和&amp;lt;下&amp;gt;两部分。谢谢Alice对文章的细心校对，帮我发下了其中的很多问题。添加下infoq要求的声明：本文为InfoQ中文站特供稿件，首发地址为：http://www.infoq.com/cn/articles/executor-framework-thread-pool-task-execution-part-02 。如需转载，请与InfoQ中文站联系。
+内容综述 基于Executor接口中将任务提交和任务执行解耦的设计，ExecutorService和其各种功能强大的实现类提供了非常简便方式来提交任务并获取任务执行结果，封装了任务执行的全部过程。本文尝试通过对j.u.c.下该部分源码的解析以ThreadPoolExecutor为例来追踪任务提交、执行、获取执行结果的整个过程。为了避免陷入枯燥的源码解释，将该过程和过程中涉及的角色与我们工作中的场景和场景中涉及的角色进行映射，力图生动和深入浅出。
+上一篇文章中通过引入的一个例子介绍了在Executor框架下，提交一个任务的过程，这个过程就像我们老大的老大要找个老大来执行一个任务那样简单。并通过剖析ExecutorService的一种经典实现ThreadPoolExecutor来分析接收任务的主要逻辑，发现ThreadPoolExecutor的工作思路和我们带项目的老大的工作思路完全一致。在本文中我们将继续后面的步骤，着重描述下任务执行的过程和任务执行结果获取的过程。会很容易发现，这个过程我们更加熟悉，因为正是每天我们工作的过程。除了ThreadPoolExecutor的内部类Worker外，对执行内容和执行结果封装的FutureTask的表现是这部分着重需要了解的。
+为了连贯期间，内容的编号延续上篇。
+2. 任务执行 其实应该说是任务被执行，任务是宾语。动宾结构：execute the task，执行任务，无论写成英文还是中文似乎都是这样。那么主语是是who呢？明显不是调用submit的那位（线程），那是哪位呢？上篇介绍ThreadPoolExecutor主要属性时提到其中有一个HashSet workers的集合，我们有说明这里存储的就是线程池的工作队列的集合，队列的对象是Worker类型的工作线程，是ThreadPoolExecutor的一个内部类，实现了Runnable接口：
+1private final class Worker implements Runnable 8)看作业线程干什么当然是看它的run方法在干什么。如我们所料，作业线程就是在一直调用getTask方法获取任务，然后调用 runTask(task)方法执行任务。看到没有，是在while循环里面，就是不干完不罢休的意思！在加班干活的苦逼的朋友们，有没有遇见战友的亲切感觉？
+1public void run() { 2 try { 3 Runnable task = firstTask; 4 //循环从线程池的任务队列获取任务 5 while (task != null || (task = getTask()) != null) { 6 //执行任务 7 runTask(task); 8 task = null; 9 } 10 } finally { 11 workerDone(this); 12 } 13 } 然后简单看下getTask和runTask(task)方法的内容。
+getTask方法是ThreadPoolExecutor提供给其内部类Worker的的方法。作用就是一个，从任务队列中取任务，源源不断地输出任务。有没有想到老大手里拿的总是满满当当的project，也是源源不断的。 1Runnable getTask() { 2 for (;;) { 3 //从任务队列的头部取任务 4 r = workQueue.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>戏（细）说Executor框架线程池任务执行全过程（上）</title>
+      <link>https://idouba.com/executor-framework-thread-pool-task-execution-part-01/</link>
+      <pubDate>Fri, 05 Jun 2015 15:41:44 +0000</pubDate>
+      
+      <guid>https://idouba.com/executor-framework-thread-pool-task-execution-part-01/</guid>
+      <description>
+        
+          
+            归档下发表于infoq.com 2015年6月的两篇文章。本来是一篇文章，经过Infoq编辑Alice Ding建议，拆分为&amp;lt;上&amp;gt;和&amp;lt;下&amp;gt;两部分。谢谢Alice对文章的细心校对，帮我发下了其中的很多问题。添加下infoq要求的声明：本文为InfoQ中文站特供稿件，首发地址为：http://www.infoq.com/cn/articles/executor-framework-thread-pool-task-execution-part-01。如需转载，请与InfoQ中文站联系。
+内容综述 基于Executor接口中将任务提交和任务执行解耦的设计，ExecutorService和其各种功能强大的实现类提供了非常简便方式来提交任务并获取任务执行结果，封装了任务执行的全部过程。本文尝试通过对j.u.c.下该部分源码的解析以ThreadPoolExecutor为例来追踪任务提交、执行、获取执行结果的整个过程。为了避免陷入枯燥的源码解释，将该过程和过程中涉及的角色与我们工作中的场景和场景中涉及的角色进行映射，力图生动和深入浅出。
+一、前言 1.5后引入的Executor框架的最大优点是把任务的提交和执行解耦。要执行任务的人只需把Task描述清楚，然后提交即可。这个Task是怎么被执行的，被谁执行的，什么时候执行的，提交的人就不用关心了。具体点讲，提交一个Callable对象给ExecutorService（如最常用的线程池ThreadPoolExecutor），将得到一个Future对象，调用Future对象的get方法等待执行结果就好了。
+经过这样的封装，对于使用者来说，提交任务获取结果的过程大大简化，调用者直接从提交的地方就可以等待获取执行结果。而封装最大的效果是使得真正执行任务的线程们变得不为人知。有没有觉得这个场景似曾相识？我们工作中当老大的老大（且称作LD^2）把一个任务交给我们老大（LD）的时候，到底是LD自己干，还是转过身来拉来一帮苦逼的兄弟加班加点干，那LD^2是不管的。LD^2只用把人描述清楚提及给LD，然后喝着咖啡等着收LD的report即可。等LD一封邮件非常优雅地报告LD^2report结果时，实际操作中是码农A和码农B干了一个月，还是码农ABCDE加班干了一个礼拜，大多是不用体现的。这套机制的优点就是LD^2找个合适的LD出来提交任务即可，接口友好有效，不用为具体怎么干费神费力。
+二、 一个最简单的例子 看上去这个执行过程是这个样子。调用这段代码的是老大的老大了，他所需要干的所有事情就是找到一个合适的老大（如下面例子中laodaA就荣幸地被选中了），提交任务就好了。
+1	// 一个有7个作业线程的线程池，老大的老大找到一个管7个人的小团队的老大 2 ExecutorService laodaA = Executors.newFixedThreadPool(7); 3	//提交作业给老大，作业内容封装在Callable中，约定好了输出的类型是String。 4	String outputs = laoda.submit( 5	new Callable&amp;amp;lt;String&amp;amp;gt;() { 6	public String call() throws Exception 7	{	8	return &amp;#34;I am a task, which submited by the so called laoda, and run by those anonymous workers&amp;#34;; 9	} 10	//提交后就等着结果吧，到底是手下7个作业中谁领到任务了，老大是不关心的。 11	}).get(); 12	System.out.println(outputs); 使用上非常简单，其实只有两行语句来完成所有功能：创建一个线程池，提交任务并等待获取执行结果。
+例子中生成线程池采用了工具类Executors的静态方法。除了newFixedThreadPool可以生成固定大小的线程池，newCachedThreadPool可以生成一个无界、可以自动回收的线程池，newSingleThreadScheduledExecutor可以生成一个单个线程的线程池。newScheduledThreadPool还可以生成支持周期任务的线程池。一般用户场景下各种不同设置要求的线程池都可以这样生成，不用自己new一个线程池出来。
+三、代码剖析 这套机制怎么用，上面两句语句就做到了，非常方便和友好。但是submit的task是怎么被执行的？是谁执行的？如何做到在调用的时候只有等待执行结束才能get到结果。这些都是1.5之后Executor接口下的线程池、Future接口下的可获得执行结果的的任务，配合AQS和原有的Runnable来做到的。在下文中我们尝试通过剖析每部分的代码来了解Task提交，Task执行，获取Task执行结果等几个主要步骤。为了控制篇幅，突出主要逻辑，文章中引用的代码片段去掉了异常捕获、非主要条件判断、非主要操作。文中只是以最常用的ThreadPoolExecutor线程池举例，其实ExecutorService接口下定义了很多功能丰富的其他类型，有各自的特点，但风格类似。本文重点是介绍任务提交的过程，过程中涉及的ExecutorService、ThreadPoolExecutor、AQS、Future、FutureTask等只会介绍该过程中用到的内容，不会对每个类都详细展开。
+1、 任务提交 从类图上可以看到，接口ExecutorService继承自Executor。不像Executor中只定义了一个方法来执行任务，在ExecutorService中，正如其名字暗示的一样，定义了一个服务，定义了完整的线程池的行为，可以接受提交任务、执行任务、关闭服务。抽象类AbstractExecutorService类实现了ExecutorService接口，也实现了接口定义的默认行为。
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>源码剖析AQS在几个同步工具类中的使用</title>
+      <link>https://idouba.com/sync-implementation-by-aqs/</link>
+      <pubDate>Mon, 06 Apr 2015 15:30:31 +0000</pubDate>
+      
+      <guid>https://idouba.com/sync-implementation-by-aqs/</guid>
+      <description>
+        
+          
+            1. 前言 AQS(AbstractQueuedSynchronizer)是 java.util.concurrent的基础。J.U.C中宣传的封装良好的好用的同步工具类Semaphore、CountDownLatch、ReentrantLock、ReentrantReadWriteLock、FutureTask等虽然各自都有不同特征，但是简单看一下源码，每个类内部都包含一个如下的内部类定义：
+abstract static class Sync extends AbstractQueuedSynchronizer 同时每个类内部都包含有这样一个属性，连属性名都一样！注释已经暗示了，该类的同步机制正是通过这个AQS的子类来完成的。不得不感叹：“每个强大的同步工具类，内心都有一把同样的锁！”
+1/** All mechanics via AbstractQueuedSynchronizer subclass */ 2 private final Sync sync; 几种同步类提供的功能其实都是委托sync来完成。有些是部分功能，有些则是全部功能。 本文中就是想尝试比较分析下在几个同步工具类下面定义的AQS的子类如何来实现工具类要求的功能。当然包括两部分，一部分是这些工具类如何使用其Sync这种类型的同步器，也就是工具类向外提供的方法中，如何使用sync这个句柄；第二部分，就是工具类中自己定义的内部类Sync继承自AQS，那到底override了哪些方法来做到以父类AQS为基础，提供受委托工具类的功能要求。
+关于第一部分，sync如何被其工具类使用，请允许我无耻的在一个文章中把一个类所有代码贴出来。
+所幸方法很多，总的代码行不多，因为每个方法都是一个风格，就是换个名直接调用sync的对应方法。这是Semaphore中对sync的使用。是不是觉得写这个代码的作者比写这个文章的作者还要无耻？在其他几个工具类中，没有这么夸张，b但基本上也是这个风格，即以一个helper的方式向外面的封装类提供功能支持。所以第一个问题，在文章中说到这里，后面涉及到也只会简单描述。 主要是求索第二个问题，即每个工具类中自己定义的Sync到底是什么样子，有哪些不同的特征，其实也就是代码上看这些Sync类对父类AQS做了哪些修改。
+2. AQS简介 要介绍子类的特征，父类总得大致介绍下。AQS的原理、设计等比较系统的东西，在这里就不想涉及了。可以参照《深入浅出 Java Concurrency》{#viewpost1_TitleUrl}系列的深入浅出 Java Concurrency (7): 锁机制 part 2 AQS{#viewpost1_TitleUrl}一节，谢谢这个系列，作者讲的确实非常的深入浅出！要想了解更多，可以参考Doug Lea大师的原著The java.util.concurrent Synchronizer Framework。最简单的办法其实就是的耐心把AbstractQueuedSynchronizer源码前面注释的javadoc完整的读一遍就可以了。笔者反正有这样的习惯。扎着脑袋看代码，看注释，然后自己看看是否能把一个package有个系统的视图，如果需要再看相关的参考文档来确认这个系统的视图。
+看一个对象有什么本事，看他的构成是什么样，远比看他由哪些行为来的要深远。其实在OOP这种以class方式承载功能的编程中，即看一个类包含的属性，比他的方法也更容易理解对象的作用。看AQS类，暂时抛开outline视图下需要两屏才能看完的重要方法（还未展开ConditionObject和Node两个重要的内部类），只看该类包含的三个重要属性的定义就能看出端倪。
+1private transient volatile Node head; 2 private transient volatile Node tail; 3 private volatile int state; 注释其实已经告诉我们了，Node类型的head和tail是一个FIFO的wait queue；一个int类型的状态位state。到这里也能猜到AQS对外呈现（或者说声明）的主要行为就是由一个状态位和一个有序队列来配合完成。 最简单的读一下主要的四个方法：
+1//获取排他锁 2 public final void acquire(int arg) { 3 if (!
+          
+          
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>

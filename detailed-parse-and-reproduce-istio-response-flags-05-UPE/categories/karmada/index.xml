@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Karmada on 爱豆吧！</title>
+    <link>https://idouba.com/categories/karmada/</link>
+    <description>Recent content in Karmada on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Wed, 21 Aug 2024 15:32:08 +0000</lastBuildDate><atom:link href="https://idouba.com/categories/karmada/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>KubeCon2024：Karmda和Istio提高分布式云的负载与流量韧性的最佳实践</title>
+      <link>https://idouba.com/kubecon2024-best-practice-karmada-and-istio-improve-workload-traffic-resilience-of-production-distributed-cloud/</link>
+      <pubDate>Wed, 21 Aug 2024 15:32:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/kubecon2024-best-practice-karmada-and-istio-improve-workload-traffic-resilience-of-production-distributed-cloud/</guid>
+      <description>
+        
+          
+            记录在2024年8月21日在香港Kubecon上发表的技术演讲《Best Practice: Karmada &amp;amp; Istio Improve Workload &amp;amp; Traffic Resilience of Production Distributed Cloud》
+议题： The Distributed cloud offers better resilience by providing redundancy, scalability and flexibility, especially for cloud native applications. However the complexity of multi-cluster workload and traffic management in hybrid or multi-cloud environment brings huge challenges in practice, such as the number of overall multi-cluster workload instances serve for customer request decreased when some unhealthy ones isolated in case of failures.
+          
+          
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>

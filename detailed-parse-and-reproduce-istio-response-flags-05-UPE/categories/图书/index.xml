@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>图书 on 爱豆吧！</title>
+    <link>https://idouba.com/categories/%E5%9B%BE%E4%B9%A6/</link>
+    <description>Recent content in 图书 on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Mon, 25 Sep 2023 15:22:57 +0000</lastBuildDate><atom:link href="https://idouba.com/categories/%E5%9B%BE%E4%B9%A6/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【MeetTheAuthors】Istio社区指导委员会成员携新书《Istio权威指南》和6场技术演讲亮相KubeCon</title>
+      <link>https://idouba.com/meet-the-authors-in-shanghai-kubecon.md/</link>
+      <pubDate>Mon, 25 Sep 2023 15:22:57 +0000</pubDate>
+      
+      <guid>https://idouba.com/meet-the-authors-in-shanghai-kubecon.md/</guid>
+      <description>
+        
+          
+            9 月 26-28 日，由 Linux 基金会、云原生计算基金会（CNCF）主办的 KubeCon + CloudNativeCon + Open Source Summit China 2023 将在上海跨国采购会展中心隆重召开。作为全球顶级的开源和云原生盛会，本届大会以“云赋创新，无处不在”为主题，聚焦可观测、安全、平台工程、数据库、运维+性能等技术热点，邀请全球顶级技术专家、开源社区领袖和企业代表，共同探讨最新的开源云原生技术洞见、最佳实践以及来自全球的创新案例。
+作为 7月份Istio从CNCF正式毕业后云原生领域的第一次全球顶级技术盛会，全球服务网格的爱好者们除了可以参加KubeCon + CloudNativeCon + Open Source Summit China上丰富的议题外，还可以参与同场活动IstioCon 2023，业界最受欢迎的服务网格的第三届社区会议。您将在会上找到在生产环境中运行 Istio 的经验教训、实践经验，以及来自整个 Istio 生态系统的维护人员。其中就包括华为云云原生团队的两位资深技术专家，他们同时也是Istio社区成员、Istio社区指导委员会成员（Istio Steering Committee Member）。
+他们将在本期IstioCon和KubeCon上带来6场精彩的演讲。其中即包括《基于生产案例详细解析和重现Istio访问日志的各种应答标记（Response Flags）》、《cert-Manager 帮助增强 Istio 证书管理的安全性和灵活性》这种基于生产实践的技术干货，也包括《Istio数据平面的新选择：架构创新带来的全新性能体验》，《重新思考服务网格负载均衡》这样的深入技术研讨，还有《Istio毕业后的下一步发展》、《服务网格正在逐渐见证云计算更高的崛起》这些Istio和服务网格发展的讨论。
+同时作为今年5月年上市图书《Istio权威指南（上）：原理与实践》和《Istio权威指南（下）：架构与源码》的核心作者，他们也期望在会议期间和广大读者就本次演讲的服务网格相关议题、《Istio权威指南》图书中的内容、服务网格领域社区、业界和生产实践的各类问题与广大读者听众近距离交流。
+IstioCon议题分享 Istio数据平面的新选择：架构创新带来的全新性能体验 演讲嘉宾：Zhonghu Xu, Principal Engineer, Huawei Cloud
+Songyang Xie, Senior Software Engineer, Huawei Cloud
+时间：9月26号，周二 9:55-10:20
+地点：3夹层 3M3会议室
+议题简介：在像Istio这样的服务网格技术的部署中，减少数据平面代理架构引起的延迟开销已经成为网格提供者的关键问题。在本次会议中，徐中虎和谢颂杨将从操作系统的角度提出一种全新的服务网格数据平面解决方案。通过利用eBPF +内核增强，他们在操作系统中实现了原生的流量治理能力。与其他解决方案不同，这种方法显著简化了网格数据平面的转发路径，从而使数据平面转发延迟降低了60%以上。此外，它具有低资源开销和安全隔离的特点。该项目重新定义了网格数据平面，以Istiod作为控制平面，目前华为正在进行内部验证。此外，他们还将讨论服务网格的未来演变，并在不同部署场景中探索无Sidecar架构的潜力。
+听众受益：
+架构创新：从操作系统的角度引入一种新的方法来应对服务网格挑战，为基础架构之间的协作创新提供了一个很好的例子和灵感。 为 Istio 提供一个新的数据平面选项，以满足高性能应用场景的需求。 cert-Manager 帮助增强 Istio 证书管理的安全性和灵活性** 演讲嘉宾：Chaomeng Zhang, Architect, Huawei Cloud
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>Istio多集群关键技术 –《Istio权威指南》书摘</title>
+      <link>https://idouba.com/multi-cluster-of-the-definitive-guide-istio/</link>
+      <pubDate>Sun, 04 Jun 2023 15:22:57 +0000</pubDate>
+      
+      <guid>https://idouba.com/multi-cluster-of-the-definitive-guide-istio/</guid>
+      <description>
+        
+          
+            本节书摘来自华为云原生技术丛书《Istio权威指南（上）：云原生服务网格Istio原理与实践》一书原理篇的第7章 异构基础设施，7.3节多集群的关键技术，更多内容请参照原书。
+第7章 异构基础设施 对多云、混合云、虚拟机等异构基础设施的服务治理是Istio重点支持的场景之一。为了提高服务的可用性，避免厂商锁定，多云、混合云甚至虚拟机和容器混合部署都成为常态，因此Istio社区将多集群、混合服务治理作为了重点发展方向。根据Flexera 2022 State of the Cloud Report，89%的组织选择了多云，随着越来越多的组织寻求使用最佳解决方案，混合云和多云有望实现持续增长，跨云的服务通信、服务治理将成为困扰开发人员的主要问题。本章从Istio的角度，重点解读Istio针对多集群服务治理提供的能力及实现原理。
+7.3 多集群的关键技术 多集群相对于单集群，其服务在跨集群互访时比较复杂，其中最棘手的问题有以下两个。
+◎ 异构环境下的DNS解析：如何解析多集群的服务域名。
+◎ 多网络环境下的服务跨网络访问：东西向网关如何转发跨网络的服务访问。
+7.3.1 异构环境DNS 如图7-9所示为多集群、虚拟机异构服务网格典型的服务访问拓扑。
+​ 图7-9 多集群、虚拟机异构服务网格典型的服务访问拓扑
+在Kubernetes中，Kube-dns只负责集群内的服务域名解析，对其他集群或者传统虚拟机服务的域名解析束手无策。为此，我们必须借助其他技术方案，通过级联DNS的方式向集群内的应用提供服务域名DNS解析的能力。级联DNS一般通过级联上游中心式的DNS服务器实现，但是如何向级联DNS服务器注册服务的DNS记录（DNS SRV）依然比较困难。
+另外，Istio依赖名为“istio-coredns”的CoreDns扩展插件，进行Remote集群服务的域名解析。这强制要求用户创建ServiceEntry以向istio-coredns注册服务，其中ServiceEntry中服务域名的表示形式被约定为..global，同时需要修改Kube-dns的配置，使其级联到istio-coredns。除此之外，还需要用户自己管理服务IP地址的分配。由此可见，在生产中使用这种方案非常困难。
+为降低在多集群、虚拟机等异构环境下使用Istio的难度，Istio在1.8版本中实现了DNS代理的功能。DNS代理的用法更加简单，无须用户额外创建任何配置。因此，Istio彻底废除了istio-coredns插件，不再需要为其他Kubernetes集群里面的服务在本地集群中创建影子服务。
+DNS代理完全是Istio内部实现的一个DNS服务器，负责解析所有应用程序发送的DNS解析请求。它的上游级联DNS默认为Kube-dns。DNS代理在提供服务时所需的DNS Records由Istiod通过NDS（NameTable Discovery Service）发送，其中NDS完全是基于xDS协议实现的。Istiod负责监听服务网格内部所有的服务（既包括Kubernetes服务，也包括ServiceEntry服务），然后根据服务的地址及域名等信息构建DNS记录。NDS配置的发送采用异步通知的机制，任何服务的更新都会及时触发NDS配置的发送。从功能上来讲，DNS代理完全分担了Kube-dns的压力，而且支持远端集群及ServiceEntry服务的域名解析。
+总之，本地DNS代理有三种优势：①由于DNS代理是Pilot-Agent中的子模块，所以Sidecar自动包含此功能，无须单独部署；②它与应用被部署在同一Pod中，属于同一网络空间，因此可以大大降低应用的DNS解析时延；③DNS代理属于分布式部署，可以分担中心式Kube-dns服务器的压力，避免因为Kube-dns过载而导致整个集群的可用性下降。
+DNS代理的基本工作原理如图7-10所示，流程如下。
+（1）应用程序在访问目标服务时，首先发起DNS解析。Istio通过Iptables规则拦截应用的DNS解析请求，并将其转发到本地15053端口，15053端口正是DNS代理监听的端口。
+（2）DNS代理在接收到DNS解析请求后，首先检索本地的DNS记录，如果本地存在，则直接返回DNS响应，否则继续向上游级联DNS服务器（Kube-dns）发起解析请求。
+（3）本集群的Kube-dns首先在本地查找DNS记录，如果找到，则直接返回DNS响应，否则会遵循标准的DNS配置（/etc/resolv.conf），将DNS请求转发到上游级联DNS服务器。这里的上游级联DNS服务器可能是公有云厂商自有的DNS服务器。
+​ 图7-10 DNS代理的基本工作原理
+DNS域名与IP地址映射表
+如图7-11所示，Istiod通过监听所有集群的Kube-apiserver，获取整个服务网格中的所有Service/ServiceEntry，并且为ServiceEntry自动分配IP地址。DNS代理通过NDS（Istio扩展的xDS协议）从Istiod中获取所有服务的DNS域名与IP地址的映射关系表，并将其缓存在本地。
+​ 图7-11 DNS代理NDS的发现原理
+对于Kubernetes原生的Service来说，DNS解析直接使用其ClusterIP。当然存在这么一种情况，Service B在集群1和集群2中均存在，但是具有不同的ClusterIP地址，这时应该选择哪个地址作为服务的地址呢？答案是：Istiod选择与DNS Proxy在同一集群服务中的ClusterIP作为Service B的IP地址。如果DNS Proxy在集群1中，则Istiod选择集群1的ClusterIP 10.96.0.10作为Service B的地址；如果DNS Proxy在集群2中，则Istiod选择集群2的ClusterIP 10.10.0.10作为Service B的地址。也就是说，在多集群场景中，同一个服务名在不同的集群中可能被解析成不同的IP地址，当然这里完全不影响服务的访问，因为Istiod在生成监听器及路由匹配条件时，也遵循优先选择代理所在集群的服务ClusterIP的原则。
+ServiceEntry一般用来表示虚拟机上或者服务网格外部的服务，DNS或STATIC解析类型的ServiceEntry本身并没有IP地址，Istiod会从保留的E类地址（240.0.0.1～255.255.255.254）中为其随机分配一个假的IP地址，并发送给DNS代理。当应用访问如下ServiceEntry指定的mymongodb.somedomain域名时，实际上DNS代理会返回一个240.240.x.x的IP地址。STATIC类型的服务在Envoy中的Cluster类型为EDS，因此Envoy会将请求发往2.2.2.2或者3.3.3.3中的任意一个目标实例。
+1apiVersion: networking.istio.io/v1beta1 2kind: ServiceEntry 3 metadata: 4 name: external-svc-mongocluster 5 spec: 6 hosts: 7 - mymongodb.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>Istio服务授权策略AuthorizationPolicy详解 –《Istio权威指南》书摘</title>
+      <link>https://idouba.com/authorization-policy-of-the-definitive-guide-istio/</link>
+      <pubDate>Sat, 03 Jun 2023 15:22:57 +0000</pubDate>
+      
+      <guid>https://idouba.com/authorization-policy-of-the-definitive-guide-istio/</guid>
+      <description>
+        
+          
+            本节书摘来自华为云原生技术丛书《Istio权威指南（上）：云原生服务网格Istio原理与实践》一书原理篇的第5章 服务安全的原理，5.4节AuthorizationPolicy（服务授权策略），更多内容请参照原书。
+第5章 服务安全的原理 Istio以非侵入方式透明地提供面向应用的安全基础设施。在Istio中有两种不同的认证方式：①基于mTLS的对等身份认证；②基于JWT（JSON Web Token）令牌的服务请求认证。本章重点介绍这两种认证方式，以及基于这两种认证方式的细粒度的服务访问授权，会详细介绍其中认证、授权的通用原理、模型，以及Istio基于服务网格形态的实现原理和机制。本章还会详细介绍如何通过配置PeerAuthentication、RequestAuthentication和AuthorizationPolicy使用这些认证、授权能力。
+5.4 AuthorizationPolicy（服务授权策略） 认证的大部分应用场景最终是基于授权的访问控制，以上两种认证策略也大多配套本节的授权策略使用。从Istio 1.4开始引入的AuthorizationPolicy替代了之前ClusterRbacConfig、ServiceRole和ServiceRoleBinding三个对象来进行授权配置，避免了配置多个API的麻烦，AuthorizationPolicy的自身功能也非常丰富。
+5.4.1 入门示例 在如下示例中定义了作用于forecast负载v2版本的AuthorizationPolicy：来自cluster.local/ns/weather/sa/frontend的服务，当其携带的请求头域group是admin，并且通过PUT和POST方法访问目标服务才被允许时，其他条件的访问都会被拒绝：
+1apiVersion: security.istio.io/v1beta1 2kind: AuthorizationPolicy 3metadata: 4 name: forecast 5 namespace: weather 6spec: 7 selector: 8 matchLabels: 9 app: forecast 10 version: v2 11 rules: 12 - from: 13 - source: 14 principals: [&amp;#34;cluster.local/ns/weather/sa/frontend&amp;#34;] 15 to: 16 - operation: 17 methods: [&amp;#34;PUT&amp;#34;,&amp;#34;POST&amp;#34;] 18 when: 19 - key: request.headers[group] 20 values: [&amp;#34;admin&amp;#34;] 5.4.2 配置模型 AuthorizationPolicy的配置模型如图5-16所示，主要包括以下三部分。
+◎ selector：描述策略应用的目标对象。
+◎ rules：描述详细的访问控制规则。
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>Istio重要对象ServiceEntry详解 –《Istio权威指南》书摘</title>
+      <link>https://idouba.com/service-entry-of-the-definitive-guide-istio/</link>
+      <pubDate>Fri, 02 Jun 2023 15:22:57 +0000</pubDate>
+      
+      <guid>https://idouba.com/service-entry-of-the-definitive-guide-istio/</guid>
+      <description>
+        
+          
+            本节书摘来自华为云原生技术丛书《Istio权威指南（上）：云原生服务网格Istio原理与实践》一书原理篇的第3章 流量治理的原理，3.5节ServiceEntry（服务条目），更多内容请参照原书。
+第3章 流量治理的原理 本章讲解Istio提供的流量治理相关内容，即Istio流量治理要解决的问题、实现原理、配置模型、配置定义和典型应用，包括负载均衡、服务熔断、故障注入、灰度发布、故障转移、入口流量和出口流量等流量管理能力的通用原理、模型，以及Istio基于服务网格形态实现的原理和机制；同时会详细解析如何通过Istio中的VirtualService、DestinationRule、Gateway、ServiceEntry、WorkloadEntry、WorkloadGroup、Sidecar、EnvoyFilter、WasmPlugin等重要的服务管理配置来实现流量治理能力。在内容安排上，每节在讲解治理能力前都会从一个最精简的入门示例入手，再详细解析配置模型和定义，并辅以典型的应用案例来呈现其使用方法和应用场景。
+3.5 ServiceEntry（服务条目） 在第2章介绍架构和服务模型时提到，在Istio中管理的大部分服务都是自动注册的Kubernetes服务。但在实际应用中经常还有其他类型的服务并不能自动注册，这就需要一种服务注册机制。在Istio中提供了ServiceEntry对象进行服务注册，以这种方式注册的服务和Kubernetes服务一样被服务网格管理，可以对其配置各种流量规则。
+早期的ServiceEntry主要用于服务网格外部服务注册，比如注册外部的SaaS API或中间件云服务等。当前ServiceEntry的应用范围更加广泛，包括一些非容器的内部服务，比如比较典型的虚拟机类型的服务，配合要在3.6节和3.7节介绍的WorkloadEntry和WorkloadGroup可以实现完整的服务定义和服务实例注册功能。
+3.5.1 入门示例 下面通过一个入门示例了解ServiceEntry的基本用法，在该示例中通过ServiceEntry包装了一个对api.forecast.weather的服务网格外部服务的访问。通过如下配置即可把这个服务网格外部服务注册到服务网格中，并管理其访问流量：
+1apiVersion: networking.istio.io/v1beta1 2kind: ServiceEntry 3metadata: 4 name: weather-external 5spec: 6 hosts: 7 - api.forecast.weather 8 ports: 9 - number: 80 10 name: http 11 protocol: HTTP 12 resolution: DNS 13 location: MESH_EXTERNAL 3.5.2 配置模型 如图3-68所示，ServiceEntry的配置模型主要由以下两部分组成。
+◎ 服务自身定义：定义服务的访问信息，主要包括服务域名hosts和端口ports等，表示服务的访问入口；还包括服务位置（location）和解析方式（resolution）。服务自身的定义类似Kubernetes上Service的功能和定义。
+◎ 服务实例关联：通过workloadSelector关联到服务对应的实例。类似Kubernetes中Service的后端实例选择机制。
+​ 图3-68 ServiceEntry的配置模型
+3.5.3 配置定义 1．hosts（服务域名） 在服务发现模型中，最重要的自然是服务名和服务访问地址。Istio在通过ServiceEntry定义服务时，通过hosts来表示这个访问入口。在使用上有以下几点需要说明。
+◎ 对于HTTP流量，hosts匹配HTTP头域的Host或Authority。
+◎ 对于HTTPS或TLS流量，hosts匹配SNI。
+◎ 对于其他协议的流量，不匹配hosts，而是使用下面的addresses和port字段。
+◎ 当resolution被设置为DNS类型并且没有指定endpoints时，这个字段用作后端的域名来解析后端地址。
+在Istio的流量规则被应用时，VirtualService和DestinationRule也会匹配这个hosts，来决定生效的流量规则。
+2．address（虚拟IP地址） address表示与服务关联的虚拟IP地址，可以是CIDR这种前缀表达式：
+          
+          
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>

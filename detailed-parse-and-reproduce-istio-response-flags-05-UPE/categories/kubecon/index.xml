@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>KubeCon on 爱豆吧！</title>
+    <link>https://idouba.com/categories/kubecon/</link>
+    <description>Recent content in KubeCon on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Wed, 21 Aug 2024 15:32:08 +0000</lastBuildDate><atom:link href="https://idouba.com/categories/kubecon/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>KubeCon2024：Karmda和Istio提高分布式云的负载与流量韧性的最佳实践</title>
+      <link>https://idouba.com/kubecon2024-best-practice-karmada-and-istio-improve-workload-traffic-resilience-of-production-distributed-cloud/</link>
+      <pubDate>Wed, 21 Aug 2024 15:32:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/kubecon2024-best-practice-karmada-and-istio-improve-workload-traffic-resilience-of-production-distributed-cloud/</guid>
+      <description>
+        
+          
+            记录在2024年8月21日在香港Kubecon上发表的技术演讲《Best Practice: Karmada &amp;amp; Istio Improve Workload &amp;amp; Traffic Resilience of Production Distributed Cloud》
+议题： The Distributed cloud offers better resilience by providing redundancy, scalability and flexibility, especially for cloud native applications. However the complexity of multi-cluster workload and traffic management in hybrid or multi-cloud environment brings huge challenges in practice, such as the number of overall multi-cluster workload instances serve for customer request decreased when some unhealthy ones isolated in case of failures.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>KubeCon2023：基于实际案例解析Istio访问日志ResponseFlag系列</title>
+      <link>https://idouba.com/kubecon2023-detailed-parse-and-reproduce-istio-response-flags-index/</link>
+      <pubDate>Sun, 15 Oct 2023 15:50:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/kubecon2023-detailed-parse-and-reproduce-istio-response-flags-index/</guid>
+      <description>
+        
+          
+            记录在2023年9月27日在上海Kubecon上发表的技术演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case 》
+议题： 服务网格的访问日志在运维工作中发挥着非常关键的作用。特别是访问日志在HTTP响应码外提供应答标记Response Flags，通过针对性的标记提供有用的额外信息，帮助运维人员提高故障诊断的效率。但是Envoy社区官方文档中对应答标记的介绍非常简单，Istio社区也没有资料介绍这部分内容。在实际使用中当用户遇到包含DC、UF、UH等应答标记的日志时，很难找到权威材料参考来解决具体问题。 在本次演讲中，超盟将重现10多种生产中常碰到的应答标记的实践案例，解析每个标记的含义、产生场景，并介绍如何基于这些应答标记进行故障诊断和问题定界，进而解决案例中这些应答标记表示的问题。此外，还将解析生产用例中访问日志的6个有用的时间字段的含义，并介绍如何基于这些时间字段定界服务网格的延时相关问题。
+Access logs of service mesh is practically important in ops work. Especially, Response Flags in each log help improve fault diagnosis efficiency by providing additional details of request. But the simple and brief definition of Response Flags in Envoy and Istio community makes it hard to refer to it to effectively find the real problem and root cause when running into logs containing “DC, UF, UH” like flags in practice.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>KubeCon2021：服务网格替代 Hystrix 提升在线视频服务韧性的生产实践</title>
+      <link>https://idouba.com/kubecon2021-online-video-upgrades-resilience-from-sc-circuit-breaker-to-service-mesh-kubecon2021/</link>
+      <pubDate>Sun, 12 Dec 2021 15:50:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/kubecon2021-online-video-upgrades-resilience-from-sc-circuit-breaker-to-service-mesh-kubecon2021/</guid>
+      <description>
+        
+          
+            记录在KubeCon2021上发表的技术演讲《Online Video upgrades resilience from SC Circuit Breaker to Service Mesh》，和世宇做的一个技术实践分享，总结了下一起把网格在人人视频中落地的部分经验。。
+议题： 作为中国领先的在线视频共享平台，人人视频业务的快速发展给其 IT 基础设施带来了巨大挑战。日益增长的复杂性、容量和韧性要求给当前基于 Spring Cloud 熔断器的微服务带来了新的问题。
+在KubeCon2021上，华为云应用服务网格架构师张超盟和人人视频技术主管徐世宇介绍了大规模生产环境中的服务网格韧性实践，包括不健康实例的透明自动隔离、故障自动恢复和自我修复、连接池管理、重试、限流、超时和分布式跟踪等。通过分析熔断器模式和比较 Spring Cloud 熔断器与服务网格在各自生产实践中不同的实现方式，结果表明优化不只是改善了系统的可靠性和可用性，还使得开发和操作工作更简单便捷。
+As one leading Online Video sharing platform in China, RR&#39;s rapid business development introduce great challenge on its IT infrastructure. The increasing complexity, capacity and resilience requirement brings new problems to current Spring Cloud circuit breaker based micro services.
+In this presentation, Chaomeng and Shiyu will focus on service mesh resilience practice in large scale production environment, including transparent auto-isolation of the unhealthy instance, auto-recovery and self-healing, connection pool management, retry, fine gained rate limit and distributed tracing, latency metrics.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>KubeCon2020：Kubernetes和服务网格在冠状病毒期间助力在线协作</title>
+      <link>https://idouba.com/kubeco2020-kubernetes-and-service-mesh-helps-online-collaboration-during-coronavirus-time/</link>
+      <pubDate>Sat, 01 Aug 2020 16:20:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/kubeco2020-kubernetes-and-service-mesh-helps-online-collaboration-during-coronavirus-time/</guid>
+      <description>
+        
+          
+            记录在2020年8月1日在KubeCon上发表的技术演讲《Kubernetes &amp;amp; Service Mesh Helps Online Collaboration During Coronavirus Time》，和来自云会议的同事谢飞一起分享了2019年新冠疫情期间Istio在云会议的应用。
+议题： During the period of coronavirus, lots of people required stay at home or different office, use Welink, an online collaboration platform, work together. The exponentially increased online users bring great performance and capacity challenges. In this Session, Chaomeng and Fei will share their technical experience of Kubernetes&amp;amp;Istio in Welink supporting large traffic from large amount of users’ meeting, mailing and other online collaborations.
+          
+          
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>
