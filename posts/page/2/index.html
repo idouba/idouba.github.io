@@ -120,6 +120,79 @@
   <div class="excerpt">
     <div class="excerpt_header">
       <h3 class="post_link">
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-10-FI/" title="FI(注入错误故障)--Istio访问日志ResponseFlag重现与解析10">FI(注入错误故障)--Istio访问日志ResponseFlag重现与解析10</a>
+      </h3>
+      
+  <div class="post_meta">
+    <span><svg class="icon">
+  <title>calendar</title>
+  <use xlink:href="#calendar"></use>
+</svg>
+</span>
+    <span class="post_date">
+      Oct 7, 2023</span>
+    <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/kubecon/' title="KubeCon" class="post_tag button button_translucent">KubeCon
+        </a><a href='https://idouba.com/tags/%E8%AE%BF%E9%97%AE%E6%97%A5%E5%BF%97/' title="访问日志" class="post_tag button button_translucent">访问日志
+        </a><a href='https://idouba.com/tags/responseflags/' title="ResponseFlags" class="post_tag button button_translucent">ResponseFlags
+        </a><a href='https://idouba.com/tags/fi/' title="FI" class="post_tag button button_translucent">FI
+        </a><a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' title="演讲" class="post_tag button button_translucent">演讲
+        </a>
+    </span>
+    <span class="page_only">&nbsp;·
+  <div class="post_share">
+    Share on:
+    <a href="https://twitter.com/intent/tweet?text=FI%28%e6%b3%a8%e5%85%a5%e9%94%99%e8%af%af%e6%95%85%e9%9a%9c%29--Istio%e8%ae%bf%e9%97%ae%e6%97%a5%e5%bf%97ResponseFlag%e9%87%8d%e7%8e%b0%e4%b8%8e%e8%a7%a3%e6%9e%9010&url=https%3a%2f%2fidouba.com%2fdetailed-parse-and-reproduce-istio-response-flags-10-FI%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>twitter</title>
+  <use xlink:href="#twitter"></use>
+</svg>
+
+    </a>
+    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fdetailed-parse-and-reproduce-istio-response-flags-10-FI%2f&t=FI%28%e6%b3%a8%e5%85%a5%e9%94%99%e8%af%af%e6%95%85%e9%9a%9c%29--Istio%e8%ae%bf%e9%97%ae%e6%97%a5%e5%bf%97ResponseFlag%e9%87%8d%e7%8e%b0%e4%b8%8e%e8%a7%a3%e6%9e%9010" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>facebook</title>
+  <use xlink:href="#facebook"></use>
+</svg>
+
+    </a>
+    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
+      <svg class="icon">
+  <title>linkedin</title>
+  <use xlink:href="#linkedin"></use>
+</svg>
+
+    </a>
+    <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-10-FI/" title="Copy Link" class="link link_yank">
+      <svg class="icon">
+  <title>copy</title>
+  <use xlink:href="#copy"></use>
+</svg>
+
+    </a>
+  </div>
+  </span>
+  </div>
+
+    </div>
+      <div class="excerpt_footer">
+        <div class="pale">
+          
+            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第10个关注的Response Flag是DI，全称是FaultInjected，官方定义表示The request was aborted with a response code specified via fault injection.
+含义： FI 表示故障注入错误。通过VirtualService给目标服务注入了一个特定状态码的故障。在客户端的访问日志中会返回配置的HTTP状态码，并记录FI。
+重现环境： 客户端Pod，注入了Sidecar。 目标服务，一个Cluster类型的Kubernetes服 …</p>
+          
+          <br>
+          <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-10-FI/" title="Read More" class="excerpt_more button">Read More</a>
+        </div>
+      </div>
+    </div>
+  </li>
+
+        <li class="post_item">
+  <div class="excerpt">
+    <div class="excerpt_header">
+      <h3 class="post_link">
         <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-09-DI/" title="DI(注入延时故障)--Istio访问日志ResponseFlag重现与解析09">DI(注入延时故障)--Istio访问日志ResponseFlag重现与解析09</a>
       </h3>
       
@@ -773,79 +846,6 @@
     </div>
   </li>
 
-        <li class="post_item">
-  <div class="excerpt">
-    <div class="excerpt_header">
-      <h3 class="post_link">
-        <a href="https://idouba.com/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-00-Normal/" title="正常访问--Istio访问日志ResponseFlag重现与解析00">正常访问--Istio访问日志ResponseFlag重现与解析00</a>
-      </h3>
-      
-  <div class="post_meta">
-    <span><svg class="icon">
-  <title>calendar</title>
-  <use xlink:href="#calendar"></use>
-</svg>
-</span>
-    <span class="post_date">
-      Sep 27, 2023</span>
-    <span class="post_time"> · 2 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/kubecon/' title="KubeCon" class="post_tag button button_translucent">KubeCon
-        </a><a href='https://idouba.com/tags/%E8%AE%BF%E9%97%AE%E6%97%A5%E5%BF%97/' title="访问日志" class="post_tag button button_translucent">访问日志
-        </a><a href='https://idouba.com/tags/responseflags/' title="ResponseFlags" class="post_tag button button_translucent">ResponseFlags
-        </a>
-    </span>
-    <span class="page_only">&nbsp;·
-  <div class="post_share">
-    Share on:
-    <a href="https://twitter.com/intent/tweet?text=%e6%ad%a3%e5%b8%b8%e8%ae%bf%e9%97%ae--Istio%e8%ae%bf%e9%97%ae%e6%97%a5%e5%bf%97ResponseFlag%e9%87%8d%e7%8e%b0%e4%b8%8e%e8%a7%a3%e6%9e%9000&url=https%3a%2f%2fidouba.com%2f2023-09-27-detailed-parse-and-reproduce-istio-response-flags-00-Normal%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>twitter</title>
-  <use xlink:href="#twitter"></use>
-</svg>
-
-    </a>
-    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2f2023-09-27-detailed-parse-and-reproduce-istio-response-flags-00-Normal%2f&t=%e6%ad%a3%e5%b8%b8%e8%ae%bf%e9%97%ae--Istio%e8%ae%bf%e9%97%ae%e6%97%a5%e5%bf%97ResponseFlag%e9%87%8d%e7%8e%b0%e4%b8%8e%e8%a7%a3%e6%9e%9000" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>facebook</title>
-  <use xlink:href="#facebook"></use>
-</svg>
-
-    </a>
-    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
-      <svg class="icon">
-  <title>linkedin</title>
-  <use xlink:href="#linkedin"></use>
-</svg>
-
-    </a>
-    <a href="https://idouba.com/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-00-Normal/" title="Copy Link" class="link link_yank">
-      <svg class="icon">
-  <title>copy</title>
-  <use xlink:href="#copy"></use>
-</svg>
-
-    </a>
-  </div>
-  </span>
-  </div>
-
-    </div>
-      <div class="excerpt_footer">
-        <div class="pale">
-          
-            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
-在详细展开每种Response Flag前先介绍下本系列的必要前置信息。包括访问日志的背景、机制，以及重现这些Response Flag的基本环境，方便有兴趣的同学参照练习。
-机制 早期的访问日志一般由应用程序输出，即要求用户在业务代码中记录每次访问。在服务网格中，和指标、调用链等可观测性能力类似，Istio通过非侵入方式提供访问日志的收集。
-过程大致是：
-1.网格数据面拦截流量，并根据配置的访问日志格式输出访问日志。
-2.数据面根据配置的ALS(Access log Service)地址上报访问日志。 …</p>
-          
-          <br>
-          <a href="https://idouba.com/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-00-Normal/" title="Read More" class="excerpt_more button">Read More</a>
-        </div>
-      </div>
-    </div>
-  </li>
-
       <li>
     <ul class="pagination pagination-default">
       <li class="page-item">
@@ -902,6 +902,9 @@
     <h2 class="mt-4">Recent Posts</h2>
     <ul class="flex-column">
       <li>
+        <a href="https://idouba.com/about/" class="nav-link" title="About">About</a>
+      </li>
+      <li>
         <a href="https://idouba.com/doudou-and-douba-drive-around-taihu-day1/" class="nav-link" title="豆哥国庆环太湖Day1">豆哥国庆环太湖Day1</a>
       </li>
       <li>
@@ -921,9 +924,6 @@
       </li>
       <li>
         <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-13-RL/" class="nav-link" title="RL(服务限流)--Istio访问日志ResponseFlag重现与解析13">RL(服务限流)--Istio访问日志ResponseFlag重现与解析13</a>
-      </li>
-      <li>
-        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-12-UC/" class="nav-link" title="UC(上游连接中断)--Istio访问日志ResponseFlag重现与解析12">UC(上游连接中断)--Istio访问日志ResponseFlag重现与解析12</a>
       </li>
     </ul>
     <div>
@@ -1153,9 +1153,9 @@
           <span class="button_tally">4</span>
         </a>
         
-        <a href='https://idouba.com/tags/doudou/' class="post_tag button button_translucent" title="doudou">
-          DOUDOU
-          <span class="button_tally">3</span>
+        <a href='https://idouba.com/tags/%E8%B1%86%E5%93%A5/' class="post_tag button button_translucent" title="豆哥">
+          豆哥
+          <span class="button_tally">4</span>
         </a>
         
         
@@ -1165,6 +1165,10 @@
           <div class="tags_list">
             
             <a href='https://idouba.com/tags/12306/' class=" post_tag button button_translucent" data-position=1 title="12306">12306<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/about/' class=" post_tag button button_translucent" data-position=1 title="about">ABOUT<span class="button_tally">1</span>
             </a>
             
             
@@ -1472,7 +1476,11 @@
             </a>
             
             
-            <a href='https://idouba.com/tags/%E8%B1%86%E5%93%A5/' class=" post_tag button button_translucent" data-position=3 title="豆哥">豆哥<span class="button_tally">3</span>
+            <a href='https://idouba.com/tags/%E8%B1%86%E5%93%A5/' class=" post_tag button button_translucent" data-position=4 title="豆哥">豆哥<span class="button_tally">4</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E8%B1%86%E7%88%B8/' class=" post_tag button button_translucent" data-position=1 title="豆爸">豆爸<span class="button_tally">1</span>
             </a>
             
             

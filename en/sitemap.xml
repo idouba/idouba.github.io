@@ -2,6 +2,12 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://idouba.com/tags/about/</loc>
+    <lastmod>2024-10-01T15:32:08+00:00</lastmod>
+  </url><url>
+    <loc>https://idouba.com/about/</loc>
+    <lastmod>2024-10-01T15:32:08+00:00</lastmod>
+  </url><url>
     <loc>https://idouba.com/categories/</loc>
     <lastmod>2024-10-01T15:32:08+00:00</lastmod>
     <xhtml:link
@@ -57,6 +63,9 @@
     <lastmod>2024-10-01T15:32:08+00:00</lastmod>
   </url><url>
     <loc>https://idouba.com/doudou-and-douba-drive-around-taihu-day1/</loc>
+    <lastmod>2024-10-01T15:32:08+00:00</lastmod>
+  </url><url>
+    <loc>https://idouba.com/tags/%E8%B1%86%E7%88%B8/</loc>
     <lastmod>2024-10-01T15:32:08+00:00</lastmod>
   </url><url>
     <loc>https://idouba.com/tags/%E9%9A%8F%E7%AC%94/</loc>
