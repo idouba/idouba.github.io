@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>classfication on 爱豆吧！</title>
+    <link>https://idouba.com/tags/classfication/</link>
+    <description>Recent content in classfication on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Wed, 03 Jul 2013 15:50:08 +0000</lastBuildDate><atom:link href="https://idouba.com/tags/classfication/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>A Program demonstrating Gini Index Classification</title>
+      <link>https://idouba.com/classfication-giniindex-program/</link>
+      <pubDate>Wed, 03 Jul 2013 15:50:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/classfication-giniindex-program/</guid>
+      <description>
+        
+          
+            无意发现研究生时候数据挖掘课程关于基于Gini Index的一个Classification的实验报告，还算完整。基于尚老师给的数据集完整完成了模型设计、训练和验证。还用Java写了个简单界面，能导入数据集训练，并画出决策树，并能导入数据集验证，评价准确性。
+A Program demonstrating Gini Index Classification Abstract In this document, a small program demonstrating Gini Index Classification is introduced. Users can select specified training data set, build the decision tree, and then select independent testing data set to verify the accuracy of model. Furthermore, by providing the decision tree visualization (Using JTree of Java), the pattern recognition capacities of users can be greatly improved.When estimating classifier accuracy, the known class label is compared with the learned model’s class prediction for that sample, the conflict records will be filtered to show user what the record’s class label is and what the mined model tells you the result is supposed should be.
+          
+          
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>
