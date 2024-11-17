@@ -14,18 +14,6 @@
                 href="https://idouba.com/pt/categories/"
                 />
   </url><url>
-    <loc>https://idouba.com/pt/</loc>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://idouba.com/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="pt"
-                href="https://idouba.com/pt/"
-                />
-  </url><url>
     <loc>https://idouba.com/pt/series/</loc>
     <xhtml:link
                 rel="alternate"
@@ -48,6 +36,18 @@
                 rel="alternate"
                 hreflang="pt"
                 href="https://idouba.com/pt/tags/"
+                />
+  </url><url>
+    <loc>https://idouba.com/pt/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://idouba.com/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="pt"
+                href="https://idouba.com/pt/"
                 />
   </url>
 </urlset>
