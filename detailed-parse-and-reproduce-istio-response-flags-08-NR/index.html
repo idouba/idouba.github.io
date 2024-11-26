@@ -31,16 +31,16 @@
 <meta property="og:locale" content="en" />
 
 <meta property="og:type" content="article">
-<meta name="description" content="KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
-第八个关注的Response Flag是NR，全称是NoRouteFound，官方定义表示No route configured for a given request in addition to …" />
+<meta name="description" content="KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第八个关注 …" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="">
 <meta name="twitter:title" content="NR(没有匹配的路由)--Istio访问日志ResponseFlag重现与解析08" />
 <meta name="twitter:image" content="https://idouba.com/images/thumbnail.png"/>
 <meta property="og:url" content="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-08-NR/" />
 <meta property="og:title" content="NR(没有匹配的路由)--Istio访问日志ResponseFlag重现与解析08" />
-<meta property="og:description" content="KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
-第八个关注的Response Flag是NR，全称是NoRouteFound，官方定义表示No route configured for a given request in addition to …" />
+<meta property="og:description" content="KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第八个关注 …" />
 <meta property="og:image" content="https://idouba.com/images/thumbnail.png" />
 
 <link rel="apple-touch-icon" sizes="180x180" href="https://idouba.com/icons/apple-touch-icon.png">
@@ -175,7 +175,7 @@
   </div>
 
     <div class="post_body"><hr>
-<p><a href="https://kccncosschn2023.sched.com/event/b34cdc5babaf550b06b72c5aeb5ab21e">KubeCon 2023</a>在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。</p>
+<p><a href="https://kccncosschn2023.sched.com/event/b34cdc5babaf550b06b72c5aeb5ab21e">KubeCon 2023</a>在上海做的一个关于Istio访问日志的演讲<a href="https://idouba.com/kubecon2023-detailed-parse-and-reproduce-istio-response-flags-index/">《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》</a>。解析和重现了在当时解决客户问题时碰到的各种应答日志。</p>
 <p>第八个关注的Response Flag是NR，全称是<strong>NoRouteFound</strong>，官方定义表示<strong>No <a href="https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/http/http_routing">route configured</a></strong> <strong>for a given request in addition to 404 response code or no matching filter chain for a downstream connection.</strong></p>
 <h4 id="含义"><strong>含义：</strong></h4>
 <p><strong>NR</strong>表示没有匹配的路由来处理请求的流量，一般伴随“404”状态码。比如实际的访问流量的特征不匹配VirtualService中定义的路由条件，因而没有找到匹配的路由处理请求，就会报404 NR。</p>

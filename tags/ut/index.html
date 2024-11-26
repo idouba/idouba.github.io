@@ -183,10 +183,9 @@
       <div class="excerpt_footer">
         <div class="pale">
           
-            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
 第11个关注的Response Flag是UT，全称是UpstreamRequestTimeout，官方定义表示Upstream request timeout in addition to 504 response code.
-含义： UT表示表示上游请求超时，一般伴随返回“504”的HTTP状态码。如典型场景在VirtualService中给目标服务配置了超时时间，当服务请求超过配置的超时时间，客户端代理自动超时，取消请求。
-重现环境： 客户端Pod，注入了Sidecar。 目标服务，为了模拟一个慢的服务，我 …</p>
+含义： UT表示表示上游请求超时，一般伴随返回“504”的HTTP状态码。如典型场景 …</p>
           
           <br>
           <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-11-UT/" title="Read More" class="excerpt_more button">Read More</a>

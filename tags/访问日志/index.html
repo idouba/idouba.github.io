@@ -254,9 +254,8 @@
       <div class="excerpt_footer">
         <div class="pale">
           
-            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
-第14个关注的Response Flag还是RL，全称是RateLimited，官方定义表示The request was ratelimited locally by the HTTP rate limit filter in addition to 429 response code. 不同于前一个RL的重现了服务端限流，本文将聚焦基于客户端限流重现RL。
-含义： **RL **表示触发服务限流。限流是保障服务韧性的重要手段，防止系统过载，保障服务总体的可用性。在网格中配置了本地限流或者全局限流策略，若在单位 …</p>
+            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第14个关注的Response Flag还是RL，全称是RateLimited，官方定义表示The request was ratelimited locally by the HTTP rate limit filter in addition to 429 response code. 不同于前一个RL的重现了服务端限流，本 …</p>
           
           <br>
           <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-14-RL/" title="Read More" class="excerpt_more button">Read More</a>
@@ -326,9 +325,9 @@
       <div class="excerpt_footer">
         <div class="pale">
           
-            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
 第13个关注的Response Flag是RL，全称是RateLimited，官方定义表示The request was ratelimited locally by the HTTP rate limit filter in addition to 429 response code.
-含义： **RL **表示触发服务限流。限流是保障服务韧性的重要手段，防止系统过载，保障服务总体的可用性。在网格中配置了本地限流或者全局限流策略，若在单位时间内请求数超过配置的阈值，则触发限流。访问日志记录RL，一般会伴随返 …</p>
+含义： **RL **表示触发服务限流。 …</p>
           
           <br>
           <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-13-RL/" title="Read More" class="excerpt_more button">Read More</a>
@@ -398,11 +397,9 @@
       <div class="excerpt_footer">
         <div class="pale">
           
-            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
 第12个关注的Response Flag是UC，全称是UpstreamConnectionTermination，官方定义表示Upstream connection termination in addition to 503 response code.
-含义： UC表示上游连接中断，常见的一种现象是上游连接在返回应答前已经关闭。
-重现环境： UC是一个不太好构建的场景，环境和前面的大多数略有不同。
-客户端Pod，这里是特别写了一个Python程序。因为观测点在服务端代理，客户端是否注入Sidecar都可以。  …</p>
+含义： UC表示上游连接中断，常见的一种现象是上游连接在返回应答前已经关 …</p>
           
           <br>
           <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-12-UC/" title="Read More" class="excerpt_more button">Read More</a>
@@ -472,10 +469,9 @@
       <div class="excerpt_footer">
         <div class="pale">
           
-            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
 第11个关注的Response Flag是UT，全称是UpstreamRequestTimeout，官方定义表示Upstream request timeout in addition to 504 response code.
-含义： UT表示表示上游请求超时，一般伴随返回“504”的HTTP状态码。如典型场景在VirtualService中给目标服务配置了超时时间，当服务请求超过配置的超时时间，客户端代理自动超时，取消请求。
-重现环境： 客户端Pod，注入了Sidecar。 目标服务，为了模拟一个慢的服务，我 …</p>
+含义： UT表示表示上游请求超时，一般伴随返回“504”的HTTP状态码。如典型场景 …</p>
           
           <br>
           <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-11-UT/" title="Read More" class="excerpt_more button">Read More</a>
@@ -545,10 +541,9 @@
       <div class="excerpt_footer">
         <div class="pale">
           
-            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
 第10个关注的Response Flag是DI，全称是FaultInjected，官方定义表示The request was aborted with a response code specified via fault injection.
-含义： FI 表示故障注入错误。通过VirtualService给目标服务注入了一个特定状态码的故障。在客户端的访问日志中会返回配置的HTTP状态码，并记录FI。
-重现环境： 客户端Pod，注入了Sidecar。 目标服务，一个Cluster类型的Kubernetes服 …</p>
+含义： FI 表示故障注入错误。通过VirtualService给目标服务注入了一个 …</p>
           
           <br>
           <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-10-FI/" title="Read More" class="excerpt_more button">Read More</a>
@@ -618,10 +613,9 @@
       <div class="excerpt_footer">
         <div class="pale">
           
-            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
 第九个关注的Response Flag是DI，全称是DelayInjected，官方定义表示The request processing was delayed for a period specified via fault injection.
-含义： DI表示请求中注入了一个延时故障。在VirtualService中配置了延时故障注入时，会在服务请求时产生配置的延时，并在访问日志中会记录DI的应答标记。
-重现环境： 客户端Pod，注入了Sidecar。 目标服务，一个Cluster类型的Kubernetes …</p>
+含义： DI表示请求中注入了一个延时故障。在VirtualService中配置了 …</p>
           
           <br>
           <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-09-DI/" title="Read More" class="excerpt_more button">Read More</a>
@@ -691,9 +685,8 @@
       <div class="excerpt_footer">
         <div class="pale">
           
-            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
-第八个关注的Response Flag是NR，全称是NoRouteFound，官方定义表示No route configured for a given request in addition to 404 response code or no matching filter chain for a downstream connection.
-含义： NR表示没有匹配的路由来处理请求的流量，一般伴随“404”状态码。比如实际的访问流量的特征不匹配VirtualService中定义的路由条件，因而没有找到匹配的 …</p>
+            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第八个关注的Response Flag是NR，全称是NoRouteFound，官方定义表示No route configured for a given request in addition to 404 response code or no matching filter chain for a downstream …</p>
           
           <br>
           <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-08-NR/" title="Read More" class="excerpt_more button">Read More</a>
@@ -763,10 +756,9 @@
       <div class="excerpt_footer">
         <div class="pale">
           
-            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
 第七个关注的Response Flag是NC，全称是NoClusterFound，官方定义表示Upstream cluster not found&quot;
-含义： NC表示没有上游集群，即在网格流量路由中定义的目标服务后端不存在。Istio中比较典型的场景如分流策略中流量发送给V2标识的服务子集，但是DestinationRule中并没有定义该版本标识的服务子集。
-重现环境： 客户端Pod，注入了Sidecar。 目标服务，一个Cluster类型的Kubernetes服务，多个服务实例。服务端Pod可以注 …</p>
+含义： NC表示没有上游集群，即在网格流量路由中定义的目标服务后端不存在。Istio中比较典型的场景如分流策略中流量发送给V2标识的服务子集，但 …</p>
           
           <br>
           <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-07-NC/" title="Read More" class="excerpt_more button">Read More</a>
@@ -836,10 +828,9 @@
       <div class="excerpt_footer">
         <div class="pale">
           
-            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
 第六个关注的Response Flag是DPE，全称是 DownstreamProtocolError ，官方定义表示&quot;The downstream request had an HTTP protocol error&quot;
-含义： UPE表示下游协议错误。如下游客户端通过一个错误的协议访问目标服务时，一般服务端会记录400DPE的日志
-重现环境： 客户端Pod，注入了Sidecar。注意这里选择的是busybox容器，确认容器中包含telnet命令。 目标服务，一个Cluster类型 …</p>
+含义： UPE表示下游协议错误。如下游客户端通过一个错误的协议访问目标服务时，一般服务端 …</p>
           
           <br>
           <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-06-DPE/" title="Read More" class="excerpt_more button">Read More</a>

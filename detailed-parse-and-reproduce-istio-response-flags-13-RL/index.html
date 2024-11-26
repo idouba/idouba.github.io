@@ -31,16 +31,16 @@
 <meta property="og:locale" content="en" />
 
 <meta property="og:type" content="article">
-<meta name="description" content="KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
-第13个关注的Response Flag是RL，全称是RateLimited，官方定义表示The request was ratelimited locally by the HTTP rate …" />
+<meta name="description" content="KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第13个关 …" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="">
 <meta name="twitter:title" content="RL(服务限流)--Istio访问日志ResponseFlag重现与解析13" />
 <meta name="twitter:image" content="https://idouba.com/images/thumbnail.png"/>
 <meta property="og:url" content="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-13-RL/" />
 <meta property="og:title" content="RL(服务限流)--Istio访问日志ResponseFlag重现与解析13" />
-<meta property="og:description" content="KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
-第13个关注的Response Flag是RL，全称是RateLimited，官方定义表示The request was ratelimited locally by the HTTP rate …" />
+<meta property="og:description" content="KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第13个关 …" />
 <meta property="og:image" content="https://idouba.com/images/thumbnail.png" />
 
 <link rel="apple-touch-icon" sizes="180x180" href="https://idouba.com/icons/apple-touch-icon.png">
@@ -175,7 +175,7 @@
   </div>
 
     <div class="post_body"><hr>
-<p><a href="https://kccncosschn2023.sched.com/event/b34cdc5babaf550b06b72c5aeb5ab21e">KubeCon 2023</a>在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。</p>
+<p><a href="https://kccncosschn2023.sched.com/event/b34cdc5babaf550b06b72c5aeb5ab21e">KubeCon 2023</a>在上海做的一个关于Istio访问日志的演讲<a href="https://idouba.com/kubecon2023-detailed-parse-and-reproduce-istio-response-flags-index/">《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》</a>。解析和重现了在当时解决客户问题时碰到的各种应答日志。</p>
 <p>第13个关注的Response Flag是RL，全称是<strong>RateLimited</strong>，官方定义表示<strong>The request was ratelimited</strong> <strong>locally by the</strong> <a href="https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/rate_limit_filter">HTTP rate limit filter</a> <strong>in addition to 429 response code.</strong></p>
 <h4 id="含义"><strong>含义：</strong></h4>
 <p>**RL **表示触发服务限流。限流是保障服务韧性的重要手段，防止系统过载，保障服务总体的可用性。在网格中配置了本地限流或者全局限流策略，若在单位时间内请求数超过配置的阈值，则触发限流。访问日志记录RL，一般会伴随返回“429”的HTTP状态码。</p>

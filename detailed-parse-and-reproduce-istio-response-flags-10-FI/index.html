@@ -31,16 +31,16 @@
 <meta property="og:locale" content="en" />
 
 <meta property="og:type" content="article">
-<meta name="description" content="KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
-第10个关注的Response Flag是DI，全称是FaultInjected，官方定义表示The request was aborted with a response code …" />
+<meta name="description" content="KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第10个关 …" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="">
 <meta name="twitter:title" content="FI(注入错误故障)--Istio访问日志ResponseFlag重现与解析10" />
 <meta name="twitter:image" content="https://idouba.com/images/thumbnail.png"/>
 <meta property="og:url" content="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-10-FI/" />
 <meta property="og:title" content="FI(注入错误故障)--Istio访问日志ResponseFlag重现与解析10" />
-<meta property="og:description" content="KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
-第10个关注的Response Flag是DI，全称是FaultInjected，官方定义表示The request was aborted with a response code …" />
+<meta property="og:description" content="KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第10个关 …" />
 <meta property="og:image" content="https://idouba.com/images/thumbnail.png" />
 
 <link rel="apple-touch-icon" sizes="180x180" href="https://idouba.com/icons/apple-touch-icon.png">
@@ -175,7 +175,7 @@
   </div>
 
     <div class="post_body"><hr>
-<p><a href="https://kccncosschn2023.sched.com/event/b34cdc5babaf550b06b72c5aeb5ab21e">KubeCon 2023</a>在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。</p>
+<p><a href="https://kccncosschn2023.sched.com/event/b34cdc5babaf550b06b72c5aeb5ab21e">KubeCon 2023</a>在上海做的一个关于Istio访问日志的演讲<a href="https://idouba.com/kubecon2023-detailed-parse-and-reproduce-istio-response-flags-index/">《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》</a>。解析和重现了在当时解决客户问题时碰到的各种应答日志。</p>
 <p>第10个关注的Response Flag是DI，全称是<strong>FaultInjected</strong>，官方定义表示<strong>The request was aborted with a response code specified via</strong> <strong><a href="https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/fault_filter">fault injection</a></strong>.</p>
 <h4 id="含义"><strong>含义：</strong></h4>
 <p><strong>FI</strong> 表示故障注入错误。通过VirtualService给目标服务注入了一个特定状态码的故障。在客户端的访问日志中会返回配置的HTTP状态码，并记录FI。</p>

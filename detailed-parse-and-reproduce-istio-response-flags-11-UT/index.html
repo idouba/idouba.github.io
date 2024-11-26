@@ -31,16 +31,16 @@
 <meta property="og:locale" content="en" />
 
 <meta property="og:type" content="article">
-<meta name="description" content="KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
-第11个关注的Response Flag是UT，全称是UpstreamRequestTimeout，官方定义表示Upstream request timeout in addition to 504 …" />
+<meta name="description" content="KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第11个关 …" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="">
 <meta name="twitter:title" content="UT(上游请求超时)--Istio访问日志ResponseFlag重现与解析11" />
 <meta name="twitter:image" content="https://idouba.com/images/thumbnail.png"/>
 <meta property="og:url" content="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-11-UT/" />
 <meta property="og:title" content="UT(上游请求超时)--Istio访问日志ResponseFlag重现与解析11" />
-<meta property="og:description" content="KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
-第11个关注的Response Flag是UT，全称是UpstreamRequestTimeout，官方定义表示Upstream request timeout in addition to 504 …" />
+<meta property="og:description" content="KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第11个关 …" />
 <meta property="og:image" content="https://idouba.com/images/thumbnail.png" />
 
 <link rel="apple-touch-icon" sizes="180x180" href="https://idouba.com/icons/apple-touch-icon.png">
@@ -175,7 +175,7 @@
   </div>
 
     <div class="post_body"><hr>
-<p><a href="https://kccncosschn2023.sched.com/event/b34cdc5babaf550b06b72c5aeb5ab21e">KubeCon 2023</a>在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。</p>
+<p><a href="https://kccncosschn2023.sched.com/event/b34cdc5babaf550b06b72c5aeb5ab21e">KubeCon 2023</a>在上海做的一个关于Istio访问日志的演讲<a href="https://idouba.com/kubecon2023-detailed-parse-and-reproduce-istio-response-flags-index/">《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》</a>。解析和重现了在当时解决客户问题时碰到的各种应答日志。</p>
 <p>第11个关注的Response Flag是UT，全称是<strong>UpstreamRequestTimeout</strong>，官方定义表示<strong>Upstream request timeout in addition to 504 response code.</strong></p>
 <h4 id="含义"><strong>含义：</strong></h4>
 <p><strong>UT</strong>表示表示上游请求超时，一般伴随返回“504”的HTTP状态码。如典型场景在VirtualService中给目标服务配置了超时时间，当服务请求超过配置的超时时间，客户端代理自动超时，取消请求。</p>

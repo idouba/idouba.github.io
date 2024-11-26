@@ -31,16 +31,16 @@
 <meta property="og:locale" content="en" />
 
 <meta property="og:type" content="article">
-<meta name="description" content="KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
-第六个关注的Response Flag是DPE，全称是 DownstreamProtocolError ，官方定义表示&quot;The downstream request had an HTTP …" />
+<meta name="description" content="KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第六个关注 …" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="">
 <meta name="twitter:title" content="DPE(下游协议错误)--Istio访问日志ResponseFlag重现与解析06" />
 <meta name="twitter:image" content="https://idouba.com/images/thumbnail.png"/>
 <meta property="og:url" content="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-06-DPE/" />
 <meta property="og:title" content="DPE(下游协议错误)--Istio访问日志ResponseFlag重现与解析06" />
-<meta property="og:description" content="KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
-第六个关注的Response Flag是DPE，全称是 DownstreamProtocolError ，官方定义表示&quot;The downstream request had an HTTP …" />
+<meta property="og:description" content="KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第六个关注 …" />
 <meta property="og:image" content="https://idouba.com/images/thumbnail.png" />
 
 <link rel="apple-touch-icon" sizes="180x180" href="https://idouba.com/icons/apple-touch-icon.png">
@@ -175,7 +175,7 @@
   </div>
 
     <div class="post_body"><hr>
-<p><a href="https://kccncosschn2023.sched.com/event/b34cdc5babaf550b06b72c5aeb5ab21e">KubeCon 2023</a>在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。</p>
+<p><a href="https://kccncosschn2023.sched.com/event/b34cdc5babaf550b06b72c5aeb5ab21e">KubeCon 2023</a>在上海做的一个关于Istio访问日志的演讲<a href="https://idouba.com/kubecon2023-detailed-parse-and-reproduce-istio-response-flags-index/">《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》</a>。解析和重现了在当时解决客户问题时碰到的各种应答日志。</p>
 <p>第六个关注的Response Flag是DPE，全称是 <strong>DownstreamProtocolError</strong> ，官方定义表示&quot;<strong>The downstream request had an HTTP protocol error</strong>&quot;</p>
 <h4 id="含义"><strong>含义：</strong></h4>
 <p>UPE表示下游协议错误。如下游客户端通过一个错误的协议访问目标服务时，一般服务端会记录400DPE的日志</p>

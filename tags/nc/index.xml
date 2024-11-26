@@ -17,7 +17,7 @@
       <description>
         
           
-            KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+            KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
 第七个关注的Response Flag是NC，全称是NoClusterFound，官方定义表示Upstream cluster not found&amp;quot;
 含义： NC表示没有上游集群，即在网格流量路由中定义的目标服务后端不存在。Istio中比较典型的场景如分流策略中流量发送给V2标识的服务子集，但是DestinationRule中并没有定义该版本标识的服务子集。
 重现环境： 客户端Pod，注入了Sidecar。 目标服务，一个Cluster类型的Kubernetes服务，多个服务实例。服务端Pod可以注入Siecar，也可以不用注入。 重现步骤： 第一步： 从注入了网格代理的客户端Pod中通过目标名和服务端口访问目标服务，观察代理的访问日志，得到正常的200响应码。从服务端和客户端的访问日志上都可以看到服务在目标服务的多个实例上负载均衡。正常访问参照本系列的环境部分描述。

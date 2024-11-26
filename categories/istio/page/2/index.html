@@ -183,10 +183,9 @@
       <div class="excerpt_footer">
         <div class="pale">
           
-            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
 第六个关注的Response Flag是DPE，全称是 DownstreamProtocolError ，官方定义表示&quot;The downstream request had an HTTP protocol error&quot;
-含义： UPE表示下游协议错误。如下游客户端通过一个错误的协议访问目标服务时，一般服务端会记录400DPE的日志
-重现环境： 客户端Pod，注入了Sidecar。注意这里选择的是busybox容器，确认容器中包含telnet命令。 目标服务，一个Cluster类型 …</p>
+含义： UPE表示下游协议错误。如下游客户端通过一个错误的协议访问目标服务时，一般服务端 …</p>
           
           <br>
           <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-06-DPE/" title="Read More" class="excerpt_more button">Read More</a>
@@ -256,10 +255,9 @@
       <div class="excerpt_footer">
         <div class="pale">
           
-            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
 第五个关注的Response Flag是UPE，全称是 UpstreamProtocolError ，官方定义表示&quot;The upstream response had an HTTP protocol error.&quot;
-含义： UPE表示上游服务协议错误。在网格中定义的服务的协议和服务实际的协议不一致时，当服务访问时，客户端会得到502协议错误的响应。同时服务端的入流量日志会记录502 UPE。
-重现环境： 客户端Pod，注入了Sidecar。 目标服务，一个Cluster类型 …</p>
+含义： UPE表示上游服务协议错误。在网格中定义的服务的协议和服务实际的协议不一致时，当服务 …</p>
           
           <br>
           <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-05-UPE/" title="Read More" class="excerpt_more button">Read More</a>
@@ -329,10 +327,8 @@
       <div class="excerpt_footer">
         <div class="pale">
           
-            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
-第四个关注的Response Flag是URX，全称是 UpstreamRetryLimitExceded ，官方定义表示&quot;The request was rejected because the upstream retry limit (HTTP) or maximum connect attempts (TCP) was reached..&quot;
-含义： URX表示超过了HTTP的请求重试阈值，或者TCP的重连阈值，而导致访问被拒绝。这时客户端的访问日志中会记录URX。
-重现环境： 客户 …</p>
+            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第四个关注的Response Flag是URX，全称是 UpstreamRetryLimitExceded ，官方定义表示&quot;The request was rejected because the upstream retry limit (HTTP) or maximum connect attempts (TCP) …</p>
           
           <br>
           <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-04-URX/" title="Read More" class="excerpt_more button">Read More</a>
@@ -402,10 +398,9 @@
       <div class="excerpt_footer">
         <div class="pale">
           
-            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
 第三个关注的Response Flag是UF，UF的全称是 UpstreamConnectionFailure ，官方定义表示&quot;Upstream connection failure in addition to 503 response code.&quot;
-含义： 表示上游连接失败。典型场景如目标服务的服务端口不通。如客户端通过错误的端口访问目标服务时，会导致客户端的服务访问失败，客户端代理的Outbound日志会记录503UF。
-目标服务的服务实例端口不通，会导致服务端的服务访问失败，同时目标服 …</p>
+含义： 表示上游连接失败。典型场景如目标服务的服务端口不 …</p>
           
           <br>
           <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-03-UF/" title="Read More" class="excerpt_more button">Read More</a>
@@ -475,10 +470,9 @@
       <div class="excerpt_footer">
         <div class="pale">
           
-            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
 第二个关注的Response Flag是UH，UH的全称是NoHealthyUpstream，官方定义表示&quot;No healthy upstream hosts in upstream cluster in addition to 503 response code.&quot;
-含义： 表示上游服务没有健康的后端实例。典型场景如目标服务的后端实例不可用，比如在Kubernetes中目标服务的实例数设置为0.。
-重现环境： 客户端Pod，注入了Sidecar。 目标服务，一个Cluster类型 …</p>
+含义： 表示上游服务没有健康的后端实例。 …</p>
           
           <br>
           <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-02-UH/" title="Read More" class="excerpt_more button">Read More</a>
@@ -548,11 +542,10 @@
       <div class="excerpt_footer">
         <div class="pale">
           
-            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
 第一个关注的Response Flag是DC，DC的全称是DownstreamConnectionTermination，官方定义是”Downstream connection termination“。
 含义： DC表示下游连接终止。
-在访问目标服务时，在收到完整应答前，客户端主动断开连接时，会产生DC特征的应答标记。客户端断开应答的场景比较多，生产中我们经常碰到的是客户端设置了请求超时，超时后客户端断开了连接。则在访问日志中一般会记录本次请求的结果为DC。
-重现环境： 客户端Pod，注入了Sidecar。 目 …</p>
+在访问目标服务时，在收到完整应答前，客户端主动断开连接时，会产生DC特征的应答标记。客户端断 …</p>
           
           <br>
           <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-01-DC/" title="Read More" class="excerpt_more button">Read More</a>
@@ -620,12 +613,9 @@
       <div class="excerpt_footer">
         <div class="pale">
           
-            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
 在详细展开每种Response Flag前先介绍下本系列的必要前置信息。包括访问日志的背景、机制，以及重现这些Response Flag的基本环境，方便有兴趣的同学参照练习。
-机制 早期的访问日志一般由应用程序输出，即要求用户在业务代码中记录每次访问。在服务网格中，和指标、调用链等可观测性能力类似，Istio通过非侵入方式提供访问日志的收集。
-过程大致是：
-1.网格数据面拦截流量，并根据配置的访问日志格式输出访问日志。
-2.数据面根据配置的ALS(Access log Service)地址上报访问日志。 …</p>
+机制 早期的访问日志一般由应用程序输出，即要求用户在业务代码中记录每次访问。在服务网格中，和指标、调用链等可观测性能力类似，Istio通过非侵入方式提供访 …</p>
           
           <br>
           <a href="https://idouba.com/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-00-Normal/" title="Read More" class="excerpt_more button">Read More</a>

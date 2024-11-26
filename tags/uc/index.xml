@@ -17,7 +17,7 @@
       <description>
         
           
-            KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+            KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
 第12个关注的Response Flag是UC，全称是UpstreamConnectionTermination，官方定义表示Upstream connection termination in addition to 503 response code.
 含义： UC表示上游连接中断，常见的一种现象是上游连接在返回应答前已经关闭。
 重现环境： UC是一个不太好构建的场景，环境和前面的大多数略有不同。
@@ -27,7 +27,6 @@
 第三步： 在客户端容器中执行以上Python程序， 观察Python脚本我们打印的输出，会看到执行后60秒得到了503的返回。
 第四步： 观察Nginx自身的日志记录了408，表示服务端不再等待，关闭了连接。
 1127.0.0.6 - - [25/Aug/2023:03:33:17 +0000] &amp;#34;POST /ucbackend/ HTTP/1.1&amp;#34; 408 0 &amp;#34;-&amp;#34; &amp;#34;-&amp;#34; &amp;#34;-&amp;#34; 第五步： 同时服务端代理记录503UC，表示服务端断开了连接，能看到日志上请求60秒（日志显示60060毫米）的耗时。
-1[2023-08-25T03:32:17.193Z] &amp;#34;POST /ucbackend/ HTTP/1.1&amp;#34; 503 UC upstream_reset_before_response_started{connection_termination} - &amp;#34;-&amp;#34; 0 95 60060 - &amp;#34;-&amp;#34; &amp;#34;-&amp;#34; &amp;#34;6a6febc2-d669-4788-8bf2-989371c07372&amp;#34; &amp;#34;10.
           
           
         

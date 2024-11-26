@@ -183,11 +183,10 @@
       <div class="excerpt_footer">
         <div class="pale">
           
-            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
 第一个关注的Response Flag是DC，DC的全称是DownstreamConnectionTermination，官方定义是”Downstream connection termination“。
 含义： DC表示下游连接终止。
-在访问目标服务时，在收到完整应答前，客户端主动断开连接时，会产生DC特征的应答标记。客户端断开应答的场景比较多，生产中我们经常碰到的是客户端设置了请求超时，超时后客户端断开了连接。则在访问日志中一般会记录本次请求的结果为DC。
-重现环境： 客户端Pod，注入了Sidecar。 目 …</p>
+在访问目标服务时，在收到完整应答前，客户端主动断开连接时，会产生DC特征的应答标记。客户端断 …</p>
           
           <br>
           <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-01-DC/" title="Read More" class="excerpt_more button">Read More</a>

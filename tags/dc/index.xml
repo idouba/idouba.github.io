@@ -17,7 +17,7 @@
       <description>
         
           
-            KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+            KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
 第一个关注的Response Flag是DC，DC的全称是DownstreamConnectionTermination，官方定义是”Downstream connection termination“。
 含义： DC表示下游连接终止。
 在访问目标服务时，在收到完整应答前，客户端主动断开连接时，会产生DC特征的应答标记。客户端断开应答的场景比较多，生产中我们经常碰到的是客户端设置了请求超时，超时后客户端断开了连接。则在访问日志中一般会记录本次请求的结果为DC。
@@ -27,7 +27,6 @@
 这里是为了模拟一种更接近真实应用的场景。在模拟环境下构造客户端断开更简单的办法是不设置超时，直接curl，在得到请求返回前ctl+c结束curl请求也可以得到类似的效果。
 第三步： 观察客户端的outbound日志可以看到收到了0 DC downstream_remote_disconnect的信息。同时一个小细节，客户端访问日志可以看到本次访问的耗时DURATION是1999毫秒，与我们配置的2秒钟超时吻合。
 1[2023-08-18T11:31:40.069Z] &amp;#34;GET / HTTP/1.1&amp;#34; 0 DC downstream_remote_disconnect - &amp;#34;-&amp;#34; 0 0 1999 - &amp;#34;-&amp;#34; &amp;#34;curl/7.52.1&amp;#34; &amp;#34;afe165f1-27ab-447e-823d-b5d50103d197&amp;#34; &amp;#34;nginx.external&amp;#34; &amp;#34;100.85.115.86:9090&amp;#34; outbound|9999||nginx.external 10.66.0.24:58540 192.168.99.99:9999 10.66.0.24:41660 - - 应对建议： DC一般无需特殊处理。
-大部分情况下DC的原因是，服务端耗时较长导致客户端在一定时间后断开了连接。这时候一般考虑优化目标服务，在有效的时间内返回应答。
           
           
         

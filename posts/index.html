@@ -682,9 +682,8 @@
       <div class="excerpt_footer">
         <div class="pale">
           
-            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
-第14个关注的Response Flag还是RL，全称是RateLimited，官方定义表示The request was ratelimited locally by the HTTP rate limit filter in addition to 429 response code. 不同于前一个RL的重现了服务端限流，本文将聚焦基于客户端限流重现RL。
-含义： **RL **表示触发服务限流。限流是保障服务韧性的重要手段，防止系统过载，保障服务总体的可用性。在网格中配置了本地限流或者全局限流策略，若在单位 …</p>
+            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第14个关注的Response Flag还是RL，全称是RateLimited，官方定义表示The request was ratelimited locally by the HTTP rate limit filter in addition to 429 response code. 不同于前一个RL的重现了服务端限流，本 …</p>
           
           <br>
           <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-14-RL/" title="Read More" class="excerpt_more button">Read More</a>
@@ -754,9 +753,9 @@
       <div class="excerpt_footer">
         <div class="pale">
           
-            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
 第13个关注的Response Flag是RL，全称是RateLimited，官方定义表示The request was ratelimited locally by the HTTP rate limit filter in addition to 429 response code.
-含义： **RL **表示触发服务限流。限流是保障服务韧性的重要手段，防止系统过载，保障服务总体的可用性。在网格中配置了本地限流或者全局限流策略，若在单位时间内请求数超过配置的阈值，则触发限流。访问日志记录RL，一般会伴随返 …</p>
+含义： **RL **表示触发服务限流。 …</p>
           
           <br>
           <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-13-RL/" title="Read More" class="excerpt_more button">Read More</a>
@@ -826,11 +825,9 @@
       <div class="excerpt_footer">
         <div class="pale">
           
-            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
 第12个关注的Response Flag是UC，全称是UpstreamConnectionTermination，官方定义表示Upstream connection termination in addition to 503 response code.
-含义： UC表示上游连接中断，常见的一种现象是上游连接在返回应答前已经关闭。
-重现环境： UC是一个不太好构建的场景，环境和前面的大多数略有不同。
-客户端Pod，这里是特别写了一个Python程序。因为观测点在服务端代理，客户端是否注入Sidecar都可以。  …</p>
+含义： UC表示上游连接中断，常见的一种现象是上游连接在返回应答前已经关 …</p>
           
           <br>
           <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-12-UC/" title="Read More" class="excerpt_more button">Read More</a>

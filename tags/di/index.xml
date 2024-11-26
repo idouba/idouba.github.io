@@ -17,12 +17,12 @@
       <description>
         
           
-            KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+            KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
 第九个关注的Response Flag是DI，全称是DelayInjected，官方定义表示The request processing was delayed for a period specified via fault injection.
 含义： DI表示请求中注入了一个延时故障。在VirtualService中配置了延时故障注入时，会在服务请求时产生配置的延时，并在访问日志中会记录DI的应答标记。
 重现环境： 客户端Pod，注入了Sidecar。 目标服务，一个Cluster类型的Kubernetes服务，多个服务实例。服务端Pod可以注入Siecar，也可以不用注入。 重现步骤： 第一步： 从注入了网格代理的客户端Pod中通过目标名和服务端口访问目标服务，观察代理的访问日志，得到正常的200响应码。从服务端和客户端的访问日志上都可以看到服务在目标服务的多个实例上负载均衡。正常访问参照本系列的环境部分描述。
 第二步： 修改目标服务的VirtualService，在路由上配置10秒的延时。
-1apiVersion: networking.istio.io/v1beta1 2kind: VirtualService 3metadata: 4 name: nginx-80 5 namespace: accesslog 6spec: 7 hosts: 8 - nginx 9 http: 10 - fault: 11 delay: 12 fixedDelay: 10s 13 percentage: 14 value: 100 15 route: 16 - destination: 17 host: nginx.accesslog.svc.cluster.local 18 subset: v1 第三步： .
+1apiVersion: networking.istio.io/v1beta1 2kind: VirtualService 3metadata: 4 name: nginx-80 5 namespace: accesslog 6spec: 7 hosts: 8 - nginx 9 http: 10 - fault: 11 delay: 12 fixedDelay: 10s 13 percentage: 14 value: 100 15 route: 16 - destination: 17 host: nginx.
           
           
         
