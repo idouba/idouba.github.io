@@ -126,6 +126,80 @@
   <div class="excerpt">
     <div class="excerpt_header">
       <h3 class="post_link">
+        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-01-DC/" title="DC(下游连接终止)--Istio访问日志ResponseFlag重现与解析01">DC(下游连接终止)--Istio访问日志ResponseFlag重现与解析01</a>
+      </h3>
+      
+  <div class="post_meta">
+    <span><svg class="icon">
+  <title>calendar</title>
+  <use xlink:href="#calendar"></use>
+</svg>
+</span>
+    <span class="post_date">
+      Sep 28, 2023</span>
+    <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/kubecon/' title="KubeCon" class="post_tag button button_translucent">KubeCon
+        </a><a href='https://idouba.com/tags/%E8%AE%BF%E9%97%AE%E6%97%A5%E5%BF%97/' title="访问日志" class="post_tag button button_translucent">访问日志
+        </a><a href='https://idouba.com/tags/responseflags/' title="ResponseFlags" class="post_tag button button_translucent">ResponseFlags
+        </a><a href='https://idouba.com/tags/dc/' title="DC" class="post_tag button button_translucent">DC
+        </a><a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' title="演讲" class="post_tag button button_translucent">演讲
+        </a>
+    </span>
+    <span class="page_only">&nbsp;·
+  <div class="post_share">
+    Share on:
+    <a href="https://twitter.com/intent/tweet?text=DC%28%e4%b8%8b%e6%b8%b8%e8%bf%9e%e6%8e%a5%e7%bb%88%e6%ad%a2%29--Istio%e8%ae%bf%e9%97%ae%e6%97%a5%e5%bf%97ResponseFlag%e9%87%8d%e7%8e%b0%e4%b8%8e%e8%a7%a3%e6%9e%9001&url=https%3a%2f%2fidouba.com%2fdetailed-parse-and-reproduce-istio-response-flags-01-DC%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>twitter</title>
+  <use xlink:href="#twitter"></use>
+</svg>
+
+    </a>
+    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fdetailed-parse-and-reproduce-istio-response-flags-01-DC%2f&t=DC%28%e4%b8%8b%e6%b8%b8%e8%bf%9e%e6%8e%a5%e7%bb%88%e6%ad%a2%29--Istio%e8%ae%bf%e9%97%ae%e6%97%a5%e5%bf%97ResponseFlag%e9%87%8d%e7%8e%b0%e4%b8%8e%e8%a7%a3%e6%9e%9001" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>facebook</title>
+  <use xlink:href="#facebook"></use>
+</svg>
+
+    </a>
+    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
+      <svg class="icon">
+  <title>linkedin</title>
+  <use xlink:href="#linkedin"></use>
+</svg>
+
+    </a>
+    <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-01-DC/" title="Copy Link" class="link link_yank">
+      <svg class="icon">
+  <title>copy</title>
+  <use xlink:href="#copy"></use>
+</svg>
+
+    </a>
+  </div>
+  </span>
+  </div>
+
+    </div>
+      <div class="excerpt_footer">
+        <div class="pale">
+          
+            <p>KubeCon 2023在上海做的一个关于Istio访问日志的演讲。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+第一个关注的Response Flag是DC，DC的全称是DownstreamConnectionTermination，官方定义是”Downstream connection termination“。
+含义： DC表示下游连接终止。
+在访问目标服务时，在收到完整应答前，客户端主动断开连接时，会产生DC特征的应答标记。客户端断开应答的场景比较多，生产中我们经常碰到的是客户端设置了请求超时，超时后客户端断开了连接。则在访问日志中一般会记录本次请求的结果为DC。
+重现环境： 客户端Pod，注入了Sidecar。 目 …</p>
+          
+          <br>
+          <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-01-DC/" title="Read More" class="excerpt_more button">Read More</a>
+        </div>
+      </div>
+    </div>
+  </li>
+
+        <li class="post_item">
+  <div class="excerpt">
+    <div class="excerpt_header">
+      <h3 class="post_link">
         <a href="https://idouba.com/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-00-Normal/" title="正常访问--Istio访问日志ResponseFlag重现与解析00">正常访问--Istio访问日志ResponseFlag重现与解析00</a>
       </h3>
       
@@ -767,75 +841,6 @@
     </div>
   </li>
 
-        <li class="post_item">
-  <div class="excerpt">
-    <div class="excerpt_header">
-      <h3 class="post_link">
-        <a href="https://idouba.com/the-definitive-guide-istio-preface-2/" title="《Istio权威指南-下》前言">《Istio权威指南-下》前言</a>
-      </h3>
-      
-  <div class="post_meta">
-    <span><svg class="icon">
-  <title>calendar</title>
-  <use xlink:href="#calendar"></use>
-</svg>
-</span>
-    <span class="post_date">
-      Jun 1, 2023</span>
-    <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/istio%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/' title="Istio权威指南" class="post_tag button button_translucent">Istio权威指南
-        </a><a href='https://idouba.com/tags/%E5%9B%BE%E4%B9%A6/' title="图书" class="post_tag button button_translucent">图书
-        </a><a href='https://idouba.com/tags/istio/' title="Istio" class="post_tag button button_translucent">Istio
-        </a>
-    </span>
-    <span class="page_only">&nbsp;·
-  <div class="post_share">
-    Share on:
-    <a href="https://twitter.com/intent/tweet?text=%e3%80%8aIstio%e6%9d%83%e5%a8%81%e6%8c%87%e5%8d%97-%e4%b8%8b%e3%80%8b%e5%89%8d%e8%a8%80&url=https%3a%2f%2fidouba.com%2fthe-definitive-guide-istio-preface-2%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>twitter</title>
-  <use xlink:href="#twitter"></use>
-</svg>
-
-    </a>
-    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fthe-definitive-guide-istio-preface-2%2f&t=%e3%80%8aIstio%e6%9d%83%e5%a8%81%e6%8c%87%e5%8d%97-%e4%b8%8b%e3%80%8b%e5%89%8d%e8%a8%80" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>facebook</title>
-  <use xlink:href="#facebook"></use>
-</svg>
-
-    </a>
-    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
-      <svg class="icon">
-  <title>linkedin</title>
-  <use xlink:href="#linkedin"></use>
-</svg>
-
-    </a>
-    <a href="https://idouba.com/the-definitive-guide-istio-preface-2/" title="Copy Link" class="link link_yank">
-      <svg class="icon">
-  <title>copy</title>
-  <use xlink:href="#copy"></use>
-</svg>
-
-    </a>
-  </div>
-  </span>
-  </div>
-
-    </div>
-      <div class="excerpt_footer">
-        <div class="pale">
-          
-            <p>Istio从2017年开源第1个版本到当前版本，已经走过了5年多的时间。在此期间，伴随着云原生技术在各个领域的飞速发展，服务网格的应用也越来越广泛和深入。作为服务网格领域最具影响力的项目，Istio快速发展和成熟，获得越来越多的技术人员关注和应用。我们希望通过《Istio权威指南》系统且深入地讲解Istio，帮助相关技术人员了解和熟悉Istio，满足其日常工作中的需求。《Istio权威指南（上）：云原生服务网格Istio原理与实践》是《Istio权威指南》的上册，重点讲解Istio的原理与实践；《Istio权威指南（下）：云原生服务网格Istio架构与源码》是《Istio权威指南》的下册，重点讲解Istio的架构与源码。
-近年来，服 …</p>
-          
-          <br>
-          <a href="https://idouba.com/the-definitive-guide-istio-preface-2/" title="Read More" class="excerpt_more button">Read More</a>
-        </div>
-      </div>
-    </div>
-  </li>
-
       <li>
     <ul class="pagination pagination-default">
       <li class="page-item">
@@ -892,6 +897,9 @@
     <h2 class="mt-4">Recent Posts</h2>
     <ul class="flex-column">
       <li>
+        <a href="https://idouba.com/cloud-native-engineer-learn-deeplearning-session1-from-linear-regression-to-neural-network/" class="nav-link" title="云原生工程师初识深度学习系列（一）：从线性回归入门神经网络">云原生工程师初识深度学习系列（一）：从线性回归入门神经网络</a>
+      </li>
+      <li>
         <a href="https://idouba.com/doudou-and-douba-drive-around-taihu-day2/" class="nav-link" title="豆哥国庆环太湖Day2：三国城（宜兴-无锡-常州）">豆哥国庆环太湖Day2：三国城（宜兴-无锡-常州）</a>
       </li>
       <li>
@@ -911,9 +919,6 @@
       </li>
       <li>
         <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-14-RL/" class="nav-link" title="RL(服务限流)--Istio访问日志ResponseFlag重现与解析14">RL(服务限流)--Istio访问日志ResponseFlag重现与解析14</a>
-      </li>
-      <li>
-        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-13-RL/" class="nav-link" title="RL(服务限流)--Istio访问日志ResponseFlag重现与解析13">RL(服务限流)--Istio访问日志ResponseFlag重现与解析13</a>
       </li>
     </ul>
     <div>
@@ -964,6 +969,11 @@
           <span class="button_tally">4</span>
         </a>
         
+        <a href='https://idouba.com/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/' class="post_tag button button_translucent" title="机器学习">
+          机器学习
+          <span class="button_tally">4</span>
+        </a>
+        
         <a href='https://idouba.com/categories/%E8%B1%86%E5%93%A5/' class="post_tag button button_translucent" title="豆哥">
           豆哥
           <span class="button_tally">4</span>
@@ -981,11 +991,6 @@
         
         <a href='https://idouba.com/categories/kubernetes/' class="post_tag button button_translucent" title="kubernetes">
           KUBERNETES
-          <span class="button_tally">3</span>
-        </a>
-        
-        <a href='https://idouba.com/categories/%E5%B9%B6%E5%8F%91/' class="post_tag button button_translucent" title="并发">
-          并发
           <span class="button_tally">3</span>
         </a>
         
@@ -1051,11 +1056,15 @@
             </a>
             
             
-            <a href='https://idouba.com/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/' class=" post_tag button button_translucent" data-position=3 title="机器学习">机器学习<span class="button_tally">3</span>
+            <a href='https://idouba.com/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/' class=" post_tag button button_translucent" data-position=4 title="机器学习">机器学习<span class="button_tally">4</span>
             </a>
             
             
             <a href='https://idouba.com/categories/%E6%BC%94%E8%AE%B2/' class=" post_tag button button_translucent" data-position=9 title="演讲">演讲<span class="button_tally">9</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/categories/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/' class=" post_tag button button_translucent" data-position=1 title="神经网络">神经网络<span class="button_tally">1</span>
             </a>
             
             
@@ -1158,6 +1167,10 @@
             </a>
             
             
+            <a href='https://idouba.com/tags/ai/' class=" post_tag button button_translucent" data-position=1 title="ai">AI<span class="button_tally">1</span>
+            </a>
+            
+            
             <a href='https://idouba.com/tags/aqs/' class=" post_tag button button_translucent" data-position=1 title="aqs">AQS<span class="button_tally">1</span>
             </a>
             
@@ -1255,6 +1268,10 @@
             
             
             <a href='https://idouba.com/tags/kubernetes/' class=" post_tag button button_translucent" data-position=3 title="kubernetes">KUBERNETES<span class="button_tally">3</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/linear-regression/' class=" post_tag button button_translucent" data-position=1 title="linear-regression">LINEAR-REGRESSION<span class="button_tally">1</span>
             </a>
             
             
@@ -1430,11 +1447,19 @@
             </a>
             
             
+            <a href='https://idouba.com/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/' class=" post_tag button button_translucent" data-position=1 title="深度学习">深度学习<span class="button_tally">1</span>
+            </a>
+            
+            
             <a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' class=" post_tag button button_translucent" data-position=23 title="演讲">演讲<span class="button_tally">23</span>
             </a>
             
             
             <a href='https://idouba.com/tags/%E7%A5%96%E6%AF%8D/' class=" post_tag button button_translucent" data-position=2 title="祖母">祖母<span class="button_tally">2</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/' class=" post_tag button button_translucent" data-position=1 title="神经网络">神经网络<span class="button_tally">1</span>
             </a>
             
             

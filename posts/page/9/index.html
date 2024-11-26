@@ -126,6 +126,78 @@
   <div class="excerpt">
     <div class="excerpt_header">
       <h3 class="post_link">
+        <a href="https://idouba.com/hadoop_mapreduce_job_init/" title="【hadoop代码笔记】hadoop作业提交之Job初始化">【hadoop代码笔记】hadoop作业提交之Job初始化</a>
+      </h3>
+      
+  <div class="post_meta">
+    <span><svg class="icon">
+  <title>calendar</title>
+  <use xlink:href="#calendar"></use>
+</svg>
+</span>
+    <span class="post_date">
+      Jan 19, 2014</span>
+    <span class="post_time"> · 3 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/hadoop/' title="hadoop" class="post_tag button button_translucent">hadoop
+        </a><a href='https://idouba.com/tags/java/' title="java" class="post_tag button button_translucent">java
+        </a><a href='https://idouba.com/tags/mapreduce/' title="mapreduce" class="post_tag button button_translucent">mapreduce
+        </a>
+    </span>
+    <span class="page_only">&nbsp;·
+  <div class="post_share">
+    Share on:
+    <a href="https://twitter.com/intent/tweet?text=%e3%80%90hadoop%e4%bb%a3%e7%a0%81%e7%ac%94%e8%ae%b0%e3%80%91hadoop%e4%bd%9c%e4%b8%9a%e6%8f%90%e4%ba%a4%e4%b9%8bJob%e5%88%9d%e5%a7%8b%e5%8c%96&url=https%3a%2f%2fidouba.com%2fhadoop_mapreduce_job_init%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>twitter</title>
+  <use xlink:href="#twitter"></use>
+</svg>
+
+    </a>
+    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fhadoop_mapreduce_job_init%2f&t=%e3%80%90hadoop%e4%bb%a3%e7%a0%81%e7%ac%94%e8%ae%b0%e3%80%91hadoop%e4%bd%9c%e4%b8%9a%e6%8f%90%e4%ba%a4%e4%b9%8bJob%e5%88%9d%e5%a7%8b%e5%8c%96" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>facebook</title>
+  <use xlink:href="#facebook"></use>
+</svg>
+
+    </a>
+    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
+      <svg class="icon">
+  <title>linkedin</title>
+  <use xlink:href="#linkedin"></use>
+</svg>
+
+    </a>
+    <a href="https://idouba.com/hadoop_mapreduce_job_init/" title="Copy Link" class="link link_yank">
+      <svg class="icon">
+  <title>copy</title>
+  <use xlink:href="#copy"></use>
+</svg>
+
+    </a>
+  </div>
+  </span>
+  </div>
+
+    </div>
+      <div class="excerpt_footer">
+        <div class="pale">
+          
+            <p>一、概要描述
+在上一篇博文中主要描述了JobTracker和其几个服务（或功能）模块的接收到提交的job后的一些处理。其中很重要的一部分就作业的初始化。因为代码片段图的表达问题，本应该在上篇描述的内容，分开在本篇描述。
+二、 流程描述
+代码也接上文的最后一个方法EagerTaskInitializationListener的 jobAdded方法把JobInProgress类型的job放到List类型的 jobInitQueue中，有个单独的线程会对新加入的每个job进行初始化，其初始化调用的方法就是JobInProgress的方法 initTasks。
+在JobInProgress的方法initTasks方法中，会根据传入的作业分 …</p>
+          
+          <br>
+          <a href="https://idouba.com/hadoop_mapreduce_job_init/" title="Read More" class="excerpt_more button">Read More</a>
+        </div>
+      </div>
+    </div>
+  </li>
+
+        <li class="post_item">
+  <div class="excerpt">
+    <div class="excerpt_header">
+      <h3 class="post_link">
         <a href="https://idouba.com/hadoop_mapreduce_tasktracker_retrieve_task/" title="【hadoop代码笔记】hadoop作业提交之TaskTracker获取Task">【hadoop代码笔记】hadoop作业提交之TaskTracker获取Task</a>
       </h3>
       
@@ -761,74 +833,6 @@ Unsupervised learning (clustering):The class labels of training data is unknown 
     </div>
   </li>
 
-        <li class="post_item">
-  <div class="excerpt">
-    <div class="excerpt_header">
-      <h3 class="post_link">
-        <a href="https://idouba.com/classfication-giniindex-program/" title="A Program demonstrating Gini Index Classification">A Program demonstrating Gini Index Classification</a>
-      </h3>
-      
-  <div class="post_meta">
-    <span><svg class="icon">
-  <title>calendar</title>
-  <use xlink:href="#calendar"></use>
-</svg>
-</span>
-    <span class="post_date">
-      Jul 3, 2013</span>
-    <span class="post_time"> · 7 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/' title="机器学习" class="post_tag button button_translucent">机器学习
-        </a><a href='https://idouba.com/tags/classfication/' title="classfication" class="post_tag button button_translucent">classfication
-        </a>
-    </span>
-    <span class="page_only">&nbsp;·
-  <div class="post_share">
-    Share on:
-    <a href="https://twitter.com/intent/tweet?text=A%20Program%20demonstrating%20Gini%20Index%20Classification&url=https%3a%2f%2fidouba.com%2fclassfication-giniindex-program%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>twitter</title>
-  <use xlink:href="#twitter"></use>
-</svg>
-
-    </a>
-    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fclassfication-giniindex-program%2f&t=A%20Program%20demonstrating%20Gini%20Index%20Classification" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>facebook</title>
-  <use xlink:href="#facebook"></use>
-</svg>
-
-    </a>
-    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
-      <svg class="icon">
-  <title>linkedin</title>
-  <use xlink:href="#linkedin"></use>
-</svg>
-
-    </a>
-    <a href="https://idouba.com/classfication-giniindex-program/" title="Copy Link" class="link link_yank">
-      <svg class="icon">
-  <title>copy</title>
-  <use xlink:href="#copy"></use>
-</svg>
-
-    </a>
-  </div>
-  </span>
-  </div>
-
-    </div>
-      <div class="excerpt_footer">
-        <div class="pale">
-          
-            <p>无意发现研究生时候数据挖掘课程关于基于Gini Index的一个Classification的实验报告，还算完整。基于尚老师给的数据集完整完成了模型设计、训练和验证。还用Java写了个简单界面，能导入数据集训练，并画出决策树，并能导入数据集验证，评价准确性。
-A Program demonstrating Gini Index Classification Abstract In this document, a small program demonstrating Gini Index Classification is introduced. Users can select specified training data …</p>
-          
-          <br>
-          <a href="https://idouba.com/classfication-giniindex-program/" title="Read More" class="excerpt_more button">Read More</a>
-        </div>
-      </div>
-    </div>
-  </li>
-
       <li>
     <ul class="pagination pagination-default">
       <li class="page-item">
@@ -885,6 +889,9 @@ A Program demonstrating Gini Index Classification Abstract In this document, a s
     <h2 class="mt-4">Recent Posts</h2>
     <ul class="flex-column">
       <li>
+        <a href="https://idouba.com/cloud-native-engineer-learn-deeplearning-session1-from-linear-regression-to-neural-network/" class="nav-link" title="云原生工程师初识深度学习系列（一）：从线性回归入门神经网络">云原生工程师初识深度学习系列（一）：从线性回归入门神经网络</a>
+      </li>
+      <li>
         <a href="https://idouba.com/doudou-and-douba-drive-around-taihu-day2/" class="nav-link" title="豆哥国庆环太湖Day2：三国城（宜兴-无锡-常州）">豆哥国庆环太湖Day2：三国城（宜兴-无锡-常州）</a>
       </li>
       <li>
@@ -904,9 +911,6 @@ A Program demonstrating Gini Index Classification Abstract In this document, a s
       </li>
       <li>
         <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-14-RL/" class="nav-link" title="RL(服务限流)--Istio访问日志ResponseFlag重现与解析14">RL(服务限流)--Istio访问日志ResponseFlag重现与解析14</a>
-      </li>
-      <li>
-        <a href="https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-13-RL/" class="nav-link" title="RL(服务限流)--Istio访问日志ResponseFlag重现与解析13">RL(服务限流)--Istio访问日志ResponseFlag重现与解析13</a>
       </li>
     </ul>
     <div>
@@ -957,6 +961,11 @@ A Program demonstrating Gini Index Classification Abstract In this document, a s
           <span class="button_tally">4</span>
         </a>
         
+        <a href='https://idouba.com/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/' class="post_tag button button_translucent" title="机器学习">
+          机器学习
+          <span class="button_tally">4</span>
+        </a>
+        
         <a href='https://idouba.com/categories/%E8%B1%86%E5%93%A5/' class="post_tag button button_translucent" title="豆哥">
           豆哥
           <span class="button_tally">4</span>
@@ -974,11 +983,6 @@ A Program demonstrating Gini Index Classification Abstract In this document, a s
         
         <a href='https://idouba.com/categories/kubernetes/' class="post_tag button button_translucent" title="kubernetes">
           KUBERNETES
-          <span class="button_tally">3</span>
-        </a>
-        
-        <a href='https://idouba.com/categories/%E5%B9%B6%E5%8F%91/' class="post_tag button button_translucent" title="并发">
-          并发
           <span class="button_tally">3</span>
         </a>
         
@@ -1044,11 +1048,15 @@ A Program demonstrating Gini Index Classification Abstract In this document, a s
             </a>
             
             
-            <a href='https://idouba.com/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/' class=" post_tag button button_translucent" data-position=3 title="机器学习">机器学习<span class="button_tally">3</span>
+            <a href='https://idouba.com/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/' class=" post_tag button button_translucent" data-position=4 title="机器学习">机器学习<span class="button_tally">4</span>
             </a>
             
             
             <a href='https://idouba.com/categories/%E6%BC%94%E8%AE%B2/' class=" post_tag button button_translucent" data-position=9 title="演讲">演讲<span class="button_tally">9</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/categories/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/' class=" post_tag button button_translucent" data-position=1 title="神经网络">神经网络<span class="button_tally">1</span>
             </a>
             
             
@@ -1151,6 +1159,10 @@ A Program demonstrating Gini Index Classification Abstract In this document, a s
             </a>
             
             
+            <a href='https://idouba.com/tags/ai/' class=" post_tag button button_translucent" data-position=1 title="ai">AI<span class="button_tally">1</span>
+            </a>
+            
+            
             <a href='https://idouba.com/tags/aqs/' class=" post_tag button button_translucent" data-position=1 title="aqs">AQS<span class="button_tally">1</span>
             </a>
             
@@ -1248,6 +1260,10 @@ A Program demonstrating Gini Index Classification Abstract In this document, a s
             
             
             <a href='https://idouba.com/tags/kubernetes/' class=" post_tag button button_translucent" data-position=3 title="kubernetes">KUBERNETES<span class="button_tally">3</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/linear-regression/' class=" post_tag button button_translucent" data-position=1 title="linear-regression">LINEAR-REGRESSION<span class="button_tally">1</span>
             </a>
             
             
@@ -1423,11 +1439,19 @@ A Program demonstrating Gini Index Classification Abstract In this document, a s
             </a>
             
             
+            <a href='https://idouba.com/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/' class=" post_tag button button_translucent" data-position=1 title="深度学习">深度学习<span class="button_tally">1</span>
+            </a>
+            
+            
             <a href='https://idouba.com/tags/%E6%BC%94%E8%AE%B2/' class=" post_tag button button_translucent" data-position=23 title="演讲">演讲<span class="button_tally">23</span>
             </a>
             
             
             <a href='https://idouba.com/tags/%E7%A5%96%E6%AF%8D/' class=" post_tag button button_translucent" data-position=2 title="祖母">祖母<span class="button_tally">2</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/' class=" post_tag button button_translucent" data-position=1 title="神经网络">神经网络<span class="button_tally">1</span>
             </a>
             
             
