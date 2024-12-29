@@ -693,10 +693,10 @@
     </picture>
 </figure>
 </p>
-<p>如图示意的8层神经网络，每两层规划在一个GPU设备上。当数据从0层到1层、2层到3层都是在一个卡内传播，而从1层到2层、3层到4层会垮了不同的卡设备，产生通讯开销。对于流水线并行最需要考虑好在一个阶段执行的时候另外一段空等待的问题，专业上把这种空闲叫气泡Bubble。解决气泡有各种专业的设计，多数思路和典型的操作系统流水线类似，把作业划分的再细一些，并行的粒度更小一些，更容易流水线并行。</p>
+<p>如图示意的8层神经网络，每两层规划在一个GPU设备上。当数据从0层到1层、2层到3层都是在一个卡内传播，而从1层到2层、3层到4层会垮了不同的卡设备，产生通讯开销。对于流水线并行最需要考虑好在一个阶段执行的时候另外一段流水线空等待的问题，专业上把这种空闲叫气泡Bubble。解决气泡有各种专业的设计，多数思路和典型的操作系统流水线类似，把作业划分的再细一些，并行的粒度更小一些，更容易流水线并行。</p>
 <h4 id="张量并行"><strong>张量并行</strong></h4>
-<p>张量并行将神经网络的模型、权重在设备之间进行拆分。将张量沿着一定维度拆分成块，每个GPU设备上只处理一块。如果将输入张量与权重张量相乘时，就使用矩阵乘法把权重矩阵基于列方向切分，每列分别与输入相乘，每个设备只计算权重矩阵的部分矩阵乘法，最后两个设备的分片连接起来组成最终输出。</p>
-<p>参照<a href="https://lightning.ai/docs/pytorch/stable/advanced/model_parallel/tp.html">Pytorch TP说明</a>，可以基于列切分：</p>
+<p>张量并行将神经网络的模型、权重在GPU设备之间进行拆分。将张量沿着一定维度拆分成块，每个GPU设备上只处理一块。输入张量与权重张量相乘时，就使用矩阵乘法把权重矩阵基于列方向切分，每列分别与输入相乘，每个设备只计算权重矩阵的部分矩阵乘法，最后两个设备的分片连接起来组成最终输出。</p>
+<p>参照<a href="https://lightning.ai/docs/pytorch/stable/advanced/model_parallel/tp.html">Pytorch 关于TP的说明</a>，可以基于列切分，如下图：</p>
 <p><figure>
   <picture>
 
@@ -722,7 +722,7 @@
     </picture>
 </figure>
 </p>
-<p>也可以基于行切分：</p>
+<p>也可以基于行切分，如下图：</p>
 <p><figure>
   <picture>
 
@@ -748,7 +748,7 @@
     </picture>
 </figure>
 </p>
-<p>更多的是行列混合切分：</p>
+<p>更多的是行列混合切分，如下图：</p>
 <p><figure>
   <picture>
 
@@ -775,8 +775,8 @@
 </figure>
 </p>
 <h4 id="混合并行"><strong>混合并行</strong></h4>
-<p>实际的模型训练中极少有只使用一种并行方式的场景，经常是几种并行一起使用，即混合并行。</p>
-<p>开源深度学习训练优化库<a href="https://github.com/microsoft/DeepSpeed">DeepSpeed</a>使用混合了数据并行、张量并行、流水线并行的3D混合并行进行万亿参数的训练。结合文章文章<a href="https://www.microsoft.com/en-us/research/blog/deepspeed-extreme-scale-model-training-for-everyone/?msockid=00efe01fd4906cc008c7f2d8d5be6d77">《DeepSpeed: Extreme-scale model training for everyone》</a>的几个图理解混合并行：首先从左到右划分了不同的阶段，这是流水线并行，网络的0到7层、8到15层、16到23层、24到31层分别属于一个流水线阶段；每个流水线阶段通过张量并行再划分为4块；上下两个分组表示把训练数据拆分到上下两组设备上，进行数据并行。</p>
+<p>以上，从原理上大致总结对比了下数据并行、流水线并行和张量并行。实际的模型训练中极少有只使用一种并行方式的场景，经常是几种并行一起使用，即混合并行。</p>
+<p>开源深度学习训练优化库<a href="https://github.com/microsoft/DeepSpeed">DeepSpeed</a>使用混合了数据并行、张量并行、流水线并行的3D混合并行进行万亿参数的训练。结合文章<a href="https://www.microsoft.com/en-us/research/blog/deepspeed-extreme-scale-model-training-for-everyone/?msockid=00efe01fd4906cc008c7f2d8d5be6d77">《DeepSpeed: Extreme-scale model training for everyone》</a>的几个图理解混合并行：首先从左到右划分了不同的阶段，这是流水线并行，网络的0到7层、8到15层、16到23层、24到31层分别属于一个流水线阶段；每个流水线阶段通过张量并行再划分为4块MP0、MP1、MP2、MP3；上下两个分组表示把训练数据拆分到上下两组设备Rank0、Rank1，进行数据并行。</p>
 <p><figure>
   <picture>
 
@@ -802,8 +802,8 @@
     </picture>
 </figure>
 </p>
-<p>可以看到混合并行能兼顾各种并行策略的优点，最大限度地提高效率，提高性能。其中张量并行通讯开销最大，一般建议在一个节点内，或Scale Up的超节点内，使用内部设备间的高速带宽如NVlink。流水线并行将模型的不同层分散到不同的机器上运算，运算结果和中间数据通过机器间的网络传递。在这个内部并行的基础上，外部进行数据并行，每组服务器处理小批量的不同数据切片，这样服务器的计算资源可以充分地被利用，提高并发量，进而提高训练速度。</p>
-<p>同一篇文章中这张图是抽象简化表达三种并行混合效果，相同颜色的表示在一个节点的GPU。可以看到同一个节点的GPU间作模型并行，跨节点的GPU间作流水线并行和数据并行。</p>
+<p>可以看到混合并行能兼顾各种并行策略的优点，最大限度地提高效率，提高性能。其中张量并行通讯开销最大，一般建议在一个节点内，或各个大厂的Scale Up超节点内，使用内部设备间的高速带宽如NVlink互联。流水线并行将模型的不同层分散到不同的机器上运算，运算结果和中间数据通过机器间的网络传递。在这个内部并行的基础上，外部进行数据并行，每组服务器处理小批量的不同数据切片，这样服务器的计算资源可以充分地被利用，提高并发量，进而提高训练速度。</p>
+<p>同一篇文章中这张图忽略了细节更抽象地表达三种并行混合效果，相同颜色的表示在一个节点的GPU上。可以看到同一个节点的GPU间作模型并行，跨节点的GPU间作流水线并行和数据并行。</p>
 <p><figure>
   <picture>
 
@@ -829,8 +829,8 @@
     </picture>
 </figure>
 </p>
-<p>以上都是论文中理论描述，为了了解实际的应用，找到了一个案例：<a href="https://www.researchgate.net/publication/365622982_BLOOM_A_176B-Parameter_Open-Access_Multilingual_Language_Model_Major_Contributors_Prompt_Engineering_Architecture_and_Objective_Engineering_Evaluation_and_Interpretability_Broader_Impacts">BLOOM模型训练</a>的一个集群，由48个NVIDIA DGX-A100服务器组成，每个服务器包含8张A100 GPU，共384张卡。</p>
-<p>从外往里看：首先，每48张卡一个分组，组内4张卡再分一个小组，在这个小组上进行张量并行，因此张量并行的并行度是4；每个组内12个小组间进行流水线并行，流水线并行的并行度是12；在外层8个分组间进行数据并行，数据并行的并行度是8。每个分组内48个GPU卡上存放了完整的模型副本。</p>
+<p>以上都是来自论文的描述，为了和实际应用结合理解，找到了一个案例：<a href="https://www.researchgate.net/publication/365622982_BLOOM_A_176B-Parameter_Open-Access_Multilingual_Language_Model_Major_Contributors_Prompt_Engineering_Architecture_and_Objective_Engineering_Evaluation_and_Interpretability_Broader_Impacts">BLOOM模型训练</a>的一个集群。由48个NVIDIA DGX-A100服务器组成，每个服务器包含8张A100 GPU，共384张卡。</p>
+<p>从外往里看：首先，每48张卡一个分组，组内4张卡再分一个小组。在这个4个卡组成的小组上进行张量并行，因此张量并行的并行度是4；每个组内12个小组间进行流水线并行，流水线并行的并行度是12；在外层的8个分组间进行数据并行，数据并行的并行度是8。每个分组内48个GPU卡上存放了完整的模型副本。</p>
 <p><figure>
   <picture>
 
@@ -856,11 +856,12 @@
     </picture>
 </figure>
 </p>
-<p>分布式训练如此重要，所以大部分深度学习框架TensorFlow、Pytorch、MindSpore、PaddlePaddle等在神经网络开发库也都提供了分布式训练能力。Pytorch内置了<a href="https://pytorch.org/docs/stable/distributed.tensor.parallel.html">张量并行</a>，<a href="https://pytorch.org/docs/stable/distributed.pipelining.html">流水线并行</a>和<a href="https://pytorch.org/docs/stable/notes/ddp.html">数据并行</a>。</p>
-<p>框架已经提供了完备的能力，怎么在资源供给上跟的上是我们这些下层平台工程师们需要考虑的问题，即怎样做好AI-Infra。虽然折腾的还是我们熟悉的计算、存储、网络。提供高质量的计算资源、节点内网络、节点间网络，将这些深度学习框架开发的训练任务按照其并行的要求调度到对应的资源节点上。</p>
-<p>毕竟大家越来越发现提高智力的唯一路径就是提高算力，大力出奇迹越来越被认可。资源管理这块在通用计算等多种场景下比较熟悉的，对于AI业务本身的初步理解，希望能帮助我们更好地管好大模型，运维好大模型。写到这里发现居然点题了。</p>
+<p>分布式训练如此重要，所以大部分深度学习框架TensorFlow、Pytorch、MindSpore、PaddlePaddle等在神经网络开发库也都提供了分布式训练能力。如Pytorch内置了完备的<a href="https://pytorch.org/docs/stable/distributed.tensor.parallel.html">张量并行</a>，<a href="https://pytorch.org/docs/stable/distributed.pipelining.html">流水线并行</a>和<a href="https://pytorch.org/docs/stable/notes/ddp.html">数据并行</a>的处理。</p>
+<p>框架已经提供了完备的能力，怎么在资源供给上跟的上是我们这些下层平台工程师们需要考虑的问题。虽然折腾的还是我们熟悉的计算、存储、网络。提供高质量的计算资源、节点内网络、节点间网络，将这些深度学习框架开发的训练任务按照其并行的要求调度到对应的资源节点上。</p>
+<p>毕竟大家越来越发现提高智力的唯一路径就是提高算力，大力出奇迹越来越被认可。通过云原生的方式进行资源管理是我们比较熟悉的。通过AI业务本身逐步深入的理解，希望能帮助我们更好地管好大模型，运维好大模型，构建一个强大的AI-Infra。</p>
+<p>写到这里发现居然点题了。</p>
 <h3 id="最后"><strong>最后</strong></h3>
-<p>说到最后，最近才开始入坑这部分领域，虽然号称十来年前有一定的数据挖掘基础，但是发现先开到的和之前学过的差别非常大。新事物入门时，个人习惯用自己的文字描述出来，自说自话，能说明白，下次碰到这块找原始资料总没有个人贯通过的友好眼熟。文中有些描述，特别是有些另类突兀的比较，可能不太严谨。也是一个说不清好还是坏的习惯，进行的适当抽象和之前熟悉的领域对象进行横向对比（东拉西扯），只是为了好理解。由于进行了适当抽象，可能有些细节失真甚至小错误，不影响总体理解。</p>
+<p>说到最后，最近才开始入坑这部分领域，新事物入门时，习惯用个人的文字描述出来，自说自话，道理全不全能说通即可，基本要求比原始资料友好眼熟即可。因此文中有些描述，特别是有些另类视角的比较做不到太严谨。另外一个习惯，相信事物总是通的，在跨领域或者一个大的领域范围内，不自觉地会对新东西适当抽象和并之前熟悉的领域对象进行横向对比，东拉西扯，试图基贯通。</p>
 
     </div>
 <div class="post_comments">
