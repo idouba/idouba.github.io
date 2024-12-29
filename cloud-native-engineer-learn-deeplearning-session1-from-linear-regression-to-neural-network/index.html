@@ -31,16 +31,16 @@
 <meta property="og:locale" content="en" />
 
 <meta property="og:type" content="article">
-<meta name="description" content="背景 最近团队的业务除了面向通用计算外，越来越多的需求要处理面向AI场景的软硬件资源的供给、分发、调度等。虽然还是在熟悉的云原生领域，折腾的还是哪些对象哪些事儿，适配到一种新场景。但为了避免新瓶装老酒，能有机会做的更扎实，做出价值，对这个要服务领域内的一些东西也想花点时间和精力稍微了解下。
-国庆长假环太湖一圈回来，假期 …" />
+<meta name="description" content="背景 最近团队的业务除了面向通用计算外，越来越多的要处理面向AI场景的软硬件资源的供给、分发、调度等。虽然还是在熟悉的云原生领域，折腾的还是哪些对象哪些事儿，适配到一种新场景。但为了避免新瓶装老酒，能有机会做的更扎实，做出价值，对这个要服务领域内的一些东西也想花点时间和精力稍微了解下。
+国庆长假环太湖一圈回来，假期最后 …" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="">
 <meta name="twitter:title" content="云原生工程师初识深度学习系列（一）：从线性回归入门神经网络" />
 <meta name="twitter:image" content="https://idouba.com/images/thumbnail.png"/>
 <meta property="og:url" content="https://idouba.com/cloud-native-engineer-learn-deeplearning-session1-from-linear-regression-to-neural-network/" />
 <meta property="og:title" content="云原生工程师初识深度学习系列（一）：从线性回归入门神经网络" />
-<meta property="og:description" content="背景 最近团队的业务除了面向通用计算外，越来越多的需求要处理面向AI场景的软硬件资源的供给、分发、调度等。虽然还是在熟悉的云原生领域，折腾的还是哪些对象哪些事儿，适配到一种新场景。但为了避免新瓶装老酒，能有机会做的更扎实，做出价值，对这个要服务领域内的一些东西也想花点时间和精力稍微了解下。
-国庆长假环太湖一圈回来，假期 …" />
+<meta property="og:description" content="背景 最近团队的业务除了面向通用计算外，越来越多的要处理面向AI场景的软硬件资源的供给、分发、调度等。虽然还是在熟悉的云原生领域，折腾的还是哪些对象哪些事儿，适配到一种新场景。但为了避免新瓶装老酒，能有机会做的更扎实，做出价值，对这个要服务领域内的一些东西也想花点时间和精力稍微了解下。
+国庆长假环太湖一圈回来，假期最后 …" />
 <meta property="og:image" content="https://idouba.com/images/thumbnail.png" />
 
 <link rel="apple-touch-icon" sizes="180x180" href="https://idouba.com/icons/apple-touch-icon.png">
@@ -175,10 +175,10 @@
 
     <div class="post_body"><hr>
 <h3 id="背景"><strong>背景</strong></h3>
-<p>最近团队的业务除了面向通用计算外，越来越多的需求要处理面向AI场景的软硬件资源的供给、分发、调度等。虽然还是在熟悉的云原生领域，折腾的还是哪些对象哪些事儿，适配到一种新场景。但为了避免新瓶装老酒，能有机会做的更扎实，做出价值，对这个要服务领域内的一些东西也想花点时间和精力稍微了解下。</p>
-<p>国庆长假<a href="https://idouba.com/doudou-and-douba-drive-around-taihu-day1/">环太湖</a>一圈回来，假期最后这两天豆哥被要求上课，正好有难得的集中时间可以稍微看些东西。能对这部分有个比较完整的入个门，暂时没有精力系统地构建。作为一个云原生领域的从业者，目标是知道容器里跑的是什么，怎么跑的。</p>
-<p>习惯稍微正式学点东西不只是把别人的东西快速过一遍，而是愿意用自己的文字，尽可能简单易懂地总结记录贯通下，做不到严谨、全面、深入、专业，开始前定个小目标只要做到基本的通、透、够用即可。</p>
-<p>说干就干，先从深度学习基础技术神经网络开始。Google一把，内容可真叫个多。确实现在身边不管曾经做什么的，摇身一变都能与AI扯上关系。这么多信息对我们这些局外人非常不友好。很多年前自学的数学等相关基础课程时，习惯从稍微了解点的东西入手，有点脸熟的东西看着不怵。于是决定重拾十来年前尚老师Data Mining那门课程的部分内容，看看哪些老概念和当前这些新的技术能产生哪些联系。</p>
+<p>最近团队的业务除了面向通用计算外，越来越多的要处理面向AI场景的软硬件资源的供给、分发、调度等。虽然还是在熟悉的云原生领域，折腾的还是哪些对象哪些事儿，适配到一种新场景。但为了避免新瓶装老酒，能有机会做的更扎实，做出价值，对这个要服务领域内的一些东西也想花点时间和精力稍微了解下。</p>
+<p>国庆长假<a href="https://idouba.com/doudou-and-douba-drive-around-taihu-day1-first-touch-taihu/">环太湖</a>一圈回来，假期最后这两天豆哥被要求上课，正好难得集中时间可以稍微看些东西。暂时没有精力系统地构建，先入个门。作为一个云原生领域的从业者，目标是知道容器里跑的是什么，怎么跑的。</p>
+<p>学新东西时习惯用自己的文字，尽可能简单易懂地总结记录贯通下，做不到严谨、全面、深入、专业。开始前定个小目标只要做到基本的通、透、够用即可。</p>
+<p>说干就干，先从深度学习基础技术神经网络开始。Google一把，内容可真叫个多。确实最近身边不管曾经做什么的，摇身一变都能与AI扯上关系。这么多信息对我们这些局外人非常不友好。很多年前自学数学等相关基础课程时，习惯从稍微了解点的东西入手，有点脸熟的东西看着不怵。重拾十来年前<a href="https://teacher.nwpu.edu.cn/Shang.html">尚老师</a>Data Mining那门课程的部分内容，看看老的概念和新的技术能产生哪些联系。</p>
 <h3 id="切入点线性回归"><strong>切入点线性回归</strong></h3>
 <p>线性回归可能是一个比较适当的切入点，模型简单好理解。线性回归时通过一组数据点来拟合线性模型，找出一个或者多个特征变量和目标结果之间的关系，有了这个关系就可以带入条件预测结果。一个非常经典的线性回归例子就是二手房价预测。</p>
 <p><figure>
@@ -206,10 +206,10 @@
     </picture>
 </figure>
 </p>
-<p>影响房价的因素很多，记得当时书上形式化表达是用了一个向量乘法y = wx + b。x向量是（x1,x2,x3,x4）组成，表示若干个属性。这里简单示意下假设只有两个因素x1、x2，分别表示屋子的房间数和面积，也不用向量乘了，就直接写成 y = w1 * x1 + w2 * x2 + b，y就房子价格。其中w1、w2和b称为线性回归模型的参数，w1、w2称为权重weight，b称为偏差bias。</p>
-<p>可以看到，作为一种最简单的回归模型，线性回归使用这种线性回归方程对一个或者多个自变量和因变量之间的关系进行建模。有了这个假设的模型，就可以根据已有的二手房成交记录求解出模型上的参数w1、w2和b，这就是老听说的模型训练。完成模型训练求解出线性回归模型的参数，就可以把其他的房子信息房间数、面积x1、x2带入表达式，得到这个房子的预测价格，这就是一个推理过程。</p>
-<p>这样通过一个简单例子把模型的的表达、训练和推理过程顺了一遍。其中省略了太多的信息和步骤，迭代着加上去应该就是关注的神经网络的关键内容。</p>
-<p>首先是模型的表达，通过最基础的数学知识，这个线性回归的输入、输出和运算过程可以大致画出这样。</p>
+<p>影响房价的因素很多，记得当时书上形式化表达是用了一个向量乘法y = wx + b。x向量由（x1,x2,x3,x4）组成，表示若干个属性。这里简单示意下假设只有两个因素x1、x2，分别表示屋子的房间数和面积，也不用向量乘了，就直接写成 y = w1 * x1 + w2 * x2 + b，y就房子价格。其中w1、w2和b称为线性回归模型的参数，w1、w2称为权重weight，b称为偏差bias。</p>
+<p>可以看到，作为一种最简单的回归模型，线性回归使用这种线性回归方程对一个或者多个自变量和因变量之间的关系进行建模。有了这个假设的模型，就可以根据已有的二手房成交记录求解出模型上的参数w1、w2和b，这就是老听说的模型训练。完成模型训练求解出线性回归模型的参数，就可以把房间数、面积x1、x2带入表达式，得到房子的预测价格，这就是一个推理过程。</p>
+<p>这个一个简单例子把模型的的表达、训练和推理过程最简单地顺一遍。省略了太多的信息和步骤，迭代着加上去应该就是关注的神经网络的关键内容。</p>
+<p>首先是模型的表达，通过最基础的数学知识，这个线性回归的输入、输出和运算过程可以大致画成这样。</p>
 <p><figure>
   <picture>
 
@@ -236,8 +236,8 @@
 </figure>
 </p>
 <p>即使完全不了解神经网络，基于最朴素的概念理解，瞅着这个图上这些点的关系好像也已经和神经网络有点神似了。</p>
-<h3 id="认识神经网络"><strong>认识神经网络</strong></h3>
-<p>神经网络这个典型术语对象标准定义很多，总结下简单理解神经网络就是一种模拟人脑处理信息的方式。从数据中获取关联，在输入和输出中建立关系，特别是复杂的输入和输出之间。类似我们人脑中神经元构成一个复杂、高度互联的网络，互相发送电信号处理信息。神经网络由人工神经元组成，在这些神经元上运行算法，求解各种复杂的模型，所以我们说的神经网络说完整点描述其实是人工神经网络。</p>
+<h3 id="神经网络的概念"><strong>神经网络的概念</strong></h3>
+<p>神经网络这个典型术语标准定义很多，总结下简单理解神经网络就是一种模拟人脑处理信息的方式。从数据中获取关联，在输入和输出中建立关系，特别是复杂的输入和输出之间。类似我们人脑中神经元构成一个复杂、高度互联的网络，互相发送电信号处理信息。神经网络由人工神经元组成，在这些神经元上运行算法，求解各种复杂的模型，所以我们说的神经网络完整点描述其实是人工神经网络。</p>
 <p><figure>
   <picture>
 
@@ -263,19 +263,19 @@
     </picture>
 </figure>
 </p>
-<p>只是从外形简单比较，前面线性回归那个图看上去像一种单层或者单个神经元组成的神经网络，大致可以认为是神经网络的简单特例。</p>
-<h4 id="神经网络结构"><strong>神经网络结构</strong></h4>
+<p>只是从外形简单比较，前面线性回归那个图看上去像一种单层或者单个神经元组成的神经网络，大致可以认为是神经网络的一个简单特例。</p>
+<h4 id="神经网络的结构"><strong>神经网络的结构</strong></h4>
 <p>经典的神经网络包括输入层、输出层和隐藏层。</p>
 <ul>
-<li>**输入层：**接受外部输入的数据，将数据输入给神经网络，简单处理后发给下一层。在预测房价这个线性模型中，输入层就是影响房价的两个属性。在经常说的图片识别分类的应用中输入层就是像素，如100*100像素的图片就又10000个输入。</li>
-<li>**隐藏层：**神经网络中大量的隐藏层从上一层，如输入层或者上一个隐藏层获取输入，进行数据处理，然后传递给下一层。神经网络的关键处理都集中在隐藏层，越复杂的模型、表达能力越强的模型，隐藏层层数越多，隐藏层上的节点也越多。</li>
-<li>**输出层：**输出神经网络对数据的最终处理结果。因为模型固定，输出层的节点数一般也是固定的，如上一个图表示，房价预测这个线性回归，作为简单特例的神经网络只有一个输出。如果是分类的模型，有几个分类，就对应输出层有几个节点。</li>
+<li>**输入层：**接受外部输入的数据，将数据输入给神经网络，简单处理后发给下一层。在预测房价这个线性模型中，输入层就是影响房价的两个属性。在另外一个典型应用图片分类中输入层就是像素，如100*100像素的图片就又10000个输入。</li>
+<li>**隐藏层：**神经网络中大量的隐藏层从上一层，如输入层或者上一个隐藏层获取输入，进行数据处理，然后传递给下一层。神经网络的关键处理都集中在隐藏层，越复杂的模型、表达能力越强的模型，隐藏层的层数越多，隐藏层上的节点也越多。</li>
+<li>**输出层：**输出神经网络对数据的最终处理结果。因为模型固定，输出层的节点数一般也是固定的，如上一个房价预测线性回归的图中，就只有一个输出。如果是分类的模型，一般有几个分类，就对应输出层有几个节点。</li>
 </ul>
-<p>从我们程序员的语言看，一个神经网络可以简单看成我们编程的一个方法。输入层对应这个方法定义的入参，输出层对应方法定义的返回值，隐藏层可以见到类别我们的方法实现逻辑。模型训练好后，去做推理时就是传入入参调用这个方法，得到返回值的过程。</p>
-<p>从数学的视角看，一个神经网络就好像一个映射函数，函数的自变量x1、x2对应输入层，输出层对应函数的因变量y。训练过程就是找到函数表达式中的各个参数。有了这个求解的函数表达式，其他任意的x1、x2带进去也能得到对应基本正确的y。</p>
-<p>作为映射函数，只要有一组输入就能映射到一组输出。除了前面根据房子大小、房间数映射出房价外，其他更强大的神经网络可以拟合更复杂的函数。对于大多数深度学习的应用，虽然我们没有办法向这个预测房价的例子这么直观地写出一个具体表达式来，但还是理解存在这样一个函数映射，或者说通过训练有办法逼近一个理想的函数映射。</p>
-<p>记得从哪里看到黄教主说过“AI深度学习，也是一种解决难以指定的问题的算法和一种开发软件的新方法。想象我们有一个任意维度的<strong>通用函数逼近器</strong>”。如果设计的神经网络足够深、参数足够多，足够复杂就可以逼近任意复杂的函数映射。不只是预测房价这个简单的线性回归，也不只是当年机器学习课本上的分类、聚类、啤酒尿布频繁项这些业务固定的应用。</p>
-<p>为了便于理解把这种不太严谨的类比总结成这个表。</p>
+<p>不考虑内部复杂实现，只看这个外部结构，从我们程序员的语言看，一个神经网络就像我们编程的一个方法。输入层对应这个方法定义的入参，输出层对应方法定义的返回值，隐藏层可以简单类比我们的方法实现逻辑。模型训练好后，去做推理时就是传入参数调用这个方法，得到返回值的过程。</p>
+<p>从数学的视角可能更准确一些，一个神经网络对应一个映射函数，输入层对应函数的自变量x1、x2，输出层对应函数的因变量y。训练过程就是找到函数表达式中的各个参数。有了这个求解的函数表达式，其他任意参数x1、x2带进去也能得到相应基本正确的y。</p>
+<p>作为映射函数，只要有一组输入就能映射到一组输出。除了这个根据房子大小、房间数映射出房价外，其他更强大的神经网络可以拟合更复杂的函数。对于大多数深度学习的应用，虽然我们没有办法像这个预测房价的例子这么直观地写出一个具体表达式，但还是可以理解存在这样一个函数映射，或者说通过训练有办法逼近一个理想的函数映射。</p>
+<p>记得从哪里看到黄教主说过“AI深度学习，也是一种解决难以指定的问题的算法和一种开发软件的新方法。想象我们有一个任意维度的<strong>通用函数逼近器</strong>”。如果设计的神经网络足够深、参数足够多，足够复杂就可以逼近任意复杂的函数映射。不只是预测房价这个简单的线性回归，也不只是当年学习的<a href="http://hanj.cs.illinois.edu/bk4/">Han Jiawei的Data Mining课本</a>上的分类、聚类、啤酒尿布频繁项这些业务固定的应用。</p>
+<p>为了便于理解把以上简单类比总结成下表。</p>
 <table>
 <thead>
 <tr>
@@ -317,39 +317,89 @@
 </tr>
 <tr>
 <td>样板特征 Feature</td>
-<td>UT测试输入</td>
-<td>已知的函数参数</td>
+<td>UT测试用例输入</td>
+<td>已知的符合表达式的自变量取值</td>
 </tr>
 <tr>
 <td>样板标签 Label</td>
-<td>UT预期输出</td>
-<td>对应的函数取值</td>
+<td>UT用例预期输出</td>
+<td>已知的符合表达式的因变量取值</td>
 </tr>
 </tbody>
 </table>
-<p>以上两个临时起意的比喻，前一个更像神经网络的物理存在，不管多复杂的神经网络，最终都是一个方法调用。Restful或者其他协议调到推理服务上，获得一个输出。而数学的这个类比更像神经网络的逻辑定义，模型的定义和训练、推理过程等。</p>
-<p>同时，这个牵强的类比发现，较之数学和AI定义了逻辑的表达，我们伟大的程序员才是物理上默默地承担了一切的人。</p>
-<p>现在Pytorch、Mindspore等各种AI框架都很完善了，定义了大量神经网络的层和内置方法，AI算法工程师已经可以直接用Python语言开发算法了。既然AI算法公司都能写程序描述算法，我们这些下层做平台、管资源的程序员们也得尝试往上了解一些，起码知道容器里跑的是什么，怎么跑的，特别怎么用资源，为啥这样用。这样才能更高效地运行好容器，管好资源，训练出黄老板说的通用函数逼近器，尽管咱现在用的资源不只是他一家的。</p>
-<p>有了基本概念，下面还是基于房价预测的例子把神经网络中个别重要细节看能了解多少，首先是神经网络的训练过程。</p>
+<p>以上两个临时起意的类别，前一个更像神经网络的物理存在。不管多复杂的神经网络，最终都是一个方法调用。实际应用中通过Restful接口或者其他应用协议调到推理服务上，获得一个输出，返回给调用方使用。而数学的这个类比更像神经网络的逻辑定义，模型本身的定义和模型训练、推理过程。</p>
+<p>同时基于这个牵强的类比发现，较之数学和AI模型定义了各种强大、复杂的逻辑表达，<strong>我们伟大的程序员才是物理上默默地承担了一切的那个角色</strong>。</p>
+<p>现在Pytorch、TensorFlow、Mindspore等各种AI框架都很完善了，定义了大量神经网络的层和内置方法，AI算法工程师已经可以直接用Python语言开发算法了。既然AI算法工程师都能写程序来描述算法，我们这些下层做平台、管资源的程序员们也得尝试往上了解一些，起码知道容器里跑的是什么，怎么跑的，怎么用资源，为啥这样用。从而更高效地运行好容器，管好资源，训练出黄老板说的通用函数逼近器，尽管咱现在用的资源不只是他一家的。</p>
+<p>有了基本概念，下面还是基于房价预测的例子稍微探究下神经网络中的一些重要过程，首先是神经网络的训练过程。</p>
 <h4 id="神经网络训练"><strong>神经网络训练</strong></h4>
-<p>房价预测模型的训练过程就是将已有的房屋成交记录作为训练集，训练得到线性回归模型的过程，准确说就是求解这个表达式中参数的过程。</p>
-<p>首先几个简单概念：</p>
+<p>前面介绍例子时说过，房价预测模型的训练过程就是将已有的房屋成交记录作为训练集，训练得到线性回归模型。这个求解表达式中参数的过程就可以简单理解为神经网络的训练过程。</p>
+<p>详细的理解这个过程前，首先几个简单概念形式化了解下：</p>
 <ul>
-<li><strong>训练样板Sample</strong>：训练集中每条记录称为一个训练样板Sample。</li>
-<li><strong>特征Feature</strong>：样本的关键属性，与模型表达有关系的属性，如这里的房间数和房子大小，称为样本的特征Feature。</li>
-<li><strong>标签Label</strong>：样本中对应的结果，这里的实际成交价格称为标签Label。</li>
+<li><strong>样板Sample</strong>：训练集中每条记录称为一个训练样板Sample。</li>
+<li><strong>特征Feature</strong>：样本的关键属性，即与模型表达有关系的属性。如前面提到的房间数和房子大小，称为样本的特征Feature。</li>
+<li><strong>标签Label</strong>：样本中对应的结果，这个例子中实际成交价格称为标签Label。</li>
 </ul>
 <p>基于这个训练集进行模型训练的过程大致是：</p>
 <ol>
 <li>计算预测结果。将训练数据输入给神经网络，计算预测的结果。这一步就是神经网络中著名前向传播。</li>
-<li>计算预期结果和训练集中实际结果的差异，并不断调整更新参数，缩小差异，预测更准确。这一步就是神经网络中最关键的后向传播。</li>
+<li>计算预期结果和训练集中实际结果的差异，并不断调整更新参数，缩小差异，使得模型预测更准确。这一步就是神经网络中最关键的后向传播。</li>
 </ol>
-<p>基于房价预测例子详细展开下这个过程。</p>
-<p>首先，随机分配一组w1、w2、b的取值作为初始化参数，带入训练集中的样板（x1,x2,y）。注意这个步骤的关键字不是名词”参数“，也不是名词”样本“，而是副词”随机“和形容词”初始化“。神经网络根据输入的x1、x2会求解得到一个预测的房子售价y-predict。通过比较预测房价y-predict和实际房价y的接近程度来判定预测准确程度。对于线性回归一般采用平方函数表示。</p>
-<p>第 i 个样本的误差表达是</p>
-<p>这是一个样本的误差，如果全面评估模型的质量，使用训练数据集中所有样本误差的平均值表示：</p>
+<p>还是基于房价预测例子详细展开下这个过程。</p>
+<p>首先，随机分配一组模型参数w1、w2、b的取值作为初始化参数，带入训练集中的样板（x1,x2,y）。注意这个步骤的关键字不是名词”参数“，也不是名词”样本“，而是副词”<strong>随机</strong>“和形容词”<strong>初始化</strong>“。神经网络根据输入的x1、x2会求解得到一个预测的房子售价y-predict。通过比较预测房价y-predict和实际房价y的接近程度来判定预测准确程度。对于线性回归一般采用平方函数表示。</p>
+<p>第 i 个样本的误差表达是y-predict和y的差平方</p>
+<p><figure>
+  <picture>
+
+    
+      
+        
+        
+        
+        
+        
+        
+    <img
+      loading="lazy"
+      decoding="async"
+      alt=""
+      
+        class="image_figure image_internal image_unprocessed"
+        src="../picture/2024-10-07-cloud-native-engineer-learn-deeplearning-session1-from-linear-regression-to-neural-network/loss-i.png"
+      
+      
+    />
+
+    </picture>
+</figure>
+</p>
+<p>如果全面评估模型的质量，使用训练数据集中所有样本误差的平均值表示：</p>
+<p><figure>
+  <picture>
+
+    
+      
+        
+        
+        
+        
+        
+        
+    <img
+      loading="lazy"
+      decoding="async"
+      alt=""
+      
+        class="image_figure image_internal image_unprocessed"
+        src="../picture/2024-10-07-cloud-native-engineer-learn-deeplearning-session1-from-linear-regression-to-neural-network/loss-all.png"
+      
+      
+    />
+
+    </picture>
+</figure>
+</p>
 <h5 id="损失函数"><strong>损失函数</strong></h5>
-<p>可以看到不管哪种表达，函数都只跟模型参数w1、w2、b有关系，这个函数称为损失函数Loss Function。<strong>模型训练的目标正是求解出参数w1、w2、b，使得损失函数取值尽可能小</strong>。把这个损失函数表达的误差画在垂直轴上，参数w和b表达的参数表示在水平轴上则得到如下图。当然这个我们这个预测房价的例子包含了3个参数w1、w2、b，误差曲面是个空间4维，更一般的多参数是更多维的。</p>
+<p>不管哪种表达，函数都只跟模型参数w1、w2、b有关系，这个函数称为损失函数Loss Function。<strong>模型训练的目标正是求解出参数w1、w2、b，使得损失函数取值尽可能小</strong>。把这个损失函数表达的误差画在立体坐标的垂直轴上，参数w和b表达的参数表示在水平轴上则得到如下图。这里只是示意，这个预测房价的例子包含了3个参数w1、w2、b，误差曲面是个空间4维，更一般的多参数是更多维的。</p>
 <p><figure>
   <picture>
 
@@ -375,19 +425,45 @@
     </picture>
 </figure>
 </p>
-<p>对于基于线性回归的房价预测，取得极小值的参数是比较容易算出来。但对于大多数深度学习得模型，模型本身比线性回归要复杂得多，并不能直接求解方式得到参数的取值。而需要通过不断迭代的方式使得损失函数获得极小值，这可能就是黄老板说的函数逼近器。试想如果模型参数都能直接求解，训练也就没有那么费劲，当然也不需要那么多资源，黄老板的生意可能也就没有理论支持了。</p>
+<p>对于这个基于线性回归的房价预测，取得极小值的参数是比较容易算出来。但对于大多数深度学习模型，模型本身比线性回归要复杂得多，并不能直接求解方式得到参数的取值。而需要通过不断迭代的方式使得损失函数获得极小值，这可能就是黄老板说的函数逼近器。试想如果模型参数都能直接求解，训练也就没有那么费劲，当然也不需要那么多资源，黄老板的生意可能也就没有理论支持了。</p>
 <h5 id="梯度下降"><strong>梯度下降</strong></h5>
-<p>现在一般应用的是一种叫梯度下降的方法寻找损失函数的极小值。在维基的解释中梯度Gradient是一种关于多元导数的描述。梯度是一个由各个自变量的偏导数所组成的一个向量，平常的一元函数的导数是标量值函数，而多元函数的梯度是向量值函数。</p>
-<p>梯度是一个向量，梯度下降法就是向函数当前点对应梯度的反方向进行迭代搜索，找一个函数的局部最小值。基房价预测这个例子，对于（w1,w2,b）组成的这个向量，w1的偏导数的反方向就是在w1这个维度上变化使得损失函数减小，同样w2的偏导数的反方向就是在w2这个维度上变化使得损失函数减小。则偏导数组成的向量就就决定了一个方向去调整向量（w1,w2,b）的取值，使得包含这个参数的损失函数值最小。</p>
-<p>基于形式化定义先理解到这个程度，幸亏维基对于梯度的词条下附了这么一个生动的解释，帮助我们更好地理解梯度的含义和用法。一个被卡在山上的人正在试图下山，大雾使得能见度非常低，看不见下山的道路。这个人通过观察他当前位置的陡峭程度，找到下山坡度最大的方向前进，从而最快速地下山。坡度VS梯度，很形象生动。梯度下降就是利于局部信息找到极小值的路径，即使得误差最小的权重集合。联想到上图的那个误差函数的曲面，山的坡度对应误差函数曲面在这个点的斜率。</p>
-<p>粗略总结前面的形式化定义和这个类别，再理解下梯度下降这个动作。梯度指向的在当前点函数值减少最多的方向，作为一个向量，在神经网络中梯度表示更新权重的方向。</p>
-<p>前面流程描述中，梯度下降使用训练数据集的所有样本数据计算梯度，这种方式也称为批量梯度下降BGD（Batch Gradient Descent） 。很明显一般训练数据量都比较大，这种基于整个数据集计算梯度的方式开销高的基本不能承受，改善方案就是在每次迭代中，随机采样一个样本计算梯度，这就是随机梯度下降SGD（Stochastic Gradient Descent）。实际使用中更多的是随机选择一组样本，使用这一组样本来计算梯度。这组随机样本称为小批量，这种机制就是经常被提到的小批量随机梯度Mini-batch  SGD。</p>
-<p>计算得到梯度后，就可以基于梯度更新参数。这里涉及一个重要的参数学习率。每次迭代模型参数的变化由梯度和学习率共同作用求得。梯度乘以学习率，得到模型参数在本次迭代后会减少的值。理论上，每次模型参数调整，损失函数取值会减小，模型准确率会提高。</p>
-<p>学习率的选择要适当，太小会影响效率，一直不收敛；太大则可能会跳过极值点。这个结合前面下山那个例子也很好理解：下山朝一个方向一次走太多，可能会错过最低点，但是一次走太小，没走几步就检查方向也浪费时间。</p>
-<p>突然联想到吴军博士<a href="https://book.douban.com/subject/34848957/">《格局》</a>一书中提到的几个关键要素位置、方向、方法、步伐和节奏。位置就是对应参数当前取值，方向就是梯度决定的向量更新的方向，步伐节奏能不严谨地能对应到学习率。基于当前位置找到前进的方向，并保存一定的效率前进。</p>
-<p>所以学习率在模型训练前确定好。除了学习率，刚才小批量随机梯度过程中的，每次迭代的批量大小batch size是另一个控制训练过程的参数，这类参数称为<strong>超参数Hyper Parameter</strong>。不同于模型的中的这些参数w1、w2、b都由训练得到，超参数都是预先设定的。一般说的模型调参，调整的就是这些超参数。</p>
-<p>说到调整参数，想起在学校里十多年前做过的一个当时号称语义网络的项目<a href="https://techcrunch.com/2006/08/01/wizag-offers-semantic-analysis-attention-to-rss/">Wizag</a>，加州大学的梁教授设计的提取文本Concepts的核心算法被证明非常神奇有用。其中关键的计算权重的参数被硬编码进去，梁老师作为领域专家指导我们对于这个特定模型进行调参获取最优结果。而神经网络中这些需要调整的超参数是模型无关的通用参数。</p>
-<p>小批量梯度下降的伪代码表达大致是：</p>
+<p>现在一般应用的是一种叫梯度下降的方法寻找损失函数的极小值。在维基的解释中梯度Gradient是一种关于多元导数的描述。梯度是一个由各个自变量的偏导数所组成的一个向量。平常的一元函数的导数是标量值函数，而多元函数的梯度是向量值函数。</p>
+<p>梯度是一个向量，梯度下降法就是函数当前点对应梯度的反方向进行迭代搜索，找一个函数的局部最小值。还是基于房价预测这个例子看，对于（w1,w2,b）组成的这个向量，w1的偏导数的反方向就是在w1这个维度上的变化使得损失函数减小；同样w2的偏导数的反方向就是在w2这个维度上的变化使得损失函数减小。它们的偏导数组成的向量就就决定了一个方向去调整向量（w1,w2,b）的取值，使得损失函数值最小。</p>
+<p>基于形式化定义先大致理解到这个程度，幸亏维基在梯度的词条下附了这么生动的解释，帮助我们更好地理解梯度的含义。这样描述的：一个被卡在山上的人正在试图下山，大雾导致能见度非常低，看不见下山的道路。这个人通过观察他当前位置的陡峭程度，找到下山坡度最大的方向前进，从而最快速地下山。坡度 VS 梯度，很形象生动。梯度下降就是利用局部信息找到极小值的路径，即满足损失最小的权重集合。联想到上图的那个损失函数的曲面，山的坡度对应损失函数曲面在这个点的斜率。</p>
+<p>粗略总结前面的形式化定义和这个类别，再理解下梯度下降这个动作，梯度指向的在当前点函数值减少最多的方向。而作为一个向量，在神经网络中梯度表示更新权重的方向。</p>
+<p>在前面流程描述中，梯度下降使用训练数据集的所有样本数据计算梯度，这种方式也称为批量梯度下降BGD（Batch Gradient Descent） 。很明显一般训练数据量都比较大，这种基于整个数据集计算梯度的方式开销高的基本不能承受。改善方案就是在每次迭代中，随机采样一个样本计算梯度，这就是随机梯度下降SGD（Stochastic Gradient Descent）。实际使用中更多的是随机选择一组样本，使用这一组样本来计算梯度。这组随机样本称为小批量，这种机制就是经常被提到的小批量随机梯度（Mini-batch  SGD）。</p>
+<p>计算得到梯度后，就可以基于梯度更新参数。这里涉及到一个重要的参数学习率。每次迭代模型参数的变化由梯度和学习率共同作用求得。梯度乘以学习率，得到模型参数在本次迭代后会减少的值。理论上，每次模型参数调整，损失函数取值会减小，模型准确率会提高。</p>
+<p><figure>
+  <picture>
+
+    
+      
+        
+        
+        
+        
+        
+        
+    <img
+      loading="lazy"
+      decoding="async"
+      alt=""
+      
+        class="image_figure image_internal image_unprocessed"
+        src="../picture/2024-10-07-cloud-native-engineer-learn-deeplearning-session1-from-linear-regression-to-neural-network/learning-rate.png"
+      
+      
+    />
+
+    </picture>
+</figure>
+</p>
+<p><a href="https://www.techopedia.com/definition/learning-rate">学习率</a>的选择要适当，太小会影响效率，一直不收敛，太大则可能会跳过极值点，错过了最佳值。这个结合下山那个例子也很好理解：下山朝一个方向一次走太多，可能会错过最佳路线，但是一次走太小，没走几步就检查方向也浪费时间。</p>
+<p>突然联想到吴军博士<a href="https://book.douban.com/subject/34848957/">《格局》</a>一书中提到的做成事几个关键要素：位置、方向、方法、步伐和节奏。和这里的机制也对应的上，位置对应参数当前取值，方向就是梯度决定的向量更新的方向，步伐节奏可以不严谨地近似对应到学习率。基于当前位置找到前进的方向，并保持一定的节奏前进，终将达到目标点。</p>
+<p>除了学习率，小批量随机梯度过程中每次迭代的批量大小batch size是另一个控制训练过程的参数，这类参数称为<strong>超参数Hyper Parameter</strong>。不同于模型的中的这些参数w1、w2、b都由训练得到，超参数都是预先设定的。一般说的模型调参，调整的就是这些超参数。</p>
+<p>说到模型参数，想起在学校里十多年前做过的一个当时号称语义网络的项目<a href="https://techcrunch.com/2006/08/01/wizag-offers-semantic-analysis-attention-to-rss/">Wizag</a>，加州大学的梁教授设计的提取文本Concepts的核心算法被证明非常神奇有用。梁老师作为领域专家指导我们对于这个特定模型进行调参从而获取最优结果。而神经网络中这些需要调整的超参数是模型无关的通用参数。</p>
+<h5 id="小批量梯度下降">小批量梯度下降</h5>
+<p>小批量梯度下降用伪代码描述过程，大致是：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="ln">1</span><span class="cl"><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nf">range</span><span class="w"> </span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span><span class="w">
 </span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="w">    </span><span class="n">np</span><span class="p">.</span><span class="na">random</span><span class="p">.</span><span class="na">shuffle</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="w">
 </span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">mini_batch</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="nf">get_mini_batch</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">batch_size</span><span class="p">)</span><span class="w">
@@ -397,7 +473,7 @@
 </span></span></span><span class="line"><span class="ln">7</span><span class="cl"><span class="w">        </span><span class="n">sum_grad</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">grad</span><span class="w">
 </span></span></span><span class="line"><span class="ln">8</span><span class="cl"><span class="w">        </span><span class="n">avg_grad</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sum_grad</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="w">
 </span></span></span><span class="line"><span class="ln">9</span><span class="cl"><span class="w">        </span><span class="n">params</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">params</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">learning_rate</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">avg_grad</span><span class="w">
-</span></span></span></code></pre></div><p>基于<a href="https://colab.research.google.com/">colab</a>上一个线性回归的Notebook，利用Pytorch进行一个最简单线性回归，在本地改造为房价预测的例子。在本地环境上简单执行验证了下。在Python命令行里，逐个片段执行，可以看到不少细节，理解前面的描述的流程。</p>
+</span></span></span></code></pre></div><p>基于<a href="https://colab.research.google.com/">colab</a>上一个Pytorch线性回归的Notebook，在本地改造为本文中房价预测的例子。在本地环境上简单执行验证，在Python命令行里，逐个片段执行，可以看到不少细节，理解前面的描述的流程。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="ln"> 1</span><span class="cl"><span class="kn">import</span> <span class="nn">torch</span>
 </span></span><span class="line"><span class="ln"> 2</span><span class="cl"><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 </span></span><span class="line"><span class="ln"> 3</span><span class="cl">     
@@ -416,7 +492,7 @@
 </span></span><span class="line"><span class="ln">16</span><span class="cl"><span class="n">batch_size</span> <span class="o">=</span> <span class="mi">3</span>
 </span></span><span class="line"><span class="ln">17</span><span class="cl"><span class="n">train_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span></span><span class="line"><span class="ln">18</span><span class="cl">
-</span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="c1"># 初始化参数</span>
+</span></span><span class="line"><span class="ln">19</span><span class="cl"><span class="c1"># 初始化模型参数w1、w2和b，随机取一组值</span>
 </span></span><span class="line"><span class="ln">20</span><span class="cl"><span class="n">w1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1">#Weights</span>
 </span></span><span class="line"><span class="ln">21</span><span class="cl"><span class="n">w2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1">#Weights</span>
 </span></span><span class="line"><span class="ln">22</span><span class="cl"><span class="n">b</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># Bias</span>
@@ -430,7 +506,7 @@
 </span></span><span class="line"><span class="ln">30</span><span class="cl">    <span class="n">difference</span> <span class="o">=</span> <span class="n">predictions</span> <span class="o">-</span> <span class="n">targets</span>
 </span></span><span class="line"><span class="ln">31</span><span class="cl">    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">difference</span> <span class="o">*</span> <span class="n">difference</span><span class="p">)</span> <span class="o">/</span> <span class="n">difference</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span>
 </span></span><span class="line"><span class="ln">32</span><span class="cl">
-</span></span><span class="line"><span class="ln">33</span><span class="cl"><span class="c1"># 基于初始化的模型参数，比较预测值与样本集中对应实际值的差异，损失函数取值非常大</span>
+</span></span><span class="line"><span class="ln">33</span><span class="cl"><span class="c1"># 基于初始化的模型参数，比较预测值与样本集中对应实际值的差异。开始时损失函数取值非常大</span>
 </span></span><span class="line"><span class="ln">34</span><span class="cl"><span class="k">for</span> <span class="n">x1</span><span class="p">,</span><span class="n">x2</span><span class="p">,</span><span class="n">y</span> <span class="ow">in</span> <span class="n">train_loader</span><span class="p">:</span>
 </span></span><span class="line"><span class="ln">35</span><span class="cl">    <span class="n">preds</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span><span class="n">x2</span><span class="p">)</span>
 </span></span><span class="line"><span class="ln">36</span><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;Prediction is :</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span><span class="n">preds</span><span class="p">)</span>
@@ -457,7 +533,7 @@
 </span></span><span class="line"><span class="ln">57</span><span class="cl">            <span class="n">b</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">zero_</span><span class="p">()</span>
 </span></span><span class="line"><span class="ln">58</span><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;Epoch </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">epochs</span><span class="si">}</span><span class="s2">: Loss: </span><span class="si">{</span><span class="n">loss</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="ln">59</span><span class="cl">
-</span></span><span class="line"><span class="ln">60</span><span class="cl"><span class="c1"># 训练好的模型对训练集上样本数据x1,x2对应预测的y和实际y很接近了</span>
+</span></span><span class="line"><span class="ln">60</span><span class="cl"><span class="c1"># 训练好的模型对训练集上样本数据x1,x2带入模型，其实就是线性表达式得到对应预测的y，和实际y比较很接近了</span>
 </span></span><span class="line"><span class="ln">61</span><span class="cl"><span class="k">for</span> <span class="n">x1</span><span class="p">,</span><span class="n">x2</span><span class="p">,</span><span class="n">y</span> <span class="ow">in</span> <span class="n">train_loader</span><span class="p">:</span>
 </span></span><span class="line"><span class="ln">62</span><span class="cl">    <span class="n">preds</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span><span class="n">x2</span><span class="p">)</span>
 </span></span><span class="line"><span class="ln">63</span><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;Prediction is :</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span><span class="n">preds</span><span class="p">)</span>
@@ -465,10 +541,9 @@
 </span></span><span class="line"><span class="ln">65</span><span class="cl">    <span class="k">break</span>
 </span></span></code></pre></div><p>正如这个真实的代码实践最后一个片段表达的，模型训练完成后，就可以应用这个训练得到模型进行预测。对应房价预测这个示例就是求解出了参数w1,w2,b即求解出了线性回归表达式，带入x1,x2就可以预测出y。只要知道房子的大小、卧室个数，就能推测出大概能卖多少钱。</p>
 <h5 id="过拟合与欠拟合"><strong>过拟合与欠拟合</strong></h5>
-<p>一般模型在正式应用前都会有一个机制评价模型的质量，简单理解就是模型预测的准确性。最基本的，考察模型在训练数据集上表现出的误差，称为<strong>训练误差Training Error</strong>；更重要的是要考察在任意一个测试数据结上表现出误差，称为<strong>泛化误差Generalization Error</strong>。</p>
-<p>对应的会评价模型是否出现欠拟合Underfitting或过拟合Overfitting的问题。其中<strong>欠拟合</strong>指模型的训练误差一直太高，即压根儿就灭有训练出来。<strong>过拟合</strong>指模型在测试集上验证的误差远高于在训练数据集上的误差，即训练的挺好，实际验证却不行。</p>
-<p>函数复杂度低表达能力弱，不容易找到合理的参数来表达目标模型，容易出现欠拟合。但是太复杂，训练时候能凑出比较好的效果，但迎合了测试集的模型特点，适应性弱，在最终测试集上表现并不好，就容易出现过拟合。另外样本数过少也容易发生过拟合。这点很好理解，平时练的不够，只做了一丁点的习题，这些练习题看着都对了，但是复习不到位，不全面，到了真正考试当然考不好。</p>
-<p>同时保证不出现欠拟合和过拟合对模型设计、训练要求挺高的。个人通俗的理解就是：要平时练习成绩好，同时要最终考试考的好，就要求真正学懂学通了。首先复习到位了，即训练样本数量得充分。另外最关键要学懂学通了，即掌握了内在的逻辑和模型，而不是只背回了练习的题库，导致练习时候成绩非常好，但是同样的题目换个样到了真正考试又做不出来了。</p>
+<p>一般训练好的模型在正式应用前都会有一个机制评价模型预测的准确性。最基本的考察模型在训练数据集上表现出的误差，称为<strong>训练误差（Training Error</strong>），更实用的是要考察模型在任意一个测试数据结上表现出误差，称为<strong>泛化误差（Generalization Error）</strong>。</p>
+<p>对应的会评价模型是否出现欠拟合Underfitting或过拟合Overfitting的问题。其中<strong>欠拟合</strong>指模型的训练误差一直太高，即压根儿就没有训练出来。<strong>过拟合</strong>指模型在测试集上验证的误差远高于在训练数据集上的误差，即训练的挺好，实际验证却不行。</p>
+<p>函数复杂度低表达能力弱，不容易找到合理的参数来表达目标模型，容易出现欠拟合。但是太复杂，训练时候能凑出比较好的效果，其实是迎合了测试集的模型特点，适应性弱，在最终测试集上表现并不好，就容易出现过拟合。另外样本数过少也容易发生过拟合。同时保证不出现欠拟合和过拟合对模型设计、训练要求挺高的。个人通俗的理解就是：要平时练习成绩好，同时要最终考试考的好，就要求真正学懂学通。首先要复习到位，即训练样本数量得充分。另外最关键要学懂学通，即掌握了内在的逻辑和模型，而不是只背会了练习的题库，或者只会做题库里的题型不会举一反三，导致练习时候成绩非常好，但是同样的题目换个样到了真正考试又做不出来了。</p>
 <p>以上也只是尝试基于一个最基础的线性回归为切入点，描述深度学习的过程。和一个完整的流程比较，以上也只是覆盖了其中关键步骤。</p>
 <h3 id="ai基础设施"><strong>AI基础设施</strong></h3>
 <p>敲完“关键”两个字，发现有点冒犯自己和小伙伴们。我们在这个过程中，完成的模型部署、资源管理、负载调度、模型监控、故障恢复这些难道很轻易就说成不关键？想着当前AI领域卖铲子的重要性，大模型训练最终比拼的还是算力、资源。如何能构建充足的资源满足越来越大的模型训练要求，如何高效地利用好这些稀缺的算力资源，最大化地发挥作用，这是我们发挥作用的舞台。这也就到了我们熟悉的领域了。</p>
