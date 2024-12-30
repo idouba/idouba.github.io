@@ -5,6 +5,9 @@
     <loc>https://idouba.com/tags/ai/</loc>
     <lastmod>2024-10-02T15:32:08+00:00</lastmod>
   </url><url>
+    <loc>https://idouba.com/categories/ai/</loc>
+    <lastmod>2024-10-02T15:32:08+00:00</lastmod>
+  </url><url>
     <loc>https://idouba.com/categories/</loc>
     <lastmod>2024-10-02T15:32:08+00:00</lastmod>
     <xhtml:link
@@ -36,6 +39,12 @@
                 hreflang="en"
                 href="https://idouba.com/tags/"
                 />
+  </url><url>
+    <loc>https://idouba.com/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/</loc>
+    <lastmod>2024-10-02T15:32:08+00:00</lastmod>
+  </url><url>
+    <loc>https://idouba.com/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/</loc>
+    <lastmod>2024-10-02T15:32:08+00:00</lastmod>
   </url><url>
     <loc>https://idouba.com/cloud-native-engineer-learn-deeplearning-session1-from-linear-regression-to-neural-network/</loc>
     <lastmod>2024-10-02T15:32:08+00:00</lastmod>

@@ -9,7 +9,7 @@
   
   >
   <head>
-<title>云原生工程师初识深度学习系列（一）：从线性回归入门神经网络 | 爱豆吧！</title>
+<title>云原生工程师入坑深度学习系列（一）：从线性回归入门神经网络 | 爱豆吧！</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -35,10 +35,10 @@
 国庆长假环太湖一圈回来，假期最后 …" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="">
-<meta name="twitter:title" content="云原生工程师初识深度学习系列（一）：从线性回归入门神经网络" />
+<meta name="twitter:title" content="云原生工程师入坑深度学习系列（一）：从线性回归入门神经网络" />
 <meta name="twitter:image" content="https://idouba.com/images/thumbnail.png"/>
 <meta property="og:url" content="https://idouba.com/cloud-native-engineer-learn-deeplearning-session1-from-linear-regression-to-neural-network/" />
-<meta property="og:title" content="云原生工程师初识深度学习系列（一）：从线性回归入门神经网络" />
+<meta property="og:title" content="云原生工程师入坑深度学习系列（一）：从线性回归入门神经网络" />
 <meta property="og:description" content="背景 最近团队的业务除了面向通用计算外，越来越多的要处理面向AI场景的软硬件资源的供给、分发、调度等。虽然还是在熟悉的云原生领域，折腾的还是哪些对象哪些事儿，适配到一种新场景。但为了避免新瓶装老酒，能有机会做的更扎实，做出价值，对这个要服务领域内的一些东西也想花点时间和精力稍微了解下。
 国庆长假环太湖一圈回来，假期最后 …" />
 <meta property="og:image" content="https://idouba.com/images/thumbnail.png" />
@@ -123,7 +123,7 @@
   
 <div class="grid-inverse wrap content">
   <article class="post_content">
-    <h1 class="post_title">云原生工程师初识深度学习系列（一）：从线性回归入门神经网络</h1>
+    <h1 class="post_title">云原生工程师入坑深度学习系列（一）：从线性回归入门神经网络</h1>
   <div class="post_meta">
     <span><svg class="icon">
   <title>calendar</title>
@@ -136,19 +136,20 @@
         </a><a href='https://idouba.com/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/' title="深度学习" class="post_tag button button_translucent">深度学习
         </a><a href='https://idouba.com/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/' title="神经网络" class="post_tag button button_translucent">神经网络
         </a><a href='https://idouba.com/tags/linear-regression/' title="Linear regression" class="post_tag button button_translucent">Linear regression
+        </a><a href='https://idouba.com/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/' title="云原生" class="post_tag button button_translucent">云原生
         </a>
     </span>
     <span class="page_only">&nbsp;·
   <div class="post_share">
     Share on:
-    <a href="https://twitter.com/intent/tweet?text=%e4%ba%91%e5%8e%9f%e7%94%9f%e5%b7%a5%e7%a8%8b%e5%b8%88%e5%88%9d%e8%af%86%e6%b7%b1%e5%ba%a6%e5%ad%a6%e4%b9%a0%e7%b3%bb%e5%88%97%ef%bc%88%e4%b8%80%ef%bc%89%ef%bc%9a%e4%bb%8e%e7%ba%bf%e6%80%a7%e5%9b%9e%e5%bd%92%e5%85%a5%e9%97%a8%e7%a5%9e%e7%bb%8f%e7%bd%91%e7%bb%9c&url=https%3a%2f%2fidouba.com%2fcloud-native-engineer-learn-deeplearning-session1-from-linear-regression-to-neural-network%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
+    <a href="https://twitter.com/intent/tweet?text=%e4%ba%91%e5%8e%9f%e7%94%9f%e5%b7%a5%e7%a8%8b%e5%b8%88%e5%85%a5%e5%9d%91%e6%b7%b1%e5%ba%a6%e5%ad%a6%e4%b9%a0%e7%b3%bb%e5%88%97%ef%bc%88%e4%b8%80%ef%bc%89%ef%bc%9a%e4%bb%8e%e7%ba%bf%e6%80%a7%e5%9b%9e%e5%bd%92%e5%85%a5%e9%97%a8%e7%a5%9e%e7%bb%8f%e7%bd%91%e7%bb%9c&url=https%3a%2f%2fidouba.com%2fcloud-native-engineer-learn-deeplearning-session1-from-linear-regression-to-neural-network%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
       <svg class="icon">
   <title>twitter</title>
   <use xlink:href="#twitter"></use>
 </svg>
 
     </a>
-    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fcloud-native-engineer-learn-deeplearning-session1-from-linear-regression-to-neural-network%2f&t=%e4%ba%91%e5%8e%9f%e7%94%9f%e5%b7%a5%e7%a8%8b%e5%b8%88%e5%88%9d%e8%af%86%e6%b7%b1%e5%ba%a6%e5%ad%a6%e4%b9%a0%e7%b3%bb%e5%88%97%ef%bc%88%e4%b8%80%ef%bc%89%ef%bc%9a%e4%bb%8e%e7%ba%bf%e6%80%a7%e5%9b%9e%e5%bd%92%e5%85%a5%e9%97%a8%e7%a5%9e%e7%bb%8f%e7%bd%91%e7%bb%9c" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
+    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fcloud-native-engineer-learn-deeplearning-session1-from-linear-regression-to-neural-network%2f&t=%e4%ba%91%e5%8e%9f%e7%94%9f%e5%b7%a5%e7%a8%8b%e5%b8%88%e5%85%a5%e5%9d%91%e6%b7%b1%e5%ba%a6%e5%ad%a6%e4%b9%a0%e7%b3%bb%e5%88%97%ef%bc%88%e4%b8%80%ef%bc%89%ef%bc%9a%e4%bb%8e%e7%ba%bf%e6%80%a7%e5%9b%9e%e5%bd%92%e5%85%a5%e9%97%a8%e7%a5%9e%e7%bb%8f%e7%bd%91%e7%bb%9c" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
       <svg class="icon">
   <title>facebook</title>
   <use xlink:href="#facebook"></use>
@@ -861,7 +862,7 @@
 <p>毕竟大家越来越发现提高智力的唯一路径就是提高算力，大力出奇迹越来越被认可。通过云原生的方式进行资源管理是我们比较熟悉的。通过AI业务本身逐步深入的理解，希望能帮助我们更好地管好大模型，运维好大模型，构建一个强大的AI-Infra。</p>
 <p>写到这里发现居然点题了。</p>
 <h3 id="最后"><strong>最后</strong></h3>
-<p>说到最后，最近才开始入坑这部分领域，新事物入门时，习惯用个人的文字描述出来，自说自话，基本要求比原始资料友好眼熟即可。另外一个习惯，相信事物总是通的，在跨领域或者一个大的领域范围内，不自觉地会对新东西适当抽象和并之前熟悉的领域对象进行横向对比，东拉西扯，试图基贯通。因此文中有些描述，特别是有些另类视角的比较做不到太严谨，就全当个托儿吧。</p>
+<p>说到最后，最近才开始入坑新领域，新事物入门时，习惯用个人的文字描述出来，自说自话，基本要求比原始资料友好眼熟即可。另外一个习惯，相信事物总是通的，在跨领域或者一个大的领域范围内，不自觉地会对新东西适当抽象并和之前熟悉的领域对象进行横向对比，东拉西扯，尝试贯通。因此文中有些描述，特别是有些另类视角的比较忽略了不少细节，只是做个思路导入，就全当个托儿吧。</p>
 
     </div>
 <div class="post_comments">
@@ -897,7 +898,7 @@
     <h2 class="mt-4">Recent Posts</h2>
     <ul class="flex-column">
       <li>
-        <a href="https://idouba.com/cloud-native-engineer-learn-deeplearning-session1-from-linear-regression-to-neural-network/" class="nav-link" title="云原生工程师初识深度学习系列（一）：从线性回归入门神经网络">云原生工程师初识深度学习系列（一）：从线性回归入门神经网络</a>
+        <a href="https://idouba.com/cloud-native-engineer-learn-deeplearning-session1-from-linear-regression-to-neural-network/" class="nav-link" title="云原生工程师入坑深度学习系列（一）：从线性回归入门神经网络">云原生工程师入坑深度学习系列（一）：从线性回归入门神经网络</a>
       </li>
       <li>
         <a href="https://idouba.com/doudou-and-douba-drive-around-taihu-day2-sanguo-city/" class="nav-link" title="豆哥国庆环太湖Day2：三国城（宜兴-无锡-常州）">豆哥国庆环太湖Day2：三国城（宜兴-无锡-常州）</a>
@@ -1000,6 +1001,10 @@
         <div class="post_tags">
           <div class="tags_list">
             
+            <a href='https://idouba.com/categories/ai/' class=" post_tag button button_translucent" data-position=1 title="ai">AI<span class="button_tally">1</span>
+            </a>
+            
+            
             <a href='https://idouba.com/categories/golang/' class=" post_tag button button_translucent" data-position=3 title="golang">GOLANG<span class="button_tally">3</span>
             </a>
             
@@ -1037,6 +1042,10 @@
             
             
             <a href='https://idouba.com/categories/servicemeshcon/' class=" post_tag button button_translucent" data-position=1 title="servicemeshcon">SERVICEMESHCON<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/' class=" post_tag button button_translucent" data-position=1 title="云原生">云原生<span class="button_tally">1</span>
             </a>
             
             
@@ -1356,6 +1365,10 @@
             
             
             <a href='https://idouba.com/tags/%E4%BA%8B%E5%8A%A1/' class=" post_tag button button_translucent" data-position=1 title="事务">事务<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/' class=" post_tag button button_translucent" data-position=1 title="云原生">云原生<span class="button_tally">1</span>
             </a>
             
             
