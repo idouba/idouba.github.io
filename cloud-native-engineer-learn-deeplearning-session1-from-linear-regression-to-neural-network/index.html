@@ -9,7 +9,7 @@
   
   >
   <head>
-<title>云原生工程师入坑深度学习系列（一）：从线性回归入门神经网络 | 爱豆吧！</title>
+<title>云原生工程师入坑AI深度学习系列（一）：从线性回归入门神经网络 | 爱豆吧！</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -35,10 +35,10 @@
 国庆长假环太湖一圈回来，假期最后 …" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="">
-<meta name="twitter:title" content="云原生工程师入坑深度学习系列（一）：从线性回归入门神经网络" />
+<meta name="twitter:title" content="云原生工程师入坑AI深度学习系列（一）：从线性回归入门神经网络" />
 <meta name="twitter:image" content="https://idouba.com/images/thumbnail.png"/>
 <meta property="og:url" content="https://idouba.com/cloud-native-engineer-learn-deeplearning-session1-from-linear-regression-to-neural-network/" />
-<meta property="og:title" content="云原生工程师入坑深度学习系列（一）：从线性回归入门神经网络" />
+<meta property="og:title" content="云原生工程师入坑AI深度学习系列（一）：从线性回归入门神经网络" />
 <meta property="og:description" content="背景 最近团队的业务除了面向通用计算外，越来越多的要处理面向AI场景的软硬件资源的供给、分发、调度等。虽然还是在熟悉的云原生领域，折腾的还是哪些对象哪些事儿，适配到一种新场景。但为了避免新瓶装老酒，能有机会做的更扎实，做出价值，对这个要服务领域内的一些东西也想花点时间和精力稍微了解下。
 国庆长假环太湖一圈回来，假期最后 …" />
 <meta property="og:image" content="https://idouba.com/images/thumbnail.png" />
@@ -123,7 +123,7 @@
   
 <div class="grid-inverse wrap content">
   <article class="post_content">
-    <h1 class="post_title">云原生工程师入坑深度学习系列（一）：从线性回归入门神经网络</h1>
+    <h1 class="post_title">云原生工程师入坑AI深度学习系列（一）：从线性回归入门神经网络</h1>
   <div class="post_meta">
     <span><svg class="icon">
   <title>calendar</title>
@@ -142,14 +142,14 @@
     <span class="page_only">&nbsp;·
   <div class="post_share">
     Share on:
-    <a href="https://twitter.com/intent/tweet?text=%e4%ba%91%e5%8e%9f%e7%94%9f%e5%b7%a5%e7%a8%8b%e5%b8%88%e5%85%a5%e5%9d%91%e6%b7%b1%e5%ba%a6%e5%ad%a6%e4%b9%a0%e7%b3%bb%e5%88%97%ef%bc%88%e4%b8%80%ef%bc%89%ef%bc%9a%e4%bb%8e%e7%ba%bf%e6%80%a7%e5%9b%9e%e5%bd%92%e5%85%a5%e9%97%a8%e7%a5%9e%e7%bb%8f%e7%bd%91%e7%bb%9c&url=https%3a%2f%2fidouba.com%2fcloud-native-engineer-learn-deeplearning-session1-from-linear-regression-to-neural-network%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
+    <a href="https://twitter.com/intent/tweet?text=%e4%ba%91%e5%8e%9f%e7%94%9f%e5%b7%a5%e7%a8%8b%e5%b8%88%e5%85%a5%e5%9d%91AI%e6%b7%b1%e5%ba%a6%e5%ad%a6%e4%b9%a0%e7%b3%bb%e5%88%97%ef%bc%88%e4%b8%80%ef%bc%89%ef%bc%9a%e4%bb%8e%e7%ba%bf%e6%80%a7%e5%9b%9e%e5%bd%92%e5%85%a5%e9%97%a8%e7%a5%9e%e7%bb%8f%e7%bd%91%e7%bb%9c&url=https%3a%2f%2fidouba.com%2fcloud-native-engineer-learn-deeplearning-session1-from-linear-regression-to-neural-network%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
       <svg class="icon">
   <title>twitter</title>
   <use xlink:href="#twitter"></use>
 </svg>
 
     </a>
-    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fcloud-native-engineer-learn-deeplearning-session1-from-linear-regression-to-neural-network%2f&t=%e4%ba%91%e5%8e%9f%e7%94%9f%e5%b7%a5%e7%a8%8b%e5%b8%88%e5%85%a5%e5%9d%91%e6%b7%b1%e5%ba%a6%e5%ad%a6%e4%b9%a0%e7%b3%bb%e5%88%97%ef%bc%88%e4%b8%80%ef%bc%89%ef%bc%9a%e4%bb%8e%e7%ba%bf%e6%80%a7%e5%9b%9e%e5%bd%92%e5%85%a5%e9%97%a8%e7%a5%9e%e7%bb%8f%e7%bd%91%e7%bb%9c" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
+    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fcloud-native-engineer-learn-deeplearning-session1-from-linear-regression-to-neural-network%2f&t=%e4%ba%91%e5%8e%9f%e7%94%9f%e5%b7%a5%e7%a8%8b%e5%b8%88%e5%85%a5%e5%9d%91AI%e6%b7%b1%e5%ba%a6%e5%ad%a6%e4%b9%a0%e7%b3%bb%e5%88%97%ef%bc%88%e4%b8%80%ef%bc%89%ef%bc%9a%e4%bb%8e%e7%ba%bf%e6%80%a7%e5%9b%9e%e5%bd%92%e5%85%a5%e9%97%a8%e7%a5%9e%e7%bb%8f%e7%bd%91%e7%bb%9c" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
       <svg class="icon">
   <title>facebook</title>
   <use xlink:href="#facebook"></use>
@@ -858,8 +858,10 @@
 </figure>
 </p>
 <p>分布式训练如此重要，所以大部分深度学习框架TensorFlow、Pytorch、MindSpore、PaddlePaddle等在神经网络开发库也都提供了分布式训练能力。如Pytorch内置了完备的<a href="https://pytorch.org/docs/stable/distributed.tensor.parallel.html">张量并行</a>，<a href="https://pytorch.org/docs/stable/distributed.pipelining.html">流水线并行</a>和<a href="https://pytorch.org/docs/stable/notes/ddp.html">数据并行</a>的处理。</p>
-<p>框架已经提供了完备的能力，怎么在资源供给上跟的上是我们这些下层平台工程师们需要考虑的问题。虽然折腾的还是我们熟悉的计算、存储、网络。提供高质量的计算资源、节点内网络、节点间网络，将这些深度学习框架开发的训练任务按照其并行的要求调度到对应的资源节点上。</p>
-<p>毕竟大家越来越发现提高智力的唯一路径就是提高算力，大力出奇迹越来越被认可。通过云原生的方式进行资源管理是我们比较熟悉的。通过AI业务本身逐步深入的理解，希望能帮助我们更好地管好大模型，运维好大模型，构建一个强大的AI-Infra。</p>
+<p>框架已经提供了完备的能力，怎么在资源供给上跟的上是我们这些下层平台工程师们需要考虑的问题。虽然折腾的还是我们熟悉的计算、存储、网络。提供高质量的计算资源、节点内网络、节点间网络，将这些深度学习框架开发的训练任务按照其并行的要求调度到对应的资源节点上。这是以Kubernetes为代表的云原生技术最擅长的事情，也是我们每天都在做的事情。在Kubernetes中，当用户创建工作负载时，复杂每个实例的Pod作为基本调度单元会调度到业务期望的目标节点上，丰富的调度策略基于资源、亲和性等要求控制负载调度。在AI场景下，Kubernetes提供的这种能力达到提高资源利用率，特别是稀缺的GPU资源算力，从而已经成为面向AI资源管理的标准底座。</p>
+<p>如根据前面不同并行策略对资源的不同要求进行拓扑亲和调度，基于最优的资源组合分配，保证模型训练性能，如优先将模型并行的任务调度到高速互联的卡上。同时，考虑到同一个训练任务基于Kubernetes调度到不同节点时，若只是部分Pod调度成功，则可能会空等待未调度成功的任务，引起资源浪费。甚至多个作业互相等待资源，可能出现资源死锁。在AI调度中引入组调度Gang Schedule实现调度过程只有满足全部资源要求是才进行调度。另外为了提高资源利用率、减少资源碎片，也有各种装箱算法优先填满一个节点或网路。在调度中也可以让离线的训练和在线的推理等任务混部。当在线任务资源低谷时，通过调度使用空闲的资源运行训练任务。当响应要求高的在线任务到来时驱逐离线任务，从而保证总体资源利用率。</p>
+<p>除了计算的调度外，Kubernetes对存储、网络的使用都可以以一种更Native的方式扩展到AI场景。如前面描述多轮训练时，生成的数据量大无法全部在内存存储，势必引入大量的本地缓存。基于Kubernetes的存储插件对接厂商或开源的高性能分布式文件系统已经成为一个标准选择，大量应用到AI训练场景中。</p>
+<p>毕竟大家越来越发现提高智力的唯一路径就是提高算力，大力出奇迹越来越被认可。这些通过云原生的方式进行资源管理是我们比较熟悉的。通过AI业务本身逐步深入的理解，希望能帮助我们更好地管好大模型，运维好大模型，构建一个强大的AI-Infra。</p>
 <p>写到这里发现居然点题了。</p>
 <h3 id="最后"><strong>最后</strong></h3>
 <p>说到最后，最近才开始入坑新领域，新事物入门时，习惯用个人的文字描述出来，自说自话，基本要求比原始资料友好眼熟即可。另外一个习惯，相信事物总是通的，在跨领域或者一个大的领域范围内，不自觉地会对新东西适当抽象并和之前熟悉的领域对象进行横向对比，东拉西扯，尝试贯通。因此文中有些描述，特别是有些另类视角的比较忽略了不少细节，只是做个思路导入，就全当个托儿吧。</p>
@@ -898,7 +900,7 @@
     <h2 class="mt-4">Recent Posts</h2>
     <ul class="flex-column">
       <li>
-        <a href="https://idouba.com/cloud-native-engineer-learn-deeplearning-session1-from-linear-regression-to-neural-network/" class="nav-link" title="云原生工程师入坑深度学习系列（一）：从线性回归入门神经网络">云原生工程师入坑深度学习系列（一）：从线性回归入门神经网络</a>
+        <a href="https://idouba.com/cloud-native-engineer-learn-deeplearning-session1-from-linear-regression-to-neural-network/" class="nav-link" title="云原生工程师入坑AI深度学习系列（一）：从线性回归入门神经网络">云原生工程师入坑AI深度学习系列（一）：从线性回归入门神经网络</a>
       </li>
       <li>
         <a href="https://idouba.com/doudou-and-douba-drive-around-taihu-day2-sanguo-city/" class="nav-link" title="豆哥国庆环太湖Day2：三国城（宜兴-无锡-常州）">豆哥国庆环太湖Day2：三国城（宜兴-无锡-常州）</a>
