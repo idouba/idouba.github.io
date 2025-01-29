@@ -134,6 +134,75 @@
   <div class="excerpt">
     <div class="excerpt_header">
       <h3 class="post_link">
+        <a href="https://idouba.com/hadoop_job_submit_conclusion/" title="【hadoop代码笔记】hadoop作业提交之汇总">【hadoop代码笔记】hadoop作业提交之汇总</a>
+      </h3>
+      
+  <div class="post_meta">
+    <span><svg class="icon">
+  <title>calendar</title>
+  <use xlink:href="#calendar"></use>
+</svg>
+</span>
+    <span class="post_date">
+      Feb 1, 2014</span>
+    <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/hadoop/' title="hadoop" class="post_tag button button_translucent">hadoop
+        </a><a href='https://idouba.com/tags/java/' title="java" class="post_tag button button_translucent">java
+        </a><a href='https://idouba.com/tags/mapreduce/' title="mapreduce" class="post_tag button button_translucent">mapreduce
+        </a>
+    </span>
+    <span class="page_only">&nbsp;·
+  <div class="post_share">
+    Share on:
+    <a href="https://twitter.com/intent/tweet?text=%e3%80%90hadoop%e4%bb%a3%e7%a0%81%e7%ac%94%e8%ae%b0%e3%80%91hadoop%e4%bd%9c%e4%b8%9a%e6%8f%90%e4%ba%a4%e4%b9%8b%e6%b1%87%e6%80%bb&url=https%3a%2f%2fidouba.com%2fhadoop_job_submit_conclusion%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>twitter</title>
+  <use xlink:href="#twitter"></use>
+</svg>
+
+    </a>
+    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fhadoop_job_submit_conclusion%2f&t=%e3%80%90hadoop%e4%bb%a3%e7%a0%81%e7%ac%94%e8%ae%b0%e3%80%91hadoop%e4%bd%9c%e4%b8%9a%e6%8f%90%e4%ba%a4%e4%b9%8b%e6%b1%87%e6%80%bb" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
+      <svg class="icon">
+  <title>facebook</title>
+  <use xlink:href="#facebook"></use>
+</svg>
+
+    </a>
+    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
+      <svg class="icon">
+  <title>linkedin</title>
+  <use xlink:href="#linkedin"></use>
+</svg>
+
+    </a>
+    <a href="https://idouba.com/hadoop_job_submit_conclusion/" title="Copy Link" class="link link_yank">
+      <svg class="icon">
+  <title>copy</title>
+  <use xlink:href="#copy"></use>
+</svg>
+
+    </a>
+  </div>
+  </span>
+  </div>
+
+    </div>
+      <div class="excerpt_footer">
+        <div class="pale">
+          
+            <p>一、概述 在本篇博文中，试图通过代码了解hadoop job执行的整个流程。即用户提交的mapreduce的jar文件、输入提交到hadoop的集群，并在集群中运行。重点在代码的角度描述整个流程，有些细节描述的并不那么详细。 汇总的代码流程图附件:hadoop_mapreduce_jobsubmit
+二、主要流程 Jobclient通过RPC方式调用到jobtracker的submitJob方法提交作业，包括作业的jar、分片和作业描述。 JobTracker的submitJob方法吧job加入到内存队列中，由独立的线程取出每个JobInProgress的对象调用其initTasks方法，根据传入的作业分片创建对应数量 …</p>
+          
+          <br>
+          <a href="https://idouba.com/hadoop_job_submit_conclusion/" title="Read More" class="excerpt_more button">Read More</a>
+        </div>
+      </div>
+    </div>
+  </li>
+
+        <li class="post_item">
+  <div class="excerpt">
+    <div class="excerpt_header">
+      <h3 class="post_link">
         <a href="https://idouba.com/hadoop_mapreduce_tasktracker_child_reduce/" title="【hadoop代码笔记】Hadoop作业提交之Child启动reduce任务">【hadoop代码笔记】Hadoop作业提交之Child启动reduce任务</a>
       </h3>
       
@@ -771,74 +840,6 @@ JobClient通过RPC的方式向JobTracker提交作业； 调用JobTracker的submi
     </div>
   </li>
 
-        <li class="post_item">
-  <div class="excerpt">
-    <div class="excerpt_header">
-      <h3 class="post_link">
-        <a href="https://idouba.com/haddoop_rpc_jobclient_jobtracker/" title="【hadoop代码笔记】通过JobClient对Jobtracker的调用详细了解Hadoop RPC">【hadoop代码笔记】通过JobClient对Jobtracker的调用详细了解Hadoop RPC</a>
-      </h3>
-      
-  <div class="post_meta">
-    <span><svg class="icon">
-  <title>calendar</title>
-  <use xlink:href="#calendar"></use>
-</svg>
-</span>
-    <span class="post_date">
-      Jan 11, 2014</span>
-    <span class="post_time"> · 6 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/mapreduce/' title="mapreduce" class="post_tag button button_translucent">mapreduce
-        </a><a href='https://idouba.com/tags/rpc/' title="RPC" class="post_tag button button_translucent">RPC
-        </a>
-    </span>
-    <span class="page_only">&nbsp;·
-  <div class="post_share">
-    Share on:
-    <a href="https://twitter.com/intent/tweet?text=%e3%80%90hadoop%e4%bb%a3%e7%a0%81%e7%ac%94%e8%ae%b0%e3%80%91%e9%80%9a%e8%bf%87JobClient%e5%af%b9Jobtracker%e7%9a%84%e8%b0%83%e7%94%a8%e8%af%a6%e7%bb%86%e4%ba%86%e8%a7%a3Hadoop%20RPC&url=https%3a%2f%2fidouba.com%2fhaddoop_rpc_jobclient_jobtracker%2f&tw_p=tweetbutton" class="twitter" title="Share on Twitter" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>twitter</title>
-  <use xlink:href="#twitter"></use>
-</svg>
-
-    </a>
-    <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fidouba.com%2fhaddoop_rpc_jobclient_jobtracker%2f&t=%e3%80%90hadoop%e4%bb%a3%e7%a0%81%e7%ac%94%e8%ae%b0%e3%80%91%e9%80%9a%e8%bf%87JobClient%e5%af%b9Jobtracker%e7%9a%84%e8%b0%83%e7%94%a8%e8%af%a6%e7%bb%86%e4%ba%86%e8%a7%a3Hadoop%20RPC" class="facebook" title="Share on Facebook" target="_blank" rel="nofollow">
-      <svg class="icon">
-  <title>facebook</title>
-  <use xlink:href="#facebook"></use>
-</svg>
-
-    </a>
-    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="Share on LinkedIn" rel="nofollow">
-      <svg class="icon">
-  <title>linkedin</title>
-  <use xlink:href="#linkedin"></use>
-</svg>
-
-    </a>
-    <a href="https://idouba.com/haddoop_rpc_jobclient_jobtracker/" title="Copy Link" class="link link_yank">
-      <svg class="icon">
-  <title>copy</title>
-  <use xlink:href="#copy"></use>
-</svg>
-
-    </a>
-  </div>
-  </span>
-  </div>
-
-    </div>
-      <div class="excerpt_footer">
-        <div class="pale">
-          
-            <p>Hadoop的各个服务间，客户端和服务间的交互采用RPC方式。关于这种机制介绍的资源很多，也不难理解，这里不做背景介绍。只是尝试从Jobclient向JobTracker提交作业这个最简单的客户端服务器交互的代码中，去跟踪和了解下RPC是怎么被使用的。不同于准备发表博客时搜索的几篇博文，试图通过一种具体的场景来介绍，属于比较初级。其他DataNode和Namenode之间，Tasktracker和JobTracker之间的交互基本也都一样。为了引用的代码篇幅尽可能少，忽略了代码中写日志（包括Metrics）、某些判断等辅助代码。
-1 RPC客户端请求（从JobClient的jobSubmitClient 入手） Jobclient包 …</p>
-          
-          <br>
-          <a href="https://idouba.com/haddoop_rpc_jobclient_jobtracker/" title="Read More" class="excerpt_more button">Read More</a>
-        </div>
-      </div>
-    </div>
-  </li>
-
       <li>
     <ul class="pagination pagination-default">
       <li class="page-item">
@@ -846,9 +847,6 @@ JobClient通过RPC的方式向JobTracker提交作业； 调用JobTracker的submi
       </li>
       <li class="page-item">
         <a href="/page/8/" aria-label="Previous" class="page-link" role="button"><span aria-hidden="true">&laquo;</span></a>
-      </li>
-      <li class="page-item">
-        <a href="/page/6/" aria-label="Page 6" class="page-link" role="button">6</a>
       </li>
       <li class="page-item">
         <a href="/page/7/" aria-label="Page 7" class="page-link" role="button">7</a>
@@ -863,10 +861,13 @@ JobClient通过RPC的方式向JobTracker提交作业； 调用JobTracker的submi
         <a href="/page/10/" aria-label="Page 10" class="page-link" role="button">10</a>
       </li>
       <li class="page-item">
+        <a href="/page/11/" aria-label="Page 11" class="page-link" role="button">11</a>
+      </li>
+      <li class="page-item">
         <a href="/page/10/" aria-label="Next" class="page-link" role="button"><span aria-hidden="true">&raquo;</span></a>
       </li>
       <li class="page-item">
-        <a href="/page/10/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
+        <a href="/page/11/" aria-label="Last" class="page-link" role="button"><span aria-hidden="true">&raquo;&raquo;</span></a>
       </li>
     </ul>
       </li>
@@ -895,6 +896,9 @@ JobClient通过RPC的方式向JobTracker提交作业； 调用JobTracker的submi
     <h2 class="mt-4">Recent Posts</h2>
     <ul class="flex-column">
       <li>
+        <a href="https://idouba.com/in-memory-of-my-father/" class="nav-link" title="从今天起，我就成了您">从今天起，我就成了您</a>
+      </li>
+      <li>
         <a href="https://idouba.com/cloud-native-engineer-learn-deeplearning-session1-from-linear-regression-to-neural-network/" class="nav-link" title="云原生工程师入坑AI深度学习系列（一）：从线性回归入门神经网络">云原生工程师入坑AI深度学习系列（一）：从线性回归入门神经网络</a>
       </li>
       <li>
@@ -915,9 +919,6 @@ JobClient通过RPC的方式向JobTracker提交作业； 调用JobTracker的submi
       <li>
         <a href="https://idouba.com/doudou-military-training/" class="nav-link" title="豆哥军训归来">豆哥军训归来</a>
       </li>
-      <li>
-        <a href="https://idouba.com/doudou-first-day-of-new-term/" class="nav-link" title="开学第一天和豆哥奇妙的拼车之旅">开学第一天和豆哥奇妙的拼车之旅</a>
-      </li>
     </ul>
     <div>
       <h2 class="mt-4 taxonomy" id="categories-section">Categories</h2>
@@ -929,7 +930,7 @@ JobClient通过RPC的方式向JobTracker提交作业； 调用JobTracker的submi
         
         <a href='https://idouba.com/categories/%E9%9A%8F%E7%AC%94/' class="post_tag button button_translucent" title="随笔">
           随笔
-          <span class="button_tally">22</span>
+          <span class="button_tally">23</span>
         </a>
         
         <a href='https://idouba.com/categories/hadoop/' class="post_tag button button_translucent" title="hadoop">
@@ -1070,6 +1071,10 @@ JobClient通过RPC的方式向JobTracker提交作业； 调用JobTracker的submi
             </a>
             
             
+            <a href='https://idouba.com/categories/%E7%88%B6%E4%BA%B2/' class=" post_tag button button_translucent" data-position=1 title="父亲">父亲<span class="button_tally">1</span>
+            </a>
+            
+            
             <a href='https://idouba.com/categories/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/' class=" post_tag button button_translucent" data-position=1 title="神经网络">神经网络<span class="button_tally">1</span>
             </a>
             
@@ -1078,7 +1083,7 @@ JobClient通过RPC的方式向JobTracker提交作业； 调用JobTracker的submi
             </a>
             
             
-            <a href='https://idouba.com/categories/%E9%9A%8F%E7%AC%94/' class=" post_tag button button_translucent" data-position=22 title="随笔">随笔<span class="button_tally">22</span>
+            <a href='https://idouba.com/categories/%E9%9A%8F%E7%AC%94/' class=" post_tag button button_translucent" data-position=23 title="随笔">随笔<span class="button_tally">23</span>
             </a>
             
             <div class="tags_sort"><span title="sort alphabetically">[A~Z]</span><span title="sort by count">[0~9]</span>
@@ -1128,6 +1133,11 @@ JobClient通过RPC的方式向JobTracker提交作业； 调用JobTracker的submi
           <span class="button_tally">12</span>
         </a>
         
+        <a href='https://idouba.com/tags/%E9%9A%8F%E7%AC%94/' class="post_tag button button_translucent" title="随笔">
+          随笔
+          <span class="button_tally">12</span>
+        </a>
+        
         <a href='https://idouba.com/tags/hadoop/' class="post_tag button button_translucent" title="hadoop">
           HADOOP
           <span class="button_tally">11</span>
@@ -1140,11 +1150,6 @@ JobClient通过RPC的方式向JobTracker提交作业； 调用JobTracker的submi
         
         <a href='https://idouba.com/tags/%E5%9B%BE%E4%B9%A6/' class="post_tag button button_translucent" title="图书">
           图书
-          <span class="button_tally">11</span>
-        </a>
-        
-        <a href='https://idouba.com/tags/%E9%9A%8F%E7%AC%94/' class="post_tag button button_translucent" title="随笔">
-          随笔
           <span class="button_tally">11</span>
         </a>
         
@@ -1465,6 +1470,10 @@ JobClient通过RPC的方式向JobTracker提交作业； 调用JobTracker的submi
             </a>
             
             
+            <a href='https://idouba.com/tags/%E7%88%B6%E4%BA%B2/' class=" post_tag button button_translucent" data-position=1 title="父亲">父亲<span class="button_tally">1</span>
+            </a>
+            
+            
             <a href='https://idouba.com/tags/%E7%A5%96%E6%AF%8D/' class=" post_tag button button_translucent" data-position=2 title="祖母">祖母<span class="button_tally">2</span>
             </a>
             
@@ -1513,7 +1522,7 @@ JobClient通过RPC的方式向JobTracker提交作业； 调用JobTracker的submi
             </a>
             
             
-            <a href='https://idouba.com/tags/%E9%9A%8F%E7%AC%94/' class=" post_tag button button_translucent" data-position=11 title="随笔">随笔<span class="button_tally">11</span>
+            <a href='https://idouba.com/tags/%E9%9A%8F%E7%AC%94/' class=" post_tag button button_translucent" data-position=12 title="随笔">随笔<span class="button_tally">12</span>
             </a>
             
             
