@@ -831,7 +831,7 @@
 </figure>
 </p>
 <p>以上都是来自论文的描述，为了和实际应用结合理解，找到了一个案例：<a href="https://www.researchgate.net/publication/365622982_BLOOM_A_176B-Parameter_Open-Access_Multilingual_Language_Model_Major_Contributors_Prompt_Engineering_Architecture_and_Objective_Engineering_Evaluation_and_Interpretability_Broader_Impacts">BLOOM模型训练</a>的一个集群。由48个NVIDIA DGX-A100服务器组成，每个服务器包含8张A100 GPU，共384张卡。</p>
-<p>从外往里看：首先，每48张卡一个分组，组内4张卡再分一个小组。在这个4个卡组成的小组上进行张量并行，因此张量并行的并行度是4；每个组内12个小组间进行流水线并行，流水线并行的并行度是12；在外层的8个分组间进行数据并行，数据并行的并行度是8。每个分组内48个GPU卡上存放了完整的模型副本。</p>
+<p>从外往里看：基于最外围的数据并行，将总的训练数据分发到左边虚线框框住的8组GPU服务器上并行处理，每个框捏的48个GPU服务器处理一个模型副本，8组间的GPU服务器处理不同的数据批量分组。这样就做到了8个模型副本在384个GPU设备上进行数据并行训练的效果，通过提高并发量，提升训练速度。数据并行的并行度是8。再看每个框，框内的每一行有4个GPU设备，模型参数划分到4个GPU设备上进行张量并行，张量并行的并行度是4。要求这4个GPU间保证告诉通讯带宽，一般这4个GPU在一个服务器内部。从图上看到框内总共有12行，或者说12层，12个层间的GPU分组间进行流水线并行。流水线并行的并行度是12。</p>
 <p><figure>
   <picture>
 
