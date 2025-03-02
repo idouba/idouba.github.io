@@ -831,7 +831,7 @@
 </figure>
 </p>
 <p>以上都是来自论文的描述，为了和实际应用结合理解，找到了一个案例：<a href="https://www.researchgate.net/publication/365622982_BLOOM_A_176B-Parameter_Open-Access_Multilingual_Language_Model_Major_Contributors_Prompt_Engineering_Architecture_and_Objective_Engineering_Evaluation_and_Interpretability_Broader_Impacts">BLOOM模型训练</a>的一个集群。由48个NVIDIA DGX-A100服务器组成，每个服务器包含8张A100 GPU，共384张卡。</p>
-<p>从外往里看：基于最外围的数据并行，将总的训练数据分发到左边虚线框框住的8组GPU服务器上并行处理，每个框捏的48个GPU服务器处理一个模型副本，8组间的GPU服务器处理不同的数据批量分组。这样就做到了8个模型副本在384个GPU设备上进行数据并行训练的效果，通过提高并发量，提升训练速度。数据并行的并行度是8。再看每个框，框内的每一行有4个GPU设备，模型参数划分到4个GPU设备上进行张量并行，张量并行的并行度是4。要求这4个GPU间保证告诉通讯带宽，一般这4个GPU在一个服务器内部。从图上看到框内总共有12行，或者说12层，12个层间的GPU分组间进行流水线并行。流水线并行的并行度是12。</p>
+<p>从外往里看：基于最外围的数据并行，将总的训练数据分发到左边虚线框框住的8组GPU服务器上并行处理，每个框捏的48个GPU服务器处理一个模型副本，8组间的GPU服务器处理不同的数据批量分组。这样就做到了8个模型副本在384个GPU设备上进行数据并行训练的效果，通过提高并发量，提升训练速度。数据并行的并行度是8。再看每个框内，框内的每一行有4个GPU设备，模型参数划分到4个GPU设备上进行张量并行，张量并行的并行度是4。要求这4个GPU间保证告诉通讯带宽，一般这4个GPU在一个服务器内部。从图上看到框内总共有12行，或者说12层，12个层间的GPU分组间进行流水线并行。流水线并行的并行度是12。</p>
 <p><figure>
   <picture>
 
@@ -923,6 +923,9 @@
         <a href="https://idouba.com/cloud-native-engineer-learn-deeplearning-session1-from-linear-regression-to-neural-network/" class="nav-link" title="云原生工程师入坑AI深度学习系列（一）：从线性回归入门神经网络">云原生工程师入坑AI深度学习系列（一）：从线性回归入门神经网络</a>
       </li>
       <li>
+        <a href="https://idouba.com/cloud-native-engineer-learn-deeplearning-session1-make-changzi-understand-model-distillation/" class="nav-link" title="云原生工程师入坑AI深度学习系列（二）：给昌子解释大模型的模型蒸馏">云原生工程师入坑AI深度学习系列（二）：给昌子解释大模型的模型蒸馏</a>
+      </li>
+      <li>
         <a href="https://idouba.com/doudou-and-douba-drive-around-taihu-day5-xishandao/" class="nav-link" title="豆哥国庆环太湖Day5：西山岛（苏州-太湖-杭州）">豆哥国庆环太湖Day5：西山岛（苏州-太湖-杭州）</a>
       </li>
       <li>
@@ -936,9 +939,6 @@
       </li>
       <li>
         <a href="https://idouba.com/doudou-and-douba-drive-around-taihu-day1-first-touch-taihu/" class="nav-link" title="豆哥国庆环太湖Day1：遇太湖（杭州-湖州-宜兴）">豆哥国庆环太湖Day1：遇太湖（杭州-湖州-宜兴）</a>
-      </li>
-      <li>
-        <a href="https://idouba.com/doudou-military-training/" class="nav-link" title="豆哥军训归来">豆哥军训归来</a>
       </li>
     </ul>
     <div>
@@ -984,6 +984,11 @@
           <span class="button_tally">6</span>
         </a>
         
+        <a href='https://idouba.com/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/' class="post_tag button button_translucent" title="机器学习">
+          机器学习
+          <span class="button_tally">5</span>
+        </a>
+        
         <a href='https://idouba.com/categories/kubecon/' class="post_tag button button_translucent" title="kubecon">
           KUBECON
           <span class="button_tally">4</span>
@@ -991,11 +996,6 @@
         
         <a href='https://idouba.com/categories/%E5%9B%BE%E4%B9%A6/' class="post_tag button button_translucent" title="图书">
           图书
-          <span class="button_tally">4</span>
-        </a>
-        
-        <a href='https://idouba.com/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/' class="post_tag button button_translucent" title="机器学习">
-          机器学习
           <span class="button_tally">4</span>
         </a>
         
@@ -1020,7 +1020,7 @@
         <div class="post_tags">
           <div class="tags_list">
             
-            <a href='https://idouba.com/categories/ai/' class=" post_tag button button_translucent" data-position=1 title="ai">AI<span class="button_tally">1</span>
+            <a href='https://idouba.com/categories/ai/' class=" post_tag button button_translucent" data-position=2 title="ai">AI<span class="button_tally">2</span>
             </a>
             
             
@@ -1064,7 +1064,7 @@
             </a>
             
             
-            <a href='https://idouba.com/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/' class=" post_tag button button_translucent" data-position=1 title="云原生">云原生<span class="button_tally">1</span>
+            <a href='https://idouba.com/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/' class=" post_tag button button_translucent" data-position=2 title="云原生">云原生<span class="button_tally">2</span>
             </a>
             
             
@@ -1084,7 +1084,7 @@
             </a>
             
             
-            <a href='https://idouba.com/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/' class=" post_tag button button_translucent" data-position=4 title="机器学习">机器学习<span class="button_tally">4</span>
+            <a href='https://idouba.com/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/' class=" post_tag button button_translucent" data-position=5 title="机器学习">机器学习<span class="button_tally">5</span>
             </a>
             
             
@@ -1096,7 +1096,7 @@
             </a>
             
             
-            <a href='https://idouba.com/categories/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/' class=" post_tag button button_translucent" data-position=1 title="神经网络">神经网络<span class="button_tally">1</span>
+            <a href='https://idouba.com/categories/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/' class=" post_tag button button_translucent" data-position=2 title="神经网络">神经网络<span class="button_tally">2</span>
             </a>
             
             
@@ -1199,7 +1199,7 @@
             </a>
             
             
-            <a href='https://idouba.com/tags/ai/' class=" post_tag button button_translucent" data-position=1 title="ai">AI<span class="button_tally">1</span>
+            <a href='https://idouba.com/tags/ai/' class=" post_tag button button_translucent" data-position=2 title="ai">AI<span class="button_tally">2</span>
             </a>
             
             
@@ -1216,6 +1216,10 @@
             
             
             <a href='https://idouba.com/tags/dc/' class=" post_tag button button_translucent" data-position=1 title="dc">DC<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/deepseek/' class=" post_tag button button_translucent" data-position=1 title="deepseek">DEEPSEEK<span class="button_tally">1</span>
             </a>
             
             
@@ -1391,7 +1395,7 @@
             </a>
             
             
-            <a href='https://idouba.com/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/' class=" post_tag button button_translucent" data-position=1 title="云原生">云原生<span class="button_tally">1</span>
+            <a href='https://idouba.com/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/' class=" post_tag button button_translucent" data-position=2 title="云原生">云原生<span class="button_tally">2</span>
             </a>
             
             
@@ -1483,7 +1487,11 @@
             </a>
             
             
-            <a href='https://idouba.com/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/' class=" post_tag button button_translucent" data-position=1 title="深度学习">深度学习<span class="button_tally">1</span>
+            <a href='https://idouba.com/tags/%E6%A8%A1%E5%9E%8B%E8%92%B8%E9%A6%8F/' class=" post_tag button button_translucent" data-position=1 title="模型蒸馏">模型蒸馏<span class="button_tally">1</span>
+            </a>
+            
+            
+            <a href='https://idouba.com/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/' class=" post_tag button button_translucent" data-position=2 title="深度学习">深度学习<span class="button_tally">2</span>
             </a>
             
             
@@ -1499,7 +1507,7 @@
             </a>
             
             
-            <a href='https://idouba.com/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/' class=" post_tag button button_translucent" data-position=1 title="神经网络">神经网络<span class="button_tally">1</span>
+            <a href='https://idouba.com/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/' class=" post_tag button button_translucent" data-position=2 title="神经网络">神经网络<span class="button_tally">2</span>
             </a>
             
             
