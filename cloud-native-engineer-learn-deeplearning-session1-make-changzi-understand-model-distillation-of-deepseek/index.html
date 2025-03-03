@@ -193,46 +193,9 @@
 <p>那段时间，咱们仨人一直鬼混一起，也就是一直在一起学。你和老七顶多就是过会儿拿书过来问我这个题我的答案是啥，为啥这样想的，然后你的答案是啥，为啥不一样。从外面行为看，我们整个状态都是学习的状态，认真学习的状态，你理也就每学期这时候有个学习的状态。从内在看，你俩是自己脑子在思考，在各自脑子里构造各自的模型。对于同一个题目，准确说是一块知识点，我这个山寨老师咋想的，你们咋想的，能得到尽量一致的答案。我没有把我的模型给你们抄，也没有途径啊，抄不着。顶多从这过程获取了一些重要知识，帮助你在考试时能同样方式去思考，选到一个对的答案。</p>
 <p>我讲的都一样，你俩各自独立地在思考学习，各自在自己脑子里形成对《公差与配合》独立的思考。你和老七学到的也不一样，最终期末考试时在实际的测试数据集上验证，结果大不相同。结果留个彩蛋在后面。同样的教师模型，同样的训练过程，两个不同的学生模型，学到的效果不同。这也反证了，如果是抄，你俩应该抄的是一样的才对。同样的模型蒸馏，也是学，不是抄。只是学到了行为和能力，抄不到内部结构和实现。</p>
 <h3 id="模型蒸馏流程"><strong>模型蒸馏流程</strong></h3>
-<p>上面简单类别，我们理解个概念：模型蒸馏是什么。下面简单了解下流程：模型蒸馏怎么做的。</p>
-<p>大致能分四个步骤：</p>
-<p><figure>
-  <picture>
-
-    
-      
-        
-        
-        
-        
-        
-        
-    <img
-      loading="lazy"
-      decoding="async"
-      alt=""
-      
-        class="image_figure image_internal image_unprocessed"
-        src="../picture/2025-02-07-cloud-native-engineer-learn-deeplearning-session1-make-changzi-understand-model-distillation/model_distillation.png"
-      
-      
-    />
-
-    </picture>
-</figure>
-</p>
-<p>第一步：使用训练数据集训练教师模型。在咱们的那个过程里，就对应哥这个山寨老师认真上课、做题，能比较高准确率地完成《公差与配合》里的考试题目。至少你们是相信哥做那些题的质量比较高的。</p>
-<p>第二步：定义学生模型。这是一个独立的模型，比教师模型简单，但也能独立完成相关的推理。对应咱们那个过程里的角色，就是你俩（的脑子，或者只是手指头），也要完成那次期末考试的同样一套题目。</p>
-<p>第三步：通过模型蒸馏方式训练学生模型。这是最核心的流程，我们下面重点展开下，会少量参照咱们当时那个活动，尽量按照本来方式描述。</p>
-<p>第四步：使用学生模型推理。把上一步训练好的学生模型在实际中应用。对应咱们的那个过程就是期末考试时，你、老七、我和咱班其他人一起拿着同一份卷子被考察。</p>
-<p>重点是第三步。从外围看就是一个普通的神经网络模型训练过程，和<a href="https://idouba.com/cloud-native-engineer-learn-deeplearning-session1-from-linear-regression-to-neural-network/#%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E8%AE%AD%E7%BB%83">上篇神经网络训练</a>的主要流程差不多。先预测，再计算损失，然后根据损失函数计算梯度，并更像模型参数，一直迭代这个过程。通过模型蒸馏训练学生模型的过程中，模型训练的对象是学生模型，对应就是先计算学生模型的预测，在计算损失，计算梯度，更新模型参数。其中最大的差异是计算损失的方式不同。</p>
-<p>首先，损失中要体现学生模型和他在学校的教师模型的差异。在模型蒸馏过程中，教师模型一般假设是更全面、强大，他的输出假设也是更全面、准确；对应的学生模型比较简单，预测的输出不太准确。这也复合咱们那个过程里的具体情况。哥这个山寨老师在你们眼里权威性还是有保证的，哥的答案你一般是信的。对应你们给的答案，心虚都写在脸上了，特别是老七。在模型蒸馏中一般通过KL散度（Kullback-Leibler Divergence）来描述学生模型预测结果的概率分别和对应教师模型预测结果概率分布之间的差异。KL散度越小说明教师模型和学生模型的差异越小，这个英文单词你不用读出来，理解就是你做题的思路和教你那个山寨老师的思路有多像。</p>
-<p>在训练过程中，对学生模型的不断训练，在对应的数据集上，学生模型的月初概率分布与教师模型的概率分布越来越接近，这样正是学生模型学习教师模型的知识的过程。不只是对同样的训练数据得到和教师模型一致的结果，对每种答案的置信度也越来越接近。对应咱做《公差与配合》的单选题：比较孔或轴加工难易程度高低的依据是：A 标准公差因子；B 基本尺寸大小；C 公差等级；D 公差值大小 ，选A对的可能性1%；选B对的可能性3%；选C对的可能性95%；选D对的可能性1%。经过那段时间的练习后，你俩不止做题的结果和这个山寨老师越来越一致了，连思考问题的方式，至少是对某个结果的说法，都差不多了。从结果看学生模型可以更好地模拟教师模型的推理过程。前面这段描述里教师模型的输出不只包含标准答案，还包括更多的信息，如每个答案的概率，这种标签称为软标签。对应的是传统数据集上的每条样本的标签。</p>
-<p>在模型蒸馏过程中，计算损失时，除了使用软标签，也要参考硬标签。即除了衡量学生模型预测和教师模型预测的差异外，也要衡量学生模型的输出和标准答案的差异。后者也称为交叉熵损失计算，和传统的神经网络模型训练计算损失的思路和方法一样。对应到咱们那个补课活动，就是老七买来那本练习书里的标准答案，这部分训练过程就是你们做那本书上的习题，然后对答案学习的过程。</p>
-<p>模型蒸馏的过程中损失计算是把上面两种损失加权求和。即保证学生模型能学习到教师模型的思路方法，同时也能处理实际真实问题。类似咱们补课过程中，你俩一边跟着一个山寨老师学，一边自己做练习对答案。基于这种结合方式，通过硬标签可以适当纠正软标签的输出。一般模型蒸馏过程中软标签权重较大，如果教师模型模型输出有问题，就会较大地影响学生模型。对应到咱们那个补课活动，老七曾经拿着那本练习里的一个标准答案质疑哥有个地方可能讲错了。但是更多时候，你俩比较懒，也就听哥讲讲，那本练习是没怎么用上的，也就是硬标签作用有限。</p>
-<p>最后一步，就是学生模型的应用，即使用训练好的学生模型在实际数据集上的推理。训练的目的是推理，就像你来问我DeepSeek怎么用，大家常用的就是下了个<a href="https://download.deepseek.com/app/">App</a>，用它的推理能力来完成需要的任务。对应到咱们那次活动，学生模型推理流程对应的自然就是咱们那次期末考试了。这是咱们那个阶段的高潮，哥也刻意在这篇文档中整理这部分内容的时候把这部分设计为全文的高潮。我们的学生模型推理的结果是：你将将过，老七却挂了。</p>
-<p>当时是一件有点悲伤但却给我们带了了很多额外快乐的事情，特别是当时我认赌服输请你俩去那个叫双虎的小饭店吃饭。老白干干得很爽，以至于这么多年后每次我去北京咱们吃喝的氛围和风格都是那次的延续。吃饭的话题留着咱下次吃饭再说，在这里还是把老七这个案例拿到这个技术话题里技术性地讨论下。专业分析要么是我这个教师模型不够强大，要么是我们模型蒸馏的过程有问题。也许是老七那个模型服务资源不够，训练没问题，模型也学习到位了，就是推理时候推不出来。当时我们吃饭时候调侃老七脑子不好，他的学生模型太简单了，你的刚刚好，老师出的题稍微变了下，你做出来了，他却没有。那最终原因可能还是你当年说的，丫的脑子不好使。唉，发现我们不小心从花双虎的生米里捏了几颗盐粒子洒在了老七的娇嫩的伤口上，下次见面喝酒时可怎么跟老七交代呢。</p>
-<p>结合我们这个实践也能看到模型蒸馏的优点很明显，不需要从最初始训练一个模型，省下来大量的资源开销和时间。这点你俩应该神佑感触，不需自己从头翻书，跟着一个山寨老师来几遍就可以了。另外一个我们但是感知不明显的优势是不需要大量标注过的样本。模型训练中很重要的一部分是训练的样本数据，但是获取高质量的样本数据从来不是一件容易得事情。模型蒸馏中通过教师模型的软标签信息就可以有效地进行学生模型的训练。类似咱们那个补课案例中，你俩不需要买大量的带有标准答案的练习册，自己做很多题，再去对答案。特别是是考虑到咱们那个年代辅导书、练习册本来就很稀缺。但是如果处理不好会导致泛化能力可能有限，学生模型学习到了教师模型的基本能力，对于老师交的知识处理较好，但其他数据处理不好。可以简单理解成跟着老师模型学得太死，学到了然，没有学到所以然。咱们那次补课后的考试，老七就是因为学的稍微死了一点，期末考试的题目稍微变一变，他就没搞定。</p>
-<p>DeepSeek关于模型蒸馏流程的描述如下，你只作为参照就好。比我们罗里吧嗦说半天要简洁、准确、权威。我们描述过程中为了方便你理解，有些内容刻意跳过了，有兴趣我们后面再补充。</p>
+<p>上面通过简单类比，我们理解个概念：模型蒸馏是什么。下面简单了解下流程：模型蒸馏怎么做的。</p>
+<p>DeepSeek关于模型蒸馏流程的描述如下，你只作为参照就好。内容可能太干，后面结合我们的具体案例我们具体案例可能会好理解些。</p>
+<blockquote>
 <h4 id="0-流程图"><strong>0. 流程图</strong></h4>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="ln"> 1</span><span class="cl">[输入数据 X] 
 </span></span><span class="line"><span class="ln"> 2</span><span class="cl">   │
@@ -327,9 +290,178 @@ $$</p>
 <li>同时优化软目标损失（模仿教师）和硬目标损失（拟合真实标签）。</li>
 <li>通过反向传播更新学生模型参数。</li>
 </ol>
+</blockquote>
+<p>结合我们的实践，总结模型蒸馏流程大致能分四个步骤。我们描述过程中为了方便你理解，有些内容刻意跳过了，有兴趣我们后面再补充。</p>
+<p><figure>
+  <picture>
+
+    
+      
+        
+        
+        
+        
+        
+        
+    <img
+      loading="lazy"
+      decoding="async"
+      alt=""
+      
+        class="image_figure image_internal image_unprocessed"
+        src="../picture/2025-02-07-cloud-native-engineer-learn-deeplearning-session1-make-changzi-understand-model-distillation/model_distillation.png"
+      
+      
+    />
+
+    </picture>
+</figure>
+</p>
+<p>第一步：使用训练数据集训练教师模型。在咱们的那个过程里，就对应哥这个山寨老师认真上课、做题，能比较高准确率地完成《公差与配合》里的考试题目。至少你们是相信哥做那些题的质量比较高的。</p>
+<p>第二步：定义学生模型。这是一个独立的模型，比教师模型简单，但也能独立完成相关的推理。对应咱们那个过程里的角色，就是你俩（的脑子，或者只是手指头），也要完成那次期末考试的同样一套题目。</p>
+<p>第三步：通过模型蒸馏方式训练学生模型。这是最核心的流程，我们下面重点展开下，会少量参照咱们当时那个活动，尽量按照本来方式描述。</p>
+<p>第四步：使用学生模型推理。把上一步训练好的学生模型在实际中应用。对应咱们的那个过程就是期末考试时，你、老七、我和咱班其他人一起拿着同一份卷子被考察。</p>
+<p>重点是第三步。从外围看就是一个普通的神经网络模型训练过程，和<a href="https://idouba.com/cloud-native-engineer-learn-deeplearning-session1-from-linear-regression-to-neural-network/#%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E8%AE%AD%E7%BB%83">上篇神经网络训练</a>的主要流程差不多。先预测，再计算损失，然后根据损失函数计算梯度，并更像模型参数，一直迭代这个过程。通过模型蒸馏训练学生模型的过程中，模型训练的对象是学生模型，对应就是先计算学生模型的预测，在计算损失，计算梯度，更新模型参数。其中最大的差异是计算损失的方式不同。</p>
+<p>首先，损失中要体现学生模型和他在学校的教师模型的差异。在模型蒸馏过程中，教师模型一般假设是更全面、强大，他的输出假设也是更全面、准确；对应的学生模型比较简单，预测的输出不太准确。这也复合咱们那个过程里的具体情况。哥这个山寨老师在你们眼里权威性还是有保证的，哥的答案你一般是信的。对应你们给的答案，心虚都写在脸上了，特别是老七。在模型蒸馏中一般通过KL散度（Kullback-Leibler Divergence）来描述学生模型预测结果的概率分别和对应教师模型预测结果概率分布之间的差异。KL散度越小说明教师模型和学生模型的差异越小，这个英文单词你不用读出来，理解就是你做题的思路和教你那个山寨老师的思路有多像。</p>
+<p>在训练过程中，对学生模型的不断训练，在对应的数据集上，学生模型的月初概率分布与教师模型的概率分布越来越接近，这样正是学生模型学习教师模型的知识的过程。不只是对同样的训练数据得到和教师模型一致的结果，对每种答案的置信度也越来越接近。对应咱做《公差与配合》的单选题：比较孔或轴加工难易程度高低的依据是：A 标准公差因子；B 基本尺寸大小；C 公差等级；D 公差值大小 ，选A对的可能性1%；选B对的可能性3%；选C对的可能性95%；选D对的可能性1%。经过那段时间的练习后，你俩不止做题的结果和这个山寨老师越来越一致了，连思考问题的方式，至少是对某个结果的说法，都差不多了。从结果看学生模型可以更好地模拟教师模型的推理过程。前面这段描述里教师模型的输出不只包含标准答案，还包括更多的信息，如每个答案的概率，这种标签称为软标签。对应的是传统数据集上的每条样本的标签。</p>
+<p>在模型蒸馏过程中，计算损失时，除了使用软标签，也要参考硬标签。即除了衡量学生模型预测和教师模型预测的差异外，也要衡量学生模型的输出和标准答案的差异。后者也称为交叉熵损失计算，和传统的神经网络模型训练计算损失的思路和方法一样。对应到咱们那个补课活动，就是老七买来那本练习书里的标准答案，这部分训练过程就是你们做那本书上的习题，然后对答案学习的过程。</p>
+<p>模型蒸馏的过程中损失计算是把上面两种损失加权求和。即保证学生模型能学习到教师模型的思路方法，同时也能处理实际真实问题。类似咱们补课过程中，你俩一边跟着一个山寨老师学，一边自己做练习对答案。基于这种结合方式，通过硬标签可以适当纠正软标签的输出。一般模型蒸馏过程中软标签权重较大，如果教师模型模型输出有问题，就会较大地影响学生模型。对应到咱们那个补课活动，老七曾经拿着那本练习里的一个标准答案质疑哥有个地方可能讲错了。但是更多时候，你俩比较懒，也就听哥讲讲，那本练习是没怎么用上的，也就是硬标签作用有限。</p>
+<p>最后一步，就是学生模型的应用，即使用训练好的学生模型在实际数据集上的推理。训练的目的是推理，就像你来问我DeepSeek怎么用，大家常用的就是下了个<a href="https://download.deepseek.com/app/">App</a>，用它的推理能力来完成需要的任务。对应到咱们那次活动，学生模型推理流程对应的自然就是咱们那次期末考试了。这是咱们那个阶段的高潮，哥也刻意在这篇文档中整理这部分内容的时候把这部分设计为全文的高潮。我们的学生模型推理的结果是：你将将过，老七却挂了。</p>
+<p>当时是一件有点悲伤但却给我们带了了很多额外快乐的事情，特别是当时我认赌服输请你俩去那个叫双虎的小饭店吃饭。老白干干得很爽，以至于这么多年后每次我去北京咱们吃喝的氛围和风格都是那次的延续。吃饭的话题留着咱下次吃饭再说，在这里还是把老七这个案例拿到这个技术话题里技术性地讨论下。专业分析要么是我这个教师模型不够强大，要么是我们模型蒸馏的过程有问题。也许是老七那个模型服务资源不够，训练没问题，模型也学习到位了，就是推理时候推不出来。当时我们吃饭时候调侃老七脑子不好，他的学生模型太简单了，你的刚刚好，老师出的题稍微变了下，你做出来了，他却没有。那最终原因可能还是你当年说的，丫的脑子不好使。唉，发现我们不小心从花双虎的生米里捏了几颗盐粒子洒在了老七的娇嫩的伤口上，下次见面喝酒时可怎么跟老七交代呢。</p>
+<p>结合我们这个实践也能看到模型蒸馏的优点很明显，不需要从最初始训练一个模型，省下来大量的资源开销和时间。这点你俩应该神佑感触，不需自己从头翻书，跟着一个山寨老师来几遍就可以了。另外一个我们但是感知不明显的优势是不需要大量标注过的样本。模型训练中很重要的一部分是训练的样本数据，但是获取高质量的样本数据从来不是一件容易得事情。模型蒸馏中通过教师模型的软标签信息就可以有效地进行学生模型的训练。类似咱们那个补课案例中，你俩不需要买大量的带有标准答案的练习册，自己做很多题，再去对答案。特别是是考虑到咱们那个年代辅导书、练习册本来就很稀缺。但是如果处理不好会导致泛化能力可能有限，学生模型学习到了教师模型的基本能力，对于老师交的知识处理较好，但其他数据处理不好。可以简单理解成跟着老师模型学得太死，学到了然，没有学到所以然。咱们那次补课后的考试，老七就是因为学的稍微死了一点，期末考试的题目稍微变一变，他就没搞定。</p>
+<h3 id="deepseek的模型蒸馏"><strong>DeepSeek的模型蒸馏</strong></h3>
+<p>终于到正题了。关于DeepSeek的模型蒸馏，最近一段时间文章、短视频内容很多，居然都传到你耳朵里了。也正因此才有了咱这次交流（和回忆杀）。哥尝试带着你从最源头理解下，这个源头就是DeepSeek发布的一篇论文<a href="https://github.com/deepseek-ai/DeepSeek-R1/blob/main/DeepSeek_R1.pdf">《DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning》</a>。完整介绍了DeepSeek-R1-Zero 和 DeepSeek-R1模型的构建方案、发现、实验和讨论等内容。我们重点关注其中与模型蒸馏相关的内容。</p>
+<p>论文重模型蒸馏占的篇幅不算多。下表描述了使用DeepSeek-R1模型蒸馏几个小模型后的效果对比。</p>
+<p><figure>
+  <picture>
+
+    
+      
+        
+        
+        
+        
+        
+        
+    <img
+      loading="lazy"
+      decoding="async"
+      alt="Distilled Model Evaluation"
+      
+        class="image_figure image_internal image_unprocessed"
+        src="../picture/2025-02-07-cloud-native-engineer-learn-deeplearning-session1-make-changzi-understand-model-distillation/DistilledModelEvaluation.png"
+      
+      
+    />
+
+    </picture>
+</figure>
+</p>
+<p>可以看到简单蒸馏DeepSeek-R1得到的DeepSeek-R1-Distill-Qwen-7B全面优于GPT-4o-0513等非推理模型。DeepSeek-R1-Distill-Qwen-14B在所有评估项上均超过了QwQ-32B-Preview。而DeepSeek-R1-Distill-Qwen-32B和 DeepSeek-R1-Distill-Llama-70B在大多数基准测试中都超过了OpenAI的o1-mini模型。这些结果都证明了模型蒸馏的强大潜力。且论文里提到将强化学习应用到这些经过蒸馏的模型中可以进一步改善模型的效果。</p>
+<p>另外在论文中专门有一节比较了模型蒸馏和强化学习的效果。</p>
+<p><figure>
+  <picture>
+
+    
+      
+        
+        
+        
+        
+        
+        
+    <img
+      loading="lazy"
+      decoding="async"
+      alt="Distillation v.s.Reinforcement Learning"
+      
+        class="image_figure image_internal image_unprocessed"
+        src="../picture/2025-02-07-cloud-native-engineer-learn-deeplearning-session1-make-changzi-understand-model-distillation/Distillationv.s.ReinforcementLearning.png"
+      
+      
+    />
+
+    </picture>
+</figure>
+</p>
+<p>在实验中，对Qwen-32B-Base进行大规模强化学习，得到DeepSeek-R1-Zero-Qwen-32B模型，比较发现和 QwQ-32B-Preview差不多。而DeepSeek-R1 蒸馏得到的DeepSeek-R1-Distill-Qwen-32B模型在各方面都比以上两个模型表现好很多。实验说明了通过模型蒸馏方式将一个大模型蒸馏为一个小一点的模型，比使用大量计算资源进行的强化学习得到的模型效果要好得多。</p>
+<p>DeepSeek-R1 模型相关的新鲜在<a href="https://github.com/deepseek-ai/DeepSeek-R1">Github</a>和<a href="https://huggingface.co/deepseek-ai/DeepSeek-R1">Hugging Face</a>均有维护。最重要的是两个表格。</p>
+<p>下表列出了DeepSeek-R1和DeepSeek-R1-Zero相关信息。</p>
+<table>
+<thead>
+<tr>
+<th><strong>Model</strong></th>
+<th><strong>#Total Params</strong></th>
+<th><strong>#Activated Params</strong></th>
+<th><strong>Context Length</strong></th>
+<th><strong>Download</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DeepSeek-R1-Zero</td>
+<td>671B</td>
+<td>37B</td>
+<td>128K</td>
+<td><a href="https://huggingface.co/deepseek-ai/DeepSeek-R1-Zero">🤗 HuggingFace</a></td>
+</tr>
+<tr>
+<td>DeepSeek-R1</td>
+<td>671B</td>
+<td>37B</td>
+<td>128K</td>
+<td><a href="https://huggingface.co/deepseek-ai/DeepSeek-R1">🤗 HuggingFace</a></td>
+</tr>
+</tbody>
+</table>
+<p>DeepSeek-R1蒸馏后的模型如下。可以看到蒸馏过的模型都是对于开源模型，使用DeepSeek-R1生成的数据微调过。具体讲DeepSeek-R1生成了80万推理样本数据，通过这些样本数据对Qwen和Llama等小模型进行监督微调SFT。</p>
+<table>
+<thead>
+<tr>
+<th><strong>Model</strong></th>
+<th><strong>Base Model</strong></th>
+<th><strong>Download</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DeepSeek-R1-Distill-Qwen-1.5B</td>
+<td><a href="https://huggingface.co/Qwen/Qwen2.5-Math-1.5B">Qwen2.5-Math-1.5B</a></td>
+<td><a href="https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B">🤗 HuggingFace</a></td>
+</tr>
+<tr>
+<td>DeepSeek-R1-Distill-Qwen-7B</td>
+<td><a href="https://huggingface.co/Qwen/Qwen2.5-Math-7B">Qwen2.5-Math-7B</a></td>
+<td><a href="https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-7B">🤗 HuggingFace</a></td>
+</tr>
+<tr>
+<td>DeepSeek-R1-Distill-Llama-8B</td>
+<td><a href="https://huggingface.co/meta-llama/Llama-3.1-8B">Llama-3.1-8B</a></td>
+<td><a href="https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B">🤗 HuggingFace</a></td>
+</tr>
+<tr>
+<td>DeepSeek-R1-Distill-Qwen-14B</td>
+<td><a href="https://huggingface.co/Qwen/Qwen2.5-14B">Qwen2.5-14B</a></td>
+<td><a href="https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-14B">🤗 HuggingFace</a></td>
+</tr>
+<tr>
+<td>DeepSeek-R1-Distill-Qwen-32B</td>
+<td><a href="https://huggingface.co/Qwen/Qwen2.5-32B">Qwen2.5-32B</a></td>
+<td><a href="https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-32B">🤗 HuggingFace</a></td>
+</tr>
+<tr>
+<td>DeepSeek-R1-Distill-Llama-70B</td>
+<td><a href="https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct">Llama-3.3-70B-Instruct</a></td>
+<td><a href="https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-70B">🤗 HuggingFace</a></td>
+</tr>
+</tbody>
+</table>
+<p>@TODO</p>
+<p>从以上描述蒸馏看，模型DeepSeek-R1和DeepSeek-R1-Zero多次被体积，需要稍微了解下。论文也是围绕这两个模型来讲的，其他模型都是基于这两个模型生成的。</p>
 <h3 id="最后"><strong>最后</strong></h3>
+<p>主要内容就这些，可以看到：</p>
 <p>第一，模型蒸馏不是DeepSeek首创。讲完我们的粗浅故事，去DeepSeek尝试了解更多信息。DeepSeek告诉说：Geoffrey Hinton 及其合作者早在 2015 年发表的论文 <strong>《<a href="https://arxiv.org/pdf/1503.02531">Distilling the Knowledge in a Neural Network</a>》</strong> 是知识蒸馏（Knowledge Distillation）领域的奠基性工作。找到论文对着小标题快速过了遍，非常系统完整地介绍了知识蒸馏的关键技术，后面大量的实践都是基于这个论文的理论展开。早在2019年在论文《<a href="https://arxiv.org/pdf/1910.01108">DistilBERT, a distilled version of BERT: smaller, faster, cheaper and lighter</a>》中描述了DistilBERT通过知识蒸馏<a href="https://arxiv.org/pdf/1810.04805">BERT</a>达到的效果： we leverage knowledge distillation during the pre-training phase and show that it is possible to reduce the size of a BERT model by <strong>40%,</strong> while retaining <strong>97%</strong> of its language understanding capabilities and being <strong>60%</strong> faster.。当然在更早的时候一个叫昌子、一个叫老七的牛人，已经在自己的领域实践过了。</p>
-<p>第二、虽然你追着问，但是模型蒸馏并不算是DeepSeek成功的最关键因素。之前大家总结的多头潜在注意力机制MLA（Multi - Head Latent Attention）、专家混合模型MoE (Mixture of Experts)等都被证明是非常值得关注的创新技术。这些早在过年时候我们关注DeepSeek-R1之前已经被使用了。大家普遍认为最具里程碑意义的是R1之前的R1 Zero版本，第一个公开验证了只要通过强化学习的激励就能取得成功极大的成功（可能OpenAI也发现了这个重大规律，只是捂着没给大家说，这些捂发霉了）。深度学习一直对数据质量要求非常高，这种基于强化学习的方式，让模型自己学习，而不需要提供答案，比监督微调SFT(Supervised fine-tuning)要高效得多。就像不给你答案，自己练习也能提高成绩。显然对于你、我和老七这个有点困难。我们跟着DeepSeek等慢慢学习，保不齐我们也能修炼到类似功力。</p>
+<p>第二、虽然你追着问，但是模型蒸馏并不算是DeepSeek成功的最关键因素。之前大家总结的多头潜在注意力机制MLA（Multi - Head Latent Attention）、专家混合模型MoE (Mixture of Experts)等都被证明是非常值得关注的创新技术。这些早在过年时候我们关注DeepSeek-R1之前已经被使用了。包括在论文里提到的，大家普遍认为最具里程碑意义的是R1之前的R1 Zero版本，第一个公开验证了只要通过强化学习的激励就能取得成功极大的成功（可能OpenAI也发现了这个重大规律，只是捂着没给大家说，这些捂发霉了）。深度学习一直对数据质量要求非常高，这种基于强化学习的方式，让模型自己学习，而不需要提供答案，比监督微调SFT(Supervised fine-tuning)要高效得多。就像不给你答案，自己练习也能提高成绩。显然对于你、我和老七这个有点困难。我们跟着DeepSeek等慢慢学习，保不齐我们也能修炼到类似功力。</p>
 <p>看下，跟咱过年那天说的应该差不多。我多补充了点信息，让内容完整点。自己瞎看看就像，不要给老七看见。</p>
 
     </div>
