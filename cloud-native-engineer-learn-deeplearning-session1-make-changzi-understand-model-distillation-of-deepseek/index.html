@@ -61,7 +61,7 @@
 
   </head>
   <body
-    data-code="7"
+    data-code="100"
     data-lines="false"
     id="documentTop"
     data-lang="en"
@@ -130,7 +130,7 @@
 </span>
     <span class="post_date">
       Feb 7, 2025</span>
-    <span class="post_time"> · 1 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/ai/' title="AI" class="post_tag button button_translucent">AI
+    <span class="post_time"> · 2 min read</span><span>&nbsp;· <a href='https://idouba.com/tags/ai/' title="AI" class="post_tag button button_translucent">AI
         </a><a href='https://idouba.com/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/' title="深度学习" class="post_tag button button_translucent">深度学习
         </a><a href='https://idouba.com/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/' title="神经网络" class="post_tag button button_translucent">神经网络
         </a><a href='https://idouba.com/tags/%E6%A8%A1%E5%9E%8B%E8%92%B8%E9%A6%8F/' title="模型蒸馏" class="post_tag button button_translucent">模型蒸馏
@@ -176,7 +176,7 @@
     <div class="post_body"><hr>
 <h3 id="背景"><strong>背景</strong></h3>
 <p>昨天，<a href="https://idouba.com/meet-changzi-in-hangzhou/">昌子</a>突然微信问我“DeepSeek咋用”。回复“你不好好焊钢轨，打听这玩意儿干啥”。小哥说我就想闹明白我们中国这个技术是不是像有些短视频里说的抄了老美的。不用问，这小哥是过年在家闲的刷到OpenAI可能起诉DeepSeek的新闻了。虽然给他说Altman在咱们大年初六好已经承认不打算起诉了，但是说服昌子小哥还是费了不少口舌。为了说明没有抄，模型蒸馏的话题就绕不过。在沟通中临时起意提到小哥咱们很多年前的一段趣事，居然说明白了。觉得很有意思，就顺手归档下。</p>
-<h3 id="模型蒸馏概念初体验">模型蒸馏概念初体验</h3>
+<h3 id="模型蒸馏概念初体验"><strong>模型蒸馏概念初体验</strong></h3>
 <p>首先，<a href="https://chat.deepseek.com/">DeepSeek</a>关于模型蒸馏的定义是这样的：</p>
 <blockquote>
 <p>模型蒸馏通过将复杂模型（教师模型）的知识转移到简单模型（学生模型）中，实现模型压缩、加速推理并保持性能，适用于多种资源受限的场景。</p>
@@ -192,7 +192,7 @@
 <p>通过这种有针对性的练习，学习老师模型总结过的知识，更有针对性，因此也更高效。你们用更简单的模型，通过更低的成本，但更高的效率达到了很高的模型质量。到考试前那阵子，特别是你，不止比我墨迹白天推导要快，有些时候也更准。这就是你们根据各自的逻辑理解学习的成果。</p>
 <p>那段时间，咱们仨人一直鬼混一起，也就是一直在一起学。你和老七顶多就是过会儿拿书过来问我这个题我的答案是啥，为啥这样想的，然后你的答案是啥，为啥不一样。从外面行为看，我们整个状态都是学习的状态，认真学习的状态，你理也就每学期这时候有个学习的状态。从内在看，你俩是自己脑子在思考，在各自脑子里构造各自的模型。对于同一个题目，准确说是一块知识点，我这个山寨老师咋想的，你们咋想的，能得到尽量一致的答案。我没有把我的模型给你们抄，也没有途径啊，抄不着。顶多从这过程获取了一些重要知识，帮助你在考试时能同样方式去思考，选到一个对的答案。</p>
 <p>我讲的都一样，你俩各自独立地在思考学习，各自在自己脑子里形成对《公差与配合》独立的思考。你和老七学到的也不一样，最终期末考试时在实际的测试数据集上验证，结果大不相同。结果留个彩蛋在后面。同样的教师模型，同样的训练过程，两个不同的学生模型，学到的效果不同。这也反证了，如果是抄，你俩应该抄的是一样的才对。同样的模型蒸馏，也是学，不是抄。只是学到了行为和能力，抄不到内部结构和实现。</p>
-<h3 id="模型蒸馏流程">模型蒸馏流程</h3>
+<h3 id="模型蒸馏流程"><strong>模型蒸馏流程</strong></h3>
 <p>上面简单类别，我们理解个概念：模型蒸馏是什么。下面简单了解下流程：模型蒸馏怎么做的。</p>
 <p>大致能分四个步骤：</p>
 <p><figure>
@@ -232,9 +232,105 @@
 <p>最后一步，就是学生模型的应用，即使用训练好的学生模型在实际数据集上的推理。训练的目的是推理，就像你来问我DeepSeek怎么用，大家常用的就是下了个<a href="https://download.deepseek.com/app/">App</a>，用它的推理能力来完成需要的任务。对应到咱们那次活动，学生模型推理流程对应的自然就是咱们那次期末考试了。这是咱们那个阶段的高潮，哥也刻意在这篇文档中整理这部分内容的时候把这部分设计为全文的高潮。我们的学生模型推理的结果是：你将将过，老七却挂了。</p>
 <p>当时是一件有点悲伤但却给我们带了了很多额外快乐的事情，特别是当时我认赌服输请你俩去那个叫双虎的小饭店吃饭。老白干干得很爽，以至于这么多年后每次我去北京咱们吃喝的氛围和风格都是那次的延续。吃饭的话题留着咱下次吃饭再说，在这里还是把老七这个案例拿到这个技术话题里技术性地讨论下。专业分析要么是我这个教师模型不够强大，要么是我们模型蒸馏的过程有问题。也许是老七那个模型服务资源不够，训练没问题，模型也学习到位了，就是推理时候推不出来。当时我们吃饭时候调侃老七脑子不好，他的学生模型太简单了，你的刚刚好，老师出的题稍微变了下，你做出来了，他却没有。那最终原因可能还是你当年说的，丫的脑子不好使。唉，发现我们不小心从花双虎的生米里捏了几颗盐粒子洒在了老七的娇嫩的伤口上，下次见面喝酒时可怎么跟老七交代呢。</p>
 <p>结合我们这个实践也能看到模型蒸馏的优点很明显，不需要从最初始训练一个模型，省下来大量的资源开销和时间。这点你俩应该神佑感触，不需自己从头翻书，跟着一个山寨老师来几遍就可以了。另外一个我们但是感知不明显的优势是不需要大量标注过的样本。模型训练中很重要的一部分是训练的样本数据，但是获取高质量的样本数据从来不是一件容易得事情。模型蒸馏中通过教师模型的软标签信息就可以有效地进行学生模型的训练。类似咱们那个补课案例中，你俩不需要买大量的带有标准答案的练习册，自己做很多题，再去对答案。特别是是考虑到咱们那个年代辅导书、练习册本来就很稀缺。但是如果处理不好会导致泛化能力可能有限，学生模型学习到了教师模型的基本能力，对于老师交的知识处理较好，但其他数据处理不好。可以简单理解成跟着老师模型学得太死，学到了然，没有学到所以然。咱们那次补课后的考试，老七就是因为学的稍微死了一点，期末考试的题目稍微变一变，他就没搞定。</p>
+<p>DeepSeek关于模型蒸馏流程的描述如下，你只作为参照就好。比我们罗里吧嗦说半天要简洁、准确、权威。我们描述过程中为了方便你理解，有些内容刻意跳过了，有兴趣我们后面再补充。</p>
+<h4 id="0-流程图"><strong>0. 流程图</strong></h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="ln"> 1</span><span class="cl">[输入数据 X] 
+</span></span><span class="line"><span class="ln"> 2</span><span class="cl">   │
+</span></span><span class="line"><span class="ln"> 3</span><span class="cl">   ├─────► [教师模型（大型复杂模型，如BERT/ResNet）] ────► [软标签（Soft Targets，带温度参数 T）]
+</span></span><span class="line"><span class="ln"> 4</span><span class="cl">   │                                      │
+</span></span><span class="line"><span class="ln"> 5</span><span class="cl">   │                                      ▼
+</span></span><span class="line"><span class="ln"> 6</span><span class="cl">   │                      [概率分布（Softmax with Temperature T）]
+</span></span><span class="line"><span class="ln"> 7</span><span class="cl">   │                                      │
+</span></span><span class="line"><span class="ln"> 8</span><span class="cl">   │                                      ▼
+</span></span><span class="line"><span class="ln"> 9</span><span class="cl">   └─────► [学生模型（小型轻量模型，如MobileNet/TinyBERT）] ◄──┐
+</span></span><span class="line"><span class="ln">10</span><span class="cl">                                 │                           │
+</span></span><span class="line"><span class="ln">11</span><span class="cl">                                 ▼                           │
+</span></span><span class="line"><span class="ln">12</span><span class="cl">                     [概率分布（Softmax with Temperature T）] │
+</span></span><span class="line"><span class="ln">13</span><span class="cl">                                 │                           │
+</span></span><span class="line"><span class="ln">14</span><span class="cl">                                 ▼                           │
+</span></span><span class="line"><span class="ln">15</span><span class="cl">         [损失函数：软目标损失（KL散度） + 硬目标损失（交叉熵）] │
+</span></span><span class="line"><span class="ln">16</span><span class="cl">                                 │                           │
+</span></span><span class="line"><span class="ln">17</span><span class="cl">                                 ▼                           │
+</span></span><span class="line"><span class="ln">18</span><span class="cl">                            [参数更新（反向传播）] ──────────────┘
+</span></span></code></pre></div><h4 id="1-输入数据x">1. <strong>输入数据（X）</strong></h4>
+<ul>
+<li>原始训练数据（如图像、文本等），同时输入给教师模型和学生模型。</li>
+</ul>
+<h4 id="2-教师模型teacher-model">2. <strong>教师模型（Teacher Model）</strong></h4>
+<ul>
+<li><strong>功能</strong>：大型预训练模型（如ResNet、BERT），拥有高精度但计算成本高。</li>
+<li><strong>输出</strong>：生成<strong>软标签（Soft Targets）</strong>，即对输入数据的概率分布（如分类任务的类别概率）。</li>
+<li><strong>关键参数</strong>：<strong>温度参数（T）</strong>，用于平滑概率分布：
+<ul>
+<li>公式：<code>Softmax(z_i / T)</code>，其中<code>z_i</code>为模型输出的 logits。</li>
+<li>温度越高，概率分布越平滑，隐含更多“暗知识”（Dark Knowledge）。</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-学生模型student-model">3. <strong>学生模型（Student Model）</strong></h4>
+<ul>
+<li><strong>功能</strong>：轻量级模型（如MobileNet、TinyBERT），目标是通过模仿教师模型实现轻量化推理。</li>
+<li><strong>输出</strong>：与教师模型相同维度的概率分布（通过带温度参数 T 的 Softmax）。</li>
+</ul>
+<h4 id="4-损失函数">4. <strong>损失函数</strong></h4>
+<ul>
+<li>
+<p><strong>软目标损失（Soft Target Loss）</strong>：</p>
+<ul>
+<li>
+<p>衡量学生模型与教师模型的概率分布差异。</p>
+</li>
+<li>
+<p>使用<strong>KL散度（Kullback-Leibler Divergence）</strong>：
+$$
+L_{soft} = T^2 \cdot D_{KL}(P_{\text{teacher}} \parallel P_{\text{student}})
+$$</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>硬目标损失（Hard Target Loss）</strong>：</p>
+<ul>
+<li>
+<p>衡量学生模型与真实标签的差异。</p>
+</li>
+<li>
+<p>使用<strong>交叉熵（Cross-Entropy）</strong>：</p>
+<p>$$
+L_{hard} = CE(y_{\text{true}}, P_{\text{student}})
+$$</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>总损失</strong>：
+$$
+L_{\text{total}} = \alpha \cdot L_{soft} + (1-\alpha) \cdot L_{hard}
+$$</p>
+<ul>
+<li><code>α</code> 为软/硬目标损失的权重系数（通常 α &gt; 0.5）。</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-温度参数t">5. <strong>温度参数（T）</strong></h4>
+<ul>
+<li><strong>作用</strong>：
+<ul>
+<li>控制概率分布的平滑程度。T &gt; 1 时，教师模型的输出更关注类别间的关系（如“猫”和“狗”的相似性）。</li>
+<li>训练时学生模型使用相同的 T，但推理时恢复 T=1。</li>
+</ul>
+</li>
+</ul>
+<h4 id="6-训练流程">6. <strong>训练流程</strong></h4>
+<ol>
+<li>固定教师模型参数，仅训练学生模型。</li>
+<li>同时优化软目标损失（模仿教师）和硬目标损失（拟合真实标签）。</li>
+<li>通过反向传播更新学生模型参数。</li>
+</ol>
 <h3 id="最后"><strong>最后</strong></h3>
 <p>第一，模型蒸馏不是DeepSeek首创。讲完我们的粗浅故事，去DeepSeek尝试了解更多信息。DeepSeek告诉说：Geoffrey Hinton 及其合作者早在 2015 年发表的论文 <strong>《<a href="https://arxiv.org/pdf/1503.02531">Distilling the Knowledge in a Neural Network</a>》</strong> 是知识蒸馏（Knowledge Distillation）领域的奠基性工作。找到论文对着小标题快速过了遍，非常系统完整地介绍了知识蒸馏的关键技术，后面大量的实践都是基于这个论文的理论展开。早在2019年在论文《<a href="https://arxiv.org/pdf/1910.01108">DistilBERT, a distilled version of BERT: smaller, faster, cheaper and lighter</a>》中描述了DistilBERT通过知识蒸馏<a href="https://arxiv.org/pdf/1810.04805">BERT</a>达到的效果： we leverage knowledge distillation during the pre-training phase and show that it is possible to reduce the size of a BERT model by <strong>40%,</strong> while retaining <strong>97%</strong> of its language understanding capabilities and being <strong>60%</strong> faster.。当然在更早的时候一个叫昌子、一个叫老七的牛人，已经在自己的领域实践过了。</p>
-<p>第二、虽然你追着问，但是模型蒸馏并不算是DeepSeek成功的最关键因素。之前大家总结的多头潜在注意力机制MLA（Multi - Head Latent Attention）、专家混合模型MoE (Mixture of Experts)等都被证明是非常值得关注的创新技术。这些早在过年时候我们关注DeepSeek-R1之前已经被使用了。大家普遍认为最具里程碑意义的是R1之前的DeepSeek R1 Zero版本，第一个公开验证了只要通过强化学习的激励就能取得成功极大的成功。深度学习一直对数据质量要求非常高，这种基于强化学习的方式，让模型自己学习，而不需要提供答案，比监督微调SFT(Supervised fine-tuning)要高效得多。就像不给你答案，自己练习也能提高成绩。显然对于你、我和老七这个有点困难。我们跟着DeepSeek等慢慢学习，保不齐我们也能修炼到类似功力。</p>
+<p>第二、虽然你追着问，但是模型蒸馏并不算是DeepSeek成功的最关键因素。之前大家总结的多头潜在注意力机制MLA（Multi - Head Latent Attention）、专家混合模型MoE (Mixture of Experts)等都被证明是非常值得关注的创新技术。这些早在过年时候我们关注DeepSeek-R1之前已经被使用了。大家普遍认为最具里程碑意义的是R1之前的R1 Zero版本，第一个公开验证了只要通过强化学习的激励就能取得成功极大的成功（可能OpenAI也发现了这个重大规律，只是捂着没给大家说，这些捂发霉了）。深度学习一直对数据质量要求非常高，这种基于强化学习的方式，让模型自己学习，而不需要提供答案，比监督微调SFT(Supervised fine-tuning)要高效得多。就像不给你答案，自己练习也能提高成绩。显然对于你、我和老七这个有点困难。我们跟着DeepSeek等慢慢学习，保不齐我们也能修炼到类似功力。</p>
+<p>看下，跟咱过年那天说的应该差不多。我多补充了点信息，让内容完整点。自己瞎看看就像，不要给老七看见。</p>
 
     </div>
 <div class="post_comments">
