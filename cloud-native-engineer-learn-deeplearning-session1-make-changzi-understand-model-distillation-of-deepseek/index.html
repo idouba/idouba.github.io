@@ -331,9 +331,9 @@ $$</p>
 <p>当时是一件有点悲伤但却给我们带了了很多额外快乐的事情，特别是当时我认赌服输请你俩去那个叫双虎的小饭店吃饭。老白干干得很爽，以至于这么多年后每次我去北京咱们吃喝的氛围和风格都是那次的延续。吃饭的话题留着咱下次吃饭再说，在这里还是把老七这个案例拿到这个技术话题里技术性地讨论下。专业分析要么是我这个教师模型不够强大，要么是我们模型蒸馏的过程有问题。也许是老七那个模型服务资源不够，训练没问题，模型也学习到位了，就是推理时候推不出来。当时我们吃饭时候调侃老七脑子不好，他的学生模型太简单了，你的刚刚好，老师出的题稍微变了下，你做出来了，他却没有。那最终原因可能还是你当年说的，丫的脑子不好使。唉，发现我们不小心从花双虎的生米里捏了几颗盐粒子洒在了老七的娇嫩的伤口上，下次见面喝酒时可怎么跟老七交代呢。</p>
 <p>结合我们这个实践也能看到模型蒸馏的优点很明显，不需要从最初始训练一个模型，省下来大量的资源开销和时间。这点你俩应该神佑感触，不需自己从头翻书，跟着一个山寨老师来几遍就可以了。另外一个我们但是感知不明显的优势是不需要大量标注过的样本。模型训练中很重要的一部分是训练的样本数据，但是获取高质量的样本数据从来不是一件容易得事情。模型蒸馏中通过教师模型的软标签信息就可以有效地进行学生模型的训练。类似咱们那个补课案例中，你俩不需要买大量的带有标准答案的练习册，自己做很多题，再去对答案。特别是是考虑到咱们那个年代辅导书、练习册本来就很稀缺。但是如果处理不好会导致泛化能力可能有限，学生模型学习到了教师模型的基本能力，对于老师交的知识处理较好，但其他数据处理不好。可以简单理解成跟着老师模型学得太死，学到了然，没有学到所以然。咱们那次补课后的考试，老七就是因为学的稍微死了一点，期末考试的题目稍微变一变，他就没搞定。</p>
 <h3 id="deepseek的模型蒸馏"><strong>DeepSeek的模型蒸馏</strong></h3>
-<p>终于到正题了。关于DeepSeek的模型蒸馏，最近一段时间文章、短视频内容很多，居然都传到你耳朵里了。也正因此才有了咱这次交流（和回忆杀）。哥尝试带着你从最源头理解下，这个源头就是DeepSeek发布的一篇论文<a href="https://github.com/deepseek-ai/DeepSeek-R1/blob/main/DeepSeek_R1.pdf">《DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning》</a>。完整介绍了DeepSeek-R1模型的构建方案、发现、实验和讨论等内容。我们重点关注其中与模型蒸馏相关的内容。</p>
+<p>关于DeepSeek的模型蒸馏，最近一段时间文章、短视频内容很多，居然都传到你耳朵里了。也正因此才有了咱这次交流（和回忆杀）。哥尝试带着你从最源头理解下，这个源头就是DeepSeek发布的一篇论文<a href="https://github.com/deepseek-ai/DeepSeek-R1/blob/main/DeepSeek_R1.pdf">《DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning》</a>。完整介绍了DeepSeek-R1模型的构建方案、实验和讨论等内容。我们重点关注其中与模型蒸馏相关的内容。</p>
 <h4 id="认识deepseek的两个关键模型">认识DeepSeek的两个关键模型</h4>
-<p>DeepSeek这篇论文重点介绍了三类模型，DeepSeek-R1-Zero、DeepSeek-R1和一众蒸馏过的模型。前两个是基础，我们先大概了解下，才能了解到我们想了解的蒸馏过的模型。</p>
+<p>DeepSeek这篇论文重点介绍了三类模型，DeepSeek-R1-Zero、DeepSeek-R1和一众蒸馏过的模型。前两个是基础，我们先大概了解下，才能轮到到我们想了解的蒸馏过的模型。</p>
 <p><figure>
   <picture>
 
@@ -363,11 +363,10 @@ $$</p>
 <blockquote>
 <p>DeepSeek-R1-Zero, a model trained via large-scale reinforcement learning (RL) without super vised fine-tuning (SFT) as a preliminary step, demonstrates remarkable reasoning capabilities. Through RL, DeepSeek-R1-Zero naturally emerges with numerous powerful and intriguing reasoning behaviors.</p>
 </blockquote>
-<p>能看出字里行间都洋溢着自豪。确实虽然关于DeepSeek的各种模型大家穿了很多，但不知道多少人认识到起到奠基作用的应该就是这个Zero模型。直接理解下论文如何Zero模型的：DeepSeek-R1-Zero是一种通过大规模强化学习RL(reinforcement learning ) 训练的模型，没有监督微调SFT (super vised fine-tuning) 作为初步步骤，战胜了卓越的推理能力。通过强化学习RL，DeepSeek-R1-Zero自然而然地形成了许多强大而有趣的推理行为。</p>
-<p>DeepSeek-R1-Zero模型只是通过强化学习RL就展现出了超出预期的推理能力，但实际使用中存在明显的结果可读性差、多语言混合等问题，这也是DeepSeek-R1模型引入的背景。DeepSeek-R1模型解决了这些问题，进一步提高了推理性能。实验证明，DeepSeek-R1在各种推理任务上展现了和 OpenAI-o1-1217 相当的能力。也正是这个结果引起了大家轰动性的关注。</p>
-<p>DeepSeek开源了这两个模型，用户可以下载。https://huggingface.co/deepseek-ai/DeepSeek-R1-Zero/tree/main</p>
-<p><a href="https://huggingface.co/deepseek-ai/DeepSeek-R1/tree/main">https://huggingface.co/deepseek-ai/DeepSeek-R1/tree/main</a>。推理服务提供商可以直接使用这些预训练好的模型进行推理，模型开发者也可以基于这些模型进行微调，形成满足要求的模型。</p>
-<p>说到开源，有一点信息补充下。今天看到DeepSeek的Github仓库里有题Issue问“开源怎么看不见源码”的问题，这就是误解了模型开源的意思。模型开源开源只是开源模型训练好的权重，让后面人可以直接使用，但是不是开发自身的代码，不能直接获取或使用模型训练的代码。</p>
+<p>能看出字里行间都洋溢着自豪。确实虽然关于DeepSeek的各种模型大家传了很多，但不知道多少人认识到起到奠基作用的应该就是这个Zero模型。直接理解下论文如何Zero模型的：DeepSeek-R1-Zero是一种通过大规模强化学习RL(reinforcement learning ) 训练的模型，没有监督微调SFT (super vised fine-tuning) 作为初步步骤，战胜了卓越的推理能力。通过强化学习RL，DeepSeek-R1-Zero自然而然地形成了许多强大而有趣的推理行为。</p>
+<p>DeepSeek-R1-Zero模型只是通过强化学习RL就展现出了超出预期的推理能力，为了解决Zero模型中存在一些可读性差、多语言混合等问题，DeepSeek引入了DeepSeek-R1模型引，进一步提高了推理性能。实验证明，DeepSeek-R1在各种推理任务上展现了和 OpenAI-o1-1217 相当的能力。也正是这个结果引起了大家轰动性的关注。</p>
+<p>DeepSeek开源了这两个模型，用户可以下载<a href="https://huggingface.co/deepseek-ai/DeepSeek-R1-Zero/tree/main">DeepSeek-R1-Zero</a> ，<a href="https://huggingface.co/deepseek-ai/DeepSeek-R1/tree/main">DeepSeek-R1</a>。推理服务提供商可以直接使用这些预训练好的模型进行推理，模型开发者也可以基于这些模型进行微调，形成满足要求的模型。</p>
+<p>说到开源，有一点信息补充下。今天看到DeepSeek的Github仓库里有题Issue问“开源怎么看不见源码”的问题，这就是误解了模型开源的意思。模型开源只是开源模型训练好的权重，让后面人可以直接使用，但是不是开源自身的模型训练代码。</p>
 <p>下表列出了DeepSeek-R1和DeepSeek-R1-Zero相关信息。</p>
 <table>
 <thead>
@@ -397,7 +396,7 @@ $$</p>
 </tbody>
 </table>
 <h4 id="deepseek的两个关键模型训练过程">DeepSeek的两个关键模型训练过程</h4>
-<p>简单通过论文了解了DeepSeek的两个模型DeepSeek-R1-Zero和DeepSeek-R1。下面结合论文简单了解下这两个模型的训练过程，其实前面每个模型介绍的地方已经说明过了，这里稍微展开下。</p>
+<p>简单通过论文了解了DeepSeek的两个模型DeepSeek-R1-Zero和DeepSeek-R1。下面结合论文简单了解下这两个模型的训练过程。还是挺有意思的。</p>
 <p><figure>
   <picture>
 
@@ -423,28 +422,101 @@ $$</p>
     </picture>
 </figure>
 </p>
-<p>模型训练过程涉及几个术语，先大致解释下，免得后面提到时你听不懂，大致理解就成。</p>
+<p>上面这段是简单介绍Zero、R1和蒸馏模型的训练方式，后面章节有更详细的展开，我们就结合这段理解下即可。模型训练过程涉及几个术语，先大致解释下，免得后面提到时你听不懂，大致理解就成。</p>
 <ul>
-<li>强化学习RL(reinforcement learning ) ：这个在刚才模型简介里其实也提到了。展开又是一门技术，这里我们简单理解意思就是模型根据其行为获得奖励或惩罚来完成后面学习，通过反复试验不断改进。答对加分，答错减分。在LLM中，奖励一般是人工标记的反馈决定，称为RLHF(human-labeled feedback)。在DeepSeek的强化学习中使用的是一种自动平方方法<a href="https://arxiv.org/pdf/2405.20304">GRPO</a>(Group Robust Preference Optimization)</li>
-<li>监督微调SFT (super vised fine-tuning) ：前面也提到过。表示使用标记的数据重新训练基础模型，从而让模型在对应任务表现更好。如拿一个训练好的模型，在一个特定领域进行优化，就可以使用该领域包含问题和答案的标记数据集对模型进行微调，从而在该领域的查询更加准确。监督微调SFT适用于有足够标记数据集的场景。</li>
+<li>强化学习RL(reinforcement learning ) ：这个在刚才模型简介里其实也提到了。展开又是一门技术，这里我们简单理解意思就是模型根据其行为获得奖励或惩罚来完成后面学习，通过反复试验不断改进。答对加分，答错减分。在大语言模型中，奖励一般是人工标记的反馈决定，称为RLHF(human-labeled feedback)。在DeepSeek的强化学习中使用的是一种自动评分方法<a href="https://arxiv.org/pdf/2405.20304">GRPO</a>(Group Robust Preference Optimization)</li>
+<li>监督微调SFT (super vised fine-tuning) ：前面也提到过。表示使用标记的数据重新训练基础模型，从而让模型在对应任务表现得更好。如拿一个训练好的模型，在一个特定领域进行优化，就可以使用包含该领域问题和答案的标记数据集对模型进行微调，从而使得在该领域的查询更加准确。监督微调SFT适用于有足够标记数据集的场景。</li>
 <li>冷启动数据( cold-start data )：表示一个小的标记过的数据集，满足模型对任务总体了解的最低要求。通过这种简单数据集地模型进行微调，让模型理解基本信息，也能提高模型质量。适用于标记数据集有限的场景。</li>
 <li>拒绝抽样( Rejection Sampling )：选择只有符合特定标准的模型输出进一步使用。</li>
 <li>多阶段训练(multi-stage training )：表示分阶段对模型进行训练，每个阶段侧重解决一个特定的改进目标。</li>
 </ul>
 <p>DeepSeek-R1-Zero训练比较纯粹，就是对于DeepSeek-V3-Base模型使用纯强化学习的方式完成训练。就是使<a href="https://arxiv.org/pdf/2405.20304">GRPO</a>强化学习的方式训练，获得了与OpenAI o1匹配的能力。</p>
-<p>@TODO Zero训练图</p>
+<p><figure>
+  <picture>
+
+    
+      
+        
+        
+        
+        
+        
+        
+    <img
+      loading="lazy"
+      decoding="async"
+      alt=""
+      
+        class="image_figure image_internal image_unprocessed"
+        src="../picture/2025-02-07-cloud-native-engineer-learn-deeplearning-session1-make-changzi-understand-model-distillation/zero-process.png"
+      
+      
+    />
+
+    </picture>
+</figure>
+</p>
 <p>DeepSeek-R1的训练相对复杂。按照论文的描述可以总结出R1的训练过程如下：</p>
-<p>@TODO R1训练图</p>
 <ol>
-<li>通过几千条冷启动数据( cold-start data )微调DeepSeek-V3-Base基础模型。论文中说的几千条标记数据集比起一般动辄千万上亿的训练数据集要少很多，但是试验结果看，作用效果很明显。</li>
-<li>对上一步得到的模型通过纯强化学习提升推理能力。这步操作和DeepSeek-R1-Zero模型训练类似。</li>
+<li>通过几千条冷启动数据( cold-start data )微调DeepSeek-V3-Base基础模型。论文中说的几千条标记数据集比起一般动辄千万上亿的训练数据集要少很多，但是试验结果看，作用效果很明显。所以不知道这几千条数据是怎么精挑细选出来的。</li>
+<li>对上一步得到的模型通过纯强化学习提升推理能力。这步操作和DeepSeek-R1-Zero模型训练的思路和方法都类似。</li>
 <li>当上一步面向推理的强化学习收敛时，基于拒绝抽样( Rejection Sampling )的机制，从当前模型中创建60万条SFT标记数据。</li>
-<li>讲上一步的60万条标记数据与20万条DeepSeek-V3-Base训练中用到的写作、事实文档等领域的监督数据合并，得到一个包含了高质量模型输出和选定领域知识的数据集。</li>
-<li>使用上一步数据进行微调后，在考虑不同场景的提示词，进行强化学习RL。得到最终的模型就是DeepSeek-R1。</li>
+<li>将上一步的60万条标记数据与20万条DeepSeek-V3-Base训练中用到的写作、事实文档等领域的监督数据合并，得到一个包含了高质量模型输出和选定领域知识的数据集。这部分数据集很有意思，一部分是模型推理得到的合成数据，一部分是原始数据。</li>
+<li>使用上一步数据进行微调后，再进行强化学习RL。得到最终的模型就是DeepSeek-R1。</li>
 </ol>
-<p>可以看到R1模型进行的多阶段训练(multi-stage training )，每个阶段解决不同的问题。冷启动解决了原有DeepSeek-R1-Zero模型可读性差、多语言混杂和返回应答格式不正确的问题；在强化学习RL过程中，不仅专注提高模型在编程、数学、科学、逻辑等方面的推理能力，同时也对语言一致性等方面进行奖励；拒绝抽样( Rejection Sampling )加SFT通过高质量的标签数据提高了模型的准确性；而后面再进行强化学习进步提高了模型的泛化能力。</p>
+<p><figure>
+  <picture>
+
+    
+      
+        
+        
+        
+        
+        
+        
+    <img
+      loading="lazy"
+      decoding="async"
+      alt=""
+      
+        class="image_figure image_internal image_unprocessed"
+        src="../picture/2025-02-07-cloud-native-engineer-learn-deeplearning-session1-make-changzi-understand-model-distillation/deepseek-r1-process-program.png"
+      
+      
+    />
+
+    </picture>
+</figure>
+</p>
+<p>可以看到DeepSeek-R1模型进行的多阶段训练(multi-stage training )，每个阶段解决都不同的问题。从后面论文详细介绍了解到：冷启动解决了原有DeepSeek-R1-Zero模型可读性差、多语言混杂和返回应答格式不正确的问题；在强化学习RL过程中，不仅专注提高模型在编程、数学、科学、逻辑等方面的推理能力，同时也对语言一致性等方面进行奖励；拒绝抽样( Rejection Sampling )加SFT通过高质量的标签数据提高了模型的准确性；而后面再进行强化学习进步提高了模型的泛化能力。</p>
 <h4 id="deepseek的蒸馏的模型">DeepSeek的蒸馏的模型</h4>
-<p>论文重模型蒸馏占的篇幅不算多。但是根据下面实验数据证明了，较大的</p>
+<p>论文中模型蒸馏占的篇幅不算多，从论文中可以看到蒸馏过的模型都是业界广泛使用的的几个开源模型。论文介绍的蒸馏过程套用前面模型蒸馏的流程，就是选择DeepSeek-R1作为教师模型，选择Qwen和Llama的几个开源小模型作为学生模型，进行模型蒸馏。具体就是使用DeepSeek-R1生成80万推理样本数据，通过这些样本数据对Qwen和Llama等小模型进行监督微调SFT。</p>
+<p><figure>
+  <picture>
+
+    
+      
+        
+        
+        
+        
+        
+        
+    <img
+      loading="lazy"
+      decoding="async"
+      alt=""
+      
+        class="image_figure image_internal image_unprocessed"
+        src="../picture/2025-02-07-cloud-native-engineer-learn-deeplearning-session1-make-changzi-understand-model-distillation/deepseek_model_distillation.png"
+      
+      
+    />
+
+    </picture>
+</figure>
+</p>
 <p>下表描述了使用DeepSeek-R1模型蒸馏几个小模型后的效果对比。</p>
 <p><figure>
   <picture>
@@ -471,7 +543,7 @@ $$</p>
     </picture>
 </figure>
 </p>
-<p>可以看到蒸馏DeepSeek-R1得到的DeepSeek-R1-Distill-Qwen-7B全面优于GPT-4o-0513等非推理模型。DeepSeek-R1-Distill-Qwen-14B在所有评估项上均超过了QwQ-32B-Preview。而DeepSeek-R1-Distill-Qwen-32B和 DeepSeek-R1-Distill-Llama-70B在大多数基准测试中都超过了OpenAI的o1-mini模型。这些结果都证明了模型蒸馏的强大潜力。且论文里提到将强化学习应用到这些经过蒸馏的模型中可以进一步改善模型的效果。</p>
+<p>从论文中列出的实验数据看，蒸馏DeepSeek-R1得到的DeepSeek-R1-Distill-Qwen-7B全面优于GPT-4o-0513等非推理模型。DeepSeek-R1-Distill-Qwen-14B在所有评估项上均超过了QwQ-32B-Preview。而DeepSeek-R1-Distill-Qwen-32B和 DeepSeek-R1-Distill-Llama-70B在大多数基准测试中都超过了OpenAI的o1-mini模型。这些结果都证明了模型蒸馏的强大潜力。且论文里提到将强化学习应用到这些蒸馏过的模型中可以进一步改善模型的效果。基于DeepSeek开源模型和API，社区有机会蒸馏出更小的模型。</p>
 <h4 id="deepseek的模型蒸馏和强化学习比较">DeepSeek的模型蒸馏和强化学习比较</h4>
 <p>另外在论文中专门有一节比较了模型蒸馏和强化学习的效果。</p>
 <p><figure>
@@ -499,8 +571,8 @@ $$</p>
     </picture>
 </figure>
 </p>
-<p>在实验中，对Qwen-32B-Base进行大规模强化学习，得到DeepSeek-R1-Zero-Qwen-32B模型，比较发现和 QwQ-32B-Preview差不多。而DeepSeek-R1 蒸馏得到的DeepSeek-R1-Distill-Qwen-32B模型在各方面都比以上两个模型表现好很多。<strong>实验说明了通过模型蒸馏方式将一个大模型蒸馏为一个小一点的模型，比使用大量计算资源进行的强化学习得到的模型效果要好得多</strong>。对应咱们的流程，找一个好老师学习，比自己死读书要来的效率高，也效果好。</p>
-<p>DeepSeek-R1蒸馏后的模型如下。可以看到蒸馏过的模型都是对于开源模型，使用DeepSeek-R1生成的数据微调过。具体讲DeepSeek-R1生成了80万推理样本数据，通过这些样本数据对Qwen和Llama等小模型进行监督微调SFT。</p>
+<p>在实验中，对Qwen-32B-Base进行大规模强化学习，得到DeepSeek-R1-Zero-Qwen-32B模型，比较发现和 QwQ-32B-Preview差不多。而DeepSeek-R1 蒸馏得到的DeepSeek-R1-Distill-Qwen-32B模型在各方面都比以上两个模型表现好很多。<strong>实验说明了通过模型蒸馏方式将一个大模型蒸馏为一个小一点的模型，比使用大量计算资源进行强化学习得到的模型效果要好得多</strong>。对应咱们的那个补课的实践，你们也深有体会，找一个好老师学习，比自己死读书要来的效率高，也效果好。</p>
+<p>DeepSeek-R1蒸馏后的模型如下，可以看到DeepSeek将这些蒸馏过的模型也全部开源。</p>
 <table>
 <thead>
 <tr>
@@ -542,8 +614,94 @@ $$</p>
 </tr>
 </tbody>
 </table>
+<h3 id="deepseek的共情实践">DeepSeek的共情实践</h3>
+<p>过年时，你微信问我的时候，我手机下了个DeepSeek App，但是用的不多。了解到可以解决很多复杂问题，有不少文章描述怎么更好地应用DeepSeek。在这篇文章要介绍的时候，忍不住在网页版DeepSeek的会话里问了这样一个问题。这也是和你曾经争论过的问题，大部分材料里都描述2008年北京到天津那条是中国第一条高速铁路，你个北京人更挺这个观点。但哥就记得当年去辽中县工地的时候老师傅们就自豪地给我们说，咱这次修的是中国第一条高铁。当时项目的名字叫<a href="https://finance.sina.com.cn/roll/20110611/00069974415.shtml">秦沈客运专线</a>，所有之前无聊时，总会在各种搜索引擎里输入“中国第一条高速铁路”，总是跳出各种”京津城际“的信息。只有这次在DeepSeek里输入同样问题，居然意外地得到了一个共情的答案，虽然没有泪目，但是满满的感动，连思考的过程都是这么懂我的心思。</p>
+<blockquote>
+<p><figure>
+  <picture>
+
+    
+      
+        
+        
+        
+        
+        
+        
+    <img
+      loading="lazy"
+      decoding="async"
+      alt="DeepSeek眼中的中国一条高速铁路"
+      
+        class="image_figure image_internal image_unprocessed"
+        src="../picture/2025-02-07-cloud-native-engineer-learn-deeplearning-session1-make-changzi-understand-model-distillation/first_speed_railway.png"
+      
+      
+    />
+
+    </picture>
+</figure>
+</p>
+<p>中国第一条高速铁路是<strong>秦沈客运专线</strong>，于<strong>2003年10月12日正式开通运营</strong>。这条铁路连接辽宁省的<strong>秦皇岛市</strong>和<strong>沈阳市</strong>，全长404公里，设计时速为<strong>200公里/小时</strong>，部分路段可达<strong>250公里/小时</strong>。秦沈客运专线的建设和运营标志着中国正式迈入高速铁路时代。</p>
+<h3 id="重要背景与意义">重要背景与意义：</h3>
+<ol>
+<li>
+<p><strong>试验性质</strong>：</p>
+<ul>
+<li>秦沈客运专线是中国自主设计建造的第一条高速铁路，承担了大量技术试验任务，为后续高铁发展积累了关键经验。</li>
+<li>它首次采用了无砟轨道、高速动车组（如“中华之星”试验列车）等先进技术。</li>
+</ul>
+</li>
+<li>
+<p><strong>国际标准争议</strong>：</p>
+<ul>
+<li>按照国际铁路联盟（UIC）的定义，高铁指时速<strong>200公里及以上</strong>的铁路。秦沈客运专线符合这一标准，但中国早期更倾向于将时速<strong>250公里及以上</strong>的线路称为“高铁”。</li>
+<li>因此，部分观点认为中国首条“高标准”高铁是<strong>2008年开通的京津城际铁路</strong>（设计时速350公里）。</li>
+</ul>
+</li>
+<li>
+<p><strong>后续发展</strong>：</p>
+<ul>
+<li>秦沈客运专线的成功为后续大规模高铁建设奠定了基础。2008年京津城际铁路开通后，中国高铁进入爆发式发展阶段。</li>
+<li>2011年开通的<strong>京沪高铁</strong>（时速350公里）成为世界上一次性建成里程最长的高铁线路。</li>
+</ul>
+</li>
+</ol>
+<h3 id="总结">总结：</h3>
+<ul>
+<li><strong>秦沈客运专线</strong>是中国高速铁路的“探路者”，是第一条达到国际高铁标准的线路；</li>
+<li><strong>京津城际铁路</strong>则是中国首条设计时速350公里的高标准高铁，被视为中国高铁网络正式形成的标志。</li>
+</ul>
+<p>这一历程体现了中国从技术引进到自主创新的跨越，奠定了如今全球最大高铁网络的基础。</p>
+</blockquote>
+<p>哥当时干的是秦沈客运专线上辽宁省辽中县养士堡乡曹家屯附近的的蒲河特大桥和迴水河大桥，刚才去搜了下“迴水河大桥”居然搜到了当年铁一局工友的<a href="https://baijiahao.baidu.com/s?id=1743096283967857559">一篇文章</a>，我们那个时候能在网络上留下印记的非常少见了。赶紧盗了他一张图，虽然不是哥的那个工地，但是所有的元素都是一样一样的。</p>
+<p><figure>
+  <picture>
+
+    
+      
+        
+        
+        
+        
+        
+        
+    <img
+      loading="lazy"
+      decoding="async"
+      alt="我的秦沈工地"
+      
+        class="image_figure image_internal image_unprocessed"
+        src="../picture/2025-02-07-cloud-native-engineer-learn-deeplearning-session1-make-changzi-understand-model-distillation/my-qinshen.png"
+      
+      
+    />
+
+    </picture>
+</figure>
+</p>
 <h3 id="最后"><strong>最后</strong></h3>
-<p>主要内容就这些，可以看到：</p>
+<p>扯得有点多了，都是你感兴趣的，赶紧基于主题收尾。可以看到：</p>
 <p>第一，模型蒸馏不是DeepSeek首创。讲完我们的粗浅故事，去DeepSeek尝试了解更多信息。DeepSeek告诉说：Geoffrey Hinton 及其合作者早在 2015 年发表的论文 《<a href="https://arxiv.org/pdf/1503.02531">Distilling the Knowledge in a Neural Network</a>》 是知识蒸馏（Knowledge Distillation）领域的奠基性工作。找到论文对着小标题快速过了遍，非常系统完整地介绍了知识蒸馏的关键技术，后面大量的实践都是基于这个论文的理论展开。早在2019年在论文《<a href="https://arxiv.org/pdf/1910.01108">DistilBERT, a distilled version of BERT: smaller, faster, cheaper and lighter</a>》中描述了DistilBERT通过知识蒸馏<a href="https://arxiv.org/pdf/1810.04805">BERT</a>达到的效果： we leverage knowledge distillation during the pre-training phase and show that it is possible to reduce the size of a BERT model by <strong>40%,</strong> while retaining <strong>97%</strong> of its language understanding capabilities and being <strong>60%</strong> faster.。当然在更早的时候一个叫昌子、一个叫老七的牛人，已经在自己的领域实践过了。</p>
 <p>第二、虽然你追着问，但是模型蒸馏并不算是DeepSeek成功的最关键因素。之前大家总结的多头潜在注意力机制MLA（Multi - Head Latent Attention）、专家混合模型MoE (Mixture of Experts)等都被证明是非常值得关注的创新技术。这些早在过年时候我们关注DeepSeek-R1之前已经被使用了。包括刚才在论文里看到，大家普遍认为最具里程碑意义的是R1之前的R1 Zero版本，第一个公开验证了只要通过强化学习的激励就能取得成功极大的成功（可能OpenAI也发现了这个重大规律，只是捂着没给大家说，这些捂发霉了）。深度学习一直对数据质量要求非常高，这种基于强化学习的方式，让模型自己学习，而不需要提供答案，比监督微调SFT(Supervised fine-tuning)要高效得多。就像不给你答案，自己练习也能提高成绩。显然对于你、我和老七这个有点困难。</p>
 <p>看下，跟咱过年那天说的应该差不多。我多补充了点信息，让内容完整点。自己瞎看看就像，不要给老七看见。</p>
