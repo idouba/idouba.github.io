@@ -182,6 +182,24 @@
   </span>
   </div>
 
+      <div class="post_toc">
+        <h2>Overview</h2>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#背景"><strong>背景</strong></a></li>
+        <li><a href="#模型蒸馏概念初体验"><strong>模型蒸馏概念初体验</strong></a></li>
+        <li><a href="#模型蒸馏流程"><strong>模型蒸馏流程</strong></a></li>
+        <li><a href="#deepseek的模型蒸馏"><strong>DeepSeek的模型蒸馏</strong></a></li>
+        <li><a href="#deepseek的共情实践"><strong>DeepSeek的共情实践</strong></a></li>
+        <li><a href="#最后"><strong>最后</strong></a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+      </div>
+    
     <div class="post_body"><hr>
 <h3 id="背景"><strong>背景</strong></h3>
 <p>一篇技术入门文章，尝试向非领域技术人员介绍DeepSeek的模型蒸馏。先求易懂，再求准确。起因是昨天，正月初七，<a href="https://idouba.com/meet-changzi-in-hangzhou/">昌子</a>突然微信问我“DeepSeek咋用”。回复“你不好好焊钢轨，打听这玩意儿干啥”。小哥说我就想闹明白我们中国这个技术是不是像有些短视频里说的抄了老美的。不用问，这小哥是过年在家闲的刷到OpenAI可能起诉DeepSeek的新闻了。虽然给他说Altman在咱们大年初六好已经承认不打算起诉了，但是说服昌子小哥还是费了不少口舌。为了说明没有抄，模型蒸馏的话题就绕不过。在沟通中临时起意提到小哥咱们很多年前的一段趣事，居然说明白了。觉得很有意思，就顺手归档下。</p>
@@ -341,7 +359,7 @@ $$</p>
 <p>结合我们这个实践也能看到模型蒸馏的优点很明显，不需要从最初始训练一个模型，省下来大量的资源开销和时间。这点你俩应该神佑感触，不需自己从头翻书，跟着一个山寨老师来几遍就可以了。另外一个我们但是感知不明显的优势是不需要大量标注过的样本。模型训练中很重要的一部分是训练的样本数据，但是获取高质量的样本数据从来不是一件容易得事情。模型蒸馏中通过教师模型的软标签信息就可以有效地进行学生模型的训练。类似咱们那个补课案例中，你俩不需要买大量的带有标准答案的练习册，自己做很多题，再去对答案。特别是是考虑到咱们那个年代辅导书、练习册本来就很稀缺。但是如果处理不好会导致泛化能力可能有限，学生模型学习到了教师模型的基本能力，对于老师交的知识处理较好，但其他数据处理不好。可以简单理解成跟着老师模型学得太死，学到了然，没有学到所以然。咱们那次补课后的考试，老七就是因为学的稍微死了一点，期末考试的题目稍微变一变，他就没搞定。</p>
 <h3 id="deepseek的模型蒸馏"><strong>DeepSeek的模型蒸馏</strong></h3>
 <p>关于DeepSeek的模型蒸馏，最近一段时间文章、短视频内容很多，居然都传到你耳朵里了。也正因此才有了咱这次交流（和回忆杀）。哥尝试带着你从最源头理解下，这个源头就是DeepSeek发布的一篇论文<a href="https://github.com/deepseek-ai/DeepSeek-R1/blob/main/DeepSeek_R1.pdf">《DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning》</a>。完整介绍了DeepSeek-R1模型的构建方案、实验和讨论等内容。我们重点关注其中与模型蒸馏相关的内容。</p>
-<h4 id="认识deepseek的两个关键模型">认识DeepSeek的两个关键模型</h4>
+<h4 id="认识deepseek的两个关键模型"><strong>认识DeepSeek的两个关键模型</strong></h4>
 <p>DeepSeek这篇论文重点介绍了三类模型，DeepSeek-R1-Zero、DeepSeek-R1和一众蒸馏过的模型。前两个是基础，我们先大概了解下，才能轮到到我们想了解的蒸馏过的模型。</p>
 <p><figure>
   <picture>
@@ -404,7 +422,7 @@ $$</p>
 </tr>
 </tbody>
 </table>
-<h4 id="deepseek的两个关键模型训练过程">DeepSeek的两个关键模型训练过程</h4>
+<h4 id="deepseek的两个关键模型训练过程"><strong>DeepSeek的两个关键模型训练过程</strong></h4>
 <p>简单通过论文了解了DeepSeek的两个模型DeepSeek-R1-Zero和DeepSeek-R1。下面结合论文简单了解下这两个模型的训练过程。还是挺有意思的。</p>
 <p><figure>
   <picture>
@@ -499,7 +517,7 @@ $$</p>
 </figure>
 </p>
 <p>可以看到DeepSeek-R1模型进行的多阶段训练(multi-stage training )，每个阶段解决都不同的问题。从后面论文详细介绍了解到：冷启动解决了原有DeepSeek-R1-Zero模型可读性差、多语言混杂和返回应答格式不正确的问题；在强化学习RL过程中，不仅专注提高模型在编程、数学、科学、逻辑等方面的推理能力，同时也对语言一致性等方面进行奖励；拒绝抽样( Rejection Sampling )加SFT通过高质量的标签数据提高了模型的准确性；而后面再进行强化学习进步提高了模型的泛化能力。</p>
-<h4 id="deepseek的蒸馏的模型">DeepSeek的蒸馏的模型</h4>
+<h4 id="deepseek的蒸馏的模型"><strong>DeepSeek的蒸馏的模型</strong></h4>
 <p>论文中模型蒸馏占的篇幅不算多，从论文中可以看到蒸馏过的模型都是业界广泛使用的的几个开源模型。论文介绍的蒸馏过程套用前面模型蒸馏的流程，就是选择DeepSeek-R1作为教师模型，选择Qwen和Llama的几个开源小模型作为学生模型，进行模型蒸馏。具体就是使用DeepSeek-R1生成80万推理样本数据，通过这些样本数据对Qwen和Llama等小模型进行监督微调SFT。</p>
 <p><figure>
   <picture>
@@ -553,7 +571,7 @@ $$</p>
 </figure>
 </p>
 <p>从论文中列出的实验数据看，蒸馏DeepSeek-R1得到的DeepSeek-R1-Distill-Qwen-7B全面优于GPT-4o-0513等非推理模型。DeepSeek-R1-Distill-Qwen-14B在所有评估项上均超过了QwQ-32B-Preview。而DeepSeek-R1-Distill-Qwen-32B和 DeepSeek-R1-Distill-Llama-70B在大多数基准测试中都超过了OpenAI的o1-mini模型。这些结果都证明了模型蒸馏的强大潜力。且论文里提到将强化学习应用到这些蒸馏过的模型中可以进一步改善模型的效果。基于DeepSeek开源模型和API，社区有机会蒸馏出更小的模型。</p>
-<h4 id="deepseek的模型蒸馏和强化学习比较">DeepSeek的模型蒸馏和强化学习比较</h4>
+<h4 id="deepseek的模型蒸馏和强化学习比较"><strong>DeepSeek的模型蒸馏和强化学习比较</strong></h4>
 <p>另外在论文中专门有一节比较了模型蒸馏和强化学习的效果。</p>
 <p><figure>
   <picture>
@@ -623,7 +641,7 @@ $$</p>
 </tr>
 </tbody>
 </table>
-<h3 id="deepseek的共情实践">DeepSeek的共情实践</h3>
+<h3 id="deepseek的共情实践"><strong>DeepSeek的共情实践</strong></h3>
 <p>过年时，你微信问我的时候，我手机下了个DeepSeek App，但是用的不多。了解到可以解决很多复杂问题，有不少文章描述怎么更好地应用DeepSeek。在这篇文章要介绍的时候，忍不住在网页版DeepSeek的会话里问了这样一个问题。这也是和你曾经争论过的问题，大部分材料里都描述2008年北京到天津那条是中国第一条高速铁路，你个北京人更挺这个观点。但哥就记得当年去辽中县工地的时候老师傅们就自豪地给我们说，咱这次修的是中国第一条高铁。当时项目的名字叫<a href="https://finance.sina.com.cn/roll/20110611/00069974415.shtml">秦沈客运专线</a>，所有之前无聊时，总会在各种搜索引擎里输入“中国第一条高速铁路”，总是跳出各种”京津城际“的信息。只有这次在DeepSeek里输入同样问题，居然意外地得到了一个共情的答案，虽然没有泪目，但是满满的感动，连思考的过程都是这么懂我的心思。</p>
 <blockquote>
 <p><figure>
@@ -652,7 +670,7 @@ $$</p>
 </figure>
 </p>
 <p>中国第一条高速铁路是<strong>秦沈客运专线</strong>，于<strong>2003年10月12日正式开通运营</strong>。这条铁路连接辽宁省的<strong>秦皇岛市</strong>和<strong>沈阳市</strong>，全长404公里，设计时速为<strong>200公里/小时</strong>，部分路段可达<strong>250公里/小时</strong>。秦沈客运专线的建设和运营标志着中国正式迈入高速铁路时代。</p>
-<h3 id="重要背景与意义">重要背景与意义：</h3>
+<h4 id="重要背景与意义">重要背景与意义：</h4>
 <ol>
 <li>
 <p><strong>试验性质</strong>：</p>
@@ -676,7 +694,7 @@ $$</p>
 </ul>
 </li>
 </ol>
-<h3 id="总结">总结：</h3>
+<h4 id="总结">总结：</h4>
 <ul>
 <li><strong>秦沈客运专线</strong>是中国高速铁路的“探路者”，是第一条达到国际高铁标准的线路；</li>
 <li><strong>京津城际铁路</strong>则是中国首条设计时速350公里的高标准高铁，被视为中国高铁网络正式形成的标志。</li>
