@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>案例 on 爱豆吧！</title>
+    <link>https://idouba.com/tags/%E6%A1%88%E4%BE%8B/</link>
+    <description>Recent content in 案例 on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Thu, 28 Apr 2022 15:32:08 +0000</lastBuildDate><atom:link href="https://idouba.com/tags/%E6%A1%88%E4%BE%8B/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>IstioCon2022：Istio 多集群流量管理加速汽车公司新业务开发、部署和运营</title>
+      <link>https://idouba.com/istiocon2022-istio-multi-cluster-traffic-management-speed-up-automobile-company-new-business-dev-deploy-and-ops/</link>
+      <pubDate>Thu, 28 Apr 2022 15:32:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/istiocon2022-istio-multi-cluster-traffic-management-speed-up-automobile-company-new-business-dev-deploy-and-ops/</guid>
+      <description>
+        
+          
+            记录在2022年4月28日在IstioCon上发表的技术演讲《Istio multi-cluster traffic management speed up automobile company new business dev,deploy and ops》，和Smart的研发总监Kexing一起介绍了Istio多集群在Smart的实践。希望为Smart新车的大卖贡献了一点力量。
+议题： smart, a brand to fully transform from fuel vehicles to electric vehicles, is committed to exploring the best solutions for future urban transportation. On its IT infrastructure, cloud-native technologies such as Kubernetes and service mesh help simplify the technology stack, accelerate business innovation, and greatly improve the efficiency of new business development, deployment, operation and maintenance.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>KubeCon2021：服务网格替代 Hystrix 提升在线视频服务韧性的生产实践</title>
+      <link>https://idouba.com/kubecon2021-online-video-upgrades-resilience-from-sc-circuit-breaker-to-service-mesh-kubecon2021/</link>
+      <pubDate>Sun, 12 Dec 2021 15:50:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/kubecon2021-online-video-upgrades-resilience-from-sc-circuit-breaker-to-service-mesh-kubecon2021/</guid>
+      <description>
+        
+          
+            记录在KubeCon2021上发表的技术演讲《Online Video upgrades resilience from SC Circuit Breaker to Service Mesh》，和世宇做的一个技术实践分享，总结了下一起把网格在人人视频中落地的部分经验。。
+议题： 作为中国领先的在线视频共享平台，人人视频业务的快速发展给其 IT 基础设施带来了巨大挑战。日益增长的复杂性、容量和韧性要求给当前基于 Spring Cloud 熔断器的微服务带来了新的问题。
+在KubeCon2021上，华为云应用服务网格架构师张超盟和人人视频技术主管徐世宇介绍了大规模生产环境中的服务网格韧性实践，包括不健康实例的透明自动隔离、故障自动恢复和自我修复、连接池管理、重试、限流、超时和分布式跟踪等。通过分析熔断器模式和比较 Spring Cloud 熔断器与服务网格在各自生产实践中不同的实现方式，结果表明优化不只是改善了系统的可靠性和可用性，还使得开发和操作工作更简单便捷。
+As one leading Online Video sharing platform in China, RR&#39;s rapid business development introduce great challenge on its IT infrastructure. The increasing complexity, capacity and resilience requirement brings new problems to current Spring Cloud circuit breaker based micro services.
+In this presentation, Chaomeng and Shiyu will focus on service mesh resilience practice in large scale production environment, including transparent auto-isolation of the unhealthy instance, auto-recovery and self-healing, connection pool management, retry, fine gained rate limit and distributed tracing, latency metrics.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>ServiceMeshCon2021：Kubernetes 和 Service Mesh 升级汽车公司的 IT 基础设施</title>
+      <link>https://idouba.com/servicemeshcon2021-kubernetes-and-service-mesh-upgrade-automobile-company%E2%80%99s-it-infrastructure/</link>
+      <pubDate>Tue, 04 May 2021 12:40:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/servicemeshcon2021-kubernetes-and-service-mesh-upgrade-automobile-company%E2%80%99s-it-infrastructure/</guid>
+      <description>
+        
+          
+            记录在2021年5月4日在欧洲ServiceMeshCon上发表的技术演讲《Kubernetes and Service Mesh Upgrade Automobile Company’s IT Infrastructure》，分享了一个服务网格在一个客户的实践案例。
+议题： Rapid business development brings a great challenge to automobile manufacturing company’s IT platforms. In this presentation, Chaomeng will share a practice of upgrading the traditional IT built microservice platform to cloud native infrastructure. That is gradually transforming the self-developed inner DNS plus ELB for service discovery and load balance, per VM nginx for inbound traffic management, metric, and access log, to Kubernetes and service mesh.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>KubeCon2020：Kubernetes和服务网格在冠状病毒期间助力在线协作</title>
+      <link>https://idouba.com/kubeco2020-kubernetes-and-service-mesh-helps-online-collaboration-during-coronavirus-time/</link>
+      <pubDate>Sat, 01 Aug 2020 16:20:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/kubeco2020-kubernetes-and-service-mesh-helps-online-collaboration-during-coronavirus-time/</guid>
+      <description>
+        
+          
+            记录在2020年8月1日在KubeCon上发表的技术演讲《Kubernetes &amp;amp; Service Mesh Helps Online Collaboration During Coronavirus Time》，和来自云会议的同事谢飞一起分享了2019年新冠疫情期间Istio在云会议的应用。
+议题： During the period of coronavirus, lots of people required stay at home or different office, use Welink, an online collaboration platform, work together. The exponentially increased online users bring great performance and capacity challenges. In this Session, Chaomeng and Fei will share their technical experience of Kubernetes&amp;amp;Istio in Welink supporting large traffic from large amount of users’ meeting, mailing and other online collaborations.
+          
+          
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>

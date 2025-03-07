@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>语言 on 爱豆吧！</title>
+    <link>https://idouba.com/tags/%E8%AF%AD%E8%A8%80/</link>
+    <description>Recent content in 语言 on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Tue, 01 Dec 2015 15:20:55 +0000</lastBuildDate><atom:link href="https://idouba.com/tags/%E8%AF%AD%E8%A8%80/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Sort源码实现比较Go&amp;Java语言风格(3)</title>
+      <link>https://idouba.com/compare-go-and-java-style-by-sort-implement-3/</link>
+      <pubDate>Tue, 01 Dec 2015 15:20:55 +0000</pubDate>
+      
+      <guid>https://idouba.com/compare-go-and-java-style-by-sort-implement-3/</guid>
+      <description>
+        
+          
+            前面两部分分别描述了Go和java两种语言对sort的使用方式和源码实现。作为go初学者，最想做的是通过例子和源码来对新的语言有个理解。这部分就结合自己的理解整理下，可以看到，是非常主观。
+4 语言语法比较
+可以看到，两种语言的思路基本上是一样的，用户必须定义比较规则。在排序过程中都要考察集合长度，使用用户定义的比较规则，然后调整元素位置来达到排序的效果，对应go的interface要求的三个方法。但是还是有挺多不同。
+首先从使用方式上看，go的规则（通过方法来体现）定义在集合上，并且定义了三个方法，分别获取集合的状况，元素比较的规则，元素位置操作的方法；而java的规则定义在元素上，用户只用一个元素比较的规则compareTo就够了。看起来java要求用户定义少，因为其封装的多，这也是其一贯的风格。对用户要似乎更友好一点。比较而言go更直接，简单。留给程序员能干预的更多一点。但还是觉得Len和Swap方法留给用户定义的意义不是很大，就像源码中自带的好几个例子，Len除了返回集合长度， Swap(i,j)除了{ a[i], a[j] = a[j], a[i] }，真想不好我们还能赋予它其他的使用方法。
+从package的组织，能看到Go中更面向功能（或者说行为），功能更简单直接，而java更是面向对象组织的，封装更多。看到go sort的package下面的内容如图，而java一个Collections下面这么多功能方法，而看所在的的uitl包下上内容（只能截一屏还有一大半显示不全）。
+看到了java的uitl包，下面除了Collections和Arrays这样几个工具类外更多的是List、Map、Set这样的数据结构定义（通过接口），以及常用的ArrayList，LinedList，HashMap，HashTable，TreeSet这样的实现。同样的这样键值对的容器，即有HashMap这样非同步的，又有Hashtable这样同步的，同步个容器上嫌Hashtable上加一把锁影响并发性能，后来大师Doug Lea，又发明了ConcurrentMap接口，以及现在已成经典的实现ConcurrentHashMap，在一个容器上分开加多把锁。
+而比较而言，go的结构就简单很多，语言内置容器数组和map提供了几乎所有我们要的功能，并且其操作非常简单，在源码中费劲的想找其他基于其上的结构居然没有找见。Go的简的风格在此体现的真是明显，只提供基础的数据结构，和对这些结构的好用的操作。稍微用了下切片操作真的非常赞，非要对照下和java的ArrayList挺像，但是[:]这样操作起来真的很简单直接。另外看sort源码时发现两个语言在各自package中，和sort 相伴的也都是search之类的操作。
+当然，看例子中还有源码中两个语言的语法差别那就更多了。尤其要称赞下go的几个非常酷的语法。如快排中找中间点的方法
+1func doPivot(data Interface, lo, hi int) (midlo, midhi int){.. 2return lo + b - a, hi - (d - c) 3} 居然可以返回多个返回值，不用再像原来那样，要么一个返回值作为参数传进来，另外一个从return上取，要么就不得不构造一个结构来做组织多个返回值，费劲又别扭。真是解决程序员的真正问题。
+还有，这个swap的方法实现，
+1func (a ByAge) Swap(i, j int) { a[i], a[j] = a[j], a[i] } 这样一句就解决问题。而不是java这样费劲。
+一下就把我大java比下去了。有没有想到很多年前，我们用c来数据结构的时候，老师反复强调，这时候要声明一个局部变量temp类做数据交换，非常神秘非常高级的知识点哈。在go这里居然真的可以直接交换。看上去有点像SQL这样的非过程语言了，又有点像我们描述代码功能的伪代码，只要告诉我你想干啥描述清楚，过程的能省就省了。非常非常简单，就这一小点，让咱这个新人产生了无数好感。
+1private static void swap(Object[] x, int a, int b) { 2Object t = x[a]; 3x[a] = x[b]; 4x[b] = t; 5} 当然还有左大括号的使用，声明未使用的变量编译报错等新语法，看着蛮横，但却是简单。有一点点不习惯的是居然用方法名首字母的大小写来区分方法的访问权限，不像java中public protected private这样关键字来修饰，但说实话，写大写字母大头的方法还是有点瞅着怪怪的，老想给改成小写，虽然都是所谓的驼峰式的命名。
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>Sort源码实现比较Go&amp;Java语言风格(2)</title>
+      <link>https://idouba.com/compare-go-and-java-style-by-sort-implement-2/</link>
+      <pubDate>Tue, 01 Dec 2015 15:18:12 +0000</pubDate>
+      
+      <guid>https://idouba.com/compare-go-and-java-style-by-sort-implement-2/</guid>
+      <description>
+        
+          
+            接上篇博文，工作中用到了go排序的功能，作为go新手，在参照着例子，并读了go的sort.go部分涉及的源码，了解了go中排序的细节和实现算法，这些在上篇博文中有介绍。作为一个java ZHONGDU*2的用户，不由自主的想到了java中对应实现的样子，在这里也非常简要的贴出来，描述下java中排序的用法，和java源码中对应部分的实现，比较好奇java是和go一样，也用的时候快速排序吗？
+3 Java 排序源码解析 主要代码Looks like this： 3.1 使用例子
+1public class Person implements Comparable&amp;amp;lt;Person&amp;amp;gt; { 2private String name; 3private int age; 4 5 6@Override 7public int compareTo(Person o) { 8return this.age - o.age; 9} 10 11public static void main(String args[]) 12{ 13List&amp;amp;lt;Person&amp;amp;gt; persons = new ArrayList&amp;amp;lt;Person&amp;amp;gt;(); 14Collections.sort(persons); 15} 16} 和go中不同，必须要在class的第一行implements Comparable这个接口，然后在实现这个接口中定义的compareTo方法，告诉接口到底元素是怎么比较大小的。于是这也追踪下Collections.sort()方法中是如何使用这个compareTo规则来进行排序的。
+3.2 源码解析 Collections是一个工具类，调用的是另外一个工具类Arrays中提供的静态方法。java中很少有class名用复数的，和Collection这也一个单数表达的是interface不同，这两个有悠久历史的类下面提供了很多static的工具方法。
+1public static &amp;amp;lt;T extends Comparable&amp;amp;lt;? super T&amp;amp;gt;&amp;amp;gt; void sort(List&amp;amp;lt;T&amp;amp;gt; list) { 2Object[] a = list.toArray(); 3Arrays.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>Sort源码实现比较Go&amp;Java语言风格(1)</title>
+      <link>https://idouba.com/compare-go-and-java-style-by-sort-implement-1/</link>
+      <pubDate>Tue, 01 Dec 2015 05:11:15 +0000</pubDate>
+      
+      <guid>https://idouba.com/compare-go-and-java-style-by-sort-implement-1/</guid>
+      <description>
+        
+          
+            1 前言 刚开始拥抱go，非常新鲜！才使用没多久，属于没有经验，有一点感受的那种。具体也说不了特别清楚，就是觉得：简单，直接，灵活，方便。作为一个 java 重度中毒（ZHANGDU*2）用户，过程中还是习惯对照着思考，至少在这个阶段。也好，发现对照着想，似乎更容易融会贯通。 对资深的go程序员来说，应该都是非常基础基本的问题，但也挡不住咱这个小白要发表下感想。
+第一篇文章首先结合最近做一个小feature时用到go中元素排序的功能，顺便了解下两种语言中排序功能的使用方式，各自源码中对排序功能的实现。当然最主要的是在这个过程中，作为go初学者对语言的体会和理解。
+2 Go排序源码解析 现在一般不太会自己写排序算法的实现了，就去搜go的package， 如愿找到了package sort?，和猜想的接口差不多，有一个func Sort(data Interface) 。只要把待排序的对象传到一个sort方法中就可以了。
+只是对这个Interface?对象还有点疑惑，这个Interface是个啥东西呀？带着这个疑问，瞄见了package前面这个这个example（裁剪了部分非关键代码）。
+2.1 go排序例子 1type Person struct { 2Name string 3Age int 4} 5// ByAge implements sort.Interface for []Person based on the Age field. 6type ByAge []Person 7func (a ByAge) Len() int { return len(a) } 8func (a ByAge) Swap(i, j int) { a[i], a[j] = a[j], a[i] } 9func (a ByAge) Less(i, j int) bool { return a[i].
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>戏（细）说Executor框架线程池任务执行全过程（下）</title>
+      <link>https://idouba.com/executor-framework-thread-pool-task-execution-part-02/</link>
+      <pubDate>Fri, 05 Jun 2015 16:02:43 +0000</pubDate>
+      
+      <guid>https://idouba.com/executor-framework-thread-pool-task-execution-part-02/</guid>
+      <description>
+        
+          
+            归档下发表于infoq.com 2015年6月的两篇文章。本来是一篇文章，经过Infoq编辑Alice Ding建议，拆分为&amp;lt;上&amp;gt;和&amp;lt;下&amp;gt;两部分。谢谢Alice对文章的细心校对，帮我发下了其中的很多问题。添加下infoq要求的声明：本文为InfoQ中文站特供稿件，首发地址为：http://www.infoq.com/cn/articles/executor-framework-thread-pool-task-execution-part-02 。如需转载，请与InfoQ中文站联系。
+内容综述 基于Executor接口中将任务提交和任务执行解耦的设计，ExecutorService和其各种功能强大的实现类提供了非常简便方式来提交任务并获取任务执行结果，封装了任务执行的全部过程。本文尝试通过对j.u.c.下该部分源码的解析以ThreadPoolExecutor为例来追踪任务提交、执行、获取执行结果的整个过程。为了避免陷入枯燥的源码解释，将该过程和过程中涉及的角色与我们工作中的场景和场景中涉及的角色进行映射，力图生动和深入浅出。
+上一篇文章中通过引入的一个例子介绍了在Executor框架下，提交一个任务的过程，这个过程就像我们老大的老大要找个老大来执行一个任务那样简单。并通过剖析ExecutorService的一种经典实现ThreadPoolExecutor来分析接收任务的主要逻辑，发现ThreadPoolExecutor的工作思路和我们带项目的老大的工作思路完全一致。在本文中我们将继续后面的步骤，着重描述下任务执行的过程和任务执行结果获取的过程。会很容易发现，这个过程我们更加熟悉，因为正是每天我们工作的过程。除了ThreadPoolExecutor的内部类Worker外，对执行内容和执行结果封装的FutureTask的表现是这部分着重需要了解的。
+为了连贯期间，内容的编号延续上篇。
+2. 任务执行 其实应该说是任务被执行，任务是宾语。动宾结构：execute the task，执行任务，无论写成英文还是中文似乎都是这样。那么主语是是who呢？明显不是调用submit的那位（线程），那是哪位呢？上篇介绍ThreadPoolExecutor主要属性时提到其中有一个HashSet workers的集合，我们有说明这里存储的就是线程池的工作队列的集合，队列的对象是Worker类型的工作线程，是ThreadPoolExecutor的一个内部类，实现了Runnable接口：
+1private final class Worker implements Runnable 8)看作业线程干什么当然是看它的run方法在干什么。如我们所料，作业线程就是在一直调用getTask方法获取任务，然后调用 runTask(task)方法执行任务。看到没有，是在while循环里面，就是不干完不罢休的意思！在加班干活的苦逼的朋友们，有没有遇见战友的亲切感觉？
+1public void run() { 2 try { 3 Runnable task = firstTask; 4 //循环从线程池的任务队列获取任务 5 while (task != null || (task = getTask()) != null) { 6 //执行任务 7 runTask(task); 8 task = null; 9 } 10 } finally { 11 workerDone(this); 12 } 13 } 然后简单看下getTask和runTask(task)方法的内容。
+getTask方法是ThreadPoolExecutor提供给其内部类Worker的的方法。作用就是一个，从任务队列中取任务，源源不断地输出任务。有没有想到老大手里拿的总是满满当当的project，也是源源不断的。 1Runnable getTask() { 2 for (;;) { 3 //从任务队列的头部取任务 4 r = workQueue.
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>戏（细）说Executor框架线程池任务执行全过程（上）</title>
+      <link>https://idouba.com/executor-framework-thread-pool-task-execution-part-01/</link>
+      <pubDate>Fri, 05 Jun 2015 15:41:44 +0000</pubDate>
+      
+      <guid>https://idouba.com/executor-framework-thread-pool-task-execution-part-01/</guid>
+      <description>
+        
+          
+            归档下发表于infoq.com 2015年6月的两篇文章。本来是一篇文章，经过Infoq编辑Alice Ding建议，拆分为&amp;lt;上&amp;gt;和&amp;lt;下&amp;gt;两部分。谢谢Alice对文章的细心校对，帮我发下了其中的很多问题。添加下infoq要求的声明：本文为InfoQ中文站特供稿件，首发地址为：http://www.infoq.com/cn/articles/executor-framework-thread-pool-task-execution-part-01。如需转载，请与InfoQ中文站联系。
+内容综述 基于Executor接口中将任务提交和任务执行解耦的设计，ExecutorService和其各种功能强大的实现类提供了非常简便方式来提交任务并获取任务执行结果，封装了任务执行的全部过程。本文尝试通过对j.u.c.下该部分源码的解析以ThreadPoolExecutor为例来追踪任务提交、执行、获取执行结果的整个过程。为了避免陷入枯燥的源码解释，将该过程和过程中涉及的角色与我们工作中的场景和场景中涉及的角色进行映射，力图生动和深入浅出。
+一、前言 1.5后引入的Executor框架的最大优点是把任务的提交和执行解耦。要执行任务的人只需把Task描述清楚，然后提交即可。这个Task是怎么被执行的，被谁执行的，什么时候执行的，提交的人就不用关心了。具体点讲，提交一个Callable对象给ExecutorService（如最常用的线程池ThreadPoolExecutor），将得到一个Future对象，调用Future对象的get方法等待执行结果就好了。
+经过这样的封装，对于使用者来说，提交任务获取结果的过程大大简化，调用者直接从提交的地方就可以等待获取执行结果。而封装最大的效果是使得真正执行任务的线程们变得不为人知。有没有觉得这个场景似曾相识？我们工作中当老大的老大（且称作LD^2）把一个任务交给我们老大（LD）的时候，到底是LD自己干，还是转过身来拉来一帮苦逼的兄弟加班加点干，那LD^2是不管的。LD^2只用把人描述清楚提及给LD，然后喝着咖啡等着收LD的report即可。等LD一封邮件非常优雅地报告LD^2report结果时，实际操作中是码农A和码农B干了一个月，还是码农ABCDE加班干了一个礼拜，大多是不用体现的。这套机制的优点就是LD^2找个合适的LD出来提交任务即可，接口友好有效，不用为具体怎么干费神费力。
+二、 一个最简单的例子 看上去这个执行过程是这个样子。调用这段代码的是老大的老大了，他所需要干的所有事情就是找到一个合适的老大（如下面例子中laodaA就荣幸地被选中了），提交任务就好了。
+1	// 一个有7个作业线程的线程池，老大的老大找到一个管7个人的小团队的老大 2 ExecutorService laodaA = Executors.newFixedThreadPool(7); 3	//提交作业给老大，作业内容封装在Callable中，约定好了输出的类型是String。 4	String outputs = laoda.submit( 5	new Callable&amp;amp;lt;String&amp;amp;gt;() { 6	public String call() throws Exception 7	{	8	return &amp;#34;I am a task, which submited by the so called laoda, and run by those anonymous workers&amp;#34;; 9	} 10	//提交后就等着结果吧，到底是手下7个作业中谁领到任务了，老大是不关心的。 11	}).get(); 12	System.out.println(outputs); 使用上非常简单，其实只有两行语句来完成所有功能：创建一个线程池，提交任务并等待获取执行结果。
+例子中生成线程池采用了工具类Executors的静态方法。除了newFixedThreadPool可以生成固定大小的线程池，newCachedThreadPool可以生成一个无界、可以自动回收的线程池，newSingleThreadScheduledExecutor可以生成一个单个线程的线程池。newScheduledThreadPool还可以生成支持周期任务的线程池。一般用户场景下各种不同设置要求的线程池都可以这样生成，不用自己new一个线程池出来。
+三、代码剖析 这套机制怎么用，上面两句语句就做到了，非常方便和友好。但是submit的task是怎么被执行的？是谁执行的？如何做到在调用的时候只有等待执行结束才能get到结果。这些都是1.5之后Executor接口下的线程池、Future接口下的可获得执行结果的的任务，配合AQS和原有的Runnable来做到的。在下文中我们尝试通过剖析每部分的代码来了解Task提交，Task执行，获取Task执行结果等几个主要步骤。为了控制篇幅，突出主要逻辑，文章中引用的代码片段去掉了异常捕获、非主要条件判断、非主要操作。文中只是以最常用的ThreadPoolExecutor线程池举例，其实ExecutorService接口下定义了很多功能丰富的其他类型，有各自的特点，但风格类似。本文重点是介绍任务提交的过程，过程中涉及的ExecutorService、ThreadPoolExecutor、AQS、Future、FutureTask等只会介绍该过程中用到的内容，不会对每个类都详细展开。
+1、 任务提交 从类图上可以看到，接口ExecutorService继承自Executor。不像Executor中只定义了一个方法来执行任务，在ExecutorService中，正如其名字暗示的一样，定义了一个服务，定义了完整的线程池的行为，可以接受提交任务、执行任务、关闭服务。抽象类AbstractExecutorService类实现了ExecutorService接口，也实现了接口定义的默认行为。
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>最简单例子图解JVM内存分配和回收</title>
+      <link>https://idouba.com/a-simple-example-demo-jvm-allocation-and-gc/</link>
+      <pubDate>Tue, 15 Jul 2014 05:49:37 +0000</pubDate>
+      
+      <guid>https://idouba.com/a-simple-example-demo-jvm-allocation-and-gc/</guid>
+      <description>
+        
+          
+            一、简介 JVM采用分代垃圾回收。在JVM的内存空间中把堆空间分为年老代和年轻代。将大量（据说是90%以上）创建了没多久就会消亡的对象存储在年轻代，而年老代中存放生命周期长久的实例对象。年轻代中又被分为Eden区(圣经中的伊甸园)、和两个Survivor区。新的对象分配是首先放在Eden区，Survivor区作为Eden区和Old区的缓冲，在Survivor区的对象经历若干次收集仍然存活的，就会被转移到年老区。
+简单讲，就是生命期短的对象放在一起，将少数生命期长的对象放在一起，分别采用不同的回收策略。生命期短的对象回收频率比较高，生命期长的对象采用比较低回收频率，生命期短的对象被尝试回收几次发现还存活，则被移到另外一个地方去存起来。就像现在夏天了，勤劳的douma把doudou和douba常穿的衣服放在顺手的地方，把冬天的衣服打包放在柜子
+另一个地方。虽然把doudou的小衣服类比成虚拟机里的对象有点不合适，大致意思应该就是这样。
+本文中通过最简单的一个例子来demo下这个过程，代码很短，很简单，希望剖析的细一点，包括每一步操作后对象的分配和回收对内存堆产生的影响。设定上包括对堆中年轻代（年轻代中eden区和survivor区）、年老代大小的设定，以及设置阈值控制年轻代到年老代的晋升。
+二、示例代码 下面是最简单的代码，通过代码的每一步的执行来剖析其中的规则。
+1package com.idouba.jvm.demo; 2/** 3 * @author idouba 4 * Use shortest code demo jvm allocation, gc, and someting in gc. 5 * 6 * In details 7 * 1) sizing of young generation (eden space，survivor space),old generation. 8 * 2) allocation in eden space, gc in young generation, 9 * 3) working with survivor space and with old generation. 10 * 11 */ 12 public class SimpleJVMArg { 13 /** 14 * @param args 15 */ 16 public static void main(String[] args) 17 { 18 demo(); 19 } 20 21 /** 22 * VM arg：-verbose:gc -Xms200M -Xmx200M -Xmn100M -XX:+PrintGCDetails -XX:SurvivorRatio=8 -XX:MaxTenuringThreshold=1 -XX:+PrintTenuringDistribution 23 * */ 24 @SuppressWarnings(&amp;#34;unused&amp;#34;) 25 public static void demo() { 26 27 final int tenMB = 10* 1024 * 1024; 28 29 byte[] alloc1, alloc2, alloc3; 30 31 alloc1 = new byte[tenMB / 5]; 32 alloc2 = new byte[5 * tenMB]; 33 alloc3 = new byte[4 * tenMB]; 34 alloc3 = null; 35 alloc3 = new byte[6 * tenMB]; 36 } 37 } package com.
+          
+          
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>

@@ -468,5 +468,25 @@ JobClient通过RPC的方式向JobTracker提交作业； 调用JobTracker的submi
       </description>
     </item>
     
+    <item>
+      <title>【hadoop代码笔记】通过JobClient对Jobtracker的调用详细了解Hadoop RPC</title>
+      <link>https://idouba.com/haddoop_rpc_jobclient_jobtracker/</link>
+      <pubDate>Sat, 11 Jan 2014 12:02:36 +0000</pubDate>
+      
+      <guid>https://idouba.com/haddoop_rpc_jobclient_jobtracker/</guid>
+      <description>
+        
+          
+            Hadoop的各个服务间，客户端和服务间的交互采用RPC方式。关于这种机制介绍的资源很多，也不难理解，这里不做背景介绍。只是尝试从Jobclient向JobTracker提交作业这个最简单的客户端服务器交互的代码中，去跟踪和了解下RPC是怎么被使用的。不同于准备发表博客时搜索的几篇博文，试图通过一种具体的场景来介绍，属于比较初级。其他DataNode和Namenode之间，Tasktracker和JobTracker之间的交互基本也都一样。为了引用的代码篇幅尽可能少，忽略了代码中写日志（包括Metrics）、某些判断等辅助代码。
+1 RPC客户端请求（从JobClient的jobSubmitClient 入手） Jobclient包含一个JobSubmissionProtocol jobSubmitClient类型的句柄，从作业提交一节的介绍中看到Jobclient的计划所有重要操作都是通过jobSubmitClient来完成的。包括
+JobSubmissionProtocol Outline
+所有这些方法都在JobSubmissionProtocol接口中定义。在0.20.1的时候已经到Version 20了，在2.2.0好像到了Version 40了,说明功能一直在增强。 客户端的某个方法调用如何会调用到服务端的方法呢？在客户端机器上调用JobClient的getAllJobs(),怎么调用到了服务端JobTracker的getAllJobs()。这也是我尝试讲明白的核心内容。为了体现代码的一步一步分析总结在最后。可能循序渐进的作用没起到，还会笔记读起来笔记乱，感受有点不太好可能:-(。 首先看客户端JobClient中的jobSubmitClient初始化方法。在JobClient的init方法中判断不是local的方式则会调用createRPCProxy方法，进而调用RPC的getProxy方法。方法连接对应IP的服务器。比较客户端和服务端的RPC版本一致，返回一个JobSubmissionProtocol类型的句柄，抛出VersionMismatch异常。
+1private JobSubmissionProtocol createRPCProxy(InetSocketAddress addr, 2 Configuration conf) throws IOException { 3 return (JobSubmissionProtocol) RPC.getProxy(JobSubmissionProtocol.class, 4 JobSubmissionProtocol.versionID, addr, getUGI(conf), conf, 5 NetUtils.getSocketFactory(conf, JobSubmissionProtocol.class)); 6 } 7 public static VersionedProtocol getProxy(Class&amp;lt; &amp;gt; protocol, 8 long clientVersion, InetSocketAddress addr, UserGroupInformation ticket, 9 Configuration conf, SocketFactory factory) throws IOException { 10 11 VersionedProtocol proxy = 12 (VersionedProtocol) Proxy.newProxyInstance( 13 protocol.getClassLoader(), new Class[] { protocol }, 14 new Invoker(addr, ticket, conf, factory)); 15 long serverVersion = proxy.
+          
+          
+        
+      </description>
+    </item>
+    
   </channel>
 </rss>

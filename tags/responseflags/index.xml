@@ -7,7 +7,25 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
-    <lastBuildDate>Wed, 11 Oct 2023 15:50:08 +0000</lastBuildDate><atom:link href="https://idouba.com/tags/responseflags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 15 Oct 2023 15:50:08 +0000</lastBuildDate><atom:link href="https://idouba.com/tags/responseflags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>KubeCon2023：基于实际案例解析Istio访问日志ResponseFlag系列</title>
+      <link>https://idouba.com/kubecon2023-detailed-parse-and-reproduce-istio-response-flags-index/</link>
+      <pubDate>Sun, 15 Oct 2023 15:50:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/kubecon2023-detailed-parse-and-reproduce-istio-response-flags-index/</guid>
+      <description>
+        
+          
+            记录在2023年9月27日在上海Kubecon上发表的技术演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case 》
+议题： 服务网格的访问日志在运维工作中发挥着非常关键的作用。特别是访问日志在HTTP响应码外提供应答标记Response Flags，通过针对性的标记提供有用的额外信息，帮助运维人员提高故障诊断的效率。但是Envoy社区官方文档中对应答标记的介绍非常简单，Istio社区也没有资料介绍这部分内容。在实际使用中当用户遇到包含DC、UF、UH等应答标记的日志时，很难找到权威材料参考来解决具体问题。 在本次演讲中，超盟将重现10多种生产中常碰到的应答标记的实践案例，解析每个标记的含义、产生场景，并介绍如何基于这些应答标记进行故障诊断和问题定界，进而解决案例中这些应答标记表示的问题。此外，还将解析生产用例中访问日志的6个有用的时间字段的含义，并介绍如何基于这些时间字段定界服务网格的延时相关问题。
+Access logs of service mesh is practically important in ops work. Especially, Response Flags in each log help improve fault diagnosis efficiency by providing additional details of request. But the simple and brief definition of Response Flags in Envoy and Istio community makes it hard to refer to it to effectively find the real problem and root cause when running into logs containing “DC, UF, UH” like flags in practice.
+          
+          
+        
+      </description>
+    </item>
+    
     <item>
       <title>RL(服务限流)--Istio访问日志ResponseFlag重现与解析14</title>
       <link>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-14-RL/</link>

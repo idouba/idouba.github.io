@@ -33,5 +33,32 @@
       </description>
     </item>
     
+    <item>
+      <title>正常访问--Istio访问日志ResponseFlag重现与解析00</title>
+      <link>https://idouba.com/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-00-Normal/</link>
+      <pubDate>Wed, 27 Sep 2023 15:50:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/2023-09-27-detailed-parse-and-reproduce-istio-response-flags-00-Normal/</guid>
+      <description>
+        
+          
+            KubeCon 2023在上海做的一个关于Istio访问日志的演讲《Detailed Parse and Reproduce Response Flags of Istio Access Log Based on Production Use Case》。解析和重现了在当时解决客户问题时碰到的各种应答日志。
+在详细展开每种Response Flag前先介绍下本系列的必要前置信息。包括访问日志的背景、机制，以及重现这些Response Flag的基本环境，方便有兴趣的同学参照练习。
+机制 早期的访问日志一般由应用程序输出，即要求用户在业务代码中记录每次访问。在服务网格中，和指标、调用链等可观测性能力类似，Istio通过非侵入方式提供访问日志的收集。
+过程大致是：
+1.网格数据面拦截流量，并根据配置的访问日志格式输出访问日志。
+2.数据面根据配置的ALS(Access log Service)地址上报访问日志。
+3.ALS服务端收集日志，存储在日志存储，如ES中，或其他的日志系统中。
+4.服务端日志检索工具如Kibana或其他日服务索日志。
+这是一个一般性流程机制，在Istio中日志可以通过ALS的gRPC的服务收集日志，也可以写日志文件、标准输出或者对接OpenTelemetry等通道，即各种标准接口对接各种日志系统和通道，日志格式可以动态定义。
+环境 这是我这次实践的环境。
+在一个accesslog的命名空间下，我们创建了两个服务。两个服务均注入了Sidecar。源服务内有curl命令，我们会通过curl访问目标服务，生成访问日志。目标服务是一个端口是80的Nginx容器。
+1apiVersion: v1 2kind: Service 3metadata: 4 name: nginx 5 namespace: accesslog 6spec: 7 ports: 8 - name: http 9 port: 80 10 protocol: TCP 11 targetPort: 80 12 selector: 13 app: nginx 14 type: ClusterIP 可以看到整个环境是比较干净简单，我们会尽量在最简单的环境上构造各种不同的场景，重现大多数常见的Response Flag，方便大家理解。
+          
+          
+        
+      </description>
+    </item>
+    
   </channel>
 </rss>

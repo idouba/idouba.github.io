@@ -176,6 +176,36 @@ Istio中虽然没有显示的提供这样一个状态图，但是大家熟悉Ist
     </item>
     
     <item>
+      <title>Istio调用链埋点原理剖析—是否真的“零修改”分享实录（下）</title>
+      <link>https://idouba.com/istio-tracing-meetup-02/</link>
+      <pubDate>Sat, 10 Nov 2018 15:36:10 +0000</pubDate>
+      
+      <guid>https://idouba.com/istio-tracing-meetup-02/</guid>
+      <description>
+        
+          
+            接上文Istio调用链埋点原理剖析—是否真的“零修改”分享实录（上）
+Isito调用链 调用链原理和场景 正如Service Mesh的诞生是为了解决大规模分布式服务访问的治理问题，调用链的出现也是为了对应于大规模的复杂的分布式系统运行中碰到的故障定位定界问题。大量的服务调用、跨进程、跨服务器，可能还会跨多个物理机房。无论是服务自身问题还是网络环境的问题导致调用上链路上出现问题都比较复杂，如何定位就比单进程的一个服务打印一个异常栈来找出某个方法要困难的多。需要有一个类似的调用链路的跟踪，经一次请求的逻辑规矩完整的表达出来，可以观察到每个阶段的调用关系，并能看到每个阶段的耗时和调用详细情况。Dapper, a Large-Scale Distributed Systems Tracing Infrastructure 描述了其中的原理和一般性的机制。模型中包含的术语也很多，理解最主要的两个即可：
+Trace：一次完整的分布式调用跟踪链路。 Span：跨服务的一次调用； 多个Span组合成一次Trace追踪记录。 上图是Dapper论文中的经典图示，左表示一个分布式调用关系。前端（A），两个中间层（B和C），以及两个后端（D和E）。用户发起一个请求时，先到达前端，再发送两个服务B和C。B直接应答，C服务调用后端D和E交互之后给A应答，A进而返回最终应答。要使用调用链跟踪，就是给每次调用添加TraceId、SpanId这样的跟踪标识和时间戳。
+右表示对应Span的管理关系。每个节点是一个Span，表示一个调用。至少包含Span的名、父SpanId和SpanId。节点间的连线下表示Span和父Span的关系。所有的Span属于一个跟踪，共用一个TraceId。从图上可以看到对前端A的调用Span的两个子Span分别是对B和C调用的Span，D和E两个后端服务调用的Span则都是C的子Span。
+调用链系统有很多实现，用的比较多的如zipkin，还有已经加入CNCF基金会并且的用的越来越多的Jaeger，满足Opentracing语义标准的就有这么多。
+一个完整的调用链跟踪系统，包括调用链埋点，调用链数据收集，调用链数据存储和处理，调用链数据检索（除了提供检索的APIServer，一般还要包含一个非常酷炫的调用链前端）等若干重要组件。上图是Jaeger的一个完整实现。这里我们仅关注与应用相关的内容，即调用链埋点的部分，看下在Istio中是否能做到”无侵入“的调用链埋点。当然在最后也会看下Istio机制下提供的不同的调用链数据收集方式。
+Istio标准BookInfo例子 简单期间，我们以Istio最经典的Bookinfo为例来说明。Bookinfo模拟在线书店的一个分类，显示一本书的信息。本身是一个异构应用，几个服务分别由不同的语言编写的。各个服务的模拟作用和调用关系是： productpage ：productpage 服务会调用 details 和 reviews 两个服务，用来生成页面。 details ：这个微服务包含了书籍的信息。 reviews ：这个微服务包含了书籍相关的评论。并调用 ratings 微服务。 ratings ：ratings 微服务中包含了由书籍评价组成的评级信息。 调用链输出 在Istio上运行这个典型例子，不用做任何的代码修改，自带的Zipkin上就能看到如下的调用链输出。可以看到展示给我们的调用链和Boookinfo这个场景设计的调用关系一致：productpage 服务会调用 details 和 reviews 两个服务，reviews调用了ratings 微服务。除了显示调用关系外，还显示了每个中间调用的耗时和调用详情。基于这个视图，服务的运维人员比较直观的定界到慢的或者有问题的服务，并钻取当时的调用细节，进而定位到问题。 我们就要关注下调用链埋点到底是在哪里做的，怎么做的？
+在Istio中，所有的治理逻辑的执行体都是和业务容器一起部署的Envoy这个Sidecar，不管是负载均衡、熔断、流量路由还是安全、可观察性的数据生成都是在Envoy上。Sidecar拦截了所有的流入和流出业务程序的流量，根据收到的规则执行执行各种动作。实际使用中一般是基于K8S提供的InitContainer机制，用于在Pod中执行一些初始化任务. InitContainer中执行了一段iptables的脚本。正是通过这些Iptables规则拦截pod中流量，并发送到Envoy上。Envoy拦截到Inbound和Outbound的流量会分别作不同操作，执行上面配置的操作，另外再把请求往下发，对于Outbound就是根据服务发现找到对应的目标服务后端上；对于Inbound流量则直接发到本地的服务实例上。
+我们今天的重点是看下拦截到流量后Sidecar在调用链埋点怎么做的。
+Istio调用链埋点逻辑 Envoy的埋点规则和在其他服务调用方和被调用方的对应埋点逻辑没有太大差别。
+Inbound流量：对于经过Sidecar流入应用程序的流量，如果经过Sidecar时Header中没有任何跟踪相关的信息，则会在创建一个根Span，TraceId就是这个SpanId，然后再将请求传递给业务容器的服务；如果请求中包含Trace相关的信息，则Sidecar从中提取Trace的上下文信息并发给应用程序。 Outbound流量：对于经过Sidecar流出的流量，如果经过Sidecar时Header中没有任何跟踪相关的信息，则会创建根Span，并将该跟Span相关上下文信息放在请求头中传递给下一个调用的服务；当存在Trace信息时，Sidecar从Header中提取Span相关信息，并基于这个Span创建子Span，并将新的Span信息加在请求头中传递。 特别是Outbound部分的调用链埋点逻辑，通过一段伪代码描述如图：
+调用链详细解析 如图是对前面Zipkin上输出的一个Trace一个透视图，观察下每个调用的细节。可以看到每个阶段四个服务与部署在它旁边上的Sidecar是怎么配合的。在图上只标记了Sidecar生成的Span主要信息。因为Sidecar 处理 Inbound和Outbound的逻辑有所不同，在图上表也分开两个框图分开表达。如productpage，接收外部请求是一个处理，给details发出请求是一个处理，给reviews发出请求是另外一个处理，因此围绕productpage这个app有三个黑色的处理块，其实是一个Sidecar在做事。
+同时，为了不使的图上箭头太多，最终的Response都没有表达出来，其实图上每个请求的箭头都有一个反方向的Response。在服务发起方的Sidecar会收到Response时，会记录一个CR(client Received)表示收到响应的时间并计算整个Span的持续时间。
+**下面通过解析下具体数据来找出埋点逻辑： **
+首先从调用入口的Gateway开始，Gateway作为一个独立部署在一个pod中的Envoy进程，当有请求过来时，它会将请求转给入口服务productpage。Gateway这个Envoy在发出请求时里面没有Trace信息，会生成一个根Span：SpanId和TraceId都是f79a31352fe7cae9，因为是第一个调用链上的第一个Span，也就是一般说的根Span，所有ParentId为空，在这个时候会记录CS（Client Send）； 请求从入口Gateway这个Envoy进入productpage的app业务进程其Inbound流量被productpage Pod内的Envoy拦截，Envoy处理请求头中带着Trace信息，记录SR(Server Received)，并将请求发送给productpage业务容器处理，productpage在处理请求的业务方法中在接受调用的参数时，除了接受一般的业务参数外，同时解析请求中的调用链Header信息，并把Header中的Trace信息传递给了调用的Details和Reviews的微服务。 从productpage出去的请求到达reviews服务前，其Oubtbound流量又一次通过同Pod的Envoy，Envoy埋点逻辑检查Header中包含了Trace相关信息，在将请求发出前会做客户端的调用链埋点，即以当前Span为parent Span，生成一个子Span：新的SpanId cb4c86fb667f3114，TraceId保持一致9a31352fe7cae9，ParentId就是上个Span的Id： f79a31352fe7cae9。 从prodcutepage到review的请求经过productpage的Sidecar走LB后，发给一个review的实例。请求在到达Review业务容器前，同样也被Review的Envoy拦截，Envoy检查从Header中解析出Trace信息存在，则发送Trace信息给reviews。reviews处理请求的服务端代码中同样接收和解析出这些包含Trace的Header信息，发送给下一个Ratings服务。 在这里我们只是理了一遍请求从入口Gateway，访问productpage服务，再访问reviews服务的流程。可以看到期间每个访问阶段，对服务的Inbound和Outbound流量都会被Envoy拦截并执行对应的调用链埋点逻辑。图示的Reviews访问Ratings和productpage访问Details逻辑与以上类似，这里不做复述。
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
       <title>Istio调用链埋点原理剖析—是否真的“零修改”分享实录（上）</title>
       <link>https://idouba.com/istio-tracing-meetup-01/</link>
       <pubDate>Sat, 10 Nov 2018 15:07:36 +0000</pubDate>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>cert-manager on 爱豆吧！</title>
+    <link>https://idouba.com/tags/cert-manager/</link>
+    <description>Recent content in cert-manager on 爱豆吧！</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
+    <lastBuildDate>Tue, 26 Sep 2023 15:32:08 +0000</lastBuildDate><atom:link href="https://idouba.com/tags/cert-manager/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>IstioCon2023：Cert-manager帮助增强Istio证书管理的安全性和灵活性</title>
+      <link>https://idouba.com/istiocon2023-cert-manager-help-enhance-security-and-flexibility-of-istio-certificate-management/</link>
+      <pubDate>Tue, 26 Sep 2023 15:32:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/istiocon2023-cert-manager-help-enhance-security-and-flexibility-of-istio-certificate-management/</guid>
+      <description>
+        
+          
+            记录在2023年9月26日在上海IstioCon上发表的技术演讲《cert-manager Help Enhance Security and Flexibility of Istio Certificate Management》
+议题： 对等身份验证是 Istio 零信任安全模型的基本组成部分。默认情况下，Istio 创建私钥和自签名根证书，使用它们自动签署和颁发 X.509 证书给每个工作负载，并帮助应用程序实现互相 TLS，以实现无需更改代码的安全服务间通信。在生产环境中，强烈建议从 PKI 提供商颁发根 CA，以增强安全性并提供更多的灵活性。在这次演讲中，超盟将分享 cert-manager 的详细实践，它是一个强大且可扩展的 X.509 证书控制器，如何帮助 Istio 构建增强的零信任网络。演讲将说明 cert-manager 如何通过自动从指定的 PKI 提供商获取证书，并在到期前的配置时间内更新证书，以避免任何服务停机，从而简化 Istio 根 CA 的生命周期管理。
+Peer authentication is fundamental part of Istio’s zero-trust security model. By default, Istio creates a private key and self-signed root certificate, uses them to automatically sign and issue X.509 certificates to every workload, and help application make mutual TLS to secure service-to-service communication without code changes.
+          
+          
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>

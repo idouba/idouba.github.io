@@ -7,37 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <copyright>浙ICP备18050493号-1 浙公网安备 33010802006262号</copyright>
-    <lastBuildDate>Tue, 15 Aug 2017 15:51:34 +0000</lastBuildDate><atom:link href="https://idouba.com/tags/golang/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>kubernetes federation 工作机制之资源对象同步</title>
-      <link>https://idouba.com/kubernetes-federation-sync-accross-cluster/</link>
-      <pubDate>Tue, 15 Aug 2017 15:51:34 +0000</pubDate>
-      
-      <guid>https://idouba.com/kubernetes-federation-sync-accross-cluster/</guid>
-      <description>
-        
-          
-            1 前言 希望通过本文最简单的方式向熟悉k8s的人说明白其上的federation是干什么的，如何工作的。
-关于federation，比较官方的说法是：集群联邦可以让租户/企业根据需要扩展或伸缩所需要的集群；可以让租户/企业在跨地区甚至跨地域的多个集群上部署、调度、监测管理应用。通过集群联邦，租户/企业可以在指定集群上部署应用，可以拉通私有云和公有云建立混合云(hybrid cloud)。
-如在design-proposal 中描述的federation提供了cross-cluster scheduling, cross-cluster service discovery, cross-cluster migration, cross-cluster**ing and auditing, cross-cluster load balancing。
-简单讲就一句话。能调用一个api，向操作一个k8s集群一样操作多个k8s集群。主要是拉通其下的k8s集群在上部署应用，发布服务，并且可以让其互相访问。
-那么是怎么做到的呢？熟悉了kubernetes代码和主要的工作逻辑会发现非常简单。简单看下这部分代码会就会发现federation有如下特点：
-复用了kubernets的机制 复用kubernetes的代码 扩展了kubernetes的对象（的定义和功能） 2. 架构 Federation 层的主要组件包括Federation-API Server，Controller-Manager和ETCD。根据Decoupled 的设计的目标和kubernetes 共用类库，而不是共用一个紧密的结构结构。在结构上解耦可以保证，Federation层故障，其下的每个个kubernetes集群不受影响。另外FederationAPI接口和kube-api接口完全兼容，用户可以像之前操作单个kubernetes集群一样操作联邦。
-和Kubernetes类似，用户通过kubectl或者API调用向FederationAPI server的接口创建和维护各种对象，数据对象被持久化存储在Federation的ETCD中。联邦只是维护了规划，真正干活还是在其下的各个Cluster上（现实生活中其实也总是这样，你见过在联邦的川普干过什么正经事情）。真正关键的联邦如何通过一个统一的入口来接收请求，在各个cluster上调度。具体到（代码）功能就是联邦中指令如何在cluster上被落实执行。
-联邦和其下k8s 集群的调用关系。调用细节下面描述。
-3. 主要流程 关键就在于Federation的组件Controller-manager。和K8s其他的controller作用和工作机制类似，通过watch api-server 执行动作来维护集群状态。Federation的Controller-manager的处理逻辑和kubernetes略有不同，在于它一般都要连两个API server，watch 3个API 对象
-对于每种Resource对象，都对应一个Controller，在Federation的Controller-manager启动时，启动这些Controller。
-以ConfigMap为例，ConfigMapController启动后会watch如下三类接口：
-Federation API server的Cluster接口federation/v1beta1/cluster； Federation API server的ConfigMap接口v1/configmap； Federation 管理的 N 个kubernetes cluster的Kube-API server 的ConfigMap的接口：v1/ configmap 当ConfigMapController watch到有户通过Federation API 创建（或者更新删除）一个ConfigMap，则会调用对应的每个cluster 的kube-apiserver创建（或者更新删除）对应的ConfigMap。
-当ConfigMapController Watch到有新的Cluster加入进来时，调用新的Cluster的kube-api接口创建ConfigMap。Configmap、Secret等对象都是依照以上逻辑，从上向下Sync。
-以ConfigMap 的controller为例，其他的都是遵从同一个模板流程。在NewConfigMapController场景controller时对watch 3个api。
-Federation API server的ConfigMap接口v1/configmap；
-          
-          
-        
-      </description>
-    </item>
-    
+    <lastBuildDate>Tue, 01 Dec 2015 15:20:55 +0000</lastBuildDate><atom:link href="https://idouba.com/tags/golang/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Sort源码实现比较Go&amp;Java语言风格(3)</title>
       <link>https://idouba.com/compare-go-and-java-style-by-sort-implement-3/</link>
