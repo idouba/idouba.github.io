@@ -700,6 +700,25 @@ Access logs of service mesh is practically important in ops work. Especially, Re
     </item>
     
     <item>
+      <title>My Books</title>
+      <link>https://idouba.com/my-books/</link>
+      <pubDate>Sun, 01 Oct 2023 15:32:08 +0000</pubDate>
+      
+      <guid>https://idouba.com/my-books/</guid>
+      <description>
+        
+          
+             Istio权威指南（上）：云原生服务网格Istio原理与实践 京东 豆瓣 书摘
+Istio权威指南（下）：云原生服务网格Istio架构与源码 京东 豆瓣 书摘
+云原生服务网格Istio：原理、实践、架构与源码解析 京东 豆瓣 书摘
+相关 
+          
+          
+        
+      </description>
+    </item>
+    
+    <item>
       <title>UF(上游连接失败)--Istio访问日志ResponseFlag重现与解析03</title>
       <link>https://idouba.com/detailed-parse-and-reproduce-istio-response-flags-03-UF/</link>
       <pubDate>Sat, 30 Sep 2023 15:50:08 +0000</pubDate>
