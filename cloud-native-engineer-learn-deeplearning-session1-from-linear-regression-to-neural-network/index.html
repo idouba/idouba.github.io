@@ -688,7 +688,7 @@
 </p>
 <p>可以看到数据并行在每个GPU设备上分发完整的模型和参数，当模型比较大时很容易超过单个设备的显存容量。解决方案当然逃不出一个拆字，就是把放不下的部分进行拆分，即拆分模型，引入模型并行。有两种切法，把模型横着切，或者竖着切。对应的一种是把神经网络的不同层切分到不同的设备上，即并行发生在层间，称为<strong>流水线并行PP(Pipeline Parallelism)</strong>；另一种把神经网络层内的参数切分到不同的GPU设备上，并行发生在层内，称为<strong>张量并行TP（Tensor Parallelism）</strong>。</p>
 <h4 id="流水线并行"><strong>流水线并行</strong></h4>
-<p>流水线并行，将模型的各个层拆分到不同的GPU上并行运行。这样可以减少每个设备上的内存消耗，同时提高效率。数据在神经网络的层间移动，物理上就是在不同的GPU间移动。逻辑上就像Linux的管道操作，或者很多编程语言里链式编程：</p>
+<p>流水线并行，将模型的各个层拆分到不同的GPU上并行运行。这样可以减少每个设备上的内存消耗，同时提高效率。数据在神经网络的层间移动，物理上就是在不同的GPU间移动。简单理解逻辑上就像Linux的管道操作，或者很多编程语言里链式编程：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="ln">1</span><span class="cl"><span class="n">QueryBuilder</span><span class="w"> </span><span class="n">queryBuilder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">QueryBuilder</span><span class="p">()</span><span class="w">
 </span></span></span><span class="line"><span class="ln">2</span><span class="cl"><span class="w">        </span><span class="p">.</span><span class="na">select</span><span class="p">(</span><span class="s">&#34;Id&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;name&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;age&#34;</span><span class="p">)</span><span class="w">
 </span></span></span><span class="line"><span class="ln">3</span><span class="cl"><span class="w">        </span><span class="p">.</span><span class="na">from</span><span class="p">(</span><span class="s">&#34;users&#34;</span><span class="p">)</span><span class="w">
@@ -720,10 +720,10 @@
     </picture>
 </figure>
 </p>
-<p>如图示意的8层神经网络，每两层规划在一个GPU设备上。当数据从0层到1层、2层到3层都是在一个卡内传播，而从1层到2层、3层到4层会垮了不同的卡设备，产生通讯开销。对于流水线并行最需要考虑好在一个阶段执行的时候另外一段流水线空等待的问题，专业上把这种空闲叫气泡Bubble。解决气泡有各种专业的设计，多数思路和典型的操作系统流水线类似，把作业划分的再细一些，并行的粒度更小一些，更容易流水线并行。</p>
+<p>如图示意的8层神经网络，模型的不同层被分配到不同的GPU卡上。每两层规划在一个GPU设备上。当数据从0层到1层、2层到3层都是在一个卡内传播，而从1层到2层、3层到4层会垮了不同的卡设备，产生通讯开销。对于流水线并行最需要考虑好在一个阶段执行的时候另外一段流水线空等待的问题，专业上把这种空闲叫气泡Bubble。解决气泡有各种专业的设计，多数思路和典型的操作系统流水线类似，把作业划分的再细一些，把mini-batch切分成micro-batch，并行的粒度更小一些，更容易流水线并行。这只是大体思路，怎样在流水线上配合好前向计算和反向计算，考虑最大化的利于缓存有很多的设计可以做。</p>
 <h4 id="张量并行"><strong>张量并行</strong></h4>
 <p>张量并行将神经网络的模型、权重在GPU设备之间进行拆分。将张量沿着一定维度拆分成块，每个GPU设备上只处理一块。输入张量与权重张量相乘时，就使用矩阵乘法把权重矩阵基于列方向切分，每列分别与输入相乘，每个设备只计算权重矩阵的部分矩阵乘法，最后两个设备的分片连接起来组成最终输出。</p>
-<p>参照<a href="https://lightning.ai/docs/pytorch/stable/advanced/model_parallel/tp.html">Pytorch 关于TP的说明</a>，可以基于列切分，如下图：</p>
+<p>参照<a href="https://lightning.ai/docs/pytorch/stable/advanced/model_parallel/tp.html">Pytorch 关于TP的说明</a>，如下图。一个蓝色的2行4列的矩阵乘以一个黄色的4行4列的矩阵，会得到一个2行4列的红色矩阵。使用按列切分的张量并行，将第二个矩阵按列切分成两个4行2列的矩阵，则蓝色矩阵和两个切分的黄色矩阵的乘法可以分配到2张GPU卡上。GPU1计算矩阵乘得到一个2行2列的矩阵，GPU2计算另外一部分列的矩阵乘得到另外一个2行2列的结果。然后通过<strong>AllGather</strong>通信操作汇聚两个结果，得到一个2行4列的矩阵。和理论上不切分时矩阵乘结果一致。</p>
 <p><figure>
   <picture>
 
@@ -749,7 +749,7 @@
     </picture>
 </figure>
 </p>
-<p>也可以基于行切分，如下图：</p>
+<p>也可以基于行切分，如下图，第二个黄色矩阵按行切分进行张量并行，黄色矩阵切分成两个2行4列的矩阵。为了满足矩阵乘法要求，蓝色矩阵要配合按列切分成两个2行2列的矩阵。在两个GPU上并行执行矩阵乘，分别得到两个2行4列的矩阵。然后通过AllReduce操作将两个矩阵的结果累加得到最终的相乘结果。</p>
 <p><figure>
   <picture>
 
@@ -775,7 +775,7 @@
     </picture>
 </figure>
 </p>
-<p>更多的是行列混合切分，如下图：</p>
+<p>更多的是行列混合切分，如Pytorch官方这个图。蓝色、黄色、绿色三个矩阵连成得到一个目标矩阵。使用张量并行，把黄色矩阵按列切分，绿色矩阵按行切分分配到两个GPU上，并行计算矩阵乘。两个GPU卡上计算结果通过AllReduce操作得到最终的相乘结果。</p>
 <p><figure>
   <picture>
 
